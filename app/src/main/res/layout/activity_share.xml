@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Image.ShareActivity"
+    android:id="@+id/root_view"
+    android:background="@android:color/black"
+    android:fitsSystemWindows="true">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/share_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentInsetStartWithNavigation="0dp"
+        android:translationZ="1dp"
+        android:fitsSystemWindows="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="A"
+                    android:layout_centerInParent="true"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/white"
+                    android:translationZ="1dp"/>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    app:civ_border_color="@android:color/darker_gray"
+                    app:civ_border_width="1dp"
+                    android:src="@drawable/ic_avatar_0"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp">
+
+                <ImageButton
+                    android:id="@+id/image_edit_item_view"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_crop_icon"
+                    style="@style/CustomTransparentViewStyle"
+                    android:backgroundTint="@android:color/transparent"
+                    android:onClick="onClick"
+                    android:layout_marginEnd="10dp"/>
+
+                <ImageButton
+                    android:id="@+id/rotate_item_view"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_rotate_icon"
+                    style="@style/CustomTransparentViewStyle"
+                    android:backgroundTint="@android:color/transparent"
+                    android:onClick="onClick"/>
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.github.chrisbanes.photoview.PhotoView
+            android:id="@+id/album_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <RelativeLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <ImageView
+                android:id="@+id/share_emoji_btn"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/ic_emoji_white_icon"
+                android:backgroundTint="@android:color/transparent"
+                android:translationZ="2dp"
+                android:elevation="0dp"
+                android:padding="17dp"
+                android:onClick="onClick"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="25dp"
+                android:background="@color/colorGray"
+                android:layout_alignBottom="@id/share_input"
+                android:layout_marginBottom="15dp"
+                android:layout_marginStart="50dp"
+                android:translationZ="2dp"/>
+
+            <com.vanniktech.emoji.EmojiEditText
+                android:id="@+id/share_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="65dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:paddingEnd="85dp"
+                android:hint="Add title..."
+                android:layout_alignParentBottom="true"
+                android:inputType="textMultiLine|textCapSentences"
+                android:scrollbars="vertical"
+                android:maxLines="5"
+                android:minLines="1"
+                android:background="#59000000"/>
+
+            <ImageButton
+                android:id="@+id/share_button"
+                style="@style/CustomButtonStyle"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_send_white_icon"
+                android:backgroundTint="?attr/colorAccent"
+                android:translationZ="2dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBottom="@id/share_input"
+                android:layout_margin="25dp"
+                android:elevation="0dp"
+                android:onClick="onClick"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

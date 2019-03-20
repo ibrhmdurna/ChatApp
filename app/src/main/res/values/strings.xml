@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ChatApp</string>
+
+    <string name="developer_text">This application was developed by <b>İBRAHİM DURNA</b></string>
+</resources>

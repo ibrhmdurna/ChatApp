@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:fitsSystemWindows="true"
+    tools:context=".Image.CropActivity">
+
+    <com.isseiaoki.simplecropview.CropImageView xmlns:custom="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/crop_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/crop_bottom_view"
+        custom:scv_crop_mode="free" />
+
+    <LinearLayout
+        android:id="@+id/crop_bottom_view"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/black"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/crop_cancel_btn"
+            style="@style/CustomTransparentViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/black"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="Cancel"
+            android:textColor="?attr/colorAccent" />
+
+        <TextView
+            android:id="@+id/crop_btn"
+            style="@style/CustomTransparentViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/black"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="Crop"
+            android:textColor="?attr/colorAccent" />
+    </LinearLayout>
+</RelativeLayout>

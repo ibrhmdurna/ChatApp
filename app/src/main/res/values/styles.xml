@@ -1,0 +1,391 @@
+<resources>
+    <style name="AppTheme.LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="isLightTheme">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="primaryTextColor">@android:color/black</item>
+        <item name="backgroundBrushColor">@color/colorPrimaryDark</item>
+        <item name="backgroundCardColor">@android:color/white</item>
+        <item name="buttonControlColor">@color/colorGray</item>
+        <item name="lineColor">@color/colorLightGray</item>
+        <item name="rippleColor">@color/colorGray</item>
+        <item name="pvtRadiusColor">@android:color/white</item>
+        <item name="searchColor">@color/colorLightGray</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/colorBackground</item>
+        <item name="isLightTheme">false</item>
+        <item name="colorPrimary">@color/colorBackground</item>
+        <item name="colorPrimaryDark">@color/colorBackground</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="primaryTextColor">@android:color/white</item>
+        <item name="backgroundBrushColor">@color/colorBackground</item>
+        <item name="backgroundCardColor">@color/colorLightBlack</item>
+        <item name="buttonControlColor">@color/colorLightBlack</item>
+        <item name="lineColor">@color/colorDarkGray</item>
+        <item name="rippleColor">@color/colorDarkGray</item>
+        <item name="pvtRadiusColor">@color/colorLightBlack</item>
+        <item name="searchColor">@color/colorLightBlack</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_design</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:activityOpenEnterAnimation">@null</item>
+        <item name="android:activityOpenExitAnimation">@null</item>
+        <item name="android:activityCloseEnterAnimation">@null</item>
+        <item name="android:activityCloseExitAnimation">@null</item>
+    </style>
+
+    <!--THEMES COLOR-->
+    <!--Light THEME-->
+    <style name="AppTheme.LightTheme.OfficialBlue" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorOfficialBlue</item>
+    </style>
+
+    <style name="AppTheme.LightTheme.Blue" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorBlue</item>
+    </style>
+
+    <style name="AppTheme.LightTheme.Indigo" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorIndigo</item>
+    </style>
+
+    <style name="AppTheme.LightTheme.DeepPurple" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorDeepPurple</item>
+    </style>
+
+    <style name="AppTheme.LightTheme.Purple" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorPurple</item>
+    </style>
+
+    <style name="AppTheme.LightTheme.LightPurple" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorLightPurple</item>
+    </style>
+
+    <style name="AppTheme.LightTheme.Pink" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorPink</item>
+    </style>
+
+    <style name="AppTheme.LightTheme.Red" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorRed</item>
+    </style>
+
+    <style name="AppTheme.LightTheme.DeepOrange" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorDeepOrange</item>
+    </style>
+
+    <style name="AppTheme.LightTheme.ExtraOrange" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorExtraOrange</item>
+    </style>
+
+    <style name="AppTheme.LightTheme.Orange" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorOrange</item>
+    </style>
+
+    <style name="AppTheme.LightTheme.Teal" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorTeal</item>
+    </style>
+
+    <style name="AppTheme.LightTheme.Cyan" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorCyan</item>
+    </style>
+
+    <style name="AppTheme.LightTheme.LightGreen" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorLightGreen</item>
+    </style>
+
+    <style name="AppTheme.LightTheme.OfficialGreen" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorOfficialGreen</item>
+    </style>
+
+    <style name="AppTheme.LightTheme.Green" parent="AppTheme.LightTheme">
+        <item name="colorAccent">@color/colorGreen</item>
+    </style>
+
+    <!--Dark THEME-->
+    <style name="AppTheme.DarkTheme.OfficialBlue" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorOfficialBlue</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.OfficialBlue.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorOfficialBlue</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Blue" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorBlue</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Blue.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorBlue</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Indigo" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorIndigo</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Indigo.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorIndigo</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.DeepPurple" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorDeepPurple</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.DeepPurple.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorDeepPurple</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Purple" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorPurple</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Purple.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorPurple</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.LightPurple" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorLightPurple</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.LightPurple.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorLightPurple</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Pink" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorPink</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Pink.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorPink</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Red" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorRed</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Red.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorRed</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.DeepOrange" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorDeepOrange</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.DeepOrange.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorDeepOrange</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.ExtraOrange" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorExtraOrange</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.ExtraOrange.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorExtraOrange</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Orange" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorOrange</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Orange.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorOrange</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Teal" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorTeal</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Teal.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorTeal</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Cyan" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorCyan</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Cyan.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorCyan</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.LightGreen" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorLightGreen</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.LightGreen.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorLightGreen</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.OfficialGreen" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorOfficialGreen</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.OfficialGreen.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorOfficialGreen</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Green" parent="AppTheme.DarkTheme">
+        <item name="colorAccent">@color/colorGreen</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme.Green.Transparent" parent="AppTheme.DarkTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="colorAccent">@color/colorGreen</item>
+    </style>
+
+    <!--
+    <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_down</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_up</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_up</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_down</item>
+    </style>-->
+
+    <style name="ExpandedTitleTextAppearance" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">34sp</item>
+        <item name="android:textColor">?attr/primaryTextColor</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CollapsedTitleTextAppearance" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">?attr/primaryTextColor</item>
+    </style>
+
+    <style name="BottomItemActiveTextAppearance" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="BottomItemInactiveTextAppearance" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?attr/primaryTextColor</item>
+    </style>
+
+    <style name="NumberPickerStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColorPrimary">?attr/primaryTextColor</item>
+        <item name="android:colorControlNormal">?attr/colorAccent</item>
+        <item name="android:colorButtonNormal">?attr/colorAccent</item>
+    </style>
+
+    <style name="dialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_up_anim</item>
+        <item name="android:windowExitAnimation">@anim/dialog_down_anim</item>
+    </style>
+
+    <style name="DialogStyle">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="CustomButtonStyle">
+        <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Widget.TextView.SpinnerItem</item>
+        <item name="android:background">@drawable/custom_button</item>
+    </style>
+
+    <style name="CustomTransparentViewStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@drawable/custom_circle_text_view</item>
+        <item name="android:backgroundTint">?attr/backgroundBrushColor</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>
+

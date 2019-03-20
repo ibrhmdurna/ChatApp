@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Image.CameraActivity"
+    android:background="@android:color/black">
+
+    <com.otaliastudios.cameraview.CameraView
+        android:id="@+id/camera_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:keepScreenOn="true"
+        app:cameraFlash="off"
+        app:cameraSessionType="picture"
+        app:cameraPlaySounds="false"
+        app:cameraJpegQuality="100"
+        app:cameraPictureSizeAspectRatio="16:9"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="100dp">
+    </com.otaliastudios.cameraview.CameraView>
+
+    <ImageView
+        android:id="@+id/camera_all_photo_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_up_icon"
+        android:layout_above="@id/camera_gallery_container"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="15dp"
+        android:onClick="onClick"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/camera_gallery_container"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:layout_above="@id/bottom_view"
+        android:verticalScrollbarPosition="right"
+        android:layout_marginBottom="25dp">
+    </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/bottom_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp">
+
+        <ImageButton
+            android:id="@+id/camera_flash_view"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_flash_off_icon"
+            android:background="@android:color/transparent"
+            android:onClick="onClick"/>
+
+        <ImageButton
+            android:id="@+id/camera_take_view"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/ic_take_icon"
+            android:translationZ="2dp"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center"
+            android:layout_marginStart="75dp"
+            android:layout_marginEnd="75dp"
+            android:onClick="onClick"/>
+
+        <ImageButton
+            android:id="@+id/camera_rotate_view"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_camera_rotate_icon"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center"
+            android:onClick="onClick"/>
+    </LinearLayout>
+</RelativeLayout>

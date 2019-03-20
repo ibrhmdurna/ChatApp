@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AppTheme">
+        <attr name="primaryTextColor" format="color|reference"/>
+        <attr name="backgroundBrushColor" format="color|reference"/>
+        <attr name="backgroundCardColor" format="color|reference"/>
+        <attr name="buttonControlColor" format="color|reference"/>
+        <attr name="lineColor" format="color|reference"/>
+        <attr name="rippleColor" format="color|reference"/>
+        <attr name="pvtRadiusColor" format="color|reference"/>
+        <attr name="searchColor" format="color|reference"/>
+    </declare-styleable>
+</resources>
