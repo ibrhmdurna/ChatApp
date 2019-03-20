@@ -8,7 +8,7 @@ import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.MoreBottomSheetDialog;
 
-public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProfileActivity extends AppCompatActivity implements View.OnClickListener, MoreBottomSheetDialog.BottomSheetListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +24,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 super.onBackPressed();
                 break;
             case R.id.profile_options_view:
-                MoreBottomSheetDialog moreBottomSheetDialog = new MoreBottomSheetDialog();
+                MoreBottomSheetDialog moreBottomSheetDialog = new MoreBottomSheetDialog(true);
                 moreBottomSheetDialog.show(getSupportFragmentManager(), "bottom_sheet");
                 break;
         }
+    }
+
+    @Override
+    public void onButtonClicked(String action) {
+
     }
 }

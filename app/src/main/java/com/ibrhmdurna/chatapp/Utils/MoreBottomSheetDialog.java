@@ -10,9 +10,16 @@ import android.widget.LinearLayout;
 
 import com.ibrhmdurna.chatapp.R;
 
+@SuppressLint("ValidFragment")
 public class MoreBottomSheetDialog extends BottomSheetDialogFragment {
 
     private BottomSheetListener mListener;
+    private boolean isFriend;
+
+    @SuppressLint("ValidFragment")
+    public MoreBottomSheetDialog(boolean isFriend){
+        this.isFriend = isFriend;
+    }
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -54,6 +61,10 @@ public class MoreBottomSheetDialog extends BottomSheetDialogFragment {
                 mListener.onButtonClicked("report");
             }
         });
+
+        if(!isFriend){
+            deleteItem.setVisibility(View.GONE);
+        }
 
         deleteItem.setOnClickListener(new View.OnClickListener() {
             @Override

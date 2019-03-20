@@ -40,8 +40,8 @@
                android:backgroundTint="?attr/backgroundCardColor">
 
                <ImageView
-                   android:layout_width="20dp"
-                   android:layout_height="20dp"
+                   android:layout_width="18dp"
+                   android:layout_height="18dp"
                    android:layout_gravity="center"
                    android:src="@drawable/ic_share_icon"/>
 
@@ -49,7 +49,8 @@
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:text="Share"
-                   android:textSize="18sp"
+                   android:textColor="?attr/primaryTextColor"
+                   android:textSize="16sp"
                    android:layout_marginStart="20dp"/>
            </LinearLayout>
 
@@ -62,8 +63,8 @@
                android:foreground="?attr/selectableItemBackground">
 
                <ImageView
-                   android:layout_width="20dp"
-                   android:layout_height="20dp"
+                   android:layout_width="18dp"
+                   android:layout_height="18dp"
                    android:layout_gravity="center"
                    android:src="@drawable/ic_block_icon"/>
 
@@ -71,7 +72,8 @@
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:text="Block"
-                   android:textSize="18sp"
+                   android:textColor="?attr/primaryTextColor"
+                   android:textSize="16sp"
                    android:layout_marginStart="20dp"/>
            </LinearLayout>
 
@@ -84,8 +86,8 @@
                android:foreground="?attr/selectableItemBackground">
 
                <ImageView
-                   android:layout_width="20dp"
-                   android:layout_height="20dp"
+                   android:layout_width="18dp"
+                   android:layout_height="18dp"
                    android:layout_gravity="center"
                    android:src="@drawable/ic_report_icon"/>
 
@@ -93,7 +95,8 @@
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:text="Report"
-                   android:textSize="18sp"
+                   android:textColor="?attr/primaryTextColor"
+                   android:textSize="16sp"
                    android:layout_marginStart="20dp"/>
            </LinearLayout>
 
@@ -107,8 +110,8 @@
                android:backgroundTint="?attr/backgroundCardColor">
 
                <ImageView
-                   android:layout_width="20dp"
-                   android:layout_height="20dp"
+                   android:layout_width="18dp"
+                   android:layout_height="18dp"
                    android:layout_gravity="center"
                    android:src="@drawable/ic_delete_friend_icon"/>
 
@@ -116,7 +119,8 @@
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:text="Delete Friend"
-                   android:textSize="18sp"
+                   android:textColor="?attr/primaryTextColor"
+                   android:textSize="16sp"
                    android:layout_marginStart="20dp"/>
            </LinearLayout>
        </LinearLayout>

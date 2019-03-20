@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_view"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -63,8 +63,24 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="You are friends"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:layout_marginTop="5dp"
+            android:textStyle="normal"
+            android:fontFamily="sans-serif"
+            android:textSize="14sp"
+            android:backgroundTint="?attr/extColor"
+            style="@style/CustomTransparentViewStyle"
+            android:visibility="visible"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:fontFamily="sans-serif-light"
             android:text="Name Surname"
             android:textColor="?attr/primaryTextColor"

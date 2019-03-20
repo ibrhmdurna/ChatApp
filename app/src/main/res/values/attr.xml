@@ -9,5 +9,6 @@
         <attr name="rippleColor" format="color|reference"/>
         <attr name="pvtRadiusColor" format="color|reference"/>
         <attr name="searchColor" format="color|reference"/>
+        <attr name="extColor" format="color|reference"/>
     </declare-styleable>
 </resources>
