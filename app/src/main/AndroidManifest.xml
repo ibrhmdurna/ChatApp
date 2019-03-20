@@ -16,9 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.LightTheme"
         tools:ignore="GoogleAppIndexingWarning,InnerclassSeparator">
-        <activity android:name=".Local.SolidColorActivity"
+        <activity android:name=".Main.WriteActivity"></activity>
+        <activity
+            android:name=".Local.SolidColorActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Image.BackgroundActivity"
             android:launchMode="singleTop"
@@ -59,7 +61,7 @@
         <activity
             android:name=".Local.ChatActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Start.RegisterFinishActivity"
             android:launchMode="singleTop"
