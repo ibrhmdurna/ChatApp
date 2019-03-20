@@ -1,5 +1,6 @@
 package com.ibrhmdurna.chatapp.Local;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -32,6 +33,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onButtonClicked(String action) {
-
+        switch (action){
+            case "share":
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String shareBody = "Hello, I Name Surname (@email) would you like to join us? ChatApp Inc.";
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(sharingIntent, "Share"));
+                break;
+        }
     }
 }

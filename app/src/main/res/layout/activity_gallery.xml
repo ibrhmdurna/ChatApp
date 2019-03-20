@@ -68,7 +68,18 @@
             android:id="@+id/gallery_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"></android.support.v7.widget.RecyclerView>
+            app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/no_photos_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Photos"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

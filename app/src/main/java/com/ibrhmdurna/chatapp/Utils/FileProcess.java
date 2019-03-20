@@ -120,14 +120,6 @@ public class FileProcess {
         return allFiles;
     }
 
-    public static boolean isEmptyAllFile(String path){
-        File file = new File(path);
-
-        File[] fileList = file.listFiles();
-
-        return fileList != null && fileList.length > 1;
-    }
-
     public static boolean isEmptyFile(String path){
         File file = new File(path);
 

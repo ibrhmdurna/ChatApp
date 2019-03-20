@@ -40,7 +40,7 @@ public class GalleryActivity extends AppCompatActivity {
     private List<File> files;
     private RecyclerView galleryContainer;
     private CollapsingToolbarLayout collapsingToolbarLayout;
-    private TextView subTitle;
+    private TextView subTitle, noPhotosView;
 
     private boolean isBack = true;
 
@@ -104,7 +104,7 @@ public class GalleryActivity extends AppCompatActivity {
         String picsArtPath = root + "/Pictures/PicsArt";
         String snapchatPath = root + "/Snapchat";
 
-        if(FileProcess.isEmptyAllFile(root)){
+        if(FileProcess.isEmptyFile(root)){
             files.add(new File("All Photos", root, FileProcess.getAllGallery(this), FileProcess.getAllGalleryImageCount(this)));
         }
         if(FileProcess.isEmptyFile(cameraPath)){
@@ -154,6 +154,10 @@ public class GalleryActivity extends AppCompatActivity {
         galleryContainer.setHasFixedSize(true);
         galleryContainer.setAdapter(galleryAdapter);
 
+        if(files.size() == 0){
+            noPhotosView.setVisibility(View.VISIBLE);
+        }
+
         galleryAdapter.setOnItemClickListener(new GalleryAdapter.OnItemClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -193,6 +197,7 @@ public class GalleryActivity extends AppCompatActivity {
     private void buildView(){
         collapsingToolbarLayout = findViewById(R.id.gallery_collapsing_bar);
         subTitle = findViewById(R.id.gallery_subtitle);
+        noPhotosView = findViewById(R.id.no_photos_view);
     }
 
     private void toolsManagement(){
