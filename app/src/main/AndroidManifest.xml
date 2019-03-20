@@ -16,7 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.LightTheme"
         tools:ignore="GoogleAppIndexingWarning,InnerclassSeparator">
-        <activity android:name=".Main.WriteActivity"></activity>
+        <activity android:name=".Main.WriteActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Local.SolidColorActivity"
             android:launchMode="singleTop"

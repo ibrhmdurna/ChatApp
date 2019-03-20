@@ -151,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(searchIntent);
                 break;
             case R.id.write_item:
-                Intent chatIntent = new Intent(getApplicationContext(), ChatActivity.class);
-                startActivity(chatIntent);
+                Intent writeIntent = new Intent(getApplicationContext(), WriteActivity.class);
+                startActivity(writeIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);
