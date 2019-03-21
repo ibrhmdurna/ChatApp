@@ -56,9 +56,10 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
         List<String> list = new ArrayList<>();
 
 
+        /*
         for(int i = 0; i < 20; i++){
             list.add("Write " + i);
-        }
+        }*/
 
         RecyclerView recyclerView = findViewById(R.id.friends_container);
         MessagesAdapter adapter = new MessagesAdapter(list);

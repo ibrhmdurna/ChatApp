@@ -72,23 +72,24 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         confirmInput.setHelperTextColor(getColorStateList(R.color.colorFail));
                     }
                 }else {
-                    if(passwordInput.getEditText().getText().length() > 10){
-                        passwordImage.setImageDrawable(getDrawable(R.drawable.ic_password_done_icon));
-                        passwordInput.setHelperText("* Password is good");
-                        passwordInput.setHelperTextColor(getColorStateList(android.R.color.holo_green_light));
-                    }
-                    else if(passwordInput.getEditText().getText().length() > 5){
-                        passwordImage.setImageDrawable(getDrawable(R.drawable.ic_password_warning_icon));
-                        passwordInput.setHelperText("* Password is medium");
-                        passwordInput.setHelperTextColor(getColorStateList(R.color.colorWarning));
-                    }
-                    else {
-                        passwordInput.setHelperText(null);
-                    }
                     //passwordImage.setImageDrawable(getDrawable(R.drawable.ic_password_icon));
                     confirmImage.setImageDrawable(getDrawable(R.drawable.ic_password_icon));
                     confirmInput.setHelperText("* Password must be at least 6 characters");
                     confirmInput.setHelperTextColor(getColorStateList(android.R.color.tab_indicator_text));
+                }
+
+                if(passwordInput.getEditText().getText().length() > 10){
+                    passwordImage.setImageDrawable(getDrawable(R.drawable.ic_password_done_icon));
+                    passwordInput.setHelperText("* Password is good");
+                    passwordInput.setHelperTextColor(getColorStateList(android.R.color.holo_green_light));
+                }
+                else if(passwordInput.getEditText().getText().length() > 5){
+                    passwordImage.setImageDrawable(getDrawable(R.drawable.ic_password_warning_icon));
+                    passwordInput.setHelperText("* Password is medium");
+                    passwordInput.setHelperTextColor(getColorStateList(R.color.colorWarning));
+                }
+                else {
+                    passwordInput.setHelperText(null);
                 }
             }else {
                 passwordImage.setImageDrawable(getDrawable(R.drawable.ic_password_icon));

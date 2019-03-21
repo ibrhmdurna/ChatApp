@@ -13,7 +13,7 @@
         android:layout_height="45dp"
         android:src="@drawable/ic_settings_icon"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="235dp"
+        android:layout_marginTop="230dp"
         android:layout_marginEnd="3dp"
         style="@style/CustomTransparentViewStyle"/>
 
@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:fontFamily="sans-serif-light"
             android:text="Name Surname"
             android:textColor="?attr/primaryTextColor"
