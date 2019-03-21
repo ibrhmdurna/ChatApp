@@ -52,6 +52,7 @@ public class FriendsFragment extends Fragment {
         rootView = view.findViewById(R.id.root_view);
         notFoundView = getActivity().findViewById(R.id.not_found_view);
 
+        /*
         for (int i = 0; i < 5; i++){
             list.add("Online " + i);
         }
@@ -60,6 +61,7 @@ public class FriendsFragment extends Fragment {
         for (int i = 0; i < 10; i++){
             list2.add("Friends " + i);
         }
+        */
 
         if(list2.size() == 0){
             rootView.setVisibility(View.GONE);

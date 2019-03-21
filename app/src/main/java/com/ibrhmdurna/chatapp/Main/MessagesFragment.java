@@ -52,12 +52,11 @@ public class MessagesFragment extends Fragment {
         recyclerView = view.findViewById(R.id.messagesContainer);
         notFoundView = getActivity().findViewById(R.id.not_found_view);
 
-
-
+        /*
         for (int i = 0; i < 20; i++){
             list.add("Messages " + i);
         }
-
+        */
 
         if(list.size() == 0){
             recyclerView.setVisibility(View.GONE);

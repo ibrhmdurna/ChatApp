@@ -47,9 +47,11 @@ public class RequestsFragment extends Fragment {
         notFoundView = getActivity().findViewById(R.id.not_found_view);
 
 
+        /*
         for (int i = 0; i < 10; i++){
             list.add("Request " + i);
         }
+        */
 
         if(list.size() == 0){
             recyclerView.setVisibility(View.GONE);

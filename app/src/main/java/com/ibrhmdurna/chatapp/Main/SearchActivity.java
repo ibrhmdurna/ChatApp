@@ -1,5 +1,6 @@
 package com.ibrhmdurna.chatapp.Main;
 
+import android.content.Context;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -33,8 +35,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_search);
 
         toolsManagement();
-
-        searchInput.requestFocus();
     }
 
     private TextWatcher checkSearch = new TextWatcher() {
@@ -80,6 +80,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         buildView();
         toolbarProcess();
         inputWatcherProcess();
+        searchInput.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(searchInput, InputMethodManager.SHOW_IMPLICIT);
     }
 
     @Override

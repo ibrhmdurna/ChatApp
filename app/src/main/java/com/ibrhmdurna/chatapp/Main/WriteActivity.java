@@ -1,5 +1,7 @@
 package com.ibrhmdurna.chatapp.Main;
 
+import android.content.Context;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +17,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -35,6 +38,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
     private LinearLayout searchInputLayout;
     private EditText searchInput;
     private ImageButton searchClearView;
+    private NestedScrollView noWriteView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +50,10 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
 
         List<String> list = new ArrayList<>();
 
+        /*
         for(int i = 0; i < 20; i++){
             list.add("Write " + i);
-        }
+        }*/
 
         RecyclerView recyclerView = findViewById(R.id.write_container);
         MessagesAdapter adapter = new MessagesAdapter(list);
@@ -56,6 +61,15 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
+
+        if(list.size() == 0){
+            noWriteView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
+        else {
+            noWriteView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void inputProcess(){
@@ -90,6 +104,7 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
         searchInputLayout = findViewById(R.id.write_search_layout);
         searchInput = findViewById(R.id.search_input);
         searchClearView = findViewById(R.id.clear_search_btn);
+        noWriteView = findViewById(R.id.no_write_view);
     }
 
     private void toolsManagement() {
@@ -109,6 +124,8 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
             searchInputLayout.setVisibility(View.VISIBLE);
             toolbar.getMenu().clear();
             searchInput.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(searchInput, InputMethodManager.SHOW_IMPLICIT);
         }
         else if(searchInputLayout.getVisibility() == View.VISIBLE) {
             writeTitle.setVisibility(View.GONE);
