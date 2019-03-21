@@ -28,6 +28,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 MoreBottomSheetDialog moreBottomSheetDialog = new MoreBottomSheetDialog(true);
                 moreBottomSheetDialog.show(getSupportFragmentManager(), "bottom_sheet");
                 break;
+            case R.id.profile_friends_view:
+                Intent friends = new Intent(this, FriendsActivity.class);
+                friends.putExtra("isAccount", false);
+                startActivity(friends);
+                break;
         }
     }
 

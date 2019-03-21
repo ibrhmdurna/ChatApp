@@ -118,15 +118,18 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/profile_friends_view"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            style="@style/CustomTransparentViewStyle"
+            android:padding="10dp"
+            android:onClick="onClick">
 
             <TextView
-                style="@style/CustomTransparentViewStyle"
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -135,7 +138,6 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:maxLines="1"
-                android:padding="5dp"
                 android:text="1 Friends"
                 android:textSize="16sp"
                 android:textStyle="normal" />
@@ -143,9 +145,10 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_margin="5dp"
                 android:layout_weight="0"
-                android:background="@color/colorGray" />
+                android:background="@color/colorGray"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"/>
 
             <TextView
                 android:layout_width="90dp"
@@ -156,7 +159,6 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:maxLines="1"
-                android:padding="5dp"
                 android:text="1 Mutual F."
                 android:textSize="16sp"
                 android:textStyle="normal" />
@@ -166,7 +168,7 @@
             android:id="@+id/nestedAccountContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/rounded_background"
             android:backgroundTint="?attr/backgroundCardColor">
 

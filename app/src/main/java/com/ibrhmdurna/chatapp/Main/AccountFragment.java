@@ -8,9 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Local.FriendsActivity;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Settings.SettingsActivity;
 
@@ -28,6 +31,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private ImageButton settingsButton;
     private CircleImageView profileImage;
     private TextView profileText;
+    private LinearLayout friendView;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -85,12 +89,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     private void clickProcess(){
         settingsButton.setOnClickListener(this);
+        friendView.setOnClickListener(this);
     }
 
     private void buildView(){
         profileImage = view.findViewById(R.id.profile_image);
         profileText = view.findViewById(R.id.profile_image_text);
         settingsButton = view.findViewById(R.id.account_settings_button);
+        friendView = view.findViewById(R.id.account_friends_button);
     }
 
     private void toolsManagement(){
@@ -104,6 +110,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             case R.id.account_settings_button:
                 Intent settings = new Intent(getActivity(), SettingsActivity.class);
                 startActivity(settings);
+                break;
+            case R.id.account_friends_button:
+                Intent friends = new Intent(getActivity(), FriendsActivity.class);
+                friends.putExtra("isAccount", true);
+                startActivity(friends);
                 break;
         }
     }
