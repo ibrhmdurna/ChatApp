@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()){
                     case R.id.messages_item:
                         showFragment(new MessagesFragment(), "MessagesFragment");
+                        App.Background.clearThisPage("MessagesFragment");
                         App.Background.addPage("MessagesFragment");
                         collapsingToolbarLayout.setTitle("Messages");
                         toolbar.getMenu().clear();
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.friends_item:
                         showFragment(new FriendsFragment(), "FriendsFragment");
+                        App.Background.clearThisPage("FriendsFragment");
                         App.Background.addPage("FriendsFragment");
                         collapsingToolbarLayout.setTitle("Friends");
                         toolbar.getMenu().clear();
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.requests_item:
                         showFragment(new RequestsFragment(), "RequestsFragment");
+                        App.Background.clearThisPage("RequestsFragment");
                         App.Background.addPage("RequestsFragment");
                         collapsingToolbarLayout.setTitle("Requests");
                         toolbar.getMenu().clear();
@@ -84,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.account_item:
                         showFragment(new AccountFragment(), "AccountFragment");
+                        App.Background.clearThisPage("AccountFragment");
                         App.Background.addPage("AccountFragment");
                         mainAppBarLayout.setVisibility(View.GONE);
                         fullFrame.setVisibility(View.VISIBLE);

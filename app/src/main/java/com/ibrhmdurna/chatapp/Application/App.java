@@ -71,6 +71,14 @@ public class App extends Application {
             pageStackList.remove(pageStackList.size() - 1);
             pageStackList.remove(pageStackList.size() - 1);
         }
+
+        public static void clearThisPage(String tag){
+            for(int i = 0; i < pageStackList.size(); i++){
+                if(pageStackList.get(i).equals(tag)){
+                    pageStackList.remove(i);
+                }
+            }
+        }
     }
 
     public static class Theme{

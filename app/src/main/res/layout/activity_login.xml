@@ -40,8 +40,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
-        android:layout_marginBottom="55dp">
+        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
         <ImageView
             android:layout_width="24dp"
@@ -170,9 +169,9 @@
         android:layout_marginBottom="100dp"
         android:fontFamily="sans-serif"
         android:textStyle="normal"
-        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
         style="@style/CustomTransparentViewStyle"
-        android:onClick="onClick"/>
+        android:onClick="onClick"
+        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"/>
 
     <ImageView
         android:layout_width="24dp"
