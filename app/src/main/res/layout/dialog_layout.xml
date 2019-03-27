@@ -32,7 +32,8 @@
                     android:id="@+id/dialog_content_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="?attr/primaryTextColor"/>
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="16sp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

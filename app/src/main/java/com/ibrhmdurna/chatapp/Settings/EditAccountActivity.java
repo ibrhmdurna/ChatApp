@@ -234,11 +234,13 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
             case "gallery":
                 Intent galleryIntent = new Intent(this, GalleryActivity.class);
                 galleryIntent.putExtra("isContext","Profile");
+                galleryIntent.putExtra("register", false);
                 startActivity(galleryIntent);
                 break;
             case "camera":
                 Intent cameraIntent = new Intent(this, CameraActivity.class);
                 cameraIntent.putExtra("isContext","Profile");
+                cameraIntent.putExtra("register", false);
                 startActivity(cameraIntent);
                 break;
         }

@@ -1,6 +1,5 @@
 package com.ibrhmdurna.chatapp.Start;
 
-import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,9 +8,11 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Database.Search;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.Environment;
 
@@ -20,6 +21,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private TextInputLayout emailInput, passwordInput, confirmInput;
     private TextView nextView;
     private ImageView passwordImage, confirmImage;
+    private ProgressBar loadingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +44,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void passwordProcess(){
-        passwordInput.getEditText().addTextChangedListener(passwordWatcher);
-        confirmInput.getEditText().addTextChangedListener(passwordWatcher);
+        emailInput.getEditText().addTextChangedListener(inputWatcher);
+        passwordInput.getEditText().addTextChangedListener(inputWatcher);
+        confirmInput.getEditText().addTextChangedListener(inputWatcher);
     }
 
-    private TextWatcher passwordWatcher = new TextWatcher() {
+    private TextWatcher inputWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -109,6 +112,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         nextView = findViewById(R.id.register_next_btn);
         passwordImage = findViewById(R.id.reg_password_image);
         confirmImage = findViewById(R.id.reg_confirm_image);
+        loadingBar = findViewById(R.id.reg_loading_bar);
     }
 
     private void toolsManagement(){
@@ -127,8 +131,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.register_next_btn:
-                Intent finishIntent = new Intent(this, RegisterInfoActivity.class);
-                startActivity(finishIntent);
+                Search searchDB = new Search();
+                searchDB.checkEmail(this, emailInput, passwordInput, loadingBar);
                 break;
         }
     }

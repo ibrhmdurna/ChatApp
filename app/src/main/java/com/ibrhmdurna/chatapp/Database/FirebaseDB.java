@@ -10,6 +10,8 @@ public class FirebaseDB {
     private FirebaseUser currentUser;
     private DatabaseReference database;
 
+    private FirebaseDB firebaseDB;
+
     public FirebaseDB() {
     }
 

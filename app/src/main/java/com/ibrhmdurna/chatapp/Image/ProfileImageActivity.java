@@ -5,18 +5,23 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Database.Insert;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Settings.EditAccountActivity;
+import com.ibrhmdurna.chatapp.Start.RegisterFinishActivity;
 import com.ibrhmdurna.chatapp.Utils.FileProcess;
 import com.ibrhmdurna.chatapp.Utils.ImageController;
 import com.ibrhmdurna.chatapp.Utils.UniversalImageLoader;
 import com.isseiaoki.simplecropview.CropImageView;
+
+import java.io.ByteArrayOutputStream;
 
 public class ProfileImageActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,7 +43,13 @@ public class ProfileImageActivity extends AppCompatActivity implements View.OnCl
 
     private void changeProfileImage(){
 
-        FileProcess.insertProfileImage(cropImageView.getCroppedBitmap());
+        //FileProcess.insertProfileImage(cropImageView.getCroppedBitmap());
+
+        Bitmap bitmap = cropImageView.getCroppedBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] bytes = stream.toByteArray();
+        bitmap.recycle();
 
         Intent editIntent = new Intent(this, EditAccountActivity.class);
         editIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

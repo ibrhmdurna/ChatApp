@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/transparent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="?attr/pvtRadiusColor"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
+                android:paddingTop="25dp"
+                android:paddingBottom="15dp">
+
+                <TextView
+                    android:id="@+id/dialog_content_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/primaryTextColor"
+                    android:text="Cannot Sign in. Please check the from and try again."
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/dialog_positive_btn"
+                    android:layout_width="140dp"
+                    android:layout_height="40dp"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:layout_gravity="end"
+                    android:fontFamily="sans-serif"
+                    android:textColor="?attr/colorAccent"
+                    android:text="Dismiss"
+                    style="@style/CustomTransparentViewStyle"
+                    android:backgroundTint="?attr/pvtRadiusColor"
+                    android:layout_marginTop="20dp"/>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -19,10 +19,14 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Database.FirebaseDB;
 import com.ibrhmdurna.chatapp.Local.ChatActivity;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.Start.StartActivity;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FirebaseDB firebaseDB;
 
     private Toolbar toolbar;
     private FrameLayout mainFrame, fullFrame;
@@ -209,5 +213,20 @@ public class MainActivity extends AppCompatActivity {
         else {
             finish();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseDB = new FirebaseDB();
+        if(firebaseDB.getCurrentUser() == null){
+            sendToStart();
+        }
+    }
+
+    private void sendToStart(){
+        Intent startIntent = new Intent(MainActivity.this, StartActivity.class);
+        startActivity(startIntent);
+        finish();
     }
 }

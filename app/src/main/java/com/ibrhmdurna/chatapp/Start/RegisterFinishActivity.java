@@ -1,28 +1,30 @@
 package com.ibrhmdurna.chatapp.Start;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.firebase.database.ServerValue;
 import com.ibrhmdurna.chatapp.Application.App;
-import com.ibrhmdurna.chatapp.Image.CameraActivity;
-import com.ibrhmdurna.chatapp.Image.GalleryActivity;
+import com.ibrhmdurna.chatapp.Database.Insert;
+import com.ibrhmdurna.chatapp.Models.Account;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.Environment;
-import com.ibrhmdurna.chatapp.Utils.ProfileBottomSheetDialog;
 
+import java.util.Map;
 import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RegisterFinishActivity extends AppCompatActivity implements View.OnClickListener, ProfileBottomSheetDialog.BottomSheetListener {
+public class RegisterFinishActivity extends AppCompatActivity implements View.OnClickListener{
 
     private CircleImageView profileImage;
-    private TextView profileText;
+    private TextView profileText, bodyText;
+
+    private int imageIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +33,20 @@ public class RegisterFinishActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_register_finish);
 
         toolManagement();
-        randomProfileImage();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void infoProcess(){
+        String name = getIntent().getStringExtra("name");
+        String surname = getIntent().getStringExtra("surname");
+        bodyText.setText("Nice to see you among us. Welcome\n"+name+" "+surname+"!");
+        profileText.setText(name.substring(0,1));
     }
 
     private void randomProfileImage(){
         Random r = new Random();
-        int index = r.nextInt(10);
-        switch (index){
+        imageIndex = r.nextInt(10);
+        switch (imageIndex){
             case 0:
                 profileImage.setImageResource(R.drawable.ic_avatar_0);
                 break;
@@ -80,39 +89,42 @@ public class RegisterFinishActivity extends AppCompatActivity implements View.On
     private void buildView(){
         profileImage = findViewById(R.id.profile_image);
         profileText = findViewById(R.id.profile_text);
+        bodyText = findViewById(R.id.reg_finish_body_text);
     }
 
     private void toolManagement(){
         Environment.toolbarProcess(this, R.id.register_finish_toolbar);
         buildView();
+        randomProfileImage();
+        infoProcess();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.change_profile_image_view:
-                ProfileBottomSheetDialog profileBottomSheetDialog = new ProfileBottomSheetDialog(profileText.getVisibility() == View.VISIBLE);
-                profileBottomSheetDialog.show(getSupportFragmentManager(), "bottom_sheet");
-            break;
             case R.id.reg_finish_back_btn:
                 super.onBackPressed();
+                break;
+            case R.id.register_finish_btn:
+                registerProcess();
                 break;
         }
     }
 
-    @Override
-    public void onButtonClicked(String action) {
-        switch (action){
-            case "gallery":
-                Intent galleryIntent = new Intent(this, GalleryActivity.class);
-                galleryIntent.putExtra("isContext","Profile");
-                startActivity(galleryIntent);
-                break;
-            case "camera":
-                Intent cameraIntent = new Intent(this, CameraActivity.class);
-                cameraIntent.putExtra("isContext","Profile");
-                startActivity(cameraIntent);
-                break;
-        }
+    private void registerProcess(){
+        String email = getIntent().getStringExtra("email");
+        String password = getIntent().getStringExtra("password");
+        String name = getIntent().getStringExtra("name");
+        String surname = getIntent().getStringExtra("surname");
+        String phone = getIntent().getStringExtra("phone");
+        String birthday = getIntent().getStringExtra("birthday");
+        String gender = getIntent().getStringExtra("gender");
+        String location = getIntent().getStringExtra("location");
+        String image = "default_"+imageIndex;
+        Map<String, String> last_seen = ServerValue.TIMESTAMP;
+
+        Account account = new Account(email, name, surname, phone, birthday, gender, location, image, image, false, last_seen);
+        Insert registerDB = new Insert();
+        registerDB.register(account, password, this);
     }
 }

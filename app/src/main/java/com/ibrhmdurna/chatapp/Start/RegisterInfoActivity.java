@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Database.Insert;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.Environment;
 import com.tsongkha.spinnerdatepicker.DatePicker;
@@ -170,6 +171,28 @@ public class RegisterInfoActivity extends AppCompatActivity implements View.OnCl
         inputProcess();
     }
 
+    private void registerProcess(){
+        String email = getIntent().getStringExtra("email");
+        String password = getIntent().getStringExtra("password");
+        String name = nameInput.getEditText().getText().toString();
+        String surname = surnameInput.getEditText().getText().toString();
+        String phone = phoneInput.getEditText().getText().toString();
+        String birthday = birthdayText.getText().toString();
+        String gender = genderSpinner.getSelectedItem().toString();
+        String location = locationSpinner.getSelectedItem().toString();
+
+        Intent finishIntent = new Intent(this, RegisterFinishActivity.class);
+        finishIntent.putExtra("email", email);
+        finishIntent.putExtra("password", password);
+        finishIntent.putExtra("name", name);
+        finishIntent.putExtra("surname", surname);
+        finishIntent.putExtra("phone", phone);
+        finishIntent.putExtra("birthday", birthday);
+        finishIntent.putExtra("gender", gender);
+        finishIntent.putExtra("location", location);
+        startActivity(finishIntent);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onBackPressed();
@@ -186,8 +209,7 @@ public class RegisterInfoActivity extends AppCompatActivity implements View.OnCl
                 super.onBackPressed();
                 break;
             case R.id.register_info_next_btn:
-                Intent finishIntent = new Intent(this, RegisterFinishActivity.class);
-                startActivity(finishIntent);
+                registerProcess();
                 break;
         }
     }

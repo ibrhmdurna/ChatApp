@@ -62,22 +62,10 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/change_profile_image_view"
-            android:layout_width="150dp"
-            android:layout_height="40dp"
-            android:text="Change Photo"
-            android:gravity="center"
-            android:textAppearance="?attr/textAppearanceHeadline1"
-            android:textColor="?attr/colorAccent"
-            style="@style/CustomTransparentViewStyle"
-            android:layout_marginTop="10dp"
-            android:onClick="onClick"/>
-
-        <TextView
+            android:id="@+id/reg_finish_body_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nice to see you among us. Welcome\nName Surname!"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:gravity="center"
             android:textSize="18sp"/>
     </LinearLayout>
@@ -115,7 +103,8 @@
             android:textColor="?attr/colorAccent"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            style="@style/CustomTransparentViewStyle"/>
+            style="@style/CustomTransparentViewStyle"
+            android:onClick="onClick"/>
     </LinearLayout>
 
     <RelativeLayout

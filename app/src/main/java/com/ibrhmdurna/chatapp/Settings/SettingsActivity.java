@@ -11,7 +11,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Database.FirebaseDB;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.Start.StartActivity;
 import com.ibrhmdurna.chatapp.Utils.Environment;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
@@ -28,7 +30,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         Environment.toolbarProcess(this, R.id.settingsToolbar);
     }
 
-    private void logoutDialog(){
+    private void dialogLogout(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.dialog_layout, null);
         App.Theme.getTheme(view.getContext());
@@ -53,12 +55,21 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                FirebaseDB firebaseDB = new FirebaseDB();
+                firebaseDB.getAuth().signOut();
+                sendToStart();
             }
         });
 
         dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
+    }
+
+    private void sendToStart(){
+        Intent startIntent = new Intent(SettingsActivity.this, StartActivity.class);
+        startActivity(startIntent);
+        finish();
     }
 
     @Override
@@ -99,7 +110,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(aboutIntent);
                 break;
             case R.id.logout_item:
-                logoutDialog();
+                dialogLogout();
                 break;
         }
     }
