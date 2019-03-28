@@ -3,7 +3,6 @@ package com.ibrhmdurna.chatapp.Main;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.MessagesAdapter;
 
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RequestsFragment extends Fragment {
+public class RequestsFragment extends Fragment implements ViewComponentFactory {
 
     private View view;
 
@@ -70,5 +70,15 @@ public class RequestsFragment extends Fragment {
         messagesAdapter.notifyDataSetChanged();
 
         return view;
+    }
+
+    @Override
+    public void toolsManagement() {
+        // ---- COMPONENT ----
+    }
+
+    @Override
+    public void buildView() {
+        // ---- COMPONENT ----
     }
 }

@@ -15,8 +15,9 @@ import android.widget.TextView;
 
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 import com.ibrhmdurna.chatapp.Application.App;
-import com.ibrhmdurna.chatapp.Image.CameraActivity;
-import com.ibrhmdurna.chatapp.Image.GalleryActivity;
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
+import com.ibrhmdurna.chatapp.Image.CameraViewFactory;
+import com.ibrhmdurna.chatapp.Image.GalleryViewFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.Environment;
 import com.ibrhmdurna.chatapp.Utils.ProfileBottomSheetDialog;
@@ -29,7 +30,7 @@ import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EditAccountActivity extends AppCompatActivity implements View.OnClickListener, ProfileBottomSheetDialog.BottomSheetListener {
+public class EditAccountActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, ProfileBottomSheetDialog.BottomSheetListener {
 
     private TextInputLayout nameInput, surnameInput, phoneInput;
     private SmartMaterialSpinner genderSpinner, locationSpinner;
@@ -189,7 +190,8 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
         locSpinner.setAdapter(locAdapter);
     }
 
-    private void buildView(){
+    @Override
+    public void buildView(){
         nameInput = findViewById(R.id.edit_name_input);
         surnameInput = findViewById(R.id.edit_surname_input);
         phoneInput = findViewById(R.id.edit_phone_input);
@@ -198,7 +200,8 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
         profileText = findViewById(R.id.profile_image_text);
     }
 
-    private void toolsManagement(){
+    @Override
+    public void toolsManagement(){
         Environment.toolbarProcess(this, R.id.edit_account_toolbar);
         buildView();
         spinnerProcess();
@@ -232,13 +235,13 @@ public class EditAccountActivity extends AppCompatActivity implements View.OnCli
     public void onButtonClicked(String action) {
         switch (action){
             case "gallery":
-                Intent galleryIntent = new Intent(this, GalleryActivity.class);
+                Intent galleryIntent = new Intent(this, GalleryViewFactory.class);
                 galleryIntent.putExtra("isContext","Profile");
                 galleryIntent.putExtra("register", false);
                 startActivity(galleryIntent);
                 break;
             case "camera":
-                Intent cameraIntent = new Intent(this, CameraActivity.class);
+                Intent cameraIntent = new Intent(this, CameraViewFactory.class);
                 cameraIntent.putExtra("isContext","Profile");
                 cameraIntent.putExtra("register", false);
                 startActivity(cameraIntent);

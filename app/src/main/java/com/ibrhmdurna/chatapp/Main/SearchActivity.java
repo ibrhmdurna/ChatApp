@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -14,12 +13,12 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 
-public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
+public class SearchActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
     private EditText searchInput;
     private ImageButton clearView;
@@ -69,14 +68,16 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_icon);
     }
 
-    private void buildView(){
+    @Override
+    public void buildView(){
         searchInput = findViewById(R.id.search_input);
         clearView = findViewById(R.id.clear_search_btn);
         recentView = findViewById(R.id.recent_layout);
         recentRecylerView = findViewById(R.id.recent_container);
     }
 
-    private void toolsManagement(){
+    @Override
+    public void toolsManagement(){
         buildView();
         toolbarProcess();
         inputWatcherProcess();

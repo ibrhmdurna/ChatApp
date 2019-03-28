@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.Environment;
 import com.ibrhmdurna.chatapp.Utils.MessagesAdapter;
@@ -29,7 +30,7 @@ import com.ibrhmdurna.chatapp.Utils.MessagesAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WriteActivity extends AppCompatActivity implements View.OnClickListener {
+public class WriteActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
     private Toolbar toolbar;
     private TextView writeTitle;
@@ -96,7 +97,8 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
         }
     };
 
-    private void buildView(){
+    @Override
+    public void buildView(){
         toolbar = findViewById(R.id.write_toolbar);
         writeTitle = findViewById(R.id.write_title_view);
         searchInputLayout = findViewById(R.id.write_search_layout);
@@ -105,7 +107,8 @@ public class WriteActivity extends AppCompatActivity implements View.OnClickList
         noWriteView = findViewById(R.id.no_write_view);
     }
 
-    private void toolsManagement() {
+    @Override
+    public void toolsManagement() {
         Environment.toolbarProcess(this, R.id.write_toolbar);
         buildView();
         inputProcess();

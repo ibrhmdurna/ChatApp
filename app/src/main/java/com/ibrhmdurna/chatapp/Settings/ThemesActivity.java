@@ -2,26 +2,15 @@ package com.ibrhmdurna.chatapp.Settings;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
-import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Main.MainActivity;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.Environment;
@@ -30,7 +19,7 @@ import com.suke.widget.SwitchButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThemesActivity extends AppCompatActivity implements View.OnClickListener {
+public class ThemesActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
     private static int THEME_COLOR;
 
@@ -190,11 +179,13 @@ public class ThemesActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private void buildView(){
+    @Override
+    public void buildView(){
         darkModeSwitch = findViewById(R.id.dark_mode_switch);
     }
 
-    private void toolsManagement(){
+    @Override
+    public void toolsManagement(){
         Environment.toolbarProcess(this, R.id.themes_toolbar);
         buildView();
         selectedListView();

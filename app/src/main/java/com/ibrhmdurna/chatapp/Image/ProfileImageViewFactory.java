@@ -5,25 +5,22 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
-import com.ibrhmdurna.chatapp.Database.Insert;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Settings.EditAccountActivity;
-import com.ibrhmdurna.chatapp.Start.RegisterFinishActivity;
-import com.ibrhmdurna.chatapp.Utils.FileProcess;
 import com.ibrhmdurna.chatapp.Utils.ImageController;
 import com.ibrhmdurna.chatapp.Utils.UniversalImageLoader;
 import com.isseiaoki.simplecropview.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 
-public class ProfileImageActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProfileImageViewFactory extends AppCompatActivity implements View.OnClickListener, ViewComponentFactory {
 
     private CropImageView cropImageView;
 
@@ -95,11 +92,13 @@ public class ProfileImageActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private void buildView(){
+    @Override
+    public void buildView(){
         cropImageView = findViewById(R.id.profile_image_corp_view);
     }
 
-    private void toolsManagement(){
+    @Override
+    public void toolsManagement(){
         buildView();
         imageProcess();
     }

@@ -19,14 +19,12 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Database.FirebaseDB;
-import com.ibrhmdurna.chatapp.Local.ChatActivity;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Start.StartActivity;
 
-public class MainActivity extends AppCompatActivity {
-
-    private FirebaseDB firebaseDB;
+public class MainActivity extends AppCompatActivity implements ViewComponentFactory {
 
     private Toolbar toolbar;
     private FrameLayout mainFrame, fullFrame;
@@ -134,7 +132,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void buildView(){
+    private void sendToStart(){
+        Intent startIntent = new Intent(MainActivity.this, StartActivity.class);
+        startActivity(startIntent);
+        finish();
+    }
+
+    @Override
+    public void buildView(){
         toolbar = findViewById(R.id.mainToolbar);
         mainFrame = findViewById(R.id.mainFrame);
         fullFrame = findViewById(R.id.fullMainFrame);
@@ -144,12 +149,12 @@ public class MainActivity extends AppCompatActivity {
         notFoundView = findViewById(R.id.not_found_view);
     }
 
-    private void toolsManagement(){
+    @Override
+    public void toolsManagement(){
         buildView();
         bottomViewItemSelected();
         setSupportActionBar(toolbar);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -218,15 +223,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        firebaseDB = new FirebaseDB();
-        if(firebaseDB.getCurrentUser() == null){
+        if(FirebaseDB.getInstance().getCurrentUser() == null){
             sendToStart();
         }
-    }
-
-    private void sendToStart(){
-        Intent startIntent = new Intent(MainActivity.this, StartActivity.class);
-        startActivity(startIntent);
-        finish();
     }
 }

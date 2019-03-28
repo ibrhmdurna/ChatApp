@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
-import com.ibrhmdurna.chatapp.Local.FriendsActivity;
+import com.ibrhmdurna.chatapp.Local.FriendsViewFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Settings.SettingsActivity;
 
@@ -25,7 +25,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AccountFragment extends Fragment implements View.OnClickListener {
+public class AccountFragment extends Fragment implements ViewComponentFactory, View.OnClickListener {
 
     private View view;
     private ImageButton settingsButton;
@@ -92,14 +92,16 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         friendView.setOnClickListener(this);
     }
 
-    private void buildView(){
+    @Override
+    public void buildView(){
         profileImage = view.findViewById(R.id.profile_image);
         profileText = view.findViewById(R.id.profile_image_text);
         settingsButton = view.findViewById(R.id.account_settings_button);
         friendView = view.findViewById(R.id.account_friends_button);
     }
 
-    private void toolsManagement(){
+    @Override
+    public void toolsManagement(){
         buildView();
         clickProcess();
     }
@@ -112,7 +114,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 startActivity(settings);
                 break;
             case R.id.account_friends_button:
-                Intent friends = new Intent(getActivity(), FriendsActivity.class);
+                Intent friends = new Intent(getActivity(), FriendsViewFactory.class);
                 friends.putExtra("isAccount", true);
                 startActivity(friends);
                 break;

@@ -12,16 +12,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Database.Search;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.Environment;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
     private TextInputLayout emailInput, passwordInput, confirmInput;
     private TextView nextView;
     private ImageView passwordImage, confirmImage;
-    private ProgressBar loadingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,17 +105,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     };
 
-    private void buildView(){
+    @Override
+    public void buildView(){
         emailInput = findViewById(R.id.reg_email_input);
         passwordInput = findViewById(R.id.reg_password_input);
         confirmInput = findViewById(R.id.reg_confirm_input);
         nextView = findViewById(R.id.register_next_btn);
         passwordImage = findViewById(R.id.reg_password_image);
         confirmImage = findViewById(R.id.reg_confirm_image);
-        loadingBar = findViewById(R.id.reg_loading_bar);
     }
 
-    private void toolsManagement(){
+    @Override
+    public void toolsManagement(){
         Environment.toolbarProcess(this, R.id.register_toolbar);
         buildView();
         passwordProcess();
@@ -131,8 +132,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.register_next_btn:
-                Search searchDB = new Search();
-                searchDB.checkEmail(this, emailInput, passwordInput, loadingBar);
+                Search.getInstance().checkEmail(this, emailInput, passwordInput);
                 break;
         }
     }

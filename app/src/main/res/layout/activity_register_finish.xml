@@ -7,14 +7,6 @@
     tools:context=".Start.RegisterFinishActivity"
     android:background="?attr/backgroundBrushColor">
 
-    <ProgressBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:indeterminate="false"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:translationZ="1dp"
-        android:visibility="gone"/>
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/register_finish_toolbar"
         android:layout_width="match_parent"

@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.AlbumAdapter;
@@ -17,7 +18,7 @@ import com.ibrhmdurna.chatapp.Utils.FileProcess;
 
 import java.util.List;
 
-public class CameraGalleryActivity extends AppCompatActivity {
+public class CameraGalleryViewFactory extends AppCompatActivity implements ViewComponentFactory {
 
     private RecyclerView galleryContainer;
     private TextView subTitle;
@@ -62,12 +63,14 @@ public class CameraGalleryActivity extends AppCompatActivity {
         }
     }
 
-    private void buildView(){
+    @Override
+    public void buildView(){
         galleryContainer = findViewById(R.id.c_gallery_container);
         subTitle = findViewById(R.id.c_gallery_subtitle);
     }
 
-    private void toolsManagement() {
+    @Override
+    public void toolsManagement() {
         Environment.toolbarProcess(this, R.id.c_gallery_toolbar);
         buildView();
         galleyProcess();

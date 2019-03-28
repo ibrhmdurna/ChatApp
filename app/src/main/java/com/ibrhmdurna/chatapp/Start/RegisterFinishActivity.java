@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.google.firebase.database.ServerValue;
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Database.Insert;
 import com.ibrhmdurna.chatapp.Models.Account;
 import com.ibrhmdurna.chatapp.R;
@@ -19,7 +20,7 @@ import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RegisterFinishActivity extends AppCompatActivity implements View.OnClickListener{
+public class RegisterFinishActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener{
 
     private CircleImageView profileImage;
     private TextView profileText, bodyText;
@@ -32,7 +33,7 @@ public class RegisterFinishActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_finish);
 
-        toolManagement();
+        toolsManagement();
     }
 
     @SuppressLint("SetTextI18n")
@@ -80,19 +81,36 @@ public class RegisterFinishActivity extends AppCompatActivity implements View.On
         }
     }
 
+    private void registerProcess(){
+        String email = getIntent().getStringExtra("email");
+        String password = getIntent().getStringExtra("password");
+        String name = getIntent().getStringExtra("name");
+        String surname = getIntent().getStringExtra("surname");
+        String phone = getIntent().getStringExtra("phone");
+        String birthday = getIntent().getStringExtra("birthday");
+        String gender = getIntent().getStringExtra("gender");
+        String location = getIntent().getStringExtra("location");
+        String image = "default_"+imageIndex;
+        Map<String, String> last_seen = ServerValue.TIMESTAMP;
+
+        Account account = new Account(email, name, surname, phone, birthday, gender, location, image, image, false, last_seen);
+        Insert.getInstance().register(account, password, this);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onBackPressed();
         return true;
     }
-
-    private void buildView(){
+    @Override
+    public void buildView(){
         profileImage = findViewById(R.id.profile_image);
         profileText = findViewById(R.id.profile_text);
         bodyText = findViewById(R.id.reg_finish_body_text);
     }
 
-    private void toolManagement(){
+    @Override
+    public void toolsManagement() {
         Environment.toolbarProcess(this, R.id.register_finish_toolbar);
         buildView();
         randomProfileImage();
@@ -109,22 +127,5 @@ public class RegisterFinishActivity extends AppCompatActivity implements View.On
                 registerProcess();
                 break;
         }
-    }
-
-    private void registerProcess(){
-        String email = getIntent().getStringExtra("email");
-        String password = getIntent().getStringExtra("password");
-        String name = getIntent().getStringExtra("name");
-        String surname = getIntent().getStringExtra("surname");
-        String phone = getIntent().getStringExtra("phone");
-        String birthday = getIntent().getStringExtra("birthday");
-        String gender = getIntent().getStringExtra("gender");
-        String location = getIntent().getStringExtra("location");
-        String image = "default_"+imageIndex;
-        Map<String, String> last_seen = ServerValue.TIMESTAMP;
-
-        Account account = new Account(email, name, surname, phone, birthday, gender, location, image, image, false, last_seen);
-        Insert registerDB = new Insert();
-        registerDB.register(account, password, this);
     }
 }

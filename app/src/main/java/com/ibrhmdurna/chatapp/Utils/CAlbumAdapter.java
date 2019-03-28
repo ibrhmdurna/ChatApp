@@ -7,11 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.ibrhmdurna.chatapp.Image.BackgroundActivity;
-import com.ibrhmdurna.chatapp.Image.ProfileImageActivity;
-import com.ibrhmdurna.chatapp.Image.ShareActivity;
+import com.ibrhmdurna.chatapp.Image.BackgroundViewFactory;
+import com.ibrhmdurna.chatapp.Image.ProfileImageViewFactory;
+import com.ibrhmdurna.chatapp.Image.ShareViewFactory;
 import com.ibrhmdurna.chatapp.R;
 
 import java.util.List;
@@ -46,19 +45,19 @@ public class CAlbumAdapter extends RecyclerView.Adapter<CAlbumAdapter.AlbumViewH
             public void onClick(View v) {
                 switch (isContext) {
                     case "Share":
-                        Intent shareIntent = new Intent(context, ShareActivity.class);
+                        Intent shareIntent = new Intent(context, ShareViewFactory.class);
                         shareIntent.putExtra("position", i);
                         context.startActivity(shareIntent);
                         context.overridePendingTransition(0, 0);
                         break;
                     case "Profile":
-                        Intent profileIntent = new Intent(context, ProfileImageActivity.class);
+                        Intent profileIntent = new Intent(context, ProfileImageViewFactory.class);
                         profileIntent.putExtra("position", i);
                         context.startActivity(profileIntent);
                         context.overridePendingTransition(0, 0);
                         break;
                     case "Background":
-                        Intent backgroundIntent = new Intent(context, BackgroundActivity.class);
+                        Intent backgroundIntent = new Intent(context, BackgroundViewFactory.class);
                         backgroundIntent.putExtra("position", i);
                         context.startActivity(backgroundIntent);
                         context.overridePendingTransition(0, 0);

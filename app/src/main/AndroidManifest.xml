@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.LightTheme"
         tools:ignore="GoogleAppIndexingWarning,InnerclassSeparator">
-        <activity android:name=".Local.FriendsActivity"
+        <activity android:name=".Local.FriendsViewFactory"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
@@ -26,15 +26,15 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".Local.SolidColorActivity"
+            android:name=".Local.SolidColorViewFactory"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Image.BackgroundActivity"
+            android:name=".Image.BackgroundViewFactory"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Local.ProfileActivity"
+            android:name=".Local.ProfileViewFactory"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
@@ -43,31 +43,31 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Image.CameraGalleryActivity"
+            android:name=".Image.CameraGalleryViewFactory"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Image.ProfileImageActivity"
+            android:name=".Image.ProfileImageViewFactory"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Image.CropActivity"
+            android:name=".Image.CropViewFactory"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Image.CameraActivity"
+            android:name=".Image.CameraViewFactory"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Image.ShareActivity"
+            android:name=".Image.ShareViewFactory"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Image.GalleryActivity"
+            android:name=".Image.GalleryViewFactory"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Local.ChatActivity"
+            android:name=".Local.ChatViewFactory"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
@@ -142,7 +142,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Application.SplashActivity"
+            android:name=".Local.SplashActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">

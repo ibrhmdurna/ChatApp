@@ -13,7 +13,6 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
@@ -24,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.Environment;
@@ -32,7 +32,7 @@ import com.ibrhmdurna.chatapp.Utils.MessagesAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FriendsActivity extends AppCompatActivity implements View.OnClickListener {
+public class FriendsViewFactory extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
     private Toolbar toolbar;
     private TextView friendsTitle;
@@ -113,7 +113,8 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
         }
     };
 
-    private void buildView(){
+    @Override
+    public void buildView(){
         toolbar = findViewById(R.id.friends_toolbar);
         friendsTitle = findViewById(R.id.friends_title_view);
         searchInputLayout = findViewById(R.id.friends_search_layout);
@@ -124,7 +125,8 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
         bottomView = findViewById(R.id.bottom_view);
     }
 
-    private void toolsManagement() {
+    @Override
+    public void toolsManagement() {
         Environment.toolbarProcess(this, R.id.friends_toolbar);
         buildView();
         inputProcess();

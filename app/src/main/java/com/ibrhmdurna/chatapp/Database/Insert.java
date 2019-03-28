@@ -14,7 +14,15 @@ import com.ibrhmdurna.chatapp.Utils.DialogController;
 
 public class Insert extends FirebaseDB {
 
+    private static Insert instance;
+
     public Insert(){}
+
+    public static Insert getInstance() {
+        if(instance == null)
+            instance = new Insert();
+        return instance;
+    }
 
     public void register(final Account account, String password, final Activity context){
         final AlertDialog loading = DialogController.dialogLoading(context);

@@ -6,12 +6,13 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.ColorAdapter;
 import com.ibrhmdurna.chatapp.Utils.Environment;
 
-public class SolidColorActivity extends AppCompatActivity {
+public class SolidColorViewFactory extends AppCompatActivity implements ViewComponentFactory {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,13 @@ public class SolidColorActivity extends AppCompatActivity {
         colorView.setAdapter(colorAdapter);
     }
 
-    private void toolsManagement() {
+    @Override
+    public void buildView() {
+        // ---- COMPONENT ----
+    }
+
+    @Override
+    public void toolsManagement() {
         Environment.toolbarProcess(this, R.id.solid_color_toolbar);
         colorProcess();
     }

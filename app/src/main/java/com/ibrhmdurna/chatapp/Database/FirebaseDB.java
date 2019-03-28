@@ -10,9 +10,15 @@ public class FirebaseDB {
     private FirebaseUser currentUser;
     private DatabaseReference database;
 
-    private FirebaseDB firebaseDB;
+    private static FirebaseDB instance;
 
     public FirebaseDB() {
+    }
+
+    public static FirebaseDB getInstance() {
+        if(instance == null)
+            instance = new FirebaseDB();
+        return instance;
     }
 
     public FirebaseAuth getAuth() {

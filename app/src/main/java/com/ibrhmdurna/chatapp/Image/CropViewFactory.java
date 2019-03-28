@@ -6,14 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Settings.ChatSettingsActivity;
 import com.ibrhmdurna.chatapp.Utils.ImageController;
 import com.ibrhmdurna.chatapp.Utils.UniversalImageLoader;
 import com.isseiaoki.simplecropview.CropImageView;
 
-public class BackgroundActivity extends AppCompatActivity implements View.OnClickListener {
+public class CropViewFactory extends AppCompatActivity implements View.OnClickListener, ViewComponentFactory {
 
     private CropImageView cropImageView;
 
@@ -23,7 +23,7 @@ public class BackgroundActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getTransparentTheme(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_background);
+        setContentView(R.layout.activity_crop);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -34,31 +34,46 @@ public class BackgroundActivity extends AppCompatActivity implements View.OnClic
         cropImageView = findViewById(R.id.crop_image_view);
         position = getIntent().getIntExtra("position", 0);
 
-        String path = ImageController.getPath().get(position);
-        UniversalImageLoader.setImage(path, cropImageView, null, "file://");
-    }
-
-    private void toolsManagement(){
-        imageProcess();
+        if(ImageController.getCameraImage() != null){
+            cropImageView.setImageBitmap(ImageController.getCameraPath());
+        }
+        else {
+            String path = ImageController.getPath().get(position);
+            UniversalImageLoader.setImage(path, cropImageView, null, "file://");
+        }
     }
 
     private void crop(){
-        ImageController.setBackgroundImage(cropImageView.getCroppedBitmap());
-        ImageController.setBackgroundColor(0);
+        if(ImageController.getCameraImage() != null){
+            ImageController.setCameraCroppedImage(cropImageView.getCroppedBitmap());
+        }
+        else {
+            ImageController.setImage(cropImageView.getCroppedBitmap());
+        }
 
-        Intent chatSettingsIntent = new Intent(this, ChatSettingsActivity.class);
-        chatSettingsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(chatSettingsIntent);
+        Intent chatIntent = new Intent(this, ShareViewFactory.class);
+        chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(chatIntent);
         finish();
+    }
+
+    @Override
+    public void buildView() {
+        // ---- COMPONENT ----
+    }
+
+    @Override
+    public void toolsManagement(){
+        imageProcess();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.back_cancel_btn:
+            case R.id.crop_cancel_btn:
                 super.onBackPressed();
                 break;
-            case R.id.back_crop_btn:
+            case R.id.crop_btn:
                 crop();
                 break;
         }

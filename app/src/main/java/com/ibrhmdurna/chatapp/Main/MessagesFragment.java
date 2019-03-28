@@ -2,32 +2,27 @@ package com.ibrhmdurna.chatapp.Main;
 
 
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.MessagesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MessagesFragment extends Fragment {
+public class MessagesFragment extends Fragment implements ViewComponentFactory {
 
     private View view;
 
@@ -75,5 +70,15 @@ public class MessagesFragment extends Fragment {
         messagesAdapter.notifyDataSetChanged();
 
         return view;
+    }
+
+    @Override
+    public void toolsManagement() {
+        // ---- COMPONENT ----
+    }
+
+    @Override
+    public void buildView() {
+        // ---- COMPONENT ----
     }
 }

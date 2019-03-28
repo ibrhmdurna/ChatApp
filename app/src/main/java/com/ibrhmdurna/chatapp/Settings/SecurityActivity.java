@@ -4,21 +4,19 @@ import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.Environment;
 
-public class SecurityActivity extends AppCompatActivity implements View.OnClickListener {
+public class SecurityActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
     private TextInputLayout currentPasswordInput, newPasswordInput, confirmPasswordInput;
     private ImageView currentImage, newPassImage, confirmImage;
@@ -104,7 +102,8 @@ public class SecurityActivity extends AppCompatActivity implements View.OnClickL
         }
     };
 
-    private void buildView(){
+    @Override
+    public void buildView(){
         currentPasswordInput = findViewById(R.id.current_password_input);
         newPasswordInput = findViewById(R.id.new_password_input);
         confirmPasswordInput = findViewById(R.id.confirm_password_input);
@@ -114,7 +113,8 @@ public class SecurityActivity extends AppCompatActivity implements View.OnClickL
         changeView = findViewById(R.id.security_change_btn);
     }
 
-    private void toolsManagement(){
+    @Override
+    public void toolsManagement(){
         Environment.toolbarProcess(this, R.id.security_toolbar);
         buildView();
         passwordProcess();

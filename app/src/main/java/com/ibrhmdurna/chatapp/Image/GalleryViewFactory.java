@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.Utils.File;
 import com.ibrhmdurna.chatapp.R;
@@ -35,7 +36,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GalleryActivity extends AppCompatActivity {
+public class GalleryViewFactory extends AppCompatActivity implements ViewComponentFactory {
 
     private List<File> files;
     private RecyclerView galleryContainer;
@@ -72,7 +73,7 @@ public class GalleryActivity extends AppCompatActivity {
                     permissionDialog();
                 }
                 else {
-                    GalleryActivity.super.onBackPressed();
+                    GalleryViewFactory.super.onBackPressed();
                 }
             }
 
@@ -83,7 +84,7 @@ public class GalleryActivity extends AppCompatActivity {
         }).withErrorListener(new PermissionRequestErrorListener() {
             @Override
             public void onError(DexterError error) {
-                GalleryActivity.super.onBackPressed();
+                GalleryViewFactory.super.onBackPressed();
                 Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
             }
         }).check();
@@ -194,18 +195,6 @@ public class GalleryActivity extends AppCompatActivity {
         galleryContainer.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
     }
 
-    private void buildView(){
-        collapsingToolbarLayout = findViewById(R.id.gallery_collapsing_bar);
-        subTitle = findViewById(R.id.gallery_subtitle);
-        noPhotosView = findViewById(R.id.no_photos_view);
-    }
-
-    private void toolsManagement(){
-        Environment.toolbarProcess(this, R.id.gallery_toolbar);
-        buildView();
-        buildGalleryPath();
-    }
-
     private void permissionDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogStyle);
         View view = getLayoutInflater().inflate(R.layout.dialog_layout, null);
@@ -222,7 +211,7 @@ public class GalleryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                GalleryActivity.super.onBackPressed();
+                GalleryViewFactory.super.onBackPressed();
             }
         });
 
@@ -249,6 +238,20 @@ public class GalleryActivity extends AppCompatActivity {
             super.onBackPressed();
         else
             getGallery();
+    }
+
+    @Override
+    public void buildView(){
+        collapsingToolbarLayout = findViewById(R.id.gallery_collapsing_bar);
+        subTitle = findViewById(R.id.gallery_subtitle);
+        noPhotosView = findViewById(R.id.no_photos_view);
+    }
+
+    @Override
+    public void toolsManagement(){
+        Environment.toolbarProcess(this, R.id.gallery_toolbar);
+        buildView();
+        buildGalleryPath();
     }
 
     @Override

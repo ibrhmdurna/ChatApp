@@ -19,9 +19,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.AlbumAdapter;
 import com.ibrhmdurna.chatapp.Utils.CAlbumAdapter;
 import com.ibrhmdurna.chatapp.Utils.FileProcess;
 import com.ibrhmdurna.chatapp.Utils.ImageController;
@@ -33,7 +33,6 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.otaliastudios.cameraview.CameraListener;
-import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.Facing;
 import com.otaliastudios.cameraview.Flash;
 import com.otaliastudios.cameraview.Gesture;
@@ -41,10 +40,10 @@ import com.otaliastudios.cameraview.GestureAction;
 
 import java.util.List;
 
-public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
+public class CameraViewFactory extends AppCompatActivity implements View.OnClickListener, ViewComponentFactory {
 
     private ImageView flashView;
-    private CameraView cameraView;
+    private com.otaliastudios.cameraview.CameraView cameraView;
 
     private String isContext = "Share";
 
@@ -141,17 +140,17 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
                 switch (isContext) {
                     case "Share":
-                        Intent shareIntent = new Intent(getApplicationContext(), ShareActivity.class);
+                        Intent shareIntent = new Intent(getApplicationContext(), ShareViewFactory.class);
                         startActivity(shareIntent);
                         overridePendingTransition(0, 0);
                         break;
                     case "Profile":
-                        Intent profileIntent = new Intent(getApplicationContext(), ProfileImageActivity.class);
+                        Intent profileIntent = new Intent(getApplicationContext(), ProfileImageViewFactory.class);
                         startActivity(profileIntent);
                         overridePendingTransition(0, 0);
                         break;
                     case "Background":
-                        Intent backgroundIntent = new Intent(getApplicationContext(), BackgroundActivity.class);
+                        Intent backgroundIntent = new Intent(getApplicationContext(), BackgroundViewFactory.class);
                         startActivity(backgroundIntent);
                         overridePendingTransition(0, 0);
                         break;
@@ -176,7 +175,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     permissionDialog();
                 }
                 else {
-                    CameraActivity.super.onBackPressed();
+                    CameraViewFactory.super.onBackPressed();
                 }
             }
 
@@ -187,7 +186,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         }).withErrorListener(new PermissionRequestErrorListener() {
             @Override
             public void onError(DexterError error) {
-                CameraActivity.super.onBackPressed();
+                CameraViewFactory.super.onBackPressed();
                 Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
             }
         }).check();
@@ -209,7 +208,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                CameraActivity.super.onBackPressed();
+                CameraViewFactory.super.onBackPressed();
             }
         });
 
@@ -231,13 +230,15 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         dialog.show();
     }
 
-    private void buildView(){
+    @Override
+    public void buildView(){
         galleryContainer = findViewById(R.id.camera_gallery_container);
         cameraView = findViewById(R.id.camera_view);
         flashView = findViewById(R.id.camera_flash_view);
     }
 
-    private void toolsManagement(){
+    @Override
+    public void toolsManagement(){
         buildView();
         cameraProcess();
         galleryProcess();
@@ -280,7 +281,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 takePhoto();
                 break;
             case R.id.camera_all_photo_item:
-                Intent galleryIntent = new Intent(this, CameraGalleryActivity.class);
+                Intent galleryIntent = new Intent(this, CameraGalleryViewFactory.class);
                 galleryIntent.putExtra("isContext", isContext);
                 startActivity(galleryIntent);
                 break;

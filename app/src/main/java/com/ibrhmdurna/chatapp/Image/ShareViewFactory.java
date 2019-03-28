@@ -16,8 +16,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.github.chrisbanes.photoview.PhotoView;
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
-import com.ibrhmdurna.chatapp.Local.ChatActivity;
+import com.ibrhmdurna.chatapp.Local.ChatViewFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.FileProcess;
 import com.ibrhmdurna.chatapp.Utils.ImageController;
@@ -28,7 +29,7 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 
-public class ShareActivity extends AppCompatActivity implements View.OnClickListener, OnEmojiPopupShownListener, OnEmojiPopupDismissListener {
+public class ShareViewFactory extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, OnEmojiPopupShownListener, OnEmojiPopupDismissListener {
 
     private ViewGroup rootView;
     private EmojiPopup emojiPopup;
@@ -48,12 +49,6 @@ public class ShareActivity extends AppCompatActivity implements View.OnClickList
         toolsManagement();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        imageProcess();
-    }
-
     private void shareProcess(){
         if(ImageController.getCameraCroppedImage() != null){
             FileProcess.insertImage(ImageController.getCameraCroppedImage());
@@ -70,7 +65,7 @@ public class ShareActivity extends AppCompatActivity implements View.OnClickList
         }
 
 
-        Intent chatIntent = new Intent(this, ChatActivity.class);
+        Intent chatIntent = new Intent(this, ChatViewFactory.class);
         chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(chatIntent);
 
@@ -150,13 +145,6 @@ public class ShareActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
-    private void buildView(){
-        rootView = findViewById(R.id.root_view);
-        emojiBtn = findViewById(R.id.share_emoji_btn);
-        messageInput = findViewById(R.id.share_input);
-        imageView = findViewById(R.id.album_image_view);
-    }
-
     private void toolbarProcess(){
         Toolbar toolbar = findViewById(R.id.share_toolbar);
         setSupportActionBar(toolbar);
@@ -164,10 +152,25 @@ public class ShareActivity extends AppCompatActivity implements View.OnClickList
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_icon_2);
     }
 
-    private void toolsManagement() {
+    @Override
+    public void buildView(){
+        rootView = findViewById(R.id.root_view);
+        emojiBtn = findViewById(R.id.share_emoji_btn);
+        messageInput = findViewById(R.id.share_input);
+        imageView = findViewById(R.id.album_image_view);
+    }
+
+    @Override
+    public void toolsManagement() {
         toolbarProcess();
         buildView();
         emojiProcess();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        imageProcess();
     }
 
     @Override
@@ -192,7 +195,7 @@ public class ShareActivity extends AppCompatActivity implements View.OnClickList
                 shareProcess();
                 break;
             case R.id.image_edit_item_view:
-                Intent editIntent = new Intent(getApplicationContext(), CropActivity.class);
+                Intent editIntent = new Intent(getApplicationContext(), CropViewFactory.class);
                 editIntent.putExtra("position", position);
                 startActivity(editIntent);
                 overridePendingTransition(0,0);

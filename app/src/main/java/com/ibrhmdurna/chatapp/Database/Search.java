@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
-import android.view.View;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,9 +16,17 @@ import com.ibrhmdurna.chatapp.Utils.DialogController;
 
 public class Search extends FirebaseDB {
 
+    private static Search instance;
+
     public Search(){}
 
-    public void checkEmail(final Activity context, final TextInputLayout emailInput, final TextInputLayout passwordInput, final ProgressBar loadingBar){
+    public static Search getInstance() {
+        if(instance == null)
+            instance = new Search();
+        return instance;
+    }
+
+    public void checkEmail(final Activity context, final TextInputLayout emailInput, final TextInputLayout passwordInput){
 
         AppController.closeKeyboard(context);
 

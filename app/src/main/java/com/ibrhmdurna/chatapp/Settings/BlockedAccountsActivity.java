@@ -2,15 +2,14 @@ package com.ibrhmdurna.chatapp.Settings;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.Environment;
 
-public class BlockedAccountsActivity extends AppCompatActivity {
+public class BlockedAccountsActivity extends AppCompatActivity implements ViewComponentFactory {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +26,13 @@ public class BlockedAccountsActivity extends AppCompatActivity {
         return true;
     }
 
-    private void toolsManagement(){
+    @Override
+    public void buildView() {
+        // ---- COMPONENT ----
+    }
+
+    @Override
+    public void toolsManagement(){
         Environment.toolbarProcess(this, R.id.blocked_toolbar);
     }
 }

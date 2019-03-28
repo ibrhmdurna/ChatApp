@@ -6,8 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,8 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ibrhmdurna.chatapp.Application.App;
-import com.ibrhmdurna.chatapp.Image.GalleryActivity;
-import com.ibrhmdurna.chatapp.Local.SolidColorActivity;
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
+import com.ibrhmdurna.chatapp.Image.GalleryViewFactory;
+import com.ibrhmdurna.chatapp.Local.SolidColorViewFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.BackgroundBottomSheetDialog;
 import com.ibrhmdurna.chatapp.Utils.Environment;
@@ -25,7 +24,7 @@ import com.ibrhmdurna.chatapp.Utils.ImageController;
 
 import java.io.ByteArrayOutputStream;
 
-public class ChatSettingsActivity extends AppCompatActivity implements View.OnClickListener , BackgroundBottomSheetDialog.BottomSheetListener {
+public class ChatSettingsActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, BackgroundBottomSheetDialog.BottomSheetListener {
 
     private SharedPreferences prefs;
 
@@ -136,12 +135,14 @@ public class ChatSettingsActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private void buildView(){
+    @Override
+    public void buildView(){
         backgroundView = findViewById(R.id.chat_background_view);
         saveView = findViewById(R.id.chat_background_save_view);
     }
 
-    private void toolsManagement(){
+    @Override
+    public void toolsManagement(){
         Environment.toolbarProcess(this, R.id.chat_settings_toolbar);
         buildView();
     }
@@ -175,12 +176,12 @@ public class ChatSettingsActivity extends AppCompatActivity implements View.OnCl
     public void onButtonClicked(String action) {
         switch (action){
             case "gallery":
-                Intent galleryIntent = new Intent(this, GalleryActivity.class);
+                Intent galleryIntent = new Intent(this, GalleryViewFactory.class);
                 galleryIntent.putExtra("isContext", "Background");
                 startActivity(galleryIntent);
                 break;
             case "color":
-                Intent solidIntent = new Intent(this, SolidColorActivity.class);
+                Intent solidIntent = new Intent(this, SolidColorViewFactory.class);
                 startActivity(solidIntent);
                 break;
             case "delete":

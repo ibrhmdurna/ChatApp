@@ -17,8 +17,6 @@ public class Account {
     private boolean online;
     private Map<String, String> last_seen;
 
-    private byte[] profile_bitmap;
-
     public Account() {
     }
 
@@ -130,14 +128,6 @@ public class Account {
 
     public void setLast_seen(Map<String, String> last_seen) {
         this.last_seen = last_seen;
-    }
-
-    public byte[] getProfile_bitmap() {
-        return profile_bitmap;
-    }
-
-    public void setProfile_bitmap(byte[] profile_bitmap) {
-        this.profile_bitmap = profile_bitmap;
     }
 
     public String getNameSurname(){

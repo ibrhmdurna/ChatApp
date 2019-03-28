@@ -11,12 +11,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.Application.App;
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Database.FirebaseDB;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Start.StartActivity;
 import com.ibrhmdurna.chatapp.Utils.Environment;
 
-public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
+public class SettingsActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getTheme(this);
@@ -24,10 +25,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_settings);
 
         toolsManagement();
-    }
-
-    private void toolsManagement(){
-        Environment.toolbarProcess(this, R.id.settingsToolbar);
     }
 
     private void dialogLogout(){
@@ -70,6 +67,16 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         Intent startIntent = new Intent(SettingsActivity.this, StartActivity.class);
         startActivity(startIntent);
         finish();
+    }
+
+    @Override
+    public void buildView() {
+        // ---- COMPONENT ----
+    }
+
+    @Override
+    public void toolsManagement(){
+        Environment.toolbarProcess(this, R.id.settingsToolbar);
     }
 
     @Override

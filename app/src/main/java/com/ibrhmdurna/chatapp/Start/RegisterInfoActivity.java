@@ -6,19 +6,16 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 import com.ibrhmdurna.chatapp.Application.App;
-import com.ibrhmdurna.chatapp.Database.Insert;
+import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Utils.Environment;
 import com.tsongkha.spinnerdatepicker.DatePicker;
@@ -27,7 +24,7 @@ import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
 import java.util.Date;
 
-public class RegisterInfoActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterInfoActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
     private TextInputLayout nameInput, surnameInput, phoneInput;
     private TextView birthdayText, nextView;
@@ -154,23 +151,6 @@ public class RegisterInfoActivity extends AppCompatActivity implements View.OnCl
         locSpinner.setAdapter(locAdapter);
     }
 
-    private void buildView(){
-        nameInput = findViewById(R.id.reg_name_input);
-        surnameInput = findViewById(R.id.reg_surname_input);
-        phoneInput = findViewById(R.id.reg_phone_input);
-        birthdayText = findViewById(R.id.birthday_text);
-        nextView = findViewById(R.id.register_info_next_btn);
-        genderSpinner = findViewById(R.id.genderSpinner);
-        locationSpinner = findViewById(R.id.locationSpinner);
-    }
-
-    private void toolsManagement(){
-        Environment.toolbarProcess(this, R.id.register_info_toolbar);
-        buildView();
-        spinnerProcess();
-        inputProcess();
-    }
-
     private void registerProcess(){
         String email = getIntent().getStringExtra("email");
         String password = getIntent().getStringExtra("password");
@@ -191,6 +171,25 @@ public class RegisterInfoActivity extends AppCompatActivity implements View.OnCl
         finishIntent.putExtra("gender", gender);
         finishIntent.putExtra("location", location);
         startActivity(finishIntent);
+    }
+
+    @Override
+    public void buildView(){
+        nameInput = findViewById(R.id.reg_name_input);
+        surnameInput = findViewById(R.id.reg_surname_input);
+        phoneInput = findViewById(R.id.reg_phone_input);
+        birthdayText = findViewById(R.id.birthday_text);
+        nextView = findViewById(R.id.register_info_next_btn);
+        genderSpinner = findViewById(R.id.genderSpinner);
+        locationSpinner = findViewById(R.id.locationSpinner);
+    }
+
+    @Override
+    public void toolsManagement(){
+        Environment.toolbarProcess(this, R.id.register_info_toolbar);
+        buildView();
+        spinnerProcess();
+        inputProcess();
     }
 
     @Override
