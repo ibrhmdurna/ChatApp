@@ -12,13 +12,13 @@ import android.widget.TextView;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.AlbumAdapter;
-import com.ibrhmdurna.chatapp.Utils.Environment;
-import com.ibrhmdurna.chatapp.Utils.FileProcess;
+import com.ibrhmdurna.chatapp.Util.AlbumAdapter;
+import com.ibrhmdurna.chatapp.Util.Environment;
+import com.ibrhmdurna.chatapp.Util.FileProcess;
 
 import java.util.List;
 
-public class CameraGalleryViewFactory extends AppCompatActivity implements ViewComponentFactory {
+public class CameraGalleryActivity extends AppCompatActivity implements ViewComponentFactory {
 
     private RecyclerView galleryContainer;
     private TextView subTitle;
@@ -27,7 +27,7 @@ public class CameraGalleryViewFactory extends AppCompatActivity implements ViewC
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_gallery);
 
@@ -71,7 +71,7 @@ public class CameraGalleryViewFactory extends AppCompatActivity implements ViewC
 
     @Override
     public void toolsManagement() {
-        Environment.toolbarProcess(this, R.id.c_gallery_toolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.c_gallery_toolbar);
         buildView();
         galleyProcess();
     }

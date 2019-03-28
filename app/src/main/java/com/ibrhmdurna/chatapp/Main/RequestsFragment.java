@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.MessagesAdapter;
+import com.ibrhmdurna.chatapp.Util.MessagesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        App.Theme.getTheme(getContext());
+        App.Theme.getInstance().getTheme(getContext());
         view = inflater.inflate(R.layout.fragment_requests, container, false);
 
         list = new ArrayList<>();

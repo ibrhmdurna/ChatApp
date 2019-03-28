@@ -13,7 +13,7 @@ import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Main.MainActivity;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.Environment;
+import com.ibrhmdurna.chatapp.Util.Environment;
 import com.suke.widget.SwitchButton;
 
 import java.util.ArrayList;
@@ -29,17 +29,11 @@ public class ThemesActivity extends AppCompatActivity implements ViewComponentFa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_themes);
 
         toolsManagement();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        App.Theme.getTheme(this);
     }
 
     @Override
@@ -50,7 +44,7 @@ public class ThemesActivity extends AppCompatActivity implements ViewComponentFa
 
     private void checkThemeColor(){
         selectedListAllVisibilityGone();
-        switch (App.Theme.getThemeColor()){
+        switch (App.Theme.getInstance().getThemeColor()){
             case R.color.colorAccent:
                 findViewById(R.id.color_accent_selected).setVisibility(View.VISIBLE);
                 THEME_COLOR = R.color.colorAccent;
@@ -186,7 +180,7 @@ public class ThemesActivity extends AppCompatActivity implements ViewComponentFa
 
     @Override
     public void toolsManagement(){
-        Environment.toolbarProcess(this, R.id.themes_toolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.themes_toolbar);
         buildView();
         selectedListView();
         checkTheme();
@@ -197,7 +191,7 @@ public class ThemesActivity extends AppCompatActivity implements ViewComponentFa
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.apply_btn:
-                App.Theme.setThemeColor(THEME_COLOR);
+                App.Theme.getInstance().setThemeColor(THEME_COLOR);
                 SharedPreferences prefs = getSharedPreferences("THEME", MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putInt("THEME_COLOR", THEME_COLOR);

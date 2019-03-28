@@ -8,13 +8,13 @@ import android.view.View;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.MoreBottomSheetDialog;
+import com.ibrhmdurna.chatapp.Util.MoreBottomSheetDialog;
 
-public class ProfileViewFactory extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, MoreBottomSheetDialog.BottomSheetListener {
+public class ProfileActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, MoreBottomSheetDialog.BottomSheetListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
     }
@@ -40,7 +40,7 @@ public class ProfileViewFactory extends AppCompatActivity implements ViewCompone
                 moreBottomSheetDialog.show(getSupportFragmentManager(), "bottom_sheet");
                 break;
             case R.id.profile_friends_view:
-                Intent friends = new Intent(this, FriendsViewFactory.class);
+                Intent friends = new Intent(this, FriendsActivity.class);
                 friends.putExtra("isAccount", false);
                 startActivity(friends);
                 break;

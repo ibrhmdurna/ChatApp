@@ -18,7 +18,7 @@ import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Main.MainActivity;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Settings.ForgotActivity;
-import com.ibrhmdurna.chatapp.Utils.Environment;
+import com.ibrhmdurna.chatapp.Util.Environment;
 
 public class LoginActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity implements ViewComponentFac
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity implements ViewComponentFac
 
     @Override
     public void toolsManagement(){
-        Environment.toolbarProcess(this, R.id.login_toolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.login_toolbar);
         buildView();
         showCheckPassword();
         inputProcess();

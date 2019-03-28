@@ -10,11 +10,11 @@ import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Settings.ChatSettingsActivity;
-import com.ibrhmdurna.chatapp.Utils.ImageController;
-import com.ibrhmdurna.chatapp.Utils.UniversalImageLoader;
+import com.ibrhmdurna.chatapp.Util.ImageController;
+import com.ibrhmdurna.chatapp.Util.UniversalImageLoader;
 import com.isseiaoki.simplecropview.CropImageView;
 
-public class BackgroundViewFactory extends AppCompatActivity implements View.OnClickListener, ViewComponentFactory {
+public class BackgroundActivity extends AppCompatActivity implements View.OnClickListener, ViewComponentFactory {
 
     private CropImageView cropImageView;
 
@@ -22,7 +22,7 @@ public class BackgroundViewFactory extends AppCompatActivity implements View.OnC
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTransparentTheme(this);
+        App.Theme.getInstance().getTransparentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_background);
 

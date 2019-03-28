@@ -44,7 +44,7 @@
                 android:layout_alignParentEnd="true"
                 android:backgroundTint="@color/colorGray"/>
 
-            <com.ibrhmdurna.chatapp.Utils.GridImageView
+            <com.ibrhmdurna.chatapp.Util.GridImageView
                 android:id="@+id/album_last_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

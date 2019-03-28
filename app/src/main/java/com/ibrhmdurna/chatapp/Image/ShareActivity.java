@@ -18,18 +18,18 @@ import android.widget.ImageView;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
-import com.ibrhmdurna.chatapp.Local.ChatViewFactory;
+import com.ibrhmdurna.chatapp.Local.ChatActivity;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.FileProcess;
-import com.ibrhmdurna.chatapp.Utils.ImageController;
-import com.ibrhmdurna.chatapp.Utils.UniversalImageLoader;
+import com.ibrhmdurna.chatapp.Util.FileProcess;
+import com.ibrhmdurna.chatapp.Util.ImageController;
+import com.ibrhmdurna.chatapp.Util.UniversalImageLoader;
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 
-public class ShareViewFactory extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, OnEmojiPopupShownListener, OnEmojiPopupDismissListener {
+public class ShareActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, OnEmojiPopupShownListener, OnEmojiPopupDismissListener {
 
     private ViewGroup rootView;
     private EmojiPopup emojiPopup;
@@ -42,7 +42,7 @@ public class ShareViewFactory extends AppCompatActivity implements ViewComponent
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTransparentTheme(this);
+        App.Theme.getInstance().getTransparentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
 
@@ -65,7 +65,7 @@ public class ShareViewFactory extends AppCompatActivity implements ViewComponent
         }
 
 
-        Intent chatIntent = new Intent(this, ChatViewFactory.class);
+        Intent chatIntent = new Intent(this, ChatActivity.class);
         chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(chatIntent);
 
@@ -195,7 +195,7 @@ public class ShareViewFactory extends AppCompatActivity implements ViewComponent
                 shareProcess();
                 break;
             case R.id.image_edit_item_view:
-                Intent editIntent = new Intent(getApplicationContext(), CropViewFactory.class);
+                Intent editIntent = new Intent(getApplicationContext(), CropActivity.class);
                 editIntent.putExtra("position", position);
                 startActivity(editIntent);
                 overridePendingTransition(0,0);

@@ -8,7 +8,7 @@ import android.support.text.emoji.bundled.BundledEmojiCompatConfig;
 import android.support.v7.app.AppCompatDelegate;
 
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.UniversalImageLoader;
+import com.ibrhmdurna.chatapp.Util.UniversalImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class App extends Application {
-
-    private SharedPreferences prefs;
 
     @Override
     public void onCreate() {
@@ -41,7 +39,7 @@ public class App extends Application {
         built.setLoggingEnabled(true);
         Picasso.setSingletonInstance(built);
 
-        prefs = getSharedPreferences("THEME",MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("THEME", MODE_PRIVATE);
         if(prefs.getBoolean("NIGHT_MODE", false)){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
@@ -49,30 +47,49 @@ public class App extends Application {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
-        Theme.setThemeColor(prefs.getInt("THEME_COLOR", R.color.colorAccent));
+        Theme.getInstance().setThemeColor(prefs.getInt("THEME_COLOR", R.color.colorAccent));
     }
 
     public static class Background{
-        private static List<String> pageStackList = new ArrayList<>();
+
+        private static Background instance;
+
+        private static List<String> pageStackList;
+
+        private Background(){}
+
+        public static Background getInstance() {
+            if(instance == null){
+                synchronized (Background.class){
+                    instance = new Background();
+                }
+            }
+            return instance;
+        }
 
         public static List<String> getPageStackList(){
+            if(pageStackList == null){
+                synchronized (Background.class){
+                    pageStackList = new ArrayList<>();
+                }
+            }
             return pageStackList;
         }
 
-        public static int pageStackChildCount(){
+        public int pageStackChildCount(){
             return pageStackList.size();
         }
 
-        public static void addPage(String tag){
+        public void addPage(String tag){
             pageStackList.add(tag);
         }
 
-        public static void removePage(){
+        public void removePage(){
             pageStackList.remove(pageStackList.size() - 1);
             pageStackList.remove(pageStackList.size() - 1);
         }
 
-        public static void clearThisPage(String tag){
+        public void clearThisPage(String tag){
             for(int i = 0; i < pageStackList.size(); i++){
                 if(pageStackList.get(i).equals(tag)){
                     pageStackList.remove(i);
@@ -84,15 +101,28 @@ public class App extends Application {
     public static class Theme{
         private static int THEME_COLOR;
 
-        public static int getThemeColor() {
+        private static Theme instance;
+
+        private Theme(){}
+
+        public static Theme getInstance(){
+            if(instance == null){
+                synchronized (Theme.class){
+                    instance = new Theme();
+                }
+            }
+            return instance;
+        }
+
+        public int getThemeColor() {
             return THEME_COLOR;
         }
 
-        public static void setThemeColor(int themeColor) {
+        public void setThemeColor(int themeColor) {
             THEME_COLOR = themeColor;
         }
 
-        public static void getTheme(Context context){
+        public void getTheme(Context context){
             if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
                 switch (getThemeColor()){
                     case R.color.colorAccent:
@@ -205,7 +235,7 @@ public class App extends Application {
             }
         }
 
-        public static void getTransparentTheme(Context context){
+        public void getTransparentTheme(Context context){
             switch (getThemeColor()){
                 case R.color.colorAccent:
                     context.setTheme(R.style.AppTheme_DarkTheme_Transparent);

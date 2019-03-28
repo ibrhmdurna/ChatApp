@@ -26,13 +26,13 @@ import android.widget.TextView;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.Environment;
-import com.ibrhmdurna.chatapp.Utils.MessagesAdapter;
+import com.ibrhmdurna.chatapp.Util.Environment;
+import com.ibrhmdurna.chatapp.Util.MessagesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FriendsViewFactory extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
+public class FriendsActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
     private Toolbar toolbar;
     private TextView friendsTitle;
@@ -47,7 +47,7 @@ public class FriendsViewFactory extends AppCompatActivity implements ViewCompone
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
 
@@ -127,7 +127,7 @@ public class FriendsViewFactory extends AppCompatActivity implements ViewCompone
 
     @Override
     public void toolsManagement() {
-        Environment.toolbarProcess(this, R.id.friends_toolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.friends_toolbar);
         buildView();
         inputProcess();
     }

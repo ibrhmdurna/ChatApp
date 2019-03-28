@@ -15,12 +15,12 @@ import android.widget.Toast;
 
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
-import com.ibrhmdurna.chatapp.Image.GalleryViewFactory;
-import com.ibrhmdurna.chatapp.Local.SolidColorViewFactory;
+import com.ibrhmdurna.chatapp.Image.GalleryActivity;
+import com.ibrhmdurna.chatapp.Local.SolidColorActivity;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.BackgroundBottomSheetDialog;
-import com.ibrhmdurna.chatapp.Utils.Environment;
-import com.ibrhmdurna.chatapp.Utils.ImageController;
+import com.ibrhmdurna.chatapp.Util.BackgroundBottomSheetDialog;
+import com.ibrhmdurna.chatapp.Util.Environment;
+import com.ibrhmdurna.chatapp.Util.ImageController;
 
 import java.io.ByteArrayOutputStream;
 
@@ -33,7 +33,7 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_settings);
 
@@ -143,7 +143,7 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
 
     @Override
     public void toolsManagement(){
-        Environment.toolbarProcess(this, R.id.chat_settings_toolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.chat_settings_toolbar);
         buildView();
     }
 
@@ -176,12 +176,12 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
     public void onButtonClicked(String action) {
         switch (action){
             case "gallery":
-                Intent galleryIntent = new Intent(this, GalleryViewFactory.class);
+                Intent galleryIntent = new Intent(this, GalleryActivity.class);
                 galleryIntent.putExtra("isContext", "Background");
                 startActivity(galleryIntent);
                 break;
             case "color":
-                Intent solidIntent = new Intent(this, SolidColorViewFactory.class);
+                Intent solidIntent = new Intent(this, SolidColorActivity.class);
                 startActivity(solidIntent);
                 break;
             case "delete":

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.ibrhmdurna.chatapp.Utils.GridImageView
+<com.ibrhmdurna.chatapp.Util.GridImageView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="83dp"
     android:layout_height="83dp"
@@ -7,4 +7,4 @@
     android:scaleType="centerCrop"
     android:id="@+id/album_image_view"
     android:background="#80222222">
-</com.ibrhmdurna.chatapp.Utils.GridImageView>
+</com.ibrhmdurna.chatapp.Util.GridImageView>

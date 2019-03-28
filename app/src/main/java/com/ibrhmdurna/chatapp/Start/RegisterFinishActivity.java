@@ -13,7 +13,7 @@ import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Database.Insert;
 import com.ibrhmdurna.chatapp.Models.Account;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.Environment;
+import com.ibrhmdurna.chatapp.Util.Environment;
 
 import java.util.Map;
 import java.util.Random;
@@ -29,7 +29,7 @@ public class RegisterFinishActivity extends AppCompatActivity implements ViewCom
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_finish);
 
@@ -111,7 +111,7 @@ public class RegisterFinishActivity extends AppCompatActivity implements ViewCom
 
     @Override
     public void toolsManagement() {
-        Environment.toolbarProcess(this, R.id.register_finish_toolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.register_finish_toolbar);
         buildView();
         randomProfileImage();
         infoProcess();

@@ -16,11 +16,11 @@ import android.widget.TextView;
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
-import com.ibrhmdurna.chatapp.Image.CameraViewFactory;
-import com.ibrhmdurna.chatapp.Image.GalleryViewFactory;
+import com.ibrhmdurna.chatapp.Image.CameraActivity;
+import com.ibrhmdurna.chatapp.Image.GalleryActivity;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.Environment;
-import com.ibrhmdurna.chatapp.Utils.ProfileBottomSheetDialog;
+import com.ibrhmdurna.chatapp.Util.Environment;
+import com.ibrhmdurna.chatapp.Util.ProfileBottomSheetDialog;
 import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
@@ -39,7 +39,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_account);
 
@@ -202,7 +202,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
 
     @Override
     public void toolsManagement(){
-        Environment.toolbarProcess(this, R.id.edit_account_toolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.edit_account_toolbar);
         buildView();
         spinnerProcess();
         inputProcess();
@@ -235,13 +235,13 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
     public void onButtonClicked(String action) {
         switch (action){
             case "gallery":
-                Intent galleryIntent = new Intent(this, GalleryViewFactory.class);
+                Intent galleryIntent = new Intent(this, GalleryActivity.class);
                 galleryIntent.putExtra("isContext","Profile");
                 galleryIntent.putExtra("register", false);
                 startActivity(galleryIntent);
                 break;
             case "camera":
-                Intent cameraIntent = new Intent(this, CameraViewFactory.class);
+                Intent cameraIntent = new Intent(this, CameraActivity.class);
                 cameraIntent.putExtra("isContext","Profile");
                 cameraIntent.putExtra("register", false);
                 startActivity(cameraIntent);

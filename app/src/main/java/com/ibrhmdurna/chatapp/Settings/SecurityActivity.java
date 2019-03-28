@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.Environment;
+import com.ibrhmdurna.chatapp.Util.Environment;
 
 public class SecurityActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
@@ -24,7 +24,7 @@ public class SecurityActivity extends AppCompatActivity implements ViewComponent
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_security);
 
@@ -115,7 +115,7 @@ public class SecurityActivity extends AppCompatActivity implements ViewComponent
 
     @Override
     public void toolsManagement(){
-        Environment.toolbarProcess(this, R.id.security_toolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.security_toolbar);
         buildView();
         passwordProcess();
     }

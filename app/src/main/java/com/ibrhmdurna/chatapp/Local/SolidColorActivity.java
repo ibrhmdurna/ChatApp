@@ -9,14 +9,14 @@ import android.view.MenuItem;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.ColorAdapter;
-import com.ibrhmdurna.chatapp.Utils.Environment;
+import com.ibrhmdurna.chatapp.Util.ColorAdapter;
+import com.ibrhmdurna.chatapp.Util.Environment;
 
-public class SolidColorViewFactory extends AppCompatActivity implements ViewComponentFactory {
+public class SolidColorActivity extends AppCompatActivity implements ViewComponentFactory {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_solid_color);
 
@@ -39,7 +39,7 @@ public class SolidColorViewFactory extends AppCompatActivity implements ViewComp
 
     @Override
     public void toolsManagement() {
-        Environment.toolbarProcess(this, R.id.solid_color_toolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.solid_color_toolbar);
         colorProcess();
     }
 

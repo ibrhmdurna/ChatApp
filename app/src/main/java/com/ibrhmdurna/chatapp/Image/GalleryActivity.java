@@ -19,12 +19,12 @@ import android.widget.Toast;
 
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
-import com.ibrhmdurna.chatapp.Utils.File;
+import com.ibrhmdurna.chatapp.Util.File;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.AlbumAdapter;
-import com.ibrhmdurna.chatapp.Utils.GalleryAdapter;
-import com.ibrhmdurna.chatapp.Utils.Environment;
-import com.ibrhmdurna.chatapp.Utils.FileProcess;
+import com.ibrhmdurna.chatapp.Util.AlbumAdapter;
+import com.ibrhmdurna.chatapp.Util.GalleryAdapter;
+import com.ibrhmdurna.chatapp.Util.Environment;
+import com.ibrhmdurna.chatapp.Util.FileProcess;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -36,7 +36,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GalleryViewFactory extends AppCompatActivity implements ViewComponentFactory {
+public class GalleryActivity extends AppCompatActivity implements ViewComponentFactory {
 
     private List<File> files;
     private RecyclerView galleryContainer;
@@ -49,7 +49,7 @@ public class GalleryViewFactory extends AppCompatActivity implements ViewCompone
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
@@ -73,7 +73,7 @@ public class GalleryViewFactory extends AppCompatActivity implements ViewCompone
                     permissionDialog();
                 }
                 else {
-                    GalleryViewFactory.super.onBackPressed();
+                    GalleryActivity.super.onBackPressed();
                 }
             }
 
@@ -84,7 +84,7 @@ public class GalleryViewFactory extends AppCompatActivity implements ViewCompone
         }).withErrorListener(new PermissionRequestErrorListener() {
             @Override
             public void onError(DexterError error) {
-                GalleryViewFactory.super.onBackPressed();
+                GalleryActivity.super.onBackPressed();
                 Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
             }
         }).check();
@@ -198,7 +198,7 @@ public class GalleryViewFactory extends AppCompatActivity implements ViewCompone
     private void permissionDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogStyle);
         View view = getLayoutInflater().inflate(R.layout.dialog_layout, null);
-        App.Theme.getTheme(view.getContext());
+        App.Theme.getInstance().getTheme(view.getContext());
         builder.setView(view);
         final AlertDialog dialog = builder.create();
 
@@ -211,7 +211,7 @@ public class GalleryViewFactory extends AppCompatActivity implements ViewCompone
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                GalleryViewFactory.super.onBackPressed();
+                GalleryActivity.super.onBackPressed();
             }
         });
 
@@ -249,7 +249,7 @@ public class GalleryViewFactory extends AppCompatActivity implements ViewCompone
 
     @Override
     public void toolsManagement(){
-        Environment.toolbarProcess(this, R.id.gallery_toolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.gallery_toolbar);
         buildView();
         buildGalleryPath();
     }

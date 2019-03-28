@@ -7,13 +7,13 @@ import android.view.MenuItem;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.Environment;
+import com.ibrhmdurna.chatapp.Util.Environment;
 
 public class BlockedAccountsActivity extends AppCompatActivity implements ViewComponentFactory {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blocked_accounts);
 
@@ -33,6 +33,6 @@ public class BlockedAccountsActivity extends AppCompatActivity implements ViewCo
 
     @Override
     public void toolsManagement(){
-        Environment.toolbarProcess(this, R.id.blocked_toolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.blocked_toolbar);
     }
 }

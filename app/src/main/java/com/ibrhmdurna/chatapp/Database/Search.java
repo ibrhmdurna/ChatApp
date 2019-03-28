@@ -5,24 +5,26 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
-import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.SignInMethodQueryResult;
 import com.ibrhmdurna.chatapp.Start.RegisterInfoActivity;
-import com.ibrhmdurna.chatapp.Utils.AppController;
-import com.ibrhmdurna.chatapp.Utils.DialogController;
+import com.ibrhmdurna.chatapp.Util.AppController;
+import com.ibrhmdurna.chatapp.Util.DialogController;
 
 public class Search extends FirebaseDB {
 
     private static Search instance;
 
-    public Search(){}
+    private Search(){}
 
     public static Search getInstance() {
-        if(instance == null)
-            instance = new Search();
+        if(instance == null){
+            synchronized (Search.class){
+                instance = new Search();
+            }
+        }
         return instance;
     }
 

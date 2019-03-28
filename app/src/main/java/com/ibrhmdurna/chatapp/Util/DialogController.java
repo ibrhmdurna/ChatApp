@@ -1,15 +1,13 @@
-package com.ibrhmdurna.chatapp.Utils;
+package com.ibrhmdurna.chatapp.Util;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.Application.App;
-import com.ibrhmdurna.chatapp.Database.FirebaseDB;
 import com.ibrhmdurna.chatapp.R;
 
 public class DialogController {
@@ -19,7 +17,7 @@ public class DialogController {
     public static AlertDialog dialogLoading(Activity context){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = context.getLayoutInflater().inflate(R.layout.dialog_loading, null);
-        App.Theme.getTheme(view.getContext());
+        App.Theme.getInstance().getTheme(view.getContext());
         builder.setView(view);
         final AlertDialog dialog = builder.create();
 
@@ -34,7 +32,7 @@ public class DialogController {
     public static AlertDialog dialogError(Activity context){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = context.getLayoutInflater().inflate(R.layout.dialog_error, null);
-        App.Theme.getTheme(view.getContext());
+        App.Theme.getInstance().getTheme(view.getContext());
         builder.setView(view);
         final AlertDialog dialog = builder.create();
 

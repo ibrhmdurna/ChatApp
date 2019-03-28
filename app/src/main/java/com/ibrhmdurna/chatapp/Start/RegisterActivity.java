@@ -8,14 +8,13 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Database.Search;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.Environment;
+import com.ibrhmdurna.chatapp.Util.Environment;
 
 public class RegisterActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
@@ -25,7 +24,7 @@ public class RegisterActivity extends AppCompatActivity implements ViewComponent
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
@@ -117,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity implements ViewComponent
 
     @Override
     public void toolsManagement(){
-        Environment.toolbarProcess(this, R.id.register_toolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.register_toolbar);
         buildView();
         passwordProcess();
     }

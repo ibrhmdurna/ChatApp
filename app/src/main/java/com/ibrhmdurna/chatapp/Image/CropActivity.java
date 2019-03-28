@@ -9,11 +9,11 @@ import android.view.WindowManager;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.ImageController;
-import com.ibrhmdurna.chatapp.Utils.UniversalImageLoader;
+import com.ibrhmdurna.chatapp.Util.ImageController;
+import com.ibrhmdurna.chatapp.Util.UniversalImageLoader;
 import com.isseiaoki.simplecropview.CropImageView;
 
-public class CropViewFactory extends AppCompatActivity implements View.OnClickListener, ViewComponentFactory {
+public class CropActivity extends AppCompatActivity implements View.OnClickListener, ViewComponentFactory {
 
     private CropImageView cropImageView;
 
@@ -21,7 +21,7 @@ public class CropViewFactory extends AppCompatActivity implements View.OnClickLi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTransparentTheme(this);
+        App.Theme.getInstance().getTransparentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crop);
 
@@ -51,7 +51,7 @@ public class CropViewFactory extends AppCompatActivity implements View.OnClickLi
             ImageController.setImage(cropImageView.getCroppedBitmap());
         }
 
-        Intent chatIntent = new Intent(this, ShareViewFactory.class);
+        Intent chatIntent = new Intent(this, ShareActivity.class);
         chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(chatIntent);
         finish();

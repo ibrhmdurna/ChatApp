@@ -14,13 +14,13 @@ import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Settings.EditAccountActivity;
-import com.ibrhmdurna.chatapp.Utils.ImageController;
-import com.ibrhmdurna.chatapp.Utils.UniversalImageLoader;
+import com.ibrhmdurna.chatapp.Util.ImageController;
+import com.ibrhmdurna.chatapp.Util.UniversalImageLoader;
 import com.isseiaoki.simplecropview.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 
-public class ProfileImageViewFactory extends AppCompatActivity implements View.OnClickListener, ViewComponentFactory {
+public class ProfileImageActivity extends AppCompatActivity implements View.OnClickListener, ViewComponentFactory {
 
     private CropImageView cropImageView;
 
@@ -29,7 +29,7 @@ public class ProfileImageViewFactory extends AppCompatActivity implements View.O
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTransparentTheme(this);
+        App.Theme.getInstance().getTransparentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_image);
 

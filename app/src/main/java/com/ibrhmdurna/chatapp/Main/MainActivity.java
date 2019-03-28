@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolsManagement();
@@ -65,32 +65,32 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
                 switch (menuItem.getItemId()){
                     case R.id.messages_item:
                         showFragment(new MessagesFragment(), "MessagesFragment");
-                        App.Background.clearThisPage("MessagesFragment");
-                        App.Background.addPage("MessagesFragment");
+                        App.Background.getInstance().clearThisPage("MessagesFragment");
+                        App.Background.getInstance().addPage("MessagesFragment");
                         collapsingToolbarLayout.setTitle("Messages");
                         toolbar.getMenu().clear();
                         toolbar.inflateMenu(R.menu.messages_main_menu);
                         break;
                     case R.id.friends_item:
                         showFragment(new FriendsFragment(), "FriendsFragment");
-                        App.Background.clearThisPage("FriendsFragment");
-                        App.Background.addPage("FriendsFragment");
+                        App.Background.getInstance().clearThisPage("FriendsFragment");
+                        App.Background.getInstance().addPage("FriendsFragment");
                         collapsingToolbarLayout.setTitle("Friends");
                         toolbar.getMenu().clear();
                         toolbar.inflateMenu(R.menu.main_menu);
                         break;
                     case R.id.requests_item:
                         showFragment(new RequestsFragment(), "RequestsFragment");
-                        App.Background.clearThisPage("RequestsFragment");
-                        App.Background.addPage("RequestsFragment");
+                        App.Background.getInstance().clearThisPage("RequestsFragment");
+                        App.Background.getInstance().addPage("RequestsFragment");
                         collapsingToolbarLayout.setTitle("Requests");
                         toolbar.getMenu().clear();
                         toolbar.inflateMenu(R.menu.main_menu);
                         break;
                     case R.id.account_item:
                         showFragment(new AccountFragment(), "AccountFragment");
-                        App.Background.clearThisPage("AccountFragment");
-                        App.Background.addPage("AccountFragment");
+                        App.Background.getInstance().clearThisPage("AccountFragment");
+                        App.Background.getInstance().addPage("AccountFragment");
                         mainAppBarLayout.setVisibility(View.GONE);
                         fullFrame.setVisibility(View.VISIBLE);
                         toolbar.getMenu().clear();
@@ -179,28 +179,28 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
 
     @Override
     public void onBackPressed() {
-        if(App.Background.pageStackChildCount() > 1){
-            switch (App.Background.getPageStackList().get(App.Background.pageStackChildCount() - 2)){
+        if(App.Background.getInstance().pageStackChildCount() > 1){
+            switch (App.Background.getPageStackList().get(App.Background.getInstance().pageStackChildCount() - 2)){
                 case "MessagesFragment":
-                    App.Background.removePage();
+                    App.Background.getInstance().removePage();
                     bottomNavigationView.setSelectedItemId(R.id.messages_item);
                     toolbar.getMenu().clear();
                     toolbar.inflateMenu(R.menu.messages_main_menu);
                     break;
                 case "FriendsFragment":
-                    App.Background.removePage();
+                    App.Background.getInstance().removePage();
                     bottomNavigationView.setSelectedItemId(R.id.friends_item);
                     toolbar.getMenu().clear();
                     toolbar.inflateMenu(R.menu.main_menu);
                     break;
                 case "RequestsFragment":
-                    App.Background.removePage();
+                    App.Background.getInstance().removePage();
                     bottomNavigationView.setSelectedItemId(R.id.requests_item);
                     toolbar.getMenu().clear();
                     toolbar.inflateMenu(R.menu.main_menu);
                     break;
                 case "AccountFragment":
-                    App.Background.removePage();
+                    App.Background.getInstance().removePage();
                     bottomNavigationView.setSelectedItemId(R.id.account_item);
                     toolbar.getMenu().clear();
                     toolbar.inflateMenu(R.menu.main_menu);
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
                     finish();
             }
         }
-        else if(App.Background.pageStackChildCount() == 1){
+        else if(App.Background.getInstance().pageStackChildCount() == 1){
             bottomNavigationView.setSelectedItemId(R.id.messages_item);
             App.Background.getPageStackList().clear();
             toolbar.getMenu().clear();

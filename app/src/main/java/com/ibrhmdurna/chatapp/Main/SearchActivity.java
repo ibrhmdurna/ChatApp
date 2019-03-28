@@ -29,7 +29,7 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 

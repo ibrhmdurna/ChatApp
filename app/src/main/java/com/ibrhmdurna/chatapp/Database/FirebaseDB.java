@@ -15,9 +15,12 @@ public class FirebaseDB {
     public FirebaseDB() {
     }
 
-    public static FirebaseDB getInstance() {
-        if(instance == null)
-            instance = new FirebaseDB();
+    public static synchronized FirebaseDB getInstance() {
+        if(instance == null){
+            synchronized (FirebaseDB.class){
+                instance = new FirebaseDB();
+            }
+        }
         return instance;
     }
 

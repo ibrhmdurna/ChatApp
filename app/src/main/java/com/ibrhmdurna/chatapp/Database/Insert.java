@@ -10,17 +10,21 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.ibrhmdurna.chatapp.Main.MainActivity;
 import com.ibrhmdurna.chatapp.Models.Account;
-import com.ibrhmdurna.chatapp.Utils.DialogController;
+import com.ibrhmdurna.chatapp.Util.DialogController;
 
 public class Insert extends FirebaseDB {
 
     private static Insert instance;
 
-    public Insert(){}
+    private Insert(){
+    }
 
     public static Insert getInstance() {
-        if(instance == null)
-            instance = new Insert();
+        if(instance == null){
+            synchronized (Insert.class){
+                instance = new Insert();
+            }
+        }
         return instance;
     }
 

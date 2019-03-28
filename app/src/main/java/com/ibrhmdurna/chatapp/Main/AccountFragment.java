@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
-import com.ibrhmdurna.chatapp.Local.FriendsViewFactory;
+import com.ibrhmdurna.chatapp.Local.FriendsActivity;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Settings.SettingsActivity;
 
@@ -39,7 +39,7 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        App.Theme.getTheme(getContext());
+        App.Theme.getInstance().getTheme(getContext());
         view = inflater.inflate(R.layout.fragment_account, container, false);
 
         toolsManagement();
@@ -114,7 +114,7 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
                 startActivity(settings);
                 break;
             case R.id.account_friends_button:
-                Intent friends = new Intent(getActivity(), FriendsViewFactory.class);
+                Intent friends = new Intent(getActivity(), FriendsActivity.class);
                 friends.putExtra("isAccount", true);
                 startActivity(friends);
                 break;

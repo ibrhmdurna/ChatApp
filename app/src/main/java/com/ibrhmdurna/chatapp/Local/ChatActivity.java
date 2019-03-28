@@ -17,18 +17,18 @@ import android.widget.ImageView;
 
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
-import com.ibrhmdurna.chatapp.Image.CameraViewFactory;
-import com.ibrhmdurna.chatapp.Image.GalleryViewFactory;
+import com.ibrhmdurna.chatapp.Image.CameraActivity;
+import com.ibrhmdurna.chatapp.Image.GalleryActivity;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.Environment;
-import com.ibrhmdurna.chatapp.Utils.GalleryBottomSheetDialog;
+import com.ibrhmdurna.chatapp.Util.Environment;
+import com.ibrhmdurna.chatapp.Util.GalleryBottomSheetDialog;
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 
-public class ChatViewFactory extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, OnEmojiPopupShownListener, OnEmojiPopupDismissListener, GalleryBottomSheetDialog.BottomSheetListener {
+public class ChatActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, OnEmojiPopupShownListener, OnEmojiPopupDismissListener, GalleryBottomSheetDialog.BottomSheetListener {
 
     private SharedPreferences prefs;
 
@@ -40,7 +40,7 @@ public class ChatViewFactory extends AppCompatActivity implements ViewComponentF
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
@@ -93,7 +93,7 @@ public class ChatViewFactory extends AppCompatActivity implements ViewComponentF
 
     @Override
     public void toolsManagement(){
-        Environment.toolbarProcess(this, R.id.chat_toolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.chat_toolbar);
         buildView();
         emojiProcess();
         backgroundProcess();
@@ -121,7 +121,7 @@ public class ChatViewFactory extends AppCompatActivity implements ViewComponentF
                 galleryBottomSheetDialog.show(getSupportFragmentManager(), "bottom_sheet");
                 break;
             case R.id.toolbar_view:
-                Intent profileIntent = new Intent(this, ProfileViewFactory.class);
+                Intent profileIntent = new Intent(this, ProfileActivity.class);
                 startActivity(profileIntent);
                 break;
         }
@@ -143,12 +143,12 @@ public class ChatViewFactory extends AppCompatActivity implements ViewComponentF
     public void onButtonClicked(String action) {
         switch (action){
             case "gallery":
-                Intent galleryIntent = new Intent(this, GalleryViewFactory.class);
+                Intent galleryIntent = new Intent(this, GalleryActivity.class);
                 galleryIntent.putExtra("isContext","Share");
                 startActivity(galleryIntent);
                 break;
             case "camera":
-                Intent cameraIntent = new Intent(this, CameraViewFactory.class);
+                Intent cameraIntent = new Intent(this, CameraActivity.class);
                 cameraIntent.putExtra("isContext","Share");
                 startActivity(cameraIntent);
                 break;

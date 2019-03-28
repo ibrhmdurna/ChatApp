@@ -15,12 +15,12 @@ import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Database.FirebaseDB;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Start.StartActivity;
-import com.ibrhmdurna.chatapp.Utils.Environment;
+import com.ibrhmdurna.chatapp.Util.Environment;
 
 public class SettingsActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
@@ -30,7 +30,7 @@ public class SettingsActivity extends AppCompatActivity implements ViewComponent
     private void dialogLogout(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.dialog_layout, null);
-        App.Theme.getTheme(view.getContext());
+        App.Theme.getInstance().getTheme(view.getContext());
         builder.setView(view);
         final AlertDialog dialog = builder.create();
 
@@ -76,7 +76,7 @@ public class SettingsActivity extends AppCompatActivity implements ViewComponent
 
     @Override
     public void toolsManagement(){
-        Environment.toolbarProcess(this, R.id.settingsToolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.settingsToolbar);
     }
 
     @Override

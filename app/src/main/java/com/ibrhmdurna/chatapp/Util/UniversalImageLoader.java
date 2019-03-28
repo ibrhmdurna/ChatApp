@@ -1,4 +1,4 @@
-package com.ibrhmdurna.chatapp.Utils;
+package com.ibrhmdurna.chatapp.Util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,8 +6,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.ibrhmdurna.chatapp.R;
-import com.naver.android.helloyako.imagecrop.view.ImageCropView;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;

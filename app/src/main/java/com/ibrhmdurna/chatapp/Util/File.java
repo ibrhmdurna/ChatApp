@@ -1,4 +1,4 @@
-package com.ibrhmdurna.chatapp.Utils;
+package com.ibrhmdurna.chatapp.Util;
 
 public class File {
     private String path, title, image;

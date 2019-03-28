@@ -22,9 +22,9 @@ import android.widget.Toast;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.CAlbumAdapter;
-import com.ibrhmdurna.chatapp.Utils.FileProcess;
-import com.ibrhmdurna.chatapp.Utils.ImageController;
+import com.ibrhmdurna.chatapp.Util.CAlbumAdapter;
+import com.ibrhmdurna.chatapp.Util.FileProcess;
+import com.ibrhmdurna.chatapp.Util.ImageController;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -40,7 +40,7 @@ import com.otaliastudios.cameraview.GestureAction;
 
 import java.util.List;
 
-public class CameraViewFactory extends AppCompatActivity implements View.OnClickListener, ViewComponentFactory {
+public class CameraActivity extends AppCompatActivity implements View.OnClickListener, ViewComponentFactory {
 
     private ImageView flashView;
     private com.otaliastudios.cameraview.CameraView cameraView;
@@ -51,7 +51,7 @@ public class CameraViewFactory extends AppCompatActivity implements View.OnClick
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTransparentTheme(this);
+        App.Theme.getInstance().getTransparentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
@@ -140,17 +140,17 @@ public class CameraViewFactory extends AppCompatActivity implements View.OnClick
 
                 switch (isContext) {
                     case "Share":
-                        Intent shareIntent = new Intent(getApplicationContext(), ShareViewFactory.class);
+                        Intent shareIntent = new Intent(getApplicationContext(), ShareActivity.class);
                         startActivity(shareIntent);
                         overridePendingTransition(0, 0);
                         break;
                     case "Profile":
-                        Intent profileIntent = new Intent(getApplicationContext(), ProfileImageViewFactory.class);
+                        Intent profileIntent = new Intent(getApplicationContext(), ProfileImageActivity.class);
                         startActivity(profileIntent);
                         overridePendingTransition(0, 0);
                         break;
                     case "Background":
-                        Intent backgroundIntent = new Intent(getApplicationContext(), BackgroundViewFactory.class);
+                        Intent backgroundIntent = new Intent(getApplicationContext(), BackgroundActivity.class);
                         startActivity(backgroundIntent);
                         overridePendingTransition(0, 0);
                         break;
@@ -175,7 +175,7 @@ public class CameraViewFactory extends AppCompatActivity implements View.OnClick
                     permissionDialog();
                 }
                 else {
-                    CameraViewFactory.super.onBackPressed();
+                    CameraActivity.super.onBackPressed();
                 }
             }
 
@@ -186,7 +186,7 @@ public class CameraViewFactory extends AppCompatActivity implements View.OnClick
         }).withErrorListener(new PermissionRequestErrorListener() {
             @Override
             public void onError(DexterError error) {
-                CameraViewFactory.super.onBackPressed();
+                CameraActivity.super.onBackPressed();
                 Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
             }
         }).check();
@@ -195,7 +195,7 @@ public class CameraViewFactory extends AppCompatActivity implements View.OnClick
     private void permissionDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogStyle);
         View view = getLayoutInflater().inflate(R.layout.dialog_layout, null);
-        App.Theme.getTheme(view.getContext());
+        App.Theme.getInstance().getTheme(view.getContext());
         builder.setView(view);
         final AlertDialog dialog = builder.create();
 
@@ -208,7 +208,7 @@ public class CameraViewFactory extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                CameraViewFactory.super.onBackPressed();
+                CameraActivity.super.onBackPressed();
             }
         });
 
@@ -281,7 +281,7 @@ public class CameraViewFactory extends AppCompatActivity implements View.OnClick
                 takePhoto();
                 break;
             case R.id.camera_all_photo_item:
-                Intent galleryIntent = new Intent(this, CameraGalleryViewFactory.class);
+                Intent galleryIntent = new Intent(this, CameraGalleryActivity.class);
                 galleryIntent.putExtra("isContext", isContext);
                 startActivity(galleryIntent);
                 break;

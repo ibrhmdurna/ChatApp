@@ -17,7 +17,7 @@ import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.Environment;
+import com.ibrhmdurna.chatapp.Util.Environment;
 import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
@@ -32,7 +32,7 @@ public class RegisterInfoActivity extends AppCompatActivity implements ViewCompo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_info);
 
@@ -186,7 +186,7 @@ public class RegisterInfoActivity extends AppCompatActivity implements ViewCompo
 
     @Override
     public void toolsManagement(){
-        Environment.toolbarProcess(this, R.id.register_info_toolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.register_info_toolbar);
         buildView();
         spinnerProcess();
         inputProcess();

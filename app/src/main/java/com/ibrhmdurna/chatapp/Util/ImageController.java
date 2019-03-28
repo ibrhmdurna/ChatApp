@@ -1,4 +1,4 @@
-package com.ibrhmdurna.chatapp.Utils;
+package com.ibrhmdurna.chatapp.Util;
 
 import android.graphics.Bitmap;
 

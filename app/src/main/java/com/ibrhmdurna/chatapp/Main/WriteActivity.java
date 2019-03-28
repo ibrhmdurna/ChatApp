@@ -24,8 +24,8 @@ import android.widget.TextView;
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.Utils.Environment;
-import com.ibrhmdurna.chatapp.Utils.MessagesAdapter;
+import com.ibrhmdurna.chatapp.Util.Environment;
+import com.ibrhmdurna.chatapp.Util.MessagesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.Theme.getTheme(this);
+        App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write);
 
@@ -109,7 +109,7 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
 
     @Override
     public void toolsManagement() {
-        Environment.toolbarProcess(this, R.id.write_toolbar);
+        Environment.getInstance().toolbarProcess(this, R.id.write_toolbar);
         buildView();
         inputProcess();
     }
