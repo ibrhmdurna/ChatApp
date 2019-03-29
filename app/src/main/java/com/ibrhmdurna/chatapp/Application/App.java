@@ -90,9 +90,9 @@ public class App extends Application {
         }
 
         public void clearThisPage(String tag){
-            for(int i = 0; i < pageStackList.size(); i++){
-                if(pageStackList.get(i).equals(tag)){
-                    pageStackList.remove(i);
+            for(int i = 0; i < getPageStackList().size(); i++){
+                if(getPageStackList().get(i).equals(tag)){
+                    getPageStackList().remove(i);
                 }
             }
         }

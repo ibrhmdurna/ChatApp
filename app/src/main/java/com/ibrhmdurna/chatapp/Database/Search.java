@@ -8,12 +8,14 @@ import android.support.v7.app.AlertDialog;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.SignInMethodQueryResult;
+import com.ibrhmdurna.chatapp.Main.MainActivity;
 import com.ibrhmdurna.chatapp.Start.RegisterInfoActivity;
 import com.ibrhmdurna.chatapp.Util.AppController;
 import com.ibrhmdurna.chatapp.Util.DialogController;
 
-public class Search extends FirebaseDB {
+public class Search{
 
     private static Search instance;
 
@@ -30,12 +32,12 @@ public class Search extends FirebaseDB {
 
     public void checkEmail(final Activity context, final TextInputLayout emailInput, final TextInputLayout passwordInput){
 
-        AppController.closeKeyboard(context);
+        AppController.getInstance().closeKeyboard(context);
 
         final AlertDialog loading = DialogController.dialogLoading(context);
         loading.show();
 
-        this.getAuth().fetchSignInMethodsForEmail(emailInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+        FirebaseDB.getInstance().getAuth().fetchSignInMethodsForEmail(emailInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
             @Override
             public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
                 if(task.isSuccessful()){
@@ -51,6 +53,7 @@ public class Search extends FirebaseDB {
 
                 }
                 else {
+                    loading.dismiss();
                     AlertDialog errorDialog = DialogController.dialogError(context);
                     errorDialog.show();
                 }
@@ -59,5 +62,31 @@ public class Search extends FirebaseDB {
             }
         });
 
+    }
+
+    public void login(final Activity context, TextInputLayout emailInput, TextInputLayout passwordInput){
+        AppController.getInstance().closeKeyboard(context);
+
+        final AlertDialog loading = DialogController.dialogLoading(context);
+        loading.show();
+
+        FirebaseDB.getInstance().getAuth().signInWithEmailAndPassword(emailInput.getEditText().getText().toString(), passwordInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    Intent mainIntent = new Intent(context, MainActivity.class);
+                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    context.startActivity(mainIntent);
+                    context.finish();
+                }
+                else{
+                    loading.dismiss();
+                    AlertDialog errorDialog = DialogController.dialogError(context);
+                    errorDialog.show();
+                }
+
+                loading.dismiss();
+            }
+        });
     }
 }

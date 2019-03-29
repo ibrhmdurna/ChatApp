@@ -12,7 +12,7 @@ import com.ibrhmdurna.chatapp.Main.MainActivity;
 import com.ibrhmdurna.chatapp.Models.Account;
 import com.ibrhmdurna.chatapp.Util.DialogController;
 
-public class Insert extends FirebaseDB {
+public class Insert {
 
     private static Insert instance;
 
@@ -32,14 +32,14 @@ public class Insert extends FirebaseDB {
         final AlertDialog loading = DialogController.dialogLoading(context);
         loading.show();
 
-        this.getAuth().createUserWithEmailAndPassword(account.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        FirebaseDB.getInstance().getAuth().createUserWithEmailAndPassword(account.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
 
-                    String uid = getCurrentUser().getUid();
+                    String uid = FirebaseDB.getInstance().getCurrentUser().getUid();
 
-                    getDatabase().child("Accounts").child(uid).setValue(account).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    FirebaseDB.getInstance().getDatabase().child("Accounts").child(uid).setValue(account).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){

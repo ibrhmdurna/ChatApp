@@ -52,8 +52,7 @@ public class SettingsActivity extends AppCompatActivity implements ViewComponent
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                FirebaseDB firebaseDB = new FirebaseDB();
-                firebaseDB.getAuth().signOut();
+                FirebaseDB.getInstance().getAuth().signOut();
                 sendToStart();
             }
         });

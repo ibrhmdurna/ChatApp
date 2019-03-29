@@ -15,6 +15,8 @@ import android.widget.CompoundButton;
 
 import com.ibrhmdurna.chatapp.Application.App;
 import com.ibrhmdurna.chatapp.Application.ViewComponentFactory;
+import com.ibrhmdurna.chatapp.Database.FirebaseDB;
+import com.ibrhmdurna.chatapp.Database.Search;
 import com.ibrhmdurna.chatapp.Main.MainActivity;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.Settings.ForgotActivity;
@@ -23,7 +25,7 @@ import com.ibrhmdurna.chatapp.Util.Environment;
 public class LoginActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
     private TextInputLayout emailInput, passwordInput;
-    private CheckBox showPassCheck;
+    private CheckBox rememberCheck;
     private Button loginBtn;
 
     @Override
@@ -70,22 +72,14 @@ public class LoginActivity extends AppCompatActivity implements ViewComponentFac
     }
 
     private void showCheckPassword(){
-        showPassCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(!isChecked)
-                    passwordInput.getEditText().setTransformationMethod(new PasswordTransformationMethod());
-                else
-                    passwordInput.getEditText().setTransformationMethod(null);
-            }
-        });
+
     }
 
     @Override
     public void buildView(){
         emailInput = findViewById(R.id.login_email_input);
         passwordInput = findViewById(R.id.login_password_input);
-        showPassCheck = findViewById(R.id.login_show_pass_check);
+        rememberCheck = findViewById(R.id.login_remember_check);
         loginBtn = findViewById(R.id.login_btn);
     }
 
@@ -107,8 +101,7 @@ public class LoginActivity extends AppCompatActivity implements ViewComponentFac
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.login_btn:
-                Intent mainIntent = new Intent(this, MainActivity.class);
-                startActivity(mainIntent);
+                Search.getInstance().login(this, emailInput, passwordInput);
                 break;
             case R.id.login_forgot_password_btn:
                 Intent forgotIntent = new Intent(this, ForgotActivity.class);
