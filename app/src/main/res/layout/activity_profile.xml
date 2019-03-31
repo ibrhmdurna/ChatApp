@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundBrushColor"
-    tools:context=".Main.AccountFragment">
+    tools:context=".main.AccountFragment">
 
     <ImageButton
         android:id="@+id/profile_back_view"

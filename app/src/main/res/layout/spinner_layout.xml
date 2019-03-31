@@ -4,6 +4,6 @@
     android:layout_height="wrap_content"
     android:textSize="18sp"
     android:padding="14dp"
-    android:textColor="?attr/primaryTextColor">
+    android:textColor="@color/selector_item_icon_color">
 
 </TextView>

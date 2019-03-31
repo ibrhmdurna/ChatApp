@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Local.ChatActivity"
+    tools:context=".local.ChatActivity"
     android:background="?attr/backgroundBrushColor"
     android:id="@+id/root_view"
     android:fitsSystemWindows="false">
