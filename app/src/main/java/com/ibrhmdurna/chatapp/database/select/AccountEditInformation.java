@@ -1,12 +1,14 @@
 package com.ibrhmdurna.chatapp.database.select;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.FirebaseDB;
@@ -19,21 +21,23 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountEditInformation implements Implementor {
 
+    private Context context;
     private ActivityEditAccountBinding binding;
     private CircleImageView profileImage;
     private TextView profileText;
-    private SmartMaterialSpinner locationSpinner;
 
-    public AccountEditInformation(ActivityEditAccountBinding binding, CircleImageView profileImage, TextView profileText, SmartMaterialSpinner locationSpinner) {
+    public AccountEditInformation(Context context, ActivityEditAccountBinding binding, CircleImageView profileImage, TextView profileText) {
+        this.context = context;
         this.binding = binding;
         this.profileImage = profileImage;
         this.profileText = profileText;
-        this.locationSpinner = locationSpinner;
     }
 
     @Override
     public void getAccountInformation() {
         String uid = FirebaseDB.getInstance().getCurrentUser().getUid();
+
+        //DatabaseReference database = FirebaseDB.getInstance().getDatabase().child("Accounts");
 
         FirebaseDB.getInstance().getDatabase().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -43,7 +47,6 @@ public class AccountEditInformation implements Implementor {
 
                     String image = account.getProfile_image();
 
-
                     if(image.substring(0, 8).equals("default_")){
                         String value = image.substring(8,9);
                         int index = Integer.parseInt(value);
@@ -52,19 +55,20 @@ public class AccountEditInformation implements Implementor {
                         profileText.setText(name);
                     }
                     else {
-                        UniversalImageLoader.setImage(account.getProfile_image(), profileImage, null, null);
+                        UniversalImageLoader.setImage(account.getProfile_image(), profileImage, null, "");
                         profileText.setVisibility(View.GONE);
                     }
 
-                    //setSelectLocation(account.getLocation());
-
                     binding.setAccount(account);
+                }
+                else {
+                    Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -102,15 +106,6 @@ public class AccountEditInformation implements Implementor {
             case 9:
                 profileImage.setImageResource(R.drawable.ic_avatar_9);
                 break;
-        }
-    }
-
-    private void setSelectLocation(String value){
-        for(int i = 0; i < locationSpinner.getCount(); i++){
-            if(locationSpinner.getItemAtPosition(i).toString().equals(value)){
-                locationSpinner.setSelection(i + 1);
-                break;
-            }
         }
     }
 }

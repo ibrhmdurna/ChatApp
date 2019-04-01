@@ -3,6 +3,9 @@ package com.ibrhmdurna.chatapp.settings;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,13 +14,16 @@ import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
+import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.database.bridgeSelect.AccountContent;
 import com.ibrhmdurna.chatapp.database.bridgeSelect.AccountInformationView;
 import com.ibrhmdurna.chatapp.database.select.AccountEditInformation;
@@ -25,12 +31,16 @@ import com.ibrhmdurna.chatapp.databinding.ActivityEditAccountBinding;
 import com.ibrhmdurna.chatapp.image.CameraActivity;
 import com.ibrhmdurna.chatapp.image.GalleryActivity;
 import com.ibrhmdurna.chatapp.util.Environment;
+import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
+import com.ibrhmdurna.chatapp.util.controller.DialogController;
+import com.ibrhmdurna.chatapp.util.controller.ImageController;
 import com.ibrhmdurna.chatapp.util.dialog.ProfileBottomSheetDialog;
 import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
 import java.util.Date;
+import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -42,6 +52,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
     private SmartMaterialSpinner genderSpinner, locationSpinner;
     private TextView birthdayText, profileText;
     private CircleImageView profileImage;
+    private TextView saveBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,38 +64,290 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
         toolsManagement();
     }
 
+    private void profileImageDeleteProcess(){
+        ImageController.setProfileImageBytes(null);
+
+        String image = binding.getAccount().getProfile_image();
+
+        if(image.substring(0, 8).equals("default_")){
+            String value = image.substring(8,9);
+            int index = Integer.parseInt(value);
+            setProfileImage(index);
+        }
+        else {
+            randomProfileImage();
+        }
+
+        String name = binding.getAccount().getName().substring(0,1);
+        profileText.setVisibility(View.VISIBLE);
+        profileText.setText(name);
+        profileImage.setSaveEnabled(true);
+        checkInput();
+
+    }
+
+    private void randomProfileImage(){
+        Random r = new Random();
+        int imageIndex = r.nextInt(10);
+        switch (imageIndex){
+            case 0:
+                profileImage.setImageResource(R.drawable.ic_avatar_0);
+                binding.getAccount().setProfile_image("default_0");
+                binding.getAccount().setThumb_image("default_0");
+                break;
+            case 1:
+                profileImage.setImageResource(R.drawable.ic_avatar_1);
+                binding.getAccount().setProfile_image("default_1");
+                binding.getAccount().setThumb_image("default_1");
+                break;
+            case 2:
+                profileImage.setImageResource(R.drawable.ic_avatar_2);
+                binding.getAccount().setProfile_image("default_2");
+                binding.getAccount().setThumb_image("default_2");
+                break;
+            case 3:
+                profileImage.setImageResource(R.drawable.ic_avatar_3);
+                binding.getAccount().setProfile_image("default_3");
+                binding.getAccount().setThumb_image("default_3");
+                break;
+            case 4:
+                profileImage.setImageResource(R.drawable.ic_avatar_4);
+                binding.getAccount().setProfile_image("default_4");
+                binding.getAccount().setThumb_image("default_4");
+                break;
+            case 5:
+                profileImage.setImageResource(R.drawable.ic_avatar_5);
+                binding.getAccount().setProfile_image("default_5");
+                binding.getAccount().setThumb_image("default_5");
+                break;
+            case 6:
+                profileImage.setImageResource(R.drawable.ic_avatar_6);
+                binding.getAccount().setProfile_image("default_6");
+                binding.getAccount().setThumb_image("default_6");
+                break;
+            case 7:
+                profileImage.setImageResource(R.drawable.ic_avatar_7);
+                binding.getAccount().setProfile_image("default_7");
+                binding.getAccount().setThumb_image("default_7");
+                break;
+            case 8:
+                profileImage.setImageResource(R.drawable.ic_avatar_8);
+                binding.getAccount().setProfile_image("default_8");
+                binding.getAccount().setThumb_image("default_8");
+                break;
+            case 9:
+                profileImage.setImageResource(R.drawable.ic_avatar_9);
+                binding.getAccount().setProfile_image("default_9");
+                binding.getAccount().setThumb_image("default_9");
+                break;
+        }
+    }
+
+    private void setProfileImage(int index){
+        switch (index){
+            case 0:
+                profileImage.setImageResource(R.drawable.ic_avatar_0);
+                break;
+            case 1:
+                profileImage.setImageResource(R.drawable.ic_avatar_1);
+                break;
+            case 2:
+                profileImage.setImageResource(R.drawable.ic_avatar_2);
+                break;
+            case 3:
+                profileImage.setImageResource(R.drawable.ic_avatar_3);
+                break;
+            case 4:
+                profileImage.setImageResource(R.drawable.ic_avatar_4);
+                break;
+            case 5:
+                profileImage.setImageResource(R.drawable.ic_avatar_5);
+                break;
+            case 6:
+                profileImage.setImageResource(R.drawable.ic_avatar_6);
+                break;
+            case 7:
+                profileImage.setImageResource(R.drawable.ic_avatar_7);
+                break;
+            case 8:
+                profileImage.setImageResource(R.drawable.ic_avatar_8);
+                break;
+            case 9:
+                profileImage.setImageResource(R.drawable.ic_avatar_9);
+                break;
+        }
+    }
+
+    private void profileImageProcess(){
+
+        byte[] bytes = ImageController.getProfileImageBytes();
+
+        if(bytes != null){
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            profileImage.setImageBitmap(bitmap);
+            profileText.setVisibility(View.GONE);
+            profileImage.setSaveEnabled(true);
+            checkInput();
+        }
+    }
+
+    private void saveEdit(){
+        binding.getAccount().setName(nameInput.getEditText().getText().toString());
+        binding.getAccount().setSurname(surnameInput.getEditText().getText().toString());
+        binding.getAccount().setPhone(phoneInput.getEditText().getText().toString());
+        binding.getAccount().setBirthday(birthdayText.getText().toString());
+        binding.getAccount().setGender(genderSpinner.getSelectedItemPosition());
+        binding.getAccount().setLocation(locationSpinner.getSelectedItemPosition());
+
+        Bitmap bitmap = null;
+
+        if(profileImage.isSaveEnabled()){
+            bitmap = ((BitmapDrawable) profileImage.getDrawable()).getBitmap();
+        }
+
+        if(profileText.getText().length() > 0){
+
+        }
+
+        Update.getInstance().updateAccount(this, binding.getAccount(), bitmap, profileImage.isSaveEnabled());
+    }
+
     private void getAccountInformation(){
-        AccountContent content = new AccountInformationView(new AccountEditInformation(binding, profileImage, profileText, locationSpinner));
+        AccountContent content = new AccountInformationView(new AccountEditInformation(this, binding, profileImage, profileText));
         content.getAccountInformation();
     }
 
-    private void inputProcess(){
-        nameInput.getEditText().addTextChangedListener(inputWatcher);
-        surnameInput.getEditText().addTextChangedListener(inputWatcher);
-        phoneInput.getEditText().addTextChangedListener(inputWatcher);
+    private void watcherProcess(){
+        nameInput.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String name = binding.getAccount().getName();
+                String name_input = nameInput.getEditText().getText().toString();
+
+                nameInput.setSaveEnabled(!name_input.equals(name));
+
+                checkInput();
+            }
+        });
+
+        surnameInput.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String surname = binding.getAccount().getSurname();
+                String surname_input = surnameInput.getEditText().getText().toString();
+
+                surnameInput.setSaveEnabled(!surname_input.equals(surname));
+
+                checkInput();
+            }
+        });
+
+        phoneInput.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String phone = binding.getAccount().getPhone();
+                String phone_input = phoneInput.getEditText().getText().toString();
+
+                phoneInput.setSaveEnabled(!phone_input.equals(phone));
+
+                checkInput();
+            }
+        });
+
+
+        genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int gender = binding.getAccount().getGender();
+
+                genderSpinner.setSaveEnabled(gender != genderSpinner.getSelectedItemPosition());
+
+                checkInput();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int location = binding.getAccount().getLocation();
+
+                locationSpinner.setSaveEnabled(location != locationSpinner.getSelectedItemPosition());
+
+                checkInput();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        birthdayText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String birthday = binding.getAccount().getBirthday();
+                String birthday_input = birthdayText.getText().toString();
+
+                birthdayText.setSaveEnabled(!birthday_input.equals(birthday));
+
+                checkInput();
+            }
+        });
     }
 
-    private TextWatcher inputWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            checkInput();
-        }
-    };
-
     private void checkInput(){
-        String name = nameInput.getEditText().getText().toString();
-        String surname = surnameInput.getEditText().getText().toString();
-        String phone = phoneInput.getEditText().getText().toString();
+        if(nameInput.isSaveEnabled() || surnameInput.isSaveEnabled() || phoneInput.isSaveEnabled() ||
+            genderSpinner.isSaveEnabled() || locationSpinner.isSaveEnabled() || birthdayText.isSaveEnabled() || profileImage.isSaveEnabled()){
+            saveBtn.setEnabled(true);
+        }
+        else {
+            saveBtn.setEnabled(false);
+        }
     }
 
     private void buildBirthdaySpinner(){
@@ -162,6 +425,22 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
         locationSpinner.setAdapter(locAdapter);
     }
 
+    private void onBack(){
+        if(saveBtn.isEnabled()){
+            DialogController.getInstance().dialogUnsaved(this);
+        }
+        else {
+            ImageController.setProfileImageBytes(null);
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        profileImageProcess();
+    }
+
     @Override
     public void buildView(){
         nameInput = findViewById(R.id.editNameInput);
@@ -172,6 +451,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
         profileText = findViewById(R.id.profileImageText);
         genderSpinner = findViewById(R.id.genderSpinner);
         locationSpinner = findViewById(R.id.locationSpinner);
+        saveBtn = findViewById(R.id.editSaveBtn);
     }
 
     @Override
@@ -179,8 +459,8 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
         Environment.getInstance().toolbarProcess(this, R.id.editAccountToolbar);
         buildView();
         spinnerProcess();
-        inputProcess();
         getAccountInformation();
+        watcherProcess();
     }
 
     @Override
@@ -197,6 +477,12 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
                 ProfileBottomSheetDialog profileBottomSheetDialog = new ProfileBottomSheetDialog(profileText.getVisibility() == View.VISIBLE);
                 profileBottomSheetDialog.show(getSupportFragmentManager(), "bottom_sheet");
                 break;
+            case R.id.editCancelBtn:
+                onBack();
+                break;
+            case R.id.editSaveBtn:
+                saveEdit();
+                break;
         }
     }
 
@@ -207,19 +493,25 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
     }
 
     @Override
+    public void onBackPressed() {
+        onBack();
+    }
+
+    @Override
     public void onButtonClicked(String action) {
         switch (action){
             case "gallery":
                 Intent galleryIntent = new Intent(this, GalleryActivity.class);
                 galleryIntent.putExtra("isContext","Profile");
-                galleryIntent.putExtra("register", false);
                 startActivity(galleryIntent);
                 break;
             case "camera":
                 Intent cameraIntent = new Intent(this, CameraActivity.class);
                 cameraIntent.putExtra("isContext","Profile");
-                cameraIntent.putExtra("register", false);
                 startActivity(cameraIntent);
+                break;
+            case "delete":
+                profileImageDeleteProcess();
                 break;
         }
     }

@@ -26,7 +26,7 @@ public class Search{
 
     private Search(){}
 
-    public static Search getInstance() {
+    public static synchronized Search getInstance() {
         if(instance == null){
             synchronized (Search.class){
                 instance = new Search();
@@ -39,7 +39,7 @@ public class Search{
 
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loading = DialogController.dialogLoading(context);
+        final AlertDialog loading = DialogController.getInstance().dialogLoading(context);
         loading.show();
 
         FirebaseDB.getInstance().getAuth().fetchSignInMethodsForEmail(emailInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
@@ -59,7 +59,7 @@ public class Search{
                 }
                 else {
                     loading.dismiss();
-                    AlertDialog errorDialog = DialogController.dialogError(context);
+                    AlertDialog errorDialog = DialogController.getInstance().dialogError(context);
                     errorDialog.show();
                 }
 
@@ -72,7 +72,7 @@ public class Search{
     public void login(final Activity context, final TextInputLayout emailInput, final TextInputLayout passwordInput, final CheckBox remember){
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loading = DialogController.dialogLoading(context);
+        final AlertDialog loading = DialogController.getInstance().dialogLoading(context);
         loading.show();
 
         FirebaseDB.getInstance().getAuth().signInWithEmailAndPassword(emailInput.getEditText().getText().toString(), passwordInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -107,7 +107,7 @@ public class Search{
                 }
                 else{
                     loading.dismiss();
-                    AlertDialog errorDialog = DialogController.dialogError(context);
+                    AlertDialog errorDialog = DialogController.getInstance().dialogError(context);
                     errorDialog.show();
                 }
 

@@ -19,7 +19,7 @@ public class Insert {
     private Insert(){
     }
 
-    public static Insert getInstance() {
+    public static synchronized Insert getInstance() {
         if(instance == null){
             synchronized (Insert.class){
                 instance = new Insert();
@@ -29,7 +29,7 @@ public class Insert {
     }
 
     public void register(final Account account, String password, final Activity context){
-        final AlertDialog loading = DialogController.dialogLoading(context);
+        final AlertDialog loading = DialogController.getInstance().dialogLoading(context);
         loading.show();
 
         FirebaseDB.getInstance().getAuth().createUserWithEmailAndPassword(account.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -54,7 +54,7 @@ public class Insert {
                 }
                 else {
                     loading.dismiss();
-                    DialogController.dialogError(context);
+                    DialogController.getInstance().dialogError(context);
                 }
             }
         });

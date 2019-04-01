@@ -104,7 +104,9 @@
                                 android:layout_height="80dp"
                                 android:layout_centerInParent="true"
                                 app:civ_border_color="@android:color/darker_gray"
-                                app:civ_border_width="0.4dp"/>
+                                app:civ_border_width="0.4dp"
+                                android:saveEnabled="false"
+                                android:src="?attr/searchColor"/>
 
                             <TextView
                                 android:id="@+id/profileImageText"
@@ -169,14 +171,16 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginStart="20dp"
                                         app:hintEnabled="false"
-                                        app:errorEnabled="false">
+                                        app:errorEnabled="false"
+                                        android:saveEnabled="false">
 
                                         <android.support.design.widget.TextInputEditText
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:hint="Name"
                                             android:backgroundTint="@color/colorGray"
-                                            android:text="@{account.name}"/>
+                                            android:text="@{account.name}"
+                                            android:maxLength="20"/>
                                     </android.support.design.widget.TextInputLayout>
                                 </LinearLayout>
                                 <LinearLayout
@@ -191,14 +195,16 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginStart="40dp"
                                         app:hintEnabled="false"
-                                        app:errorEnabled="false">
+                                        app:errorEnabled="false"
+                                        android:saveEnabled="false">
 
                                         <android.support.design.widget.TextInputEditText
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:hint="Surname"
                                             android:backgroundTint="@color/colorGray"
-                                            android:text="@{account.surname}"/>
+                                            android:text="@{account.surname}"
+                                            android:maxLength="20"/>
                                     </android.support.design.widget.TextInputLayout>
                                 </LinearLayout>
 
@@ -220,7 +226,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginStart="20dp"
                                         app:hintEnabled="false"
-                                        app:errorEnabled="false">
+                                        app:errorEnabled="false"
+                                        android:saveEnabled="false">
 
                                         <com.santalu.widget.MaskEditText
                                             android:layout_width="match_parent"
@@ -261,7 +268,8 @@
                                             app:smsp_underlineSize="0dp"
                                             app:smsp_enableFloatingLabel="false"
                                             android:popupBackground="@drawable/rounded_background"
-                                            android:selectedItemPosition="@{account.gender}">
+                                            android:selectedItemPosition="@{account.gender}"
+                                            android:saveEnabled="false">
                                         </com.chivorn.smartmaterialspinner.SmartMaterialSpinner>
 
                                         <View
@@ -303,7 +311,8 @@
                                             android:paddingTop="5dp"
                                             android:paddingBottom="5dp"
                                             android:textColor="?attr/primaryTextColor"
-                                            android:text="@{account.birthday}"/>
+                                            android:text="@{account.birthday}"
+                                            android:saveEnabled="false"/>
 
                                         <View
                                             android:layout_width="match_parent"
@@ -340,7 +349,8 @@
                                             app:smsp_underlineSize="0dp"
                                             app:smsp_enableFloatingLabel="false"
                                             android:popupBackground="@drawable/rounded_background"
-                                            android:selectedItemPosition="@{account.location}">
+                                            android:selectedItemPosition="@{account.location}"
+                                            android:saveEnabled="false">
                                         </com.chivorn.smartmaterialspinner.SmartMaterialSpinner>
 
                                         <View

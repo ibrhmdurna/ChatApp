@@ -40,13 +40,13 @@ public class ProfileImageActivity extends AppCompatActivity implements View.OnCl
 
     private void changeProfileImage(){
 
-        //FileController.insertProfileImage(cropImageView.getCroppedBitmap());
-
         Bitmap bitmap = cropImageView.getCroppedBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] bytes = stream.toByteArray();
         bitmap.recycle();
+
+        ImageController.setProfileImageBytes(bytes);
 
         Intent editIntent = new Intent(this, EditAccountActivity.class);
         editIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

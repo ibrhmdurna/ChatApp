@@ -65,6 +65,12 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        getAccountInformation();
+    }
+
+    @Override
     public void buildView(){
         profileImage = binding.getRoot().findViewById(R.id.profileImage);
         profileText = binding.getRoot().findViewById(R.id.profileImageText);
@@ -78,7 +84,6 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
     public void toolsManagement(){
         buildView();
         clickProcess();
-        getAccountInformation();
     }
 
     @Override

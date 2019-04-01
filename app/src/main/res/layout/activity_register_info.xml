@@ -99,7 +99,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Name"
-                                android:backgroundTint="@color/colorGray"/>
+                                android:backgroundTint="@color/colorGray"
+                                android:maxLength="20"/>
                         </android.support.design.widget.TextInputLayout>
                     </LinearLayout>
 
@@ -122,7 +123,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Surname"
-                                android:backgroundTint="@color/colorGray"/>
+                                android:backgroundTint="@color/colorGray"
+                                android:maxLength="20"/>
                         </android.support.design.widget.TextInputLayout>
                     </LinearLayout>
 

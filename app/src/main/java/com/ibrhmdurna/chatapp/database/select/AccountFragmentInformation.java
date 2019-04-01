@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.FirebaseDB;
@@ -43,7 +44,10 @@ public class AccountFragmentInformation implements Implementor {
 
         String uid = FirebaseDB.getInstance().getCurrentUser().getUid();
 
-        FirebaseDB.getInstance().getDatabase().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference database = FirebaseDB.getInstance().getDatabase().child("Accounts");
+        database.keepSynced(true);
+
+        database.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -59,7 +63,7 @@ public class AccountFragmentInformation implements Implementor {
                         profileText.setText(name);
                     }
                     else {
-                        UniversalImageLoader.setImage(account.getProfile_image(), profileImage, null, null);
+                        UniversalImageLoader.setImage(account.getProfile_image(), profileImage, null, "");
                     }
 
                     convertGender(account);
@@ -70,11 +74,17 @@ public class AccountFragmentInformation implements Implementor {
                     loadingBar.setIndeterminate(false);
                     loadingBar.setVisibility(View.GONE);
                 }
+                else {
+                    Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                    rootView.setVisibility(View.VISIBLE);
+                    loadingBar.setIndeterminate(false);
+                    loadingBar.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(context, "Database Error!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                 rootView.setVisibility(View.VISIBLE);
                 loadingBar.setIndeterminate(false);
                 loadingBar.setVisibility(View.GONE);

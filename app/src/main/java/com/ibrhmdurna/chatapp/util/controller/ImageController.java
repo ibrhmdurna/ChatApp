@@ -10,8 +10,17 @@ public class ImageController {
     private static List<String> path;
     private static Bitmap image, cameraPath, cameraImage, cameraCroppedImage, backgroundImage;
     private static int backgroundColor = 0;
+    private static byte[] profileImageBytes;
 
     public ImageController() {
+    }
+
+    public static byte[] getProfileImageBytes(){
+        return profileImageBytes;
+    }
+
+    public static void setProfileImageBytes(byte[] profileImageBytes) {
+        ImageController.profileImageBytes = profileImageBytes;
     }
 
     public static List<String> getPath() {
