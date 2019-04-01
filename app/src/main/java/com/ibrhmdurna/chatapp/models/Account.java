@@ -1,9 +1,5 @@
 package com.ibrhmdurna.chatapp.models;
 
-import com.ibrhmdurna.chatapp.R;
-
-import java.util.Map;
-
 public class Account {
 
     private String uid;

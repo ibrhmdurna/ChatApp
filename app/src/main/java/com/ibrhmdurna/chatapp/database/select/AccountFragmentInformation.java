@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +40,7 @@ public class AccountFragmentInformation implements Implementor {
 
     @Override
     public void getAccountInformation() {
+
         String uid = FirebaseDB.getInstance().getCurrentUser().getUid();
 
         FirebaseDB.getInstance().getDatabase().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -72,7 +74,10 @@ public class AccountFragmentInformation implements Implementor {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(context, "Database Error!", Toast.LENGTH_SHORT).show();
+                rootView.setVisibility(View.VISIBLE);
+                loadingBar.setIndeterminate(false);
+                loadingBar.setVisibility(View.GONE);
             }
         });
     }

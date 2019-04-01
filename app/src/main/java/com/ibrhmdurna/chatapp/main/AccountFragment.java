@@ -19,10 +19,10 @@ import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.database.bridgeSelect.AccountContent;
 import com.ibrhmdurna.chatapp.database.bridgeSelect.AccountInformationView;
 import com.ibrhmdurna.chatapp.database.select.AccountFragmentInformation;
+import com.ibrhmdurna.chatapp.databinding.FragmentAccountBinding;
 import com.ibrhmdurna.chatapp.local.FriendsActivity;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.settings.SettingsActivity;
-import com.ibrhmdurna.chatapp.databinding.FragmentAccountBinding;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
