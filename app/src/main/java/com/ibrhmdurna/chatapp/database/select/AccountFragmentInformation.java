@@ -1,5 +1,6 @@
 package com.ibrhmdurna.chatapp.database.select;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -20,13 +21,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountFragmentInformation implements Implementor {
 
+    private Context context;
     private FragmentAccountBinding binding;
     private RelativeLayout rootView;
     private SpinKitView loadingBar;
     private CircleImageView profileImage;
     private TextView profileText;
 
-    public AccountFragmentInformation(FragmentAccountBinding binding, RelativeLayout rootView, SpinKitView loadingBar, CircleImageView profileImage, TextView profileText) {
+    public AccountFragmentInformation(Context context, FragmentAccountBinding binding, RelativeLayout rootView, SpinKitView loadingBar, CircleImageView profileImage, TextView profileText) {
+        this.context = context;
         this.binding = binding;
         this.rootView = rootView;
         this.loadingBar = loadingBar;
@@ -56,6 +59,9 @@ public class AccountFragmentInformation implements Implementor {
                     else {
                         UniversalImageLoader.setImage(account.getProfile_image(), profileImage, null, null);
                     }
+
+                    convertGender(account);
+                    convertLocation(account);
 
                     binding.setAccount(account);
                     rootView.setVisibility(View.VISIBLE);
@@ -105,5 +111,15 @@ public class AccountFragmentInformation implements Implementor {
                 profileImage.setImageResource(R.drawable.ic_avatar_9);
                 break;
         }
+    }
+
+    private void convertGender(Account account){
+        String[] genders = context.getResources().getStringArray(R.array.gender);
+        account.setConvertGender(genders[account.getGender() - 1]);
+    }
+
+    private void convertLocation(Account account){
+        String[] locations = context.getResources().getStringArray(R.array.countries_array);
+        account.setConvertLocation(locations[account.getLocation() - 1]);
     }
 }

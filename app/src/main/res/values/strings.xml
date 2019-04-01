@@ -2,4 +2,7 @@
     <string name="app_name">ChatApp</string>
 
     <string name="developer_text">This application was developed by <b>İBRAHİM DURNA</b></string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

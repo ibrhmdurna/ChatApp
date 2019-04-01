@@ -17,16 +17,14 @@ import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import fr.ganfra.materialspinner.MaterialSpinner;
-
 public class AccountEditInformation implements Implementor {
 
     private ActivityEditAccountBinding binding;
     private CircleImageView profileImage;
     private TextView profileText;
-    private MaterialSpinner locationSpinner;
+    private SmartMaterialSpinner locationSpinner;
 
-    public AccountEditInformation(ActivityEditAccountBinding binding, CircleImageView profileImage, TextView profileText, MaterialSpinner locationSpinner) {
+    public AccountEditInformation(ActivityEditAccountBinding binding, CircleImageView profileImage, TextView profileText, SmartMaterialSpinner locationSpinner) {
         this.binding = binding;
         this.profileImage = profileImage;
         this.profileText = profileText;

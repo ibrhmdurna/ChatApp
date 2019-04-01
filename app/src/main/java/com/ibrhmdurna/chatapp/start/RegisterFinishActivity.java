@@ -88,12 +88,12 @@ public class RegisterFinishActivity extends AppCompatActivity implements ViewCom
         String surname = getIntent().getStringExtra("surname");
         String phone = getIntent().getStringExtra("phone");
         String birthday = getIntent().getStringExtra("birthday");
-        String gender = getIntent().getStringExtra("gender");
-        String location = getIntent().getStringExtra("location");
+        int gender = getIntent().getIntExtra("gender", 0);
+        int location = getIntent().getIntExtra("location", 0);
         String image = "default_"+imageIndex;
         Map<String, String> last_seen = ServerValue.TIMESTAMP;
 
-        Account account = new Account(email, name, surname, phone, birthday, gender, location, image, image, false);
+        Account account = new Account(email, name, surname, phone, birthday, gender, location, image, image, false, null);
         Insert.getInstance().register(account, password, this);
     }
 

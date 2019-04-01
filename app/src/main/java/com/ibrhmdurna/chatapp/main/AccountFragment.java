@@ -55,7 +55,7 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
     }
 
     private void getAccountInformation(){
-        AccountContent account = new AccountInformationView(new AccountFragmentInformation(binding, rootView, loadingBar, profileImage, profileText));
+        AccountContent account = new AccountInformationView(new AccountFragmentInformation(getContext(), binding, rootView, loadingBar, profileImage, profileText));
         account.getAccountInformation();
     }
 

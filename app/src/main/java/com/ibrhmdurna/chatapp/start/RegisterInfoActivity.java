@@ -139,16 +139,14 @@ public class RegisterInfoActivity extends AppCompatActivity implements ViewCompo
 
     private void spinnerProcess(){
         // Gender spinner
-        SmartMaterialSpinner spinner = findViewById(R.id.genderSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.gender, R.layout.spinner_text);
         adapter.setDropDownViewResource(R.layout.spinner_layout);
-        spinner.setAdapter(adapter);
+        genderSpinner.setAdapter(adapter);
 
         // Location spinner
-        SmartMaterialSpinner locSpinner = findViewById(R.id.locationSpinner);
         ArrayAdapter<CharSequence> locAdapter = ArrayAdapter.createFromResource(this, R.array.countries_array, R.layout.spinner_text);
         locAdapter.setDropDownViewResource(R.layout.spinner_layout);
-        locSpinner.setAdapter(locAdapter);
+        locationSpinner.setAdapter(locAdapter);
     }
 
     private void registerProcess(){
@@ -158,8 +156,8 @@ public class RegisterInfoActivity extends AppCompatActivity implements ViewCompo
         String surname = surnameInput.getEditText().getText().toString();
         String phone = phoneInput.getEditText().getText().toString();
         String birthday = birthdayText.getText().toString();
-        String gender = genderSpinner.getSelectedItem().toString();
-        String location = (locationSpinner.getSelectedItemPosition() + 1) + "";
+        int gender = genderSpinner.getSelectedItemPosition();
+        int location = locationSpinner.getSelectedItemPosition();
 
         Intent finishIntent = new Intent(this, RegisterFinishActivity.class);
         finishIntent.putExtra("email", email);

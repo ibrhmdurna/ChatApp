@@ -261,7 +261,7 @@
                                             app:smsp_underlineSize="0dp"
                                             app:smsp_enableFloatingLabel="false"
                                             android:popupBackground="@drawable/rounded_background"
-                                            android:selectedItemPosition="@{account.gender.equals(`Male`) ? 1 : 2}">
+                                            android:selectedItemPosition="@{account.gender}">
                                         </com.chivorn.smartmaterialspinner.SmartMaterialSpinner>
 
                                         <View
@@ -330,22 +330,6 @@
                                         android:layout_marginStart="25dp"
                                         android:layout_marginEnd="4dp">
 
-                                        <fr.ganfra.materialspinner.MaterialSpinner
-                                            android:id="@+id/locationSpinner"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            app:ms_hint="Location"
-                                            app:ms_enableFloatingLabel="false"
-                                            app:ms_multiline="false"
-                                            app:ms_enableErrorLabel="false"
-                                            app:ms_thickness="0dp"
-                                            app:ms_arrowSize="12sp"
-                                            app:ms_isRtl="true"
-                                            android:popupBackground="@drawable/rounded_background"
-                                            android:selectedItemPosition="@{account.converterLocation()}">
-                                        </fr.ganfra.materialspinner.MaterialSpinner>
-
-                                        <!--
                                         <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
                                             android:id="@+id/locationSpinner"
                                             android:layout_width="match_parent"
@@ -355,8 +339,9 @@
                                             app:smsp_underlineColor="@android:color/transparent"
                                             app:smsp_underlineSize="0dp"
                                             app:smsp_enableFloatingLabel="false"
-                                            android:popupBackground="@drawable/rounded_background">
-                                        </com.chivorn.smartmaterialspinner.SmartMaterialSpinner>-->
+                                            android:popupBackground="@drawable/rounded_background"
+                                            android:selectedItemPosition="@{account.location}">
+                                        </com.chivorn.smartmaterialspinner.SmartMaterialSpinner>
 
                                         <View
                                             android:layout_width="match_parent"

@@ -34,15 +34,12 @@ import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import fr.ganfra.materialspinner.MaterialSpinner;
-
 public class EditAccountActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, ProfileBottomSheetDialog.BottomSheetListener {
 
     private ActivityEditAccountBinding binding;
 
     private TextInputLayout nameInput, surnameInput, phoneInput;
-    private SmartMaterialSpinner genderSpinner;
-    private MaterialSpinner locationSpinner;
+    private SmartMaterialSpinner genderSpinner, locationSpinner;
     private TextView birthdayText, profileText;
     private CircleImageView profileImage;
 
@@ -154,16 +151,15 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
 
     private void spinnerProcess(){
         // Gender spinner
-        SmartMaterialSpinner spinner = findViewById(R.id.genderSpinner);
+        genderSpinner = findViewById(R.id.genderSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.gender, R.layout.spinner_text);
         adapter.setDropDownViewResource(R.layout.spinner_layout);
-        spinner.setAdapter(adapter);
+        genderSpinner.setAdapter(adapter);
 
         // Location spinner
-        MaterialSpinner locSpinner = findViewById(R.id.locationSpinner);
         ArrayAdapter<CharSequence> locAdapter = ArrayAdapter.createFromResource(this, R.array.countries_array, R.layout.spinner_text);
         locAdapter.setDropDownViewResource(R.layout.spinner_layout);
-        locSpinner.setAdapter(locAdapter);
+        locationSpinner.setAdapter(locAdapter);
     }
 
     @Override
@@ -174,6 +170,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
         birthdayText = findViewById(R.id.birthdayText);
         profileImage = findViewById(R.id.profileImage);
         profileText = findViewById(R.id.profileImageText);
+        genderSpinner = findViewById(R.id.genderSpinner);
         locationSpinner = findViewById(R.id.locationSpinner);
     }
 

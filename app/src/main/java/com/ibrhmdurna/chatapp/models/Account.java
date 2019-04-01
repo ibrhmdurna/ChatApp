@@ -1,5 +1,7 @@
 package com.ibrhmdurna.chatapp.models;
 
+import com.ibrhmdurna.chatapp.R;
+
 import java.util.Map;
 
 public class Account {
@@ -10,17 +12,20 @@ public class Account {
     private String surname;
     private String phone;
     private String birthday;
-    private String gender;
-    private String location;
+    private int gender;
+    private int location;
     private String profile_image;
     private String thumb_image;
     private boolean online;
     private Long lastSeen;
 
+    private String convertGender;
+    private String convertLocation;
+
     public Account() {
     }
 
-    public Account(String email, String name, String surname, String phone, String birthday, String gender, String location, String profile_image, String thumb_image, boolean online) {
+    public Account(String email, String name, String surname, String phone, String birthday, int gender, int location, String profile_image, String thumb_image, boolean online, Long lastSeen) {
         this.email = email;
         this.name = name;
         this.surname = surname;
@@ -31,6 +36,7 @@ public class Account {
         this.profile_image = profile_image;
         this.thumb_image = thumb_image;
         this.online = online;
+        this.lastSeen = lastSeen;
     }
 
     public String getUid() {
@@ -81,19 +87,19 @@ public class Account {
         this.birthday = birthday;
     }
 
-    public String getGender() {
+    public int getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 
-    public String getLocation() {
+    public int getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(int location) {
         this.location = location;
     }
 
@@ -129,11 +135,23 @@ public class Account {
         this.lastSeen = lastSeen;
     }
 
-    public String getNameSurname(){
-        return name + " " + surname;
+    public String getConvertGender() {
+        return convertGender;
     }
 
-    public int converterLocation(){
-        return Integer.parseInt(this.location);
+    public void setConvertGender(String convertGender) {
+        this.convertGender = convertGender;
+    }
+
+    public String getConvertLocation() {
+        return convertLocation;
+    }
+
+    public void setConvertLocation(String convertLocation) {
+        this.convertLocation = convertLocation;
+    }
+
+    public String getNameSurname(){
+        return name + " " + surname;
     }
 }
