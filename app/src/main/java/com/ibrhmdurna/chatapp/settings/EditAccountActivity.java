@@ -53,6 +53,8 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
     private TextView birthdayText, profileText;
     private CircleImageView profileImage;
     private TextView saveBtn;
+    private TextView genderError, locationError;
+    private View genderLine, locationLine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +187,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
         if(bytes != null){
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             profileImage.setImageBitmap(bitmap);
+            profileText.setText(null);
             profileText.setVisibility(View.GONE);
             profileImage.setSaveEnabled(true);
             checkInput();
@@ -201,15 +204,61 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
 
         Bitmap bitmap = null;
 
-        if(profileImage.isSaveEnabled()){
+        if(profileText.getText().length() > 0){
+            bitmap = null;
+        }
+        else if (profileImage.isSaveEnabled()){
             bitmap = ((BitmapDrawable) profileImage.getDrawable()).getBitmap();
         }
 
-        if(profileText.getText().length() > 0){
+        String name = nameInput.getEditText().getText().toString();
+        String surname = surnameInput.getEditText().getText().toString();
+        String birthday = birthdayText.getText().toString();
+        String phone = phoneInput.getEditText().getText().toString();
 
+        if(name.trim().length() > 0 && surname.trim().length() > 0 && birthday.trim().length() > 0 && (phone.trim().length() == 18 || phone.trim().length() == 0) && genderSpinner.getSelectedItemPosition() > 0 && locationSpinner.getSelectedItemPosition() > 0){
+            Update.getInstance().updateAccount(this, binding.getAccount(), bitmap);
+        }
+        else {
+            if(!(name.trim().length() > 0)){
+                nameInput.setError("* Enter a name");
+            }
+            else {
+                nameInput.setError(null);
+                nameInput.setErrorEnabled(false);
+            }
+            if(!(surname.trim().length() > 0)){
+                surnameInput.setError("* Enter a surname");
+            }
+            else {
+                surnameInput.setError(null);
+                surnameInput.setErrorEnabled(false);
+            }
+            if((phone.trim().length() > 0 && phone.trim().length() < 18)){
+                phoneInput.setError("Enter a valid phone number");
+            }
+            else {
+                phoneInput.setError(null);
+                phoneInput.setErrorEnabled(false);
+            }
+            if(!(genderSpinner.getSelectedItemPosition() > 0)){
+                genderError.setVisibility(View.VISIBLE);
+                genderLine.setBackgroundColor(getColor(R.color.colorError));
+            }
+            else {
+                genderError.setVisibility(View.GONE);
+                genderLine.setBackgroundColor(getColor(R.color.colorGray));
+            }
+            if(!(locationSpinner.getSelectedItemPosition() > 0)){
+                locationError.setVisibility(View.VISIBLE);
+                locationLine.setBackgroundColor(getColor(R.color.colorError));
+            }
+            else {
+                locationError.setVisibility(View.GONE);
+                locationLine.setBackgroundColor(getColor(R.color.colorGray));
+            }
         }
 
-        Update.getInstance().updateAccount(this, binding.getAccount(), bitmap, profileImage.isSaveEnabled());
     }
 
     private void getAccountInformation(){
@@ -283,7 +332,6 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
                 checkInput();
             }
         });
-
 
         genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -452,6 +500,10 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
         genderSpinner = findViewById(R.id.genderSpinner);
         locationSpinner = findViewById(R.id.locationSpinner);
         saveBtn = findViewById(R.id.editSaveBtn);
+        genderError = findViewById(R.id.gender_error_text);
+        genderLine = findViewById(R.id.gender_line);
+        locationError = findViewById(R.id.location_error_text);
+        locationLine = findViewById(R.id.location_line);
     }
 
     @Override
@@ -487,6 +539,12 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImageController.setProfileImageBytes(null);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onBackPressed();
         return true;
@@ -503,11 +561,13 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
             case "gallery":
                 Intent galleryIntent = new Intent(this, GalleryActivity.class);
                 galleryIntent.putExtra("isContext","Profile");
+                galleryIntent.putExtra("isRegister", false);
                 startActivity(galleryIntent);
                 break;
             case "camera":
                 Intent cameraIntent = new Intent(this, CameraActivity.class);
                 cameraIntent.putExtra("isContext","Profile");
+                cameraIntent.putExtra("isRegister", false);
                 startActivity(cameraIntent);
                 break;
             case "delete":

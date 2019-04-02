@@ -14,6 +14,8 @@ import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.settings.EditAccountActivity;
+import com.ibrhmdurna.chatapp.start.RegisterFinishActivity;
+import com.ibrhmdurna.chatapp.util.FileController;
 import com.ibrhmdurna.chatapp.util.controller.ImageController;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.isseiaoki.simplecropview.CropImageView;
@@ -26,6 +28,8 @@ public class ProfileImageActivity extends AppCompatActivity implements View.OnCl
 
     private String path;
     private int position;
+
+    private boolean isRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,17 +44,10 @@ public class ProfileImageActivity extends AppCompatActivity implements View.OnCl
 
     private void changeProfileImage(){
 
+        isRegister = getIntent().getBooleanExtra("isRegister", false);
+
         Bitmap bitmap = cropImageView.getCroppedBitmap();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] bytes = stream.toByteArray();
-        bitmap.recycle();
-
-        ImageController.setProfileImageBytes(bytes);
-
-        Intent editIntent = new Intent(this, EditAccountActivity.class);
-        editIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(editIntent);
+        FileController.compressToPhoto(this, bitmap, isRegister);
 
         ImageController.setCameraImage(null);
         ImageController.setImage(null);

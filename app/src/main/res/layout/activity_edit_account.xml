@@ -103,7 +103,7 @@
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:layout_centerInParent="true"
-                                app:civ_border_color="@android:color/darker_gray"
+                                app:civ_border_color="?attr/searchColor"
                                 app:civ_border_width="0.4dp"
                                 android:saveEnabled="false"
                                 android:src="?attr/searchColor"/>
@@ -180,7 +180,8 @@
                                             android:hint="Name"
                                             android:backgroundTint="@color/colorGray"
                                             android:text="@{account.name}"
-                                            android:maxLength="20"/>
+                                            android:maxLength="20"
+                                            android:inputType="textCapSentences"/>
                                     </android.support.design.widget.TextInputLayout>
                                 </LinearLayout>
                                 <LinearLayout
@@ -204,7 +205,8 @@
                                             android:hint="Surname"
                                             android:backgroundTint="@color/colorGray"
                                             android:text="@{account.surname}"
-                                            android:maxLength="20"/>
+                                            android:maxLength="20"
+                                            android:inputType="textCapSentences"/>
                                     </android.support.design.widget.TextInputLayout>
                                 </LinearLayout>
 
@@ -227,7 +229,8 @@
                                         android:layout_marginStart="20dp"
                                         app:hintEnabled="false"
                                         app:errorEnabled="false"
-                                        android:saveEnabled="false">
+                                        android:saveEnabled="false"
+                                        app:helperText="* optional">
 
                                         <com.santalu.widget.MaskEditText
                                             android:layout_width="match_parent"
@@ -244,7 +247,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="horizontal"
-                                    android:layout_marginTop="25dp">
+                                    android:layout_marginTop="15dp">
 
                                     <ImageView
                                         android:layout_width="20dp"
@@ -273,12 +276,24 @@
                                         </com.chivorn.smartmaterialspinner.SmartMaterialSpinner>
 
                                         <View
+                                            android:id="@+id/gender_line"
                                             android:layout_width="match_parent"
                                             android:layout_height="1dp"
                                             android:background="@color/colorGray"
                                             android:layout_alignParentBottom="true"/>
                                     </RelativeLayout>
                                 </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/gender_error_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="* Choose a gender"
+                                    android:textSize="12sp"
+                                    android:textColor="?attr/colorError"
+                                    android:layout_marginStart="45dp"
+                                    android:layout_marginTop="5dp"
+                                    android:visibility="gone"/>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -315,6 +330,7 @@
                                             android:saveEnabled="false"/>
 
                                         <View
+                                            android:id="@+id/birthday_line"
                                             android:layout_width="match_parent"
                                             android:layout_height="1dp"
                                             android:background="@color/colorGray"/>
@@ -354,12 +370,24 @@
                                         </com.chivorn.smartmaterialspinner.SmartMaterialSpinner>
 
                                         <View
+                                            android:id="@+id/location_line"
                                             android:layout_width="match_parent"
                                             android:layout_height="1dp"
                                             android:background="@color/colorGray"
                                             android:layout_alignParentBottom="true"/>
                                     </RelativeLayout>
                                 </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/location_error_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="* Choose a location"
+                                    android:textSize="12sp"
+                                    android:textColor="?attr/colorError"
+                                    android:layout_marginStart="45dp"
+                                    android:layout_marginTop="5dp"
+                                    android:visibility="gone"/>
                             </LinearLayout>
 
                             <LinearLayout

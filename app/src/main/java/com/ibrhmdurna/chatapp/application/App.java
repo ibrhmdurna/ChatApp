@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatDelegate;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.database.FirebaseDB;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.squareup.picasso.OkHttp3Downloader;
@@ -26,7 +25,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         EmojiCompat.Config config = new BundledEmojiCompatConfig(this);
         EmojiCompat.init(config);

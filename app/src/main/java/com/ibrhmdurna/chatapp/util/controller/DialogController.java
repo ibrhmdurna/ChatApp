@@ -25,12 +25,15 @@ public class DialogController {
         return instance;
     }
 
-    public AlertDialog dialogLoading(Activity context){
+    public AlertDialog dialogLoading(Activity context, String title){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = context.getLayoutInflater().inflate(R.layout.dialog_loading, null);
         App.Theme.getInstance().getTheme(view.getContext());
         builder.setView(view);
         final AlertDialog dialog = builder.create();
+
+        TextView titleText = view.findViewById(R.id.loading_title);
+        titleText.setText(title);
 
         dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

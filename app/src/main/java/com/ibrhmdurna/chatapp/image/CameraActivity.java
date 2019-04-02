@@ -46,6 +46,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     private com.otaliastudios.cameraview.CameraView cameraView;
 
     private String isContext = "Share";
+    private boolean isRegister;
 
     private RecyclerView galleryContainer;
 
@@ -66,7 +67,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     private void getAlbumPhoto(final List<String> list){
         galleryContainer.removeAllViews();
-        final CameraAlbumAdapter albumAdapter = new CameraAlbumAdapter(this, list, isContext);
+        final CameraAlbumAdapter albumAdapter = new CameraAlbumAdapter(this, list, isContext, isRegister);
         galleryContainer.setAdapter(albumAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -122,6 +123,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         cameraView.mapGesture(Gesture.TAP, GestureAction.FOCUS_WITH_MARKER);
 
         isContext = getIntent().getStringExtra("isContext");
+        isRegister = getIntent().getBooleanExtra("isRegister", false);
 
         cameraView.addCameraListener(new CameraListener() {
             @Override
@@ -146,6 +148,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                         break;
                     case "Profile":
                         Intent profileIntent = new Intent(getApplicationContext(), ProfileImageActivity.class);
+                        profileIntent.putExtra("isRegister", isRegister);
                         startActivity(profileIntent);
                         overridePendingTransition(0, 0);
                         break;

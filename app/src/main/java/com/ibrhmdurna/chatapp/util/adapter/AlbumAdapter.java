@@ -24,11 +24,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
     private AppCompatActivity context;
 
     private String isContext;
+    private boolean isRegister;
 
-    public AlbumAdapter(AppCompatActivity context, List<String> list, String isContext){
+    public AlbumAdapter(AppCompatActivity context, List<String> list, String isContext, boolean isRegister){
         this.context = context;
         this.list = list;
         this.isContext = isContext;
+        this.isRegister = isRegister;
         ImageController.setPath(list);
     }
 
@@ -56,6 +58,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
                     case "Profile":
                         Intent profileIntent = new Intent(context, ProfileImageActivity.class);
                         profileIntent.putExtra("position", i);
+                        profileIntent.putExtra("isRegister", isRegister);
                         context.startActivity(profileIntent);
                         context.overridePendingTransition(0, 0);
                         break;

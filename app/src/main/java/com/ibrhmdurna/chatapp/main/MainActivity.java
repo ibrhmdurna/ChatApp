@@ -18,9 +18,10 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
-import com.ibrhmdurna.chatapp.database.FirebaseDB;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.start.StartActivity;
 
@@ -223,7 +224,8 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     @Override
     protected void onStart() {
         super.onStart();
-        if(FirebaseDB.getInstance().getCurrentUser() == null){
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser == null){
             sendToStart();
         }
     }

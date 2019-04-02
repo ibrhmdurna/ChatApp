@@ -3,10 +3,9 @@ package com.ibrhmdurna.chatapp.start;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +28,8 @@ public class RegisterInfoActivity extends AppCompatActivity implements ViewCompo
     private TextInputLayout nameInput, surnameInput, phoneInput;
     private TextView birthdayText, nextView;
     private SmartMaterialSpinner genderSpinner, locationSpinner;
+    private TextView birthdayError, genderError, locationError;
+    private View birthdayLine, genderLine, locationLine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,40 +38,6 @@ public class RegisterInfoActivity extends AppCompatActivity implements ViewCompo
         setContentView(R.layout.activity_register_info);
 
         toolsManagement();
-    }
-
-    private void inputProcess(){
-        nameInput.getEditText().addTextChangedListener(inputWatcher);
-        surnameInput.getEditText().addTextChangedListener(inputWatcher);
-    }
-
-    private TextWatcher inputWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            checkInput();
-        }
-    };
-
-    private void checkInput(){
-        String name = nameInput.getEditText().getText().toString();
-        String surname = surnameInput.getEditText().getText().toString();
-
-        if(name.trim().length() > 0 && surname.trim().length() > 0){
-            nextView.setEnabled(true);
-        }
-        else {
-            nextView.setEnabled(false);
-        }
     }
 
     private void buildBirthdaySpinner(){
@@ -88,7 +55,7 @@ public class RegisterInfoActivity extends AppCompatActivity implements ViewCompo
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         switch (monthOfYear){
                             case 0:
-                                birthdayText.setText(dayOfMonth+" January "+year);
+                                birthdayText.setText(dayOfMonth +" January "+year);
                                 break;
                             case 1:
                                 birthdayText.setText(dayOfMonth+" February "+year);
@@ -124,8 +91,6 @@ public class RegisterInfoActivity extends AppCompatActivity implements ViewCompo
                                 birthdayText.setText(dayOfMonth+" December "+year);
                                 break;
                         }
-
-                        checkInput();
                     }
                 })
                 .showTitle(true)
@@ -159,16 +124,77 @@ public class RegisterInfoActivity extends AppCompatActivity implements ViewCompo
         int gender = genderSpinner.getSelectedItemPosition();
         int location = locationSpinner.getSelectedItemPosition();
 
-        Intent finishIntent = new Intent(this, RegisterFinishActivity.class);
-        finishIntent.putExtra("email", email);
-        finishIntent.putExtra("password", password);
-        finishIntent.putExtra("name", name);
-        finishIntent.putExtra("surname", surname);
-        finishIntent.putExtra("phone", phone);
-        finishIntent.putExtra("birthday", birthday);
-        finishIntent.putExtra("gender", gender);
-        finishIntent.putExtra("location", location);
-        startActivity(finishIntent);
+        if(name.trim().length() > 0 && surname.trim().length() > 0 && birthday.trim().length() > 0 && (phone.trim().length() == 18 || phone.trim().length() == 0) && genderSpinner.getSelectedItemPosition() > 0 && locationSpinner.getSelectedItemPosition() > 0){
+            Intent finishIntent = new Intent(this, RegisterFinishActivity.class);
+            finishIntent.putExtra("email", email);
+            finishIntent.putExtra("password", password);
+            finishIntent.putExtra("name", name);
+            finishIntent.putExtra("surname", surname);
+            finishIntent.putExtra("phone", phone);
+            finishIntent.putExtra("birthday", birthday);
+            finishIntent.putExtra("gender", gender);
+            finishIntent.putExtra("location", location);
+            startActivity(finishIntent);
+            nameInput.setError(null);
+            nameInput.setErrorEnabled(false);
+            surnameInput.setError(null);
+            surnameInput.setErrorEnabled(false);
+            phoneInput.setError(null);
+            phoneInput.setErrorEnabled(false);
+            birthdayError.setVisibility(View.GONE);
+            genderError.setVisibility(View.GONE);
+            locationError.setVisibility(View.GONE);
+            birthdayLine.setBackgroundColor(getColor(R.color.colorGray));
+            genderLine.setBackgroundColor(getColor(R.color.colorGray));
+            locationLine.setBackgroundColor(getColor(R.color.colorGray));
+        }
+        else {
+            if(!(name.trim().length() > 0)){
+                nameInput.setError("* Enter a name");
+            }
+            else {
+                nameInput.setError(null);
+                nameInput.setErrorEnabled(false);
+            }
+            if(!(surname.trim().length() > 0)){
+                surnameInput.setError("* Enter a surname");
+            }
+            else {
+                surnameInput.setError(null);
+                surnameInput.setErrorEnabled(false);
+            }
+            if((phone.trim().length() > 0 && phone.trim().length() < 18)){
+                phoneInput.setError("Enter a valid phone number");
+            }
+            else {
+                phoneInput.setError(null);
+                phoneInput.setErrorEnabled(false);
+            }
+            if(!(birthday.trim().length() > 0)){
+                birthdayError.setVisibility(View.VISIBLE);
+                birthdayLine.setBackgroundColor(getColor(R.color.colorError));
+            }
+            else {
+                birthdayError.setVisibility(View.GONE);
+                birthdayLine.setBackgroundColor(getColor(R.color.colorGray));
+            }
+            if(!(genderSpinner.getSelectedItemPosition() > 0)){
+                genderError.setVisibility(View.VISIBLE);
+                genderLine.setBackgroundColor(getColor(R.color.colorError));
+            }
+            else {
+                genderError.setVisibility(View.GONE);
+                genderLine.setBackgroundColor(getColor(R.color.colorGray));
+            }
+            if(!(locationSpinner.getSelectedItemPosition() > 0)){
+                locationError.setVisibility(View.VISIBLE);
+                locationLine.setBackgroundColor(getColor(R.color.colorError));
+            }
+            else {
+                locationError.setVisibility(View.GONE);
+                locationLine.setBackgroundColor(getColor(R.color.colorGray));
+            }
+        }
     }
 
     @Override
@@ -180,6 +206,12 @@ public class RegisterInfoActivity extends AppCompatActivity implements ViewCompo
         nextView = findViewById(R.id.register_info_next_btn);
         genderSpinner = findViewById(R.id.genderSpinner);
         locationSpinner = findViewById(R.id.locationSpinner);
+        birthdayError = findViewById(R.id.birthday_error_text);
+        genderError = findViewById(R.id.gender_error_text);
+        locationError = findViewById(R.id.location_error_text);
+        birthdayLine = findViewById(R.id.birthday_line);
+        genderLine = findViewById(R.id.gender_line);
+        locationLine = findViewById(R.id.location_line);
     }
 
     @Override
@@ -187,7 +219,6 @@ public class RegisterInfoActivity extends AppCompatActivity implements ViewCompo
         Environment.getInstance().toolbarProcess(this, R.id.register_info_toolbar);
         buildView();
         spinnerProcess();
-        inputProcess();
     }
 
     @Override

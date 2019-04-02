@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".main.AccountFragment"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageButton
                 android:id="@+id/account_settings_button"
@@ -64,7 +64,7 @@
                         android:id="@+id/profileImage"
                         android:layout_width="120dp"
                         android:layout_height="120dp"
-                        app:civ_border_color="@android:color/darker_gray"
+                        app:civ_border_color="?attr/searchColor"
                         app:civ_border_width="1dp"
                         android:src="?attr/searchColor"/>
                 </RelativeLayout>
@@ -142,11 +142,12 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
                                 android:layout_marginTop="15dp"
-                                android:background="?attr/lineColor" />
+                                android:background="?attr/lineColor"/>
                         </LinearLayout>
 
 
                         <LinearLayout
+                            android:id="@+id/account_phone_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"

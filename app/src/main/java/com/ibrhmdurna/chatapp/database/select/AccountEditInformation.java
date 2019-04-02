@@ -6,12 +6,12 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.database.FirebaseDB;
 import com.ibrhmdurna.chatapp.database.bridgeSelect.Implementor;
 import com.ibrhmdurna.chatapp.databinding.ActivityEditAccountBinding;
 import com.ibrhmdurna.chatapp.models.Account;
@@ -35,11 +35,11 @@ public class AccountEditInformation implements Implementor {
 
     @Override
     public void getAccountInformation() {
-        String uid = FirebaseDB.getInstance().getCurrentUser().getUid();
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         //DatabaseReference database = FirebaseDB.getInstance().getDatabase().child("Accounts");
 
-        FirebaseDB.getInstance().getDatabase().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -55,7 +55,7 @@ public class AccountEditInformation implements Implementor {
                         profileText.setText(name);
                     }
                     else {
-                        UniversalImageLoader.setImage(account.getProfile_image(), profileImage, null, "");
+                        UniversalImageLoader.setImage(account.getThumb_image(), profileImage, null, "");
                         profileText.setVisibility(View.GONE);
                     }
 

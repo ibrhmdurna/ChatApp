@@ -1,11 +1,22 @@
 package com.ibrhmdurna.chatapp.util;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.text.format.DateFormat;
+
+import com.ibrhmdurna.chatapp.settings.EditAccountActivity;
+import com.ibrhmdurna.chatapp.start.RegisterFinishActivity;
+import com.ibrhmdurna.chatapp.util.controller.DialogController;
+import com.ibrhmdurna.chatapp.util.controller.ImageController;
+import com.isseiaoki.simplecropview.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -271,5 +282,60 @@ public class FileController {
         }
 
         return countPhoto;
+    }
+
+    public static void compressToPhoto(Activity context, Bitmap bitmap, boolean isRegister){
+        new PhotoCompressAsyncTask(context, isRegister).execute(bitmap);
+    }
+
+    public static class PhotoCompressAsyncTask extends AsyncTask<Bitmap, byte[], byte[]>{
+
+        @SuppressLint("StaticFieldLeak")
+        private Activity context;
+        private AlertDialog loading;
+        private boolean isRegister;
+
+        public PhotoCompressAsyncTask(Activity context, boolean isRegister){
+            this.context = context;
+            this.isRegister = isRegister;
+        }
+
+
+        @Override
+        protected byte[] doInBackground(Bitmap... bitmaps) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmaps[0].compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] bytes = stream.toByteArray();
+            bitmaps[0].recycle();
+
+            return bytes;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            loading = DialogController.getInstance().dialogLoading(context, "Compressing...");
+            loading.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(byte[] data) {
+            loading.dismiss();
+
+            ImageController.setProfileImageBytes(data);
+
+            if(isRegister){
+                Intent editIntent = new Intent(context, RegisterFinishActivity.class);
+                editIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                context.startActivity(editIntent);
+            }
+            else {
+                Intent editIntent = new Intent(context, EditAccountActivity.class);
+                editIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                context.startActivity(editIntent);
+            }
+
+            super.onPostExecute(data);
+        }
     }
 }

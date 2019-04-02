@@ -4,6 +4,7 @@ package com.ibrhmdurna.chatapp.main;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
     private LinearLayout friendView;
     private RelativeLayout rootView;
     private SpinKitView loadingBar;
+    private LinearLayout phoneLayout;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -55,7 +57,7 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
     }
 
     private void getAccountInformation(){
-        AccountContent account = new AccountInformationView(new AccountFragmentInformation(getContext(), binding, rootView, loadingBar, profileImage, profileText));
+        AccountContent account = new AccountInformationView(new AccountFragmentInformation(getContext(), binding, rootView, loadingBar, profileImage, profileText, phoneLayout));
         account.getAccountInformation();
     }
 
@@ -78,6 +80,7 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
         friendView = binding.getRoot().findViewById(R.id.account_friends_button);
         rootView = binding.getRoot().findViewById(R.id.rootView);
         loadingBar = binding.getRoot().findViewById(R.id.loadingBar);
+        phoneLayout = binding.getRoot().findViewById(R.id.account_phone_layout);
     }
 
     @Override

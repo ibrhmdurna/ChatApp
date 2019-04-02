@@ -10,9 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
-import com.ibrhmdurna.chatapp.database.FirebaseDB;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.start.StartActivity;
 import com.ibrhmdurna.chatapp.util.Environment;
@@ -52,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity implements ViewComponent
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                FirebaseDB.getInstance().getAuth().signOut();
+                FirebaseAuth.getInstance().signOut();
                 sendToStart();
             }
         });

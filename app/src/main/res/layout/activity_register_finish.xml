@@ -54,10 +54,24 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/change_profile_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change Photo"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:textColor="?attr/colorAccent"
+            style="@style/CustomTransparentViewStyle"
+            android:backgroundTint="?attr/backgroundBrushColor"
+            android:onClick="onClick"
+            android:layout_marginTop="15dp"/>
+
+        <TextView
             android:id="@+id/reg_finish_body_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="30dp"
             android:gravity="center"
             android:textSize="18sp"/>
     </LinearLayout>

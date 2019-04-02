@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.SignInMethodQueryResult;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.main.MainActivity;
@@ -20,7 +21,7 @@ import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class Search{
+public class Search {
 
     private static Search instance;
 
@@ -39,10 +40,10 @@ public class Search{
 
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loading = DialogController.getInstance().dialogLoading(context);
+        final AlertDialog loading = DialogController.getInstance().dialogLoading(context, "Please Waiting...");
         loading.show();
 
-        FirebaseDB.getInstance().getAuth().fetchSignInMethodsForEmail(emailInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+        FirebaseAuth.getInstance().fetchSignInMethodsForEmail(emailInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
             @Override
             public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
                 if(task.isSuccessful()){
@@ -54,6 +55,7 @@ public class Search{
                         infoIntent.putExtra("email", emailInput.getEditText().getText().toString());
                         infoIntent.putExtra("password", passwordInput.getEditText().getText().toString());
                         context.startActivity(infoIntent);
+                        emailInput.setError(null);
                     }
 
                 }
@@ -72,10 +74,10 @@ public class Search{
     public void login(final Activity context, final TextInputLayout emailInput, final TextInputLayout passwordInput, final CheckBox remember){
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loading = DialogController.getInstance().dialogLoading(context);
+        final AlertDialog loading = DialogController.getInstance().dialogLoading(context, "Please Waiting...");
         loading.show();
 
-        FirebaseDB.getInstance().getAuth().signInWithEmailAndPassword(emailInput.getEditText().getText().toString(), passwordInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(emailInput.getEditText().getText().toString(), passwordInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
