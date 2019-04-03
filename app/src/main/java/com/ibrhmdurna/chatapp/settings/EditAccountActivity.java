@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 import com.ibrhmdurna.chatapp.R;
@@ -26,12 +25,11 @@ import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.database.bridgeSelect.AccountContent;
 import com.ibrhmdurna.chatapp.database.bridgeSelect.AccountInformationView;
-import com.ibrhmdurna.chatapp.database.select.AccountEditInformation;
+import com.ibrhmdurna.chatapp.database.select.AccountEditInfo;
 import com.ibrhmdurna.chatapp.databinding.ActivityEditAccountBinding;
 import com.ibrhmdurna.chatapp.image.CameraActivity;
 import com.ibrhmdurna.chatapp.image.GalleryActivity;
 import com.ibrhmdurna.chatapp.util.Environment;
-import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 import com.ibrhmdurna.chatapp.util.controller.ImageController;
 import com.ibrhmdurna.chatapp.util.dialog.ProfileBottomSheetDialog;
@@ -262,7 +260,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
     }
 
     private void getAccountInformation(){
-        AccountContent content = new AccountInformationView(new AccountEditInformation(this, binding, profileImage, profileText));
+        AccountContent content = new AccountInformationView(new AccountEditInfo(this, binding, profileImage, profileText));
         content.getAccountInformation();
     }
 

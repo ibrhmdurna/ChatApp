@@ -4,7 +4,6 @@ package com.ibrhmdurna.chatapp.main;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,7 @@ import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.database.bridgeSelect.AccountContent;
 import com.ibrhmdurna.chatapp.database.bridgeSelect.AccountInformationView;
-import com.ibrhmdurna.chatapp.database.select.AccountFragmentInformation;
+import com.ibrhmdurna.chatapp.database.select.AccountInfo;
 import com.ibrhmdurna.chatapp.databinding.FragmentAccountBinding;
 import com.ibrhmdurna.chatapp.local.FriendsActivity;
 import com.ibrhmdurna.chatapp.R;
@@ -57,8 +56,8 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
     }
 
     private void getAccountInformation(){
-        AccountContent account = new AccountInformationView(new AccountFragmentInformation(getContext(), binding, rootView, loadingBar, profileImage, profileText, phoneLayout));
-        account.getAccountInformation();
+        AccountContent content = new AccountInformationView(new AccountInfo(getContext(), binding, rootView, loadingBar, profileImage, profileText, phoneLayout));
+        content.getAccountInformation();
     }
 
     private void clickProcess(){

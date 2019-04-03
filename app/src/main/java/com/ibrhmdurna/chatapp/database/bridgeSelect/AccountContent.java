@@ -6,7 +6,7 @@ public abstract class AccountContent {
 
     protected Implementor implementor;
 
-    public AccountContent(Implementor implementor){
+    AccountContent(Implementor implementor){
         this.implementor = implementor;
     }
 
