@@ -38,7 +38,7 @@ public class Update{
 
     public void updateAccount(final Activity context, final Account account, final Bitmap bitmap){
 
-        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "This may take some time.\nPlease Waiting... ");
+        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "This may take some time.\nPlease keep waiting... ");
         loadingBar.show();
 
         final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();

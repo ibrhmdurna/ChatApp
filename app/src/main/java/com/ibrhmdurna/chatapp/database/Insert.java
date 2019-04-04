@@ -41,7 +41,7 @@ public class Insert {
     }
 
     public void register(final Account account, String password, final Bitmap bitmap, final Activity context){
-        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "Creating an account may take some time.\nPlease Waiting... ");
+        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "Creating an account may take some time.\nPlease keep waiting... ");
         loadingBar.show();
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(account.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

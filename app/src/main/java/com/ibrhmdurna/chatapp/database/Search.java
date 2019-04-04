@@ -40,7 +40,7 @@ public class Search {
 
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loading = DialogController.getInstance().dialogLoading(context, "Please Waiting...");
+        final AlertDialog loading = DialogController.getInstance().dialogLoading(context, "Please keep waiting...");
         loading.show();
 
         FirebaseAuth.getInstance().fetchSignInMethodsForEmail(emailInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
@@ -74,7 +74,7 @@ public class Search {
     public void login(final Activity context, final TextInputLayout emailInput, final TextInputLayout passwordInput, final CheckBox remember){
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loading = DialogController.getInstance().dialogLoading(context, "Please Waiting...");
+        final AlertDialog loading = DialogController.getInstance().dialogLoading(context, "Please keep waiting...");
         loading.show();
 
         FirebaseAuth.getInstance().signInWithEmailAndPassword(emailInput.getEditText().getText().toString(), passwordInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
