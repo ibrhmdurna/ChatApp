@@ -1,4 +1,4 @@
-package com.ibrhmdurna.chatapp.util;
+package com.ibrhmdurna.chatapp.util.controller;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -14,9 +14,6 @@ import android.text.format.DateFormat;
 
 import com.ibrhmdurna.chatapp.settings.EditAccountActivity;
 import com.ibrhmdurna.chatapp.start.RegisterFinishActivity;
-import com.ibrhmdurna.chatapp.util.controller.DialogController;
-import com.ibrhmdurna.chatapp.util.controller.ImageController;
-import com.isseiaoki.simplecropview.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -29,7 +26,20 @@ import java.util.Date;
 
 public class FileController {
 
-    public static void insertImage(Bitmap bitmap){
+    private static FileController instance;
+
+    private FileController(){}
+
+    public static synchronized FileController getInstance(){
+        if(instance == null){
+            synchronized (FileController.class){
+                instance = new FileController();
+            }
+        }
+        return instance;
+    }
+
+    public void insertImage(Bitmap bitmap){
         Date d = new Date();
         CharSequence s  = DateFormat.format("yyyyMMdd", d.getTime());
         String newImageName = "IMG_"+s+"_"+System.currentTimeMillis()+".jpg";
@@ -61,7 +71,7 @@ public class FileController {
         }
     }
 
-    public static void insertProfileImage(Bitmap bitmap){
+    public void insertProfileImage(Bitmap bitmap){
         Date d = new Date();
         CharSequence s  = DateFormat.format("yyyyMMdd", d.getTime());
         String newImageName = "IMG_"+s+"_"+System.currentTimeMillis()+".jpg";
@@ -93,7 +103,7 @@ public class FileController {
         }
     }
 
-    public static ArrayList<String> getFolderFile(String path){
+    public ArrayList<String> getFolderFile(String path){
         ArrayList<String> allFiles = new ArrayList<>();
 
         File file = new File(path);
@@ -131,7 +141,7 @@ public class FileController {
         return allFiles;
     }
 
-    public static boolean isEmptyFile(String path){
+    public boolean isEmptyFile(String path){
         File file = new File(path);
 
         File[] fileList = file.listFiles();
@@ -163,7 +173,7 @@ public class FileController {
         return false;
     }
 
-    public static int getAllGalleryImageCount(Context context){
+    public int getAllGalleryImageCount(Context context){
         String[] columns = (String[]) Arrays.asList(MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID).toArray();
         String orderBy = MediaStore.Images.Media.DATE_TAKEN;
 
@@ -175,7 +185,7 @@ public class FileController {
         return imageCursor.getCount();
     }
 
-    public static ArrayList<String> getAllGalleryPhoto(Context context){
+    public ArrayList<String> getAllGalleryPhoto(Context context){
         ArrayList<String> galleyImageUrls;
         String[] columns = (String[]) Arrays.asList(MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID).toArray();
         String orderBy = MediaStore.Images.Media.DATE_TAKEN;
@@ -196,7 +206,7 @@ public class FileController {
         return galleyImageUrls;
     }
 
-    public static String getAllGallery(Context context){
+    public String getAllGallery(Context context){
         String[] columns = (String[]) Arrays.asList(MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID).toArray();
         String orderBy = MediaStore.Images.Media.DATE_TAKEN;
 
@@ -214,7 +224,7 @@ public class FileController {
         return null;
     }
 
-    public static String getAlbumLastPhoto(String path){
+    public String getAlbumLastPhoto(String path){
         File file = new File(path);
         File[] folderAllFiles = file.listFiles();
 
@@ -248,7 +258,7 @@ public class FileController {
         return null;
     }
 
-    public static int getAlbumPhotoCount(String path){
+    public int getAlbumPhotoCount(String path){
         File file = new File(path);
         File[] folderAllFiles = file.listFiles();
 
@@ -284,11 +294,11 @@ public class FileController {
         return countPhoto;
     }
 
-    public static void compressToPhoto(Activity context, Bitmap bitmap, boolean isRegister){
+    public void compressToPhoto(Activity context, Bitmap bitmap, boolean isRegister){
         new PhotoCompressAsyncTask(context, isRegister).execute(bitmap);
     }
 
-    public static class PhotoCompressAsyncTask extends AsyncTask<Bitmap, byte[], byte[]>{
+    private static class PhotoCompressAsyncTask extends AsyncTask<Bitmap, byte[], byte[]>{
 
         @SuppressLint("StaticFieldLeak")
         private Activity context;
@@ -322,7 +332,7 @@ public class FileController {
         protected void onPostExecute(byte[] data) {
             loading.dismiss();
 
-            ImageController.setProfileImageBytes(data);
+            ImageController.getInstance().setProfileImageBytes(data);
 
             if(isRegister){
                 Intent editIntent = new Intent(context, RegisterFinishActivity.class);

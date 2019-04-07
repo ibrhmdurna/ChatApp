@@ -66,7 +66,7 @@ public class App extends Application {
 
         private Background(){}
 
-        public static Background getInstance() {
+        public static synchronized Background getInstance() {
             if(instance == null){
                 synchronized (Background.class){
                     instance = new Background();
@@ -75,7 +75,7 @@ public class App extends Application {
             return instance;
         }
 
-        public static List<String> getPageStackList(){
+        public static synchronized List<String> getPageStackList(){
             if(pageStackList == null){
                 synchronized (Background.class){
                     pageStackList = new ArrayList<>();
@@ -113,7 +113,7 @@ public class App extends Application {
 
         private Theme(){}
 
-        public static Theme getInstance(){
+        public static synchronized Theme getInstance(){
             if(instance == null){
                 synchronized (Theme.class){
                     instance = new Theme();
@@ -309,7 +309,7 @@ public class App extends Application {
 
         private Remember(){}
 
-        public static Remember getInstance(){
+        public static synchronized Remember getInstance(){
             if(instance == null){
                 synchronized (Remember.class){
                     instance = new Remember();

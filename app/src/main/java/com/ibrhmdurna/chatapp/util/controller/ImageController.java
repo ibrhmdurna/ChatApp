@@ -7,77 +7,88 @@ import java.util.List;
 
 public class ImageController {
 
-    private static List<String> path;
-    private static Bitmap image, cameraPath, cameraImage, cameraCroppedImage, backgroundImage;
-    private static int backgroundColor = 0;
-    private static byte[] profileImageBytes;
+    private List<String> path;
+    private Bitmap image, cameraPath, cameraImage, cameraCroppedImage, backgroundImage;
+    private int backgroundColor = 0;
+    private byte[] profileImageBytes;
+
+    private static ImageController instance;
 
     public ImageController() {
     }
 
-    public static byte[] getProfileImageBytes(){
+    public static synchronized ImageController getInstance(){
+        if(instance == null){
+            synchronized (ImageController.class){
+                instance = new ImageController();
+            }
+        }
+        return instance;
+    }
+
+    public byte[] getProfileImageBytes(){
         return profileImageBytes;
     }
 
-    public static void setProfileImageBytes(byte[] profileImageBytes) {
-        ImageController.profileImageBytes = profileImageBytes;
+    public void setProfileImageBytes(byte[] profileImageBytes) {
+        this.profileImageBytes = profileImageBytes;
     }
 
-    public static List<String> getPath() {
+    public List<String> getPath() {
         if(path == null)
             path = new ArrayList<>();
         return path;
     }
 
-    public static void setPath(List<String> path) {
-        ImageController.path = path;
+    public void setPath(List<String> path) {
+        this.path = path;
     }
 
-    public static Bitmap getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
-    public static void setImage(Bitmap image) {
-        ImageController.image = image;
+    public void setImage(Bitmap image) {
+        this.image = image;
     }
 
-    public static Bitmap getCameraImage() {
+    public Bitmap getCameraImage() {
         return cameraImage;
     }
 
-    public static void setCameraImage(Bitmap cameraImage) {
-        ImageController.cameraImage = cameraImage;
+    public void setCameraImage(Bitmap cameraImage) {
+        this.cameraImage = cameraImage;
     }
 
-    public static Bitmap getCameraCroppedImage() {
+    public Bitmap getCameraCroppedImage() {
         return cameraCroppedImage;
     }
 
-    public static void setCameraCroppedImage(Bitmap cameraCroppedImage) {
-        ImageController.cameraCroppedImage = cameraCroppedImage;
+    public void setCameraCroppedImage(Bitmap cameraCroppedImage) {
+        this.cameraCroppedImage = cameraCroppedImage;
     }
 
-    public static Bitmap getCameraPath() {
+    public Bitmap getCameraPath() {
         return cameraPath;
     }
 
-    public static void setCameraPath(Bitmap cameraPath) {
-        ImageController.cameraPath = cameraPath;
+    public void setCameraPath(Bitmap cameraPath) {
+        this.cameraPath = cameraPath;
     }
 
-    public static Bitmap getBackgroundImage() {
+    public Bitmap getBackgroundImage() {
         return backgroundImage;
     }
 
-    public static void setBackgroundImage(Bitmap backgroundImage) {
-        ImageController.backgroundImage = backgroundImage;
+    public void setBackgroundImage(Bitmap backgroundImage) {
+        this.backgroundImage = backgroundImage;
     }
 
-    public static int getBackgroundColor() {
+    public int getBackgroundColor() {
         return backgroundColor;
     }
 
-    public static void setBackgroundColor(int backgroundColor) {
-        ImageController.backgroundColor = backgroundColor;
+    public void setBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 }

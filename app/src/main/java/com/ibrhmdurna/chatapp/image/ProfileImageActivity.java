@@ -1,6 +1,5 @@
 package com.ibrhmdurna.chatapp.image;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,14 +12,10 @@ import android.view.WindowManager;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.settings.EditAccountActivity;
-import com.ibrhmdurna.chatapp.start.RegisterFinishActivity;
-import com.ibrhmdurna.chatapp.util.FileController;
+import com.ibrhmdurna.chatapp.util.controller.FileController;
 import com.ibrhmdurna.chatapp.util.controller.ImageController;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.isseiaoki.simplecropview.CropImageView;
-
-import java.io.ByteArrayOutputStream;
 
 public class ProfileImageActivity extends AppCompatActivity implements View.OnClickListener, ViewComponentFactory {
 
@@ -47,21 +42,21 @@ public class ProfileImageActivity extends AppCompatActivity implements View.OnCl
         isRegister = getIntent().getBooleanExtra("isRegister", false);
 
         Bitmap bitmap = cropImageView.getCroppedBitmap();
-        FileController.compressToPhoto(this, bitmap, isRegister);
+        FileController.getInstance().compressToPhoto(this, bitmap, isRegister);
 
-        ImageController.setCameraImage(null);
-        ImageController.setImage(null);
-        ImageController.setCameraCroppedImage(null);
+        ImageController.getInstance().setCameraImage(null);
+        ImageController.getInstance().setImage(null);
+        ImageController.getInstance().setCameraCroppedImage(null);
     }
 
     private void imageRotate(){
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
         Bitmap image;
-        if(ImageController.getCameraImage() != null){
-            Bitmap camera = ImageController.getCameraImage();
+        if(ImageController.getInstance().getCameraImage() != null){
+            Bitmap camera = ImageController.getInstance().getCameraImage();
             image = Bitmap.createBitmap(camera, 0,0, camera.getWidth(), camera.getHeight(), matrix,true);
-            ImageController.setCameraImage(image);
+            ImageController.getInstance().setCameraImage(image);
         }
         else {
             Drawable drawable = cropImageView.getDrawable();
@@ -71,17 +66,17 @@ public class ProfileImageActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void imageProcess(){
-        if(ImageController.getCameraImage() != null){
-            cropImageView.setImageBitmap(ImageController.getCameraImage());
+        if(ImageController.getInstance().getCameraImage() != null){
+            cropImageView.setImageBitmap(ImageController.getInstance().getCameraImage());
         }
         else {
-            if(ImageController.getImage() != null){
-                cropImageView.setImageBitmap(ImageController.getImage());
+            if(ImageController.getInstance().getImage() != null){
+                cropImageView.setImageBitmap(ImageController.getInstance().getImage());
             }
             else {
                 if(path == null){
                     position = getIntent().getIntExtra("position", 0);
-                    path = ImageController.getPath().get(position);
+                    path = ImageController.getInstance().getPath().get(position);
                 }
 
                 UniversalImageLoader.setImage(path, cropImageView, null, "file://");
@@ -118,8 +113,8 @@ public class ProfileImageActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ImageController.setCameraImage(null);
-        ImageController.setImage(null);
-        ImageController.setCameraCroppedImage(null);
+        ImageController.getInstance().setCameraImage(null);
+        ImageController.getInstance().setImage(null);
+        ImageController.getInstance().setCameraCroppedImage(null);
     }
 }

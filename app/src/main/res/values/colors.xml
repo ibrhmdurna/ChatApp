@@ -28,6 +28,7 @@
     <color name="colorFail">#C22A45</color>
     <color name="colorWarning">#ecd343</color>
     <color name="colorError">#FF5722</color>
+    <color name="colorDefaultBackground">#4DA0A0A0</color>
 
     <!--Solid Colors-->
     <color name="solidColor0">#1E2327</color>

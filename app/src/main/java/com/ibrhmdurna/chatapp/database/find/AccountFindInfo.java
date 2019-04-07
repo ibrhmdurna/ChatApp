@@ -1,4 +1,4 @@
-package com.ibrhmdurna.chatapp.database.select;
+package com.ibrhmdurna.chatapp.database.find;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -16,14 +16,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.database.bridgeSelect.Implementor;
+import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.databinding.FragmentAccountBinding;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AccountInfo implements Implementor {
+public class AccountFindInfo implements IFind {
 
     private Context context;
     private FragmentAccountBinding binding;
@@ -33,7 +33,7 @@ public class AccountInfo implements Implementor {
     private TextView profileText;
     private LinearLayout phoneLayout;
 
-    public AccountInfo(Context context, FragmentAccountBinding binding, RelativeLayout rootView, SpinKitView loadingBar, CircleImageView profileImage, TextView profileText, LinearLayout phoneLayout) {
+    public AccountFindInfo(Context context, FragmentAccountBinding binding, RelativeLayout rootView, SpinKitView loadingBar, CircleImageView profileImage, TextView profileText, LinearLayout phoneLayout) {
         this.context = context;
         this.binding = binding;
         this.rootView = rootView;
@@ -44,8 +44,7 @@ public class AccountInfo implements Implementor {
     }
 
     @Override
-    public void getAccountInformation() {
-
+    public void getInformation() {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Accounts");
@@ -101,8 +100,7 @@ public class AccountInfo implements Implementor {
         });
     }
 
-    @Override
-    public void setProfileImage(int index, CircleImageView profileImage) {
+    private void setProfileImage(int index, CircleImageView profileImage) {
         switch (index){
             case 0:
                 profileImage.setImageResource(R.drawable.ic_avatar_0);

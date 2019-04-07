@@ -11,7 +11,7 @@ public class Environment {
 
     private Environment(){}
 
-    public static Environment getInstance(){
+    public static synchronized Environment getInstance(){
         if(instance == null){
             synchronized (Environment.class){
                 instance = new Environment();

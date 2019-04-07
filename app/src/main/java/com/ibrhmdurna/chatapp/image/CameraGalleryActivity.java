@@ -14,7 +14,7 @@ import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.util.adapter.AlbumAdapter;
 import com.ibrhmdurna.chatapp.util.Environment;
-import com.ibrhmdurna.chatapp.util.FileController;
+import com.ibrhmdurna.chatapp.util.controller.FileController;
 
 import java.util.List;
 
@@ -55,13 +55,13 @@ public class CameraGalleryActivity extends AppCompatActivity implements ViewComp
     @SuppressLint("SetTextI18n")
     private void galleyProcess(){
 
-        getAlbumPhoto(FileController.getAllGalleryPhoto(this));
+        getAlbumPhoto(FileController.getInstance().getAllGalleryPhoto(this));
 
-        if(FileController.getAllGalleryPhoto(this).size() > 1){
-            subTitle.setText(FileController.getAllGalleryPhoto(this).size() + " photos");
+        if(FileController.getInstance().getAllGalleryPhoto(this).size() > 1){
+            subTitle.setText(FileController.getInstance().getAllGalleryPhoto(this).size() + " photos");
         }
         else {
-            subTitle.setText(FileController.getAllGalleryPhoto(this).size() + " photo");
+            subTitle.setText(FileController.getInstance().getAllGalleryPhoto(this).size() + " photo");
         }
     }
 

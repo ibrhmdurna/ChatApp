@@ -1,4 +1,4 @@
-package com.ibrhmdurna.chatapp.database.select;
+package com.ibrhmdurna.chatapp.database.find;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,21 +12,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.database.bridgeSelect.Implementor;
+import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.databinding.ActivityEditAccountBinding;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AccountEditInfo implements Implementor {
+public class AccountEditFindInfo implements IFind {
 
     private Context context;
     private ActivityEditAccountBinding binding;
     private CircleImageView profileImage;
     private TextView profileText;
 
-    public AccountEditInfo(Context context, ActivityEditAccountBinding binding, CircleImageView profileImage, TextView profileText) {
+    public AccountEditFindInfo(Context context, ActivityEditAccountBinding binding, CircleImageView profileImage, TextView profileText) {
         this.context = context;
         this.binding = binding;
         this.profileImage = profileImage;
@@ -34,7 +34,7 @@ public class AccountEditInfo implements Implementor {
     }
 
     @Override
-    public void getAccountInformation() {
+    public void getInformation() {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         //DatabaseReference database = FirebaseDB.getInstance().getDatabase().child("Accounts");
@@ -73,8 +73,7 @@ public class AccountEditInfo implements Implementor {
         });
     }
 
-    @Override
-    public void setProfileImage(int index, CircleImageView profileImage) {
+    private void setProfileImage(int index, CircleImageView profileImage) {
         switch (index){
             case 0:
                 profileImage.setImageResource(R.drawable.ic_avatar_0);

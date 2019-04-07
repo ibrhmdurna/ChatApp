@@ -34,21 +34,21 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         cropImageView = findViewById(R.id.crop_image_view);
         position = getIntent().getIntExtra("position", 0);
 
-        if(ImageController.getCameraImage() != null){
-            cropImageView.setImageBitmap(ImageController.getCameraPath());
+        if(ImageController.getInstance().getCameraImage() != null){
+            cropImageView.setImageBitmap(ImageController.getInstance().getCameraPath());
         }
         else {
-            String path = ImageController.getPath().get(position);
+            String path = ImageController.getInstance().getPath().get(position);
             UniversalImageLoader.setImage(path, cropImageView, null, "file://");
         }
     }
 
     private void crop(){
-        if(ImageController.getCameraImage() != null){
-            ImageController.setCameraCroppedImage(cropImageView.getCroppedBitmap());
+        if(ImageController.getInstance().getCameraImage() != null){
+            ImageController.getInstance().setCameraCroppedImage(cropImageView.getCroppedBitmap());
         }
         else {
-            ImageController.setImage(cropImageView.getCroppedBitmap());
+            ImageController.getInstance().setImage(cropImageView.getCroppedBitmap());
         }
 
         Intent chatIntent = new Intent(this, ShareActivity.class);

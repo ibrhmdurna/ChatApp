@@ -51,8 +51,8 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
             Toast.makeText(getApplicationContext(), "Background does not already exist!", Toast.LENGTH_SHORT).show();
         }
         else {
-            ImageController.setBackgroundColor(0);
-            ImageController.setBackgroundImage(null);
+            ImageController.getInstance().setBackgroundColor(0);
+            ImageController.getInstance().setBackgroundImage(null);
             saveView.setEnabled(false);
             saveView.setSaveEnabled(false);
             SharedPreferences prefs = getSharedPreferences("CHAT", MODE_PRIVATE);
@@ -67,9 +67,9 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
     }
 
     private void saveBackground(){
-        if(ImageController.getBackgroundImage() != null){
+        if(ImageController.getInstance().getBackgroundImage() != null){
 
-            Bitmap bm = ImageController.getBackgroundImage();
+            Bitmap bm = ImageController.getInstance().getBackgroundImage();
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bm.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
@@ -86,19 +86,19 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
             backgroundView.setImageBitmap(bm);
 
         }
-        if (ImageController.getBackgroundColor() != 0) {
+        if (ImageController.getInstance().getBackgroundColor() != 0) {
 
             SharedPreferences prefs = getSharedPreferences("CHAT", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("BACKGROUND_IMAGE", null);
-            editor.putInt("BACKGROUND_COLOR", ImageController.getBackgroundColor());
+            editor.putInt("BACKGROUND_COLOR", ImageController.getInstance().getBackgroundColor());
             editor.apply();
 
-            backgroundView.setImageResource(ImageController.getBackgroundColor());
+            backgroundView.setImageResource(ImageController.getInstance().getBackgroundColor());
         }
 
-        ImageController.setBackgroundColor(0);
-        ImageController.setBackgroundImage(null);
+        ImageController.getInstance().setBackgroundColor(0);
+        ImageController.getInstance().setBackgroundImage(null);
         saveView.setEnabled(false);
         saveView.setSaveEnabled(false);
         Toast.makeText(getApplicationContext(), "Background successfully changed.", Toast.LENGTH_SHORT).show();
@@ -106,15 +106,15 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
 
     private void backgroundProcess(){
 
-        if(ImageController.getBackgroundImage() != null){
-            backgroundView.setImageBitmap(ImageController.getBackgroundImage());
+        if(ImageController.getInstance().getBackgroundImage() != null){
+            backgroundView.setImageBitmap(ImageController.getInstance().getBackgroundImage());
             saveView.setEnabled(true);
             saveView.setSaveEnabled(true);
             return;
         }
 
-        if(ImageController.getBackgroundColor() != 0){
-            backgroundView.setImageResource(ImageController.getBackgroundColor());
+        if(ImageController.getInstance().getBackgroundColor() != 0){
+            backgroundView.setImageResource(ImageController.getInstance().getBackgroundColor());
             saveView.setEnabled(true);
             saveView.setSaveEnabled(true);
             return;
@@ -193,7 +193,7 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ImageController.setBackgroundColor(0);
-        ImageController.setBackgroundImage(null);
+        ImageController.getInstance().setBackgroundColor(0);
+        ImageController.getInstance().setBackgroundImage(null);
     }
 }

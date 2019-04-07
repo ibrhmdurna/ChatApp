@@ -24,7 +24,7 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.util.adapter.AlbumAdapter;
 import com.ibrhmdurna.chatapp.util.adapter.GalleryAdapter;
 import com.ibrhmdurna.chatapp.util.Environment;
-import com.ibrhmdurna.chatapp.util.FileController;
+import com.ibrhmdurna.chatapp.util.controller.FileController;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -107,38 +107,38 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
         String picsArtPath = root + "/Pictures/PicsArt";
         String snapchatPath = root + "/Snapchat";
 
-        if(FileController.isEmptyFile(root)){
-            files.add(new File("All Photos", root, FileController.getAllGallery(this), FileController.getAllGalleryImageCount(this)));
+        if(FileController.getInstance().isEmptyFile(root)){
+            files.add(new File("All Photos", root, FileController.getInstance().getAllGallery(this), FileController.getInstance().getAllGalleryImageCount(this)));
         }
-        if(FileController.isEmptyFile(cameraPath)){
-            files.add(new File("Camera", cameraPath, FileController.getAlbumLastPhoto(cameraPath), FileController.getAlbumPhotoCount(cameraPath)));
+        if(FileController.getInstance().isEmptyFile(cameraPath)){
+            files.add(new File("Camera", cameraPath, FileController.getInstance().getAlbumLastPhoto(cameraPath), FileController.getInstance().getAlbumPhotoCount(cameraPath)));
         }
-        if(FileController.isEmptyFile(downloadPath)){
-            files.add(new File("Download", downloadPath, FileController.getAlbumLastPhoto(downloadPath), FileController.getAlbumPhotoCount(downloadPath)));
+        if(FileController.getInstance().isEmptyFile(downloadPath)){
+            files.add(new File("Download", downloadPath, FileController.getInstance().getAlbumLastPhoto(downloadPath), FileController.getInstance().getAlbumPhotoCount(downloadPath)));
         }
-        if(FileController.isEmptyFile(screenShotsPath)){
-            files.add(new File("ScreenShots", screenShotsPath, FileController.getAlbumLastPhoto(screenShotsPath), FileController.getAlbumPhotoCount(screenShotsPath)));
+        if(FileController.getInstance().isEmptyFile(screenShotsPath)){
+            files.add(new File("ScreenShots", screenShotsPath, FileController.getInstance().getAlbumLastPhoto(screenShotsPath), FileController.getInstance().getAlbumPhotoCount(screenShotsPath)));
         }
-        if(FileController.isEmptyFile(chatAppPath)){
-            files.add(new File("ChatApp", chatAppPath, FileController.getAlbumLastPhoto(chatAppPath), FileController.getAlbumPhotoCount(chatAppPath)));
+        if(FileController.getInstance().isEmptyFile(chatAppPath)){
+            files.add(new File("ChatApp", chatAppPath, FileController.getInstance().getAlbumLastPhoto(chatAppPath), FileController.getInstance().getAlbumPhotoCount(chatAppPath)));
         }
-        if(FileController.isEmptyFile(facebookPath)){
-            files.add(new File("Facebook", facebookPath, FileController.getAlbumLastPhoto(facebookPath), FileController.getAlbumPhotoCount(facebookPath)));
+        if(FileController.getInstance().isEmptyFile(facebookPath)){
+            files.add(new File("Facebook", facebookPath, FileController.getInstance().getAlbumLastPhoto(facebookPath), FileController.getInstance().getAlbumPhotoCount(facebookPath)));
         }
-        if(FileController.isEmptyFile(instagramPath)){
-            files.add(new File("Instagram", instagramPath, FileController.getAlbumLastPhoto(instagramPath), FileController.getAlbumPhotoCount(instagramPath)));
+        if(FileController.getInstance().isEmptyFile(instagramPath)){
+            files.add(new File("Instagram", instagramPath, FileController.getInstance().getAlbumLastPhoto(instagramPath), FileController.getInstance().getAlbumPhotoCount(instagramPath)));
         }
-        if(FileController.isEmptyFile(picsArtPath)){
-            files.add(new File("PicsArt", picsArtPath, FileController.getAlbumLastPhoto(picsArtPath), FileController.getAlbumPhotoCount(picsArtPath)));
+        if(FileController.getInstance().isEmptyFile(picsArtPath)){
+            files.add(new File("PicsArt", picsArtPath, FileController.getInstance().getAlbumLastPhoto(picsArtPath), FileController.getInstance().getAlbumPhotoCount(picsArtPath)));
         }
-        if(FileController.isEmptyFile(snapchatPath)){
-            files.add(new File("Snapchat", snapchatPath, FileController.getAlbumLastPhoto(snapchatPath), FileController.getAlbumPhotoCount(snapchatPath)));
+        if(FileController.getInstance().isEmptyFile(snapchatPath)){
+            files.add(new File("Snapchat", snapchatPath, FileController.getInstance().getAlbumLastPhoto(snapchatPath), FileController.getInstance().getAlbumPhotoCount(snapchatPath)));
         }
-        if(FileController.isEmptyFile(twitterPath)){
-            files.add(new File("Twitter", twitterPath, FileController.getAlbumLastPhoto(twitterPath), FileController.getAlbumPhotoCount(twitterPath)));
+        if(FileController.getInstance().isEmptyFile(twitterPath)){
+            files.add(new File("Twitter", twitterPath, FileController.getInstance().getAlbumLastPhoto(twitterPath), FileController.getInstance().getAlbumPhotoCount(twitterPath)));
         }
-        if(FileController.isEmptyFile(whatsAppPath)){
-            files.add(new File("WhatsApp Images", whatsAppPath, FileController.getAlbumLastPhoto(whatsAppPath), FileController.getAlbumPhotoCount(whatsAppPath)));
+        if(FileController.getInstance().isEmptyFile(whatsAppPath)){
+            files.add(new File("WhatsApp Images", whatsAppPath, FileController.getInstance().getAlbumLastPhoto(whatsAppPath), FileController.getInstance().getAlbumPhotoCount(whatsAppPath)));
         }
 
         getGallery();
@@ -166,10 +166,10 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
             @Override
             public void onItemClick(int position) {
                 if(files.get(position).getTitle().equals("All Photos")){
-                    getAlbumPhoto(FileController.getAllGalleryPhoto(getApplicationContext()));
+                    getAlbumPhoto(FileController.getInstance().getAllGalleryPhoto(getApplicationContext()));
                 }
                 else {
-                    getAlbumPhoto(FileController.getFolderFile(files.get(position).getPath()));
+                    getAlbumPhoto(FileController.getInstance().getFolderFile(files.get(position).getPath()));
                 }
                 collapsingToolbarLayout.setTitle(files.get(position).getTitle());
                 if(files.get(position).getCount() > 1){

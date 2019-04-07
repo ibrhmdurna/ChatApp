@@ -35,14 +35,14 @@ public class BackgroundActivity extends AppCompatActivity implements View.OnClic
         cropImageView = findViewById(R.id.crop_image_view);
         position = getIntent().getIntExtra("position", 0);
 
-        String path = ImageController.getPath().get(position);
+        String path = ImageController.getInstance().getPath().get(position);
         UniversalImageLoader.setImage(path, cropImageView, null, "file://");
     }
 
 
     private void crop(){
-        ImageController.setBackgroundImage(cropImageView.getCroppedBitmap());
-        ImageController.setBackgroundColor(0);
+        ImageController.getInstance().setBackgroundImage(cropImageView.getCroppedBitmap());
+        ImageController.getInstance().setBackgroundColor(0);
 
         Intent chatSettingsIntent = new Intent(this, ChatSettingsActivity.class);
         chatSettingsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

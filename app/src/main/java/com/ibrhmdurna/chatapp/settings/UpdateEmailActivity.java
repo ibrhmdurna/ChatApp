@@ -1,15 +1,24 @@
 package com.ibrhmdurna.chatapp.settings;
 
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.util.Environment;
 
-public class UpdateEmailActivity extends AppCompatActivity implements ViewComponentFactory {
+public class UpdateEmailActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
+
+    private TextInputLayout newEmailInput, passwordInput;
+    private Button updateBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +29,37 @@ public class UpdateEmailActivity extends AppCompatActivity implements ViewCompon
         toolsManagement();
     }
 
+    private void inputProcess(){
+        newEmailInput.getEditText().addTextChangedListener(inputWatcher);
+        passwordInput.getEditText().addTextChangedListener(inputWatcher);
+    }
+
+    private TextWatcher inputWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            checkInput();
+        }
+    };
+
+    private void checkInput(){
+        if(newEmailInput.getEditText().getText().length() > 0 && passwordInput.getEditText().getText().length() > 0){
+            updateBtn.setEnabled(true);
+        }
+        else {
+            updateBtn.setEnabled(false);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onBackPressed();
@@ -28,11 +68,24 @@ public class UpdateEmailActivity extends AppCompatActivity implements ViewCompon
 
     @Override
     public void buildView() {
-        // ---- COMPONENT ----
+        newEmailInput = findViewById(R.id.update_email_new_mail_input);
+        passwordInput = findViewById(R.id.update_email_password_input);
+        updateBtn = findViewById(R.id.update_btn);
     }
 
     @Override
     public void toolsManagement(){
         Environment.getInstance().toolbarProcess(this, R.id.update_email_toolbar);
+        buildView();
+        inputProcess();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.update_btn:
+                Update.getInstance().updateEmail(this, newEmailInput, passwordInput);
+                break;
+        }
     }
 }

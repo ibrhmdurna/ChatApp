@@ -31,7 +31,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
         this.list = list;
         this.isContext = isContext;
         this.isRegister = isRegister;
-        ImageController.setPath(list);
+        ImageController.getInstance().setPath(list);
     }
 
     @NonNull

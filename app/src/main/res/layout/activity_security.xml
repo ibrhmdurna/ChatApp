@@ -281,7 +281,8 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 style="@style/CustomTransparentViewStyle"
-                android:enabled="false"/>
+                android:enabled="false"
+                android:onClick="onClick"/>
         </LinearLayout>
     </RelativeLayout>
 

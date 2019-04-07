@@ -1,6 +1,7 @@
 package com.ibrhmdurna.chatapp.start;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;

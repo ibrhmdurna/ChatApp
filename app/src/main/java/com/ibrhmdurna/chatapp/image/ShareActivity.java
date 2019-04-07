@@ -20,7 +20,7 @@ import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.local.ChatActivity;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.util.FileController;
+import com.ibrhmdurna.chatapp.util.controller.FileController;
 import com.ibrhmdurna.chatapp.util.controller.ImageController;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.vanniktech.emoji.EmojiEditText;
@@ -50,18 +50,18 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
     }
 
     private void shareProcess(){
-        if(ImageController.getCameraCroppedImage() != null){
-            FileController.insertImage(ImageController.getCameraCroppedImage());
+        if(ImageController.getInstance().getCameraCroppedImage() != null){
+            FileController.getInstance().insertImage(ImageController.getInstance().getCameraCroppedImage());
         }
-        else if(ImageController.getCameraImage() != null){
-            FileController.insertImage(ImageController.getCameraImage());
+        else if(ImageController.getInstance().getCameraImage() != null){
+            FileController.getInstance().insertImage(ImageController.getInstance().getCameraImage());
         }
-        else if(ImageController.getImage() != null) {
-            FileController.insertImage(ImageController.getImage());
+        else if(ImageController.getInstance().getImage() != null) {
+            FileController.getInstance().insertImage(ImageController.getInstance().getImage());
         }
         else {
             Drawable drawable = imageView.getDrawable();
-            FileController.insertImage(((BitmapDrawable)drawable).getBitmap());
+            FileController.getInstance().insertImage(((BitmapDrawable)drawable).getBitmap());
         }
 
 
@@ -69,29 +69,29 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
         chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(chatIntent);
 
-        ImageController.setCameraImage(null);
-        ImageController.setImage(null);
-        ImageController.setCameraCroppedImage(null);
+        ImageController.getInstance().setCameraImage(null);
+        ImageController.getInstance().setImage(null);
+        ImageController.getInstance().setCameraCroppedImage(null);
     }
 
     private void imageRotate(){
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
         Bitmap image;
-        if(ImageController.getCameraCroppedImage() != null){
-            Bitmap cropped = ImageController.getCameraCroppedImage();
+        if(ImageController.getInstance().getCameraCroppedImage() != null){
+            Bitmap cropped = ImageController.getInstance().getCameraCroppedImage();
             image = Bitmap.createBitmap(cropped, 0,0, cropped.getWidth(), cropped.getHeight(), matrix,true);
-            ImageController.setCameraCroppedImage(image);
+            ImageController.getInstance().setCameraCroppedImage(image);
         }
-        else if(ImageController.getCameraImage() != null){
-            Bitmap camera = ImageController.getCameraImage();
+        else if(ImageController.getInstance().getCameraImage() != null){
+            Bitmap camera = ImageController.getInstance().getCameraImage();
             image = Bitmap.createBitmap(camera, 0,0, camera.getWidth(), camera.getHeight(), matrix,true);
-            ImageController.setCameraImage(image);
+            ImageController.getInstance().setCameraImage(image);
         }
-        else if(ImageController.getImage() != null){
-            Bitmap shareImage = ImageController.getImage();
+        else if(ImageController.getInstance().getImage() != null){
+            Bitmap shareImage = ImageController.getInstance().getImage();
             image = Bitmap.createBitmap(shareImage, 0,0, shareImage.getWidth(), shareImage.getHeight(), matrix,true);
-            ImageController.setImage(image);
+            ImageController.getInstance().setImage(image);
         }
         else {
             Drawable drawable = imageView.getDrawable();
@@ -103,21 +103,21 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
 
     private void imageProcess(){
 
-        if(ImageController.getCameraCroppedImage() != null){
-            imageView.setImageBitmap(ImageController.getCameraCroppedImage());
+        if(ImageController.getInstance().getCameraCroppedImage() != null){
+            imageView.setImageBitmap(ImageController.getInstance().getCameraCroppedImage());
         }
-        else if(ImageController.getCameraImage() != null)
+        else if(ImageController.getInstance().getCameraImage() != null)
         {
-            imageView.setImageBitmap(ImageController.getCameraImage());
+            imageView.setImageBitmap(ImageController.getInstance().getCameraImage());
         }
         else {
-            if(ImageController.getImage() != null){
-                imageView.setImageBitmap(ImageController.getImage());
+            if(ImageController.getInstance().getImage() != null){
+                imageView.setImageBitmap(ImageController.getInstance().getImage());
             }
             else {
                 if(path == null){
                     position = getIntent().getIntExtra("position", 0);
-                    path = ImageController.getPath().get(position);
+                    path = ImageController.getInstance().getPath().get(position);
                 }
 
                 UniversalImageLoader.setImage(path, imageView, null, "file://");
@@ -218,8 +218,8 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ImageController.setCameraImage(null);
-        ImageController.setImage(null);
-        ImageController.setCameraCroppedImage(null);
+        ImageController.getInstance().setCameraImage(null);
+        ImageController.getInstance().setImage(null);
+        ImageController.getInstance().setCameraCroppedImage(null);
     }
 }

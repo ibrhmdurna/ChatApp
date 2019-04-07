@@ -23,7 +23,7 @@ import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.util.adapter.CameraAlbumAdapter;
-import com.ibrhmdurna.chatapp.util.FileController;
+import com.ibrhmdurna.chatapp.util.controller.FileController;
 import com.ibrhmdurna.chatapp.util.controller.ImageController;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -62,7 +62,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void galleryProcess(){
-        getAlbumPhoto(FileController.getAllGalleryPhoto(getApplicationContext()));
+        getAlbumPhoto(FileController.getInstance().getAllGalleryPhoto(getApplicationContext()));
     }
 
     private void getAlbumPhoto(final List<String> list){
@@ -130,15 +130,15 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             public void onPictureTaken(byte[] jpeg) {
                 super.onPictureTaken(jpeg);
 
-                ImageController.getPath().clear();
+                ImageController.getInstance().getPath().clear();
                 Bitmap bitmap = BitmapFactory.decodeByteArray(jpeg, 0, jpeg.length);
 
                 Matrix matrix = new Matrix();
                 matrix.postRotate(90);
                 Bitmap image = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
-                ImageController.setCameraPath(image);
-                ImageController.setCameraImage(image);
+                ImageController.getInstance().setCameraPath(image);
+                ImageController.getInstance().setCameraImage(image);
 
                 switch (isContext) {
                     case "Share":
@@ -267,8 +267,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         if(cameraView != null) {
             cameraView.destroy();
         }
-        ImageController.setCameraImage(null);
-        ImageController.setCameraCroppedImage(null);
+        ImageController.getInstance().setCameraImage(null);
+        ImageController.getInstance().setCameraCroppedImage(null);
     }
 
     @Override

@@ -14,12 +14,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.models.Account;
+import com.ibrhmdurna.chatapp.util.controller.AppController;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
 import java.io.ByteArrayOutputStream;
@@ -41,6 +44,9 @@ public class Insert {
     }
 
     public void register(final Account account, String password, final Bitmap bitmap, final Activity context){
+
+        AppController.getInstance().closeKeyboard(context);
+
         final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "Creating an account may take some time.\nPlease keep waiting... ");
         loadingBar.show();
 
@@ -48,6 +54,12 @@ public class Insert {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+
+                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                    UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(account.getNameSurname()).build();
+
+                    currentUser.updateProfile(profileChangeRequest);
 
                     final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 

@@ -11,7 +11,7 @@ public class AppController {
 
     private AppController(){}
 
-    public static AppController getInstance() {
+    public static synchronized AppController getInstance() {
         if(instance == null){
             synchronized (AppController.class){
                 instance = new AppController();

@@ -85,7 +85,7 @@ public class DialogController {
             public void onClick(View v) {
                 dialog.dismiss();
                 context.finish();
-                ImageController.setProfileImageBytes(null);
+                ImageController.getInstance().setProfileImageBytes(null);
             }
         });
 

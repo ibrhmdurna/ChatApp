@@ -144,8 +144,8 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ColorViewHol
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ImageController.setBackgroundImage(null);
-                    ImageController.setBackgroundColor(colorList.get(getAdapterPosition()));
+                    ImageController.getInstance().setBackgroundImage(null);
+                    ImageController.getInstance().setBackgroundColor(colorList.get(getAdapterPosition()));
 
                     Intent chatSettingsIntent = new Intent(context, ChatSettingsActivity.class);
                     chatSettingsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

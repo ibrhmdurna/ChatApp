@@ -16,9 +16,9 @@ import android.widget.TextView;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
-import com.ibrhmdurna.chatapp.database.bridgeSelect.AccountContent;
-import com.ibrhmdurna.chatapp.database.bridgeSelect.AccountInformationView;
-import com.ibrhmdurna.chatapp.database.select.AccountInfo;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
+import com.ibrhmdurna.chatapp.database.bridge.Find;
+import com.ibrhmdurna.chatapp.database.find.AccountFindInfo;
 import com.ibrhmdurna.chatapp.databinding.FragmentAccountBinding;
 import com.ibrhmdurna.chatapp.local.FriendsActivity;
 import com.ibrhmdurna.chatapp.R;
@@ -56,8 +56,8 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
     }
 
     private void getAccountInformation(){
-        AccountContent content = new AccountInformationView(new AccountInfo(getContext(), binding, rootView, loadingBar, profileImage, profileText, phoneLayout));
-        content.getAccountInformation();
+        AbstractFind find = new Find(new AccountFindInfo(getContext(), binding, rootView, loadingBar, profileImage, profileText, phoneLayout));
+        find.getInformation();
     }
 
     private void clickProcess(){

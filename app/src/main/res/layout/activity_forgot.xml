@@ -97,15 +97,16 @@
                                     android:layout_marginBottom="5dp"/>
 
                                 <android.support.design.widget.TextInputLayout
+                                    android:id="@+id/forgot_email_input"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginStart="20dp"
                                     app:hintEnabled="false"
                                     app:errorEnabled="true">
 
                                     <android.support.design.widget.TextInputEditText
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginStart="20dp"
                                         android:hint="Email"
                                         android:inputType="textEmailAddress"
                                         android:backgroundTint="@color/colorLightGray"/>
@@ -117,6 +118,30 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:text="We just need your registered email to send your password reset instructions"/>
+
+                            <LinearLayout
+                                android:id="@+id/send_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="15dp"
+                                android:visibility="gone">
+
+                                <com.airbnb.lottie.LottieAnimationView
+                                    android:id="@+id/done_anim_view"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center"
+                                    app:lottie_fileName="done.json"/>
+
+                                <TextView
+                                    android:id="@+id/success_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="10dp"/>
+                            </LinearLayout>
                         </LinearLayout>
 
                         <Button
@@ -129,7 +154,8 @@
                             android:text="Send"
                             style="@style/CustomButtonStyle"
                             android:textColor="@color/selector_button_text_color"
-                            android:enabled="false"/>
+                            android:enabled="false"
+                            android:onClick="onClick"/>
 
                     </LinearLayout>
 

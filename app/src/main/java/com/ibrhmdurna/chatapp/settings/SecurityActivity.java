@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.util.Environment;
 
 public class SecurityActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
@@ -34,7 +35,7 @@ public class SecurityActivity extends AppCompatActivity implements ViewComponent
     private void checkInput(){
         String currentPass = currentPasswordInput.getEditText().getText().toString();
 
-        if(currentPass.trim().length() > 0 && confirmPasswordInput.getHelperText().toString().equals("* Password are the same")){
+        if(currentPass.trim().length() > 0 && confirmPasswordInput.getHelperText() != null && confirmPasswordInput.getHelperText().toString().equals("* Password are the same")){
             changeView.setEnabled(true);
         }
         else {
@@ -43,6 +44,22 @@ public class SecurityActivity extends AppCompatActivity implements ViewComponent
     }
 
     private void passwordProcess(){
+        currentPasswordInput.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                currentPasswordInput.setError(null);
+            }
+        });
         newPasswordInput.getEditText().addTextChangedListener(passwordWatcher);
         confirmPasswordInput.getEditText().addTextChangedListener(passwordWatcher);
     }
@@ -98,6 +115,7 @@ public class SecurityActivity extends AppCompatActivity implements ViewComponent
                 confirmImage.setImageDrawable(getDrawable(R.drawable.ic_password_icon));
                 confirmPasswordInput.setHelperText(null);
             }
+            currentPasswordInput.setError(null);
             checkInput();
         }
     };
@@ -135,6 +153,9 @@ public class SecurityActivity extends AppCompatActivity implements ViewComponent
                 break;
             case R.id.security_cancel_btn:
                 super.onBackPressed();
+                break;
+            case R.id.security_change_btn:
+                Update.getInstance().updatePassword(this, currentPasswordInput, newPasswordInput, confirmPasswordInput);
                 break;
         }
     }

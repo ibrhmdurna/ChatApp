@@ -31,7 +31,7 @@ public class CameraAlbumAdapter extends RecyclerView.Adapter<CameraAlbumAdapter.
         this.list = list;
         this.isContext = isContext;
         this.isRegister = isRegister;
-        ImageController.setPath(list);
+        ImageController.getInstance().setPath(list);
     }
 
     @NonNull

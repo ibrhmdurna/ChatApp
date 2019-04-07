@@ -47,7 +47,7 @@ public class RegisterFinishActivity extends AppCompatActivity implements ViewCom
     }
 
     private void profileImageDeleteProcess(){
-        ImageController.setProfileImageBytes(null);
+        ImageController.getInstance().setProfileImageBytes(null);
 
         randomProfileImage();
 
@@ -62,7 +62,7 @@ public class RegisterFinishActivity extends AppCompatActivity implements ViewCom
 
     private void profileImageProcess(){
 
-        byte[] bytes = ImageController.getProfileImageBytes();
+        byte[] bytes = ImageController.getInstance().getProfileImageBytes();
 
         if(bytes != null){
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -131,7 +131,7 @@ public class RegisterFinishActivity extends AppCompatActivity implements ViewCom
 
         Bitmap bitmap = null;
 
-        if(ImageController.getProfileImageBytes() != null){
+        if(ImageController.getInstance().getProfileImageBytes() != null){
             bitmap = ((BitmapDrawable) profileImage.getDrawable()).getBitmap();
         }
 

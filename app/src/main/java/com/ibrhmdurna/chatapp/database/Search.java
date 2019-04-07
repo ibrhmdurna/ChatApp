@@ -7,11 +7,13 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.SignInMethodQueryResult;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.main.MainActivity;
@@ -77,6 +79,9 @@ public class Search {
         final AlertDialog loading = DialogController.getInstance().dialogLoading(context, "Please keep waiting...");
         loading.show();
 
+        emailInput.setError(null);
+        passwordInput.setError(null);
+
         FirebaseAuth.getInstance().signInWithEmailAndPassword(emailInput.getEditText().getText().toString(), passwordInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -108,9 +113,21 @@ public class Search {
                     context.finish();
                 }
                 else{
-                    loading.dismiss();
-                    AlertDialog errorDialog = DialogController.getInstance().dialogError(context);
-                    errorDialog.show();
+
+                    String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+
+                    switch (errorCode){
+                        case "ERROR_INVALID_EMAIL":
+                            emailInput.setError("Please enter a valid email address.");
+                            break;
+                        case "ERROR_WRONG_PASSWORD":
+                            passwordInput.setError("Password is incorrect.");
+                            break;
+                        case "ERROR_USER_NOT_FOUND":
+                            emailInput.setError("No account for this email address was found.");
+                            break;
+                    }
+
                 }
 
                 loading.dismiss();

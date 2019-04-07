@@ -23,9 +23,9 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.database.Update;
-import com.ibrhmdurna.chatapp.database.bridgeSelect.AccountContent;
-import com.ibrhmdurna.chatapp.database.bridgeSelect.AccountInformationView;
-import com.ibrhmdurna.chatapp.database.select.AccountEditInfo;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
+import com.ibrhmdurna.chatapp.database.bridge.Find;
+import com.ibrhmdurna.chatapp.database.find.AccountEditFindInfo;
 import com.ibrhmdurna.chatapp.databinding.ActivityEditAccountBinding;
 import com.ibrhmdurna.chatapp.image.CameraActivity;
 import com.ibrhmdurna.chatapp.image.GalleryActivity;
@@ -65,7 +65,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
     }
 
     private void profileImageDeleteProcess(){
-        ImageController.setProfileImageBytes(null);
+        ImageController.getInstance().setProfileImageBytes(null);
 
         String image = binding.getAccount().getProfile_image();
 
@@ -180,7 +180,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
 
     private void profileImageProcess(){
 
-        byte[] bytes = ImageController.getProfileImageBytes();
+        byte[] bytes = ImageController.getInstance().getProfileImageBytes();
 
         if(bytes != null){
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -260,8 +260,8 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
     }
 
     private void getAccountInformation(){
-        AccountContent content = new AccountInformationView(new AccountEditInfo(this, binding, profileImage, profileText));
-        content.getAccountInformation();
+        AbstractFind findAccount = new Find(new AccountEditFindInfo(this, binding, profileImage, profileText));
+        findAccount.getInformation();
     }
 
     private void watcherProcess(){
@@ -476,7 +476,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
             DialogController.getInstance().dialogUnsaved(this);
         }
         else {
-            ImageController.setProfileImageBytes(null);
+            ImageController.getInstance().setProfileImageBytes(null);
             super.onBackPressed();
         }
     }
@@ -485,6 +485,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
     protected void onStart() {
         super.onStart();
         profileImageProcess();
+        getAccountInformation();
     }
 
     @Override
@@ -509,7 +510,6 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
         Environment.getInstance().toolbarProcess(this, R.id.editAccountToolbar);
         buildView();
         spinnerProcess();
-        getAccountInformation();
         watcherProcess();
     }
 
@@ -539,7 +539,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ImageController.setProfileImageBytes(null);
+        ImageController.getInstance().setProfileImageBytes(null);
     }
 
     @Override

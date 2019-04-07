@@ -26,8 +26,8 @@ public class UniversalImageLoader {
 
     public ImageLoaderConfiguration getConfig() {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .showImageOnLoading(mContext.getDrawable(R.drawable.default_background))
-                .showImageOnFail(mContext.getDrawable(R.drawable.default_background))
+                .showImageOnLoading(R.color.colorDefaultBackground)
+                .showImageOnFail(R.color.colorDefaultBackground)
                 .cacheOnDisk(true).cacheInMemory(true)
                 .cacheOnDisk(true).resetViewBeforeLoading(true)
                 .imageScaleType(ImageScaleType.EXACTLY)
