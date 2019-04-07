@@ -12,6 +12,7 @@ public class Account {
     private int location;
     private String profile_image;
     private String thumb_image;
+    private String search_name;
     private boolean online;
     private Long lastSeen;
 
@@ -21,7 +22,7 @@ public class Account {
     public Account() {
     }
 
-    public Account(String email, String name, String surname, String phone, String birthday, int gender, int location, String profile_image, String thumb_image, boolean online, Long lastSeen) {
+    public Account(String email, String name, String surname, String phone, String birthday, int gender, int location, String profile_image, String thumb_image, String search_name, boolean online, Long lastSeen) {
         this.email = email;
         this.name = name;
         this.surname = surname;
@@ -31,6 +32,7 @@ public class Account {
         this.location = location;
         this.profile_image = profile_image;
         this.thumb_image = thumb_image;
+        this.search_name = search_name;
         this.online = online;
         this.lastSeen = lastSeen;
     }
@@ -113,6 +115,14 @@ public class Account {
 
     public void setThumb_image(String thumb_image) {
         this.thumb_image = thumb_image;
+    }
+
+    public String getSearch_name() {
+        return search_name;
+    }
+
+    public void setSearch_name(String search_name) {
+        this.search_name = search_name;
     }
 
     public boolean isOnline() {

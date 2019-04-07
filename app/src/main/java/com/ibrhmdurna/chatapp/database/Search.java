@@ -1,25 +1,41 @@
 package com.ibrhmdurna.chatapp.database;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.SignInMethodQueryResult;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.main.MainActivity;
+import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.start.RegisterInfoActivity;
+import com.ibrhmdurna.chatapp.util.adapter.SearchAdapter;
 import com.ibrhmdurna.chatapp.util.controller.AppController;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
+
+import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -131,6 +147,58 @@ public class Search {
                 }
 
                 loading.dismiss();
+            }
+        });
+    }
+
+    public void searchAccount(final String search, final SearchAdapter searchAdapter, final List<Account> accountList, final NestedScrollView searchLayout, final SpinKitView loadingBar){
+
+        loadingBar.setIndeterminate(true);
+        loadingBar.setVisibility(View.VISIBLE);
+        searchLayout.setVisibility(View.GONE);
+
+        Query query = FirebaseDatabase.getInstance().getReference().child("Accounts")
+                .orderByChild("search_name")
+                .startAt(search.toLowerCase())
+                .endAt(search.toLowerCase() + "\uf8ff");
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                accountList.clear();
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        Account account = snapshot.getValue(Account.class);
+                        account.setUid(snapshot.getKey());
+                        accountList.add(account);
+                    }
+                }
+                else {
+                    Account account = new Account();
+                    account.setName(search);
+                    account.setUid("False");
+                    accountList.add(account);
+                }
+                Handler h = new Handler();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(accountList.size() > 0){
+                            searchLayout.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            searchLayout.setVisibility(View.GONE);
+                        }
+                        loadingBar.setIndeterminate(false);
+                        loadingBar.setVisibility(View.GONE);
+                        searchAdapter.notifyDataSetChanged();
+                    }
+                },1000);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }

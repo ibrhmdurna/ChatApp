@@ -199,6 +199,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
         binding.getAccount().setBirthday(birthdayText.getText().toString());
         binding.getAccount().setGender(genderSpinner.getSelectedItemPosition());
         binding.getAccount().setLocation(locationSpinner.getSelectedItemPosition());
+        binding.getAccount().setSearch_name(nameInput.getEditText().getText().toString().toLowerCase() + " " + surnameInput.getEditText().getText().toString().toLowerCase());
 
         Bitmap bitmap = null;
 

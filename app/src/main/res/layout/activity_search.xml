@@ -99,7 +99,7 @@
             android:id="@+id/no_recent_layout"
             android:layout_width="match_parent"
             android:layout_height="450dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -140,19 +140,6 @@
                     android:background="@drawable/rounded_background"
                     android:backgroundTint="?attr/backgroundCardColor">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/ic_left_circle_view_top"
-                        android:translationZ="1dp"/>
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/ic_right_circle_view_top"
-                        android:translationZ="1dp"
-                        android:layout_alignParentEnd="true"/>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -164,83 +151,88 @@
                             android:layout_height="wrap_content"
                             tools:itemCount="4"
                             tools:listitem="@layout/recent_layout"
-                            android:nestedScrollingEnabled="false">
+                            android:nestedScrollingEnabled="false"
+                            android:layoutAnimation="@anim/layout_animation_fall_down">
                         </android.support.v7.widget.RecyclerView>
 
-                        <RelativeLayout
-                            android:layout_width="240dp"
-                            android:layout_height="45dp"
+                        <TextView
+                            android:id="@+id/clear_recent_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_marginBottom="2dp">
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:background="@drawable/ic_left_circle_view_top"
-                                android:translationZ="3dp"
-                                android:backgroundTint="@android:color/white"/>
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:background="@drawable/ic_right_circle_view_top"
-                                android:translationZ="3dp"
-                                android:layout_alignParentEnd="true"
-                                android:backgroundTint="@android:color/white"/>
-
-                            <TextView
-                                android:id="@+id/edit_cancel_btn"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@android:color/transparent"
-                                android:text="Clear search history"
-                                android:fontFamily="sans-serif-light"
-                                android:gravity="center"
-                                android:textColor="?attr/colorAccent"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:foreground="?android:selectableItemBackground"/>
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_above="@id/mainBottomNavigationView"
-                                android:background="@drawable/ic_left_circle_view"
-                                android:translationZ="3dp"
-                                android:layout_alignParentBottom="true"
-                                android:backgroundTint="@android:color/white"/>
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_above="@id/mainBottomNavigationView"
-                                android:layout_alignParentEnd="true"
-                                android:background="@drawable/ic_right_circle_view"
-                                android:translationZ="3dp"
-                                android:layout_alignParentBottom="true"
-                                android:backgroundTint="@android:color/white"/>
-                        </RelativeLayout>
+                            android:backgroundTint="?attr/backgroundCardColor"
+                            android:text="Clear search history"
+                            android:fontFamily="sans-serif-light"
+                            android:gravity="center"
+                            android:textColor="?attr/colorAccent"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:layout_margin="5dp"
+                            style="@style/CustomTransparentViewStyle"/>
                     </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_above="@id/mainBottomNavigationView"
-                        android:background="@drawable/ic_left_circle_view"
-                        android:translationZ="2dp"
-                        android:layout_alignParentBottom="true"/>
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_above="@id/mainBottomNavigationView"
-                        android:layout_alignParentEnd="true"
-                        android:background="@drawable/ic_right_circle_view"
-                        android:translationZ="2dp"
-                        android:layout_alignParentBottom="true"/>
                 </RelativeLayout>
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Searches"
+                    android:fontFamily="sans-serif-light"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:paddingStart="20dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:paddingEnd="20dp"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/rounded_background"
+                    android:backgroundTint="?attr/backgroundCardColor">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/search_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:itemCount="4"
+                            tools:listitem="@layout/search_layout"
+                            android:nestedScrollingEnabled="false">
+                        </android.support.v7.widget.RecyclerView>
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/search_loading_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            style="@style/SpinKitView.ThreeBounce"
+            app:SpinKit_Color="?attr/colorAccent"
+            android:layout_marginTop="15dp"
+            android:visibility="gone"/>
 
         <ImageView
             android:layout_width="24dp"

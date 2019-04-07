@@ -124,6 +124,7 @@ public class RegisterFinishActivity extends AppCompatActivity implements ViewCom
         String surname = getIntent().getStringExtra("surname");
         String phone = getIntent().getStringExtra("phone");
         String birthday = getIntent().getStringExtra("birthday");
+        String search_name = name.toLowerCase() + " " + surname.toLowerCase();
         int gender = getIntent().getIntExtra("gender", 0);
         int location = getIntent().getIntExtra("location", 0);
         String image = "default_" + imageIndex;
@@ -135,7 +136,7 @@ public class RegisterFinishActivity extends AppCompatActivity implements ViewCom
             bitmap = ((BitmapDrawable) profileImage.getDrawable()).getBitmap();
         }
 
-        account = new Account(email, name, surname, phone, birthday, gender, location, image, image, false, null);
+        account = new Account(email, name, surname, phone, birthday, gender, location, image, image, search_name, false, null);
         Insert.getInstance().register(account, password, bitmap, this);
     }
 
