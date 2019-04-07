@@ -1,6 +1,7 @@
 package com.ibrhmdurna.chatapp.main;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,9 @@ import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Search;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
+import com.ibrhmdurna.chatapp.database.bridge.FindAll;
+import com.ibrhmdurna.chatapp.database.findAll.RecentFindAll;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.util.adapter.SearchAdapter;
 
@@ -31,10 +35,11 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
     private EditText searchInput;
     private ImageButton clearView;
 
-    private NestedScrollView recentView;
+    private NestedScrollView noRecentLayout;
+    private NestedScrollView recentLayout;
     private NestedScrollView searchLayout;
 
-    private RecyclerView recentRecyclerView;
+    private RecyclerView recentView;
     private RecyclerView searchView;
 
     private SpinKitView loadingBar;
@@ -46,6 +51,11 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
         setContentView(R.layout.activity_search);
 
         toolsManagement();
+    }
+
+    private void recentProcess(){
+        AbstractFindAll recentFindAll = new FindAll(new RecentFindAll(this, recentView, noRecentLayout, recentLayout));
+        recentFindAll.getInformation();
     }
 
     private void searchProcess(){
@@ -70,12 +80,15 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
             @Override
             public void afterTextChanged(Editable s) {
                 if(searchInput.getText().toString().trim().length() > 0){
-                    Search.getInstance().searchAccount(searchInput.getText().toString(), searchAdapter, accountList, searchLayout, loadingBar);
+                    noRecentLayout.setVisibility(View.GONE);
+                    recentLayout.setVisibility(View.GONE);
+                    Search.getInstance().searchAccount(searchInput.getText().toString().trim(), searchAdapter, accountList, searchLayout, loadingBar);
                 }
                 else {
                     searchLayout.setVisibility(View.GONE);
                     accountList.clear();
                     searchAdapter.notifyDataSetChanged();
+                    recentProcess();
                 }
             }
         });
@@ -114,13 +127,20 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        recentProcess();
+    }
+
+    @Override
     public void buildView(){
         searchInput = findViewById(R.id.search_input);
         clearView = findViewById(R.id.clear_search_btn);
-        recentView = findViewById(R.id.recent_layout);
+        noRecentLayout = findViewById(R.id.no_recent_layout);
+        recentLayout = findViewById(R.id.recent_layout);
         searchLayout = findViewById(R.id.search_layout);
         searchView = findViewById(R.id.search_container);
-        recentRecyclerView = findViewById(R.id.recent_container);
+        recentView = findViewById(R.id.recent_container);
         loadingBar = findViewById(R.id.search_loading_bar);
     }
 

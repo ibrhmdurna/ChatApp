@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -26,6 +27,8 @@ import com.ibrhmdurna.chatapp.util.controller.AppController;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Insert {
 
@@ -166,5 +169,16 @@ public class Insert {
                 }
             }
         });
+    }
+
+    public void recent(String id){
+
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        Map recentMap = new HashMap();
+        recentMap.put("time", ServerValue.TIMESTAMP);
+
+        FirebaseDatabase.getInstance().getReference().child("Recent").child(uid).child(id).setValue(recentMap);
+
     }
 }

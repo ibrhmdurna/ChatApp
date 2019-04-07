@@ -166,34 +166,40 @@ public class Search {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 accountList.clear();
+                int count = 0;
                 if(dataSnapshot.exists()){
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        count++;
                         Account account = snapshot.getValue(Account.class);
                         account.setUid(snapshot.getKey());
                         accountList.add(account);
                     }
                 }
                 else {
+                    count++;
                     Account account = new Account();
                     account.setName(search);
                     account.setUid("False");
                     accountList.add(account);
                 }
-                Handler h = new Handler();
-                h.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(accountList.size() > 0){
-                            searchLayout.setVisibility(View.VISIBLE);
+
+                if(count >= dataSnapshot.getChildrenCount()){
+                    Handler h = new Handler();
+                    h.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(accountList.size() > 0){
+                                searchLayout.setVisibility(View.VISIBLE);
+                            }
+                            else {
+                                searchLayout.setVisibility(View.GONE);
+                            }
+                            loadingBar.setIndeterminate(false);
+                            loadingBar.setVisibility(View.GONE);
+                            searchAdapter.notifyDataSetChanged();
                         }
-                        else {
-                            searchLayout.setVisibility(View.GONE);
-                        }
-                        loadingBar.setIndeterminate(false);
-                        loadingBar.setVisibility(View.GONE);
-                        searchAdapter.notifyDataSetChanged();
-                    }
-                },1000);
+                    },1000);
+                }
             }
 
             @Override

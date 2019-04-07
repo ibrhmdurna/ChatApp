@@ -2,6 +2,7 @@ package com.ibrhmdurna.chatapp.util.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Insert;
+import com.ibrhmdurna.chatapp.local.ProfileActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.squareup.picasso.Callback;
@@ -62,7 +65,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         searchViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, account.getUid(), Toast.LENGTH_SHORT).show();
+                Intent profileIntent = new Intent(context, ProfileActivity.class);
+                profileIntent.putExtra("user_id", account.getUid());
+                context.startActivity(profileIntent);
+                Insert.getInstance().recent(account.getUid());
             }
         });
 
