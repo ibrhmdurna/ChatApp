@@ -118,8 +118,9 @@ public class ThemesActivity extends AppCompatActivity implements ViewComponentFa
 
     private void restart(){
         finish();
-        App.Background.getPageStackList().clear();
+        App.Background.getInstance().getPageStackList().clear();
         Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+        mainIntent.putExtra("page", "Main");
         mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainIntent);
         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);

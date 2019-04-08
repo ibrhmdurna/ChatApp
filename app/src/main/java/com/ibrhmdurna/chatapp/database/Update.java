@@ -1,6 +1,7 @@
 package com.ibrhmdurna.chatapp.database;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Handler;
@@ -32,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.util.controller.AppController;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
@@ -108,7 +110,10 @@ public class Update{
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
                                                             if(task.isSuccessful()){
-                                                                context.finish();
+                                                                Intent accountIntent = new Intent(context, MainActivity.class);
+                                                                accountIntent.putExtra("page","Account");
+                                                                accountIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                                                context.startActivity(accountIntent);
                                                                 Toast.makeText(context, "Information was successfully update.", Toast.LENGTH_SHORT).show();
                                                             }
                                                             else {
@@ -157,7 +162,10 @@ public class Update{
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
-                        context.finish();
+                        Intent accountIntent = new Intent(context, MainActivity.class);
+                        accountIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        accountIntent.putExtra("page","Account");
+                        context.startActivity(accountIntent);
                         Toast.makeText(context, "Information was successfully update.", Toast.LENGTH_SHORT).show();
                     }
                     else {

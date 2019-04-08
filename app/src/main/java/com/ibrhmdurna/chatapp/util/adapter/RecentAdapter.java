@@ -1,5 +1,6 @@
 package com.ibrhmdurna.chatapp.util.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -11,25 +12,26 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Insert;
 import com.ibrhmdurna.chatapp.local.ProfileActivity;
+import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.models.Recent;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
+import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentViewHolder> {
 
-    private Context context;
+    private Activity context;
     private List<Recent> recentList;
 
-    public RecentAdapter(Context context, List<Recent> recentList){
+    public RecentAdapter(Activity context, List<Recent> recentList){
         this.context = context;
         this.recentList = recentList;
     }
@@ -43,17 +45,46 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentView
 
     @Override
     public void onBindViewHolder(@NonNull RecentViewHolder recentViewHolder, final int i) {
-        recentViewHolder.setNameSurname(recentList.get(i).getAccount().getNameSurname());
-        recentViewHolder.setEmail(recentList.get(i).getAccount().getEmail());
-        recentViewHolder.setProfileImage(recentList.get(i).getAccount().getThumb_image(), recentList.get(i).getAccount().getName());
+        shortArrayList();
+
+        final Recent recent = recentList.get(i);
+
+        recentViewHolder.setNameSurname(recent.getAccount().getNameSurname());
+        recentViewHolder.setEmail(recent.getAccount().getEmail());
+        recentViewHolder.setProfileImage(recent.getAccount().getThumb_image(), recentList.get(i).getAccount().getName());
+
+        final String uid = FirebaseAuth.getInstance().getUid();
 
         recentViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent profileIntent = new Intent(context, ProfileActivity.class);
-                profileIntent.putExtra("user_id", recentList.get(i).getAccount().getUid());
-                context.startActivity(profileIntent);
-                Insert.getInstance().recent(recentList.get(i).getAccount().getUid());
+                if(recent.getAccount().getUid().equals(uid)){
+                    Intent accountIntent = new Intent(context, MainActivity.class);
+                    accountIntent.putExtra("page","Account");
+                    context.startActivity(accountIntent);
+                }
+                else {
+                    Intent profileIntent = new Intent(context, ProfileActivity.class);
+                    profileIntent.putExtra("user_id", recent.getAccount().getUid());
+                    context.startActivity(profileIntent);
+                }
+                Insert.getInstance().recent(recent.getAccount().getUid());
+            }
+        });
+
+        recentViewHolder.getClearBtn().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Delete.getInstance().deleteRecent(recent.getAccount().getUid());
+            }
+        });
+    }
+
+    private void shortArrayList(){
+        Collections.sort(recentList, new Comparator<Recent>() {
+            @Override
+            public int compare(Recent o1, Recent o2) {
+                return Long.compare(o2.getTime(),o1.getTime());
             }
         });
     }
@@ -63,13 +94,13 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentView
         return recentList.size();
     }
 
-    public class RecentViewHolder extends RecyclerView.ViewHolder{
+    class RecentViewHolder extends RecyclerView.ViewHolder{
 
         private CircleImageView profileImage;
         private TextView nameSurname, email, profileText;
         private ImageButton clearBtn;
 
-        public RecentViewHolder(@NonNull View itemView) {
+        RecentViewHolder(@NonNull View itemView) {
             super(itemView);
 
             profileImage = itemView.findViewById(R.id.recent_profile_image);
@@ -79,19 +110,19 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentView
             clearBtn = itemView.findViewById(R.id.recent_clear_btn);
         }
 
-        public ImageButton getClearBtn() {
+        private ImageButton getClearBtn() {
             return clearBtn;
         }
 
-        public void setEmail(String value){
+        private void setEmail(String value){
             email.setText(value);
         }
 
-        public void setNameSurname(String value){
+        private void setNameSurname(String value){
             nameSurname.setText(value);
         }
 
-        public void setProfileImage(final String value, String nameValue){
+        private void setProfileImage(final String value, String nameValue){
 
             if(value.substring(0,8).equals("default_")){
                 String text = value.substring(8,9);
@@ -102,20 +133,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentView
                 profileText.setVisibility(View.VISIBLE);
             }
             else {
-                final Picasso picasso = Picasso.get();
-                picasso.setIndicatorsEnabled(true);
-                picasso.load(value).networkPolicy(NetworkPolicy.OFFLINE)
-                        .placeholder(R.color.colorDefaultBackground).into(profileImage, new Callback() {
-                    @Override
-                    public void onSuccess() {
-
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        picasso.load(value).placeholder(R.color.colorDefaultBackground).into(profileImage);
-                    }
-                });
+                UniversalImageLoader.setImage(value, profileImage, null, "");
                 profileText.setText(null);
                 profileText.setVisibility(View.GONE);
             }

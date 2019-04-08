@@ -20,12 +20,14 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Search;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
 import com.ibrhmdurna.chatapp.database.bridge.FindAll;
 import com.ibrhmdurna.chatapp.database.findAll.RecentFindAll;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.util.adapter.SearchAdapter;
+import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -166,6 +168,9 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
         switch (v.getId()){
             case R.id.clear_search_btn:
                 searchInput.getText().clear();
+                break;
+            case R.id.clear_recent_btn:
+                DialogController.getInstance().dialogClear(this);
                 break;
         }
     }

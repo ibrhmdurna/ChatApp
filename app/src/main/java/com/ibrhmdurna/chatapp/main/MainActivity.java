@@ -34,14 +34,25 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     private BottomNavigationView bottomNavigationView;
     private TextView notFoundView;
 
+    private String page;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         toolsManagement();
 
-        showFragment(new MessagesFragment(), "MessagesFragment");
+        page = getIntent().getStringExtra("page");
+
+        if(page.equals("Main")){
+            showFragment(new MessagesFragment(), "MessagesFragment");
+        }
+        else {
+            showFragment(new AccountFragment(), "AccountFragment");
+            bottomNavigationView.setSelectedItemId(R.id.account_item);
+        }
     }
 
     private void showFragment(Fragment fragment, String tag){
@@ -180,41 +191,46 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
 
     @Override
     public void onBackPressed() {
-        if(App.Background.getInstance().pageStackChildCount() > 1){
-            switch (App.Background.getPageStackList().get(App.Background.getInstance().pageStackChildCount() - 2)){
-                case "MessagesFragment":
-                    App.Background.getInstance().removePage();
-                    bottomNavigationView.setSelectedItemId(R.id.messages_item);
-                    toolbar.getMenu().clear();
-                    toolbar.inflateMenu(R.menu.messages_main_menu);
-                    break;
-                case "FriendsFragment":
-                    App.Background.getInstance().removePage();
-                    bottomNavigationView.setSelectedItemId(R.id.friends_item);
-                    toolbar.getMenu().clear();
-                    toolbar.inflateMenu(R.menu.main_menu);
-                    break;
-                case "RequestsFragment":
-                    App.Background.getInstance().removePage();
-                    bottomNavigationView.setSelectedItemId(R.id.requests_item);
-                    toolbar.getMenu().clear();
-                    toolbar.inflateMenu(R.menu.main_menu);
-                    break;
-                case "AccountFragment":
-                    App.Background.getInstance().removePage();
-                    bottomNavigationView.setSelectedItemId(R.id.account_item);
-                    toolbar.getMenu().clear();
-                    toolbar.inflateMenu(R.menu.main_menu);
-                    break;
-                default:
-                    finish();
+        if(page.equals("Main")){
+            if(App.Background.getInstance().pageStackChildCount() > 1){
+                switch (App.Background.getInstance().getPageStackList().get(App.Background.getInstance().pageStackChildCount() - 2)){
+                    case "MessagesFragment":
+                        App.Background.getInstance().removePage();
+                        bottomNavigationView.setSelectedItemId(R.id.messages_item);
+                        toolbar.getMenu().clear();
+                        toolbar.inflateMenu(R.menu.messages_main_menu);
+                        break;
+                    case "FriendsFragment":
+                        App.Background.getInstance().removePage();
+                        bottomNavigationView.setSelectedItemId(R.id.friends_item);
+                        toolbar.getMenu().clear();
+                        toolbar.inflateMenu(R.menu.main_menu);
+                        break;
+                    case "RequestsFragment":
+                        App.Background.getInstance().removePage();
+                        bottomNavigationView.setSelectedItemId(R.id.requests_item);
+                        toolbar.getMenu().clear();
+                        toolbar.inflateMenu(R.menu.main_menu);
+                        break;
+                    case "AccountFragment":
+                        App.Background.getInstance().removePage();
+                        bottomNavigationView.setSelectedItemId(R.id.account_item);
+                        toolbar.getMenu().clear();
+                        toolbar.inflateMenu(R.menu.main_menu);
+                        break;
+                    default:
+                        finish();
+                }
             }
-        }
-        else if(App.Background.getInstance().pageStackChildCount() == 1){
-            bottomNavigationView.setSelectedItemId(R.id.messages_item);
-            App.Background.getPageStackList().clear();
-            toolbar.getMenu().clear();
-            toolbar.inflateMenu(R.menu.messages_main_menu);
+            else if(App.Background.getInstance().pageStackChildCount() == 1){
+                bottomNavigationView.setSelectedItemId(R.id.messages_item);
+                App.Background.getInstance().clearAllPage();
+                toolbar.getMenu().clear();
+                toolbar.inflateMenu(R.menu.messages_main_menu);
+            }
+            else {
+                finish();
+            }
         }
         else {
             finish();

@@ -7,8 +7,10 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Delete;
 
 public class DialogController {
 
@@ -23,6 +25,36 @@ public class DialogController {
             }
         }
         return instance;
+    }
+
+    public void dialogClear(Activity context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = context.getLayoutInflater().inflate(R.layout.dialog_clear, null);
+        App.Theme.getInstance().getTheme(view.getContext());
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+
+
+        TextView negativeBtn = view.findViewById(R.id.dialog_negative_btn);
+        negativeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        TextView positiveBtn = view.findViewById(R.id.dialog_positive_btn);
+        positiveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Delete.getInstance().deleteAllRecent();
+            }
+        });
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
     }
 
     public AlertDialog dialogLoading(Activity context, String title){

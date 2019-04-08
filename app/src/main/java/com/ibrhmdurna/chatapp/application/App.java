@@ -62,7 +62,7 @@ public class App extends Application {
 
         private static Background instance;
 
-        private static List<String> pageStackList;
+        private List<String> pageStackList;
 
         private Background(){}
 
@@ -75,26 +75,28 @@ public class App extends Application {
             return instance;
         }
 
-        public static synchronized List<String> getPageStackList(){
+        public List<String> getPageStackList(){
             if(pageStackList == null){
-                synchronized (Background.class){
-                    pageStackList = new ArrayList<>();
-                }
+                pageStackList = new ArrayList<>();
             }
             return pageStackList;
         }
 
+        public void clearAllPage(){
+            getPageStackList().clear();
+        }
+
         public int pageStackChildCount(){
-            return pageStackList.size();
+            return getPageStackList().size();
         }
 
         public void addPage(String tag){
-            pageStackList.add(tag);
+            getPageStackList().add(tag);
         }
 
         public void removePage(){
-            pageStackList.remove(pageStackList.size() - 1);
-            pageStackList.remove(pageStackList.size() - 1);
+            getPageStackList().remove(pageStackList.size() - 1);
+            getPageStackList().remove(pageStackList.size() - 1);
         }
 
         public void clearThisPage(String tag){

@@ -1,32 +1,63 @@
 package com.ibrhmdurna.chatapp.local;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
+import com.ibrhmdurna.chatapp.database.bridge.Find;
+import com.ibrhmdurna.chatapp.database.find.ProfileFindInfo;
+import com.ibrhmdurna.chatapp.databinding.ActivityProfileBinding;
 import com.ibrhmdurna.chatapp.util.dialog.MoreBottomSheetDialog;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ProfileActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, MoreBottomSheetDialog.BottomSheetListener {
+
+    private ActivityProfileBinding binding;
+    private CircleImageView profileImage;
+    private TextView profileText;
+    private LinearLayout phoneLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_profile);
+
+        toolsManagement();
+    }
+
+    private void getProfileInformation(){
+        String uid = getIntent().getStringExtra("user_id");
+
+        AbstractFind find = new Find(new ProfileFindInfo(this, binding, profileImage, profileText, phoneLayout, uid));
+        find.getInformation();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getProfileInformation();
     }
 
     @Override
     public void toolsManagement() {
-
+        buildView();
     }
 
     @Override
     public void buildView() {
-
+        profileImage = findViewById(R.id.profileImage);
+        profileText = findViewById(R.id.profileImageText);
+        phoneLayout = findViewById(R.id.profilePhoneLayout);
     }
 
     @Override
@@ -39,7 +70,7 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
                 MoreBottomSheetDialog moreBottomSheetDialog = new MoreBottomSheetDialog(true);
                 moreBottomSheetDialog.show(getSupportFragmentManager(), "bottom_sheet");
                 break;
-            case R.id.profile_friends_view:
+            case R.id.profileFriendsView:
                 Intent friends = new Intent(this, FriendsActivity.class);
                 friends.putExtra("isAccount", false);
                 startActivity(friends);

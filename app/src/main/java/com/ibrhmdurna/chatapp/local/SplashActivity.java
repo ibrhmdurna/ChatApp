@@ -13,6 +13,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Intent startIntent = new Intent(SplashActivity.this, MainActivity.class);
+        startIntent.putExtra("page","Main");
         startActivity(startIntent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();

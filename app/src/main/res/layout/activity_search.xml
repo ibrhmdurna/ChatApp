@@ -172,7 +172,8 @@
                             android:paddingTop="10dp"
                             android:paddingBottom="10dp"
                             android:layout_margin="5dp"
-                            style="@style/CustomTransparentViewStyle"/>
+                            style="@style/CustomTransparentViewStyle"
+                            android:onClick="onClick"/>
                     </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>
