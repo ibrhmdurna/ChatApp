@@ -1,11 +1,18 @@
 package com.ibrhmdurna.chatapp.local;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
+import android.support.annotation.ColorInt;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -129,7 +136,7 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
             case "share":
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
-                String shareBody = "Hello, I "+ binding.getAccount().getNameSurname() +" (" + binding.getAccount().getEmail() + ") would you like to join us? ChatApp Inc.";
+                String shareBody = "Hello, I am "+ binding.getAccount().getNameSurname() +" (" + binding.getAccount().getEmail() + ") would you like to join us? ChatApp Inc.";
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                 startActivity(Intent.createChooser(sharingIntent, "Share"));
@@ -139,8 +146,22 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
             case "report":
                 break;
             case "delete":
-                String content = String.valueOf(Html.fromHtml("Are you sure you want to make <b> " + binding.getAccount().getNameSurname() + " </b> out of friendship?"));
-                final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, content, "Cancel", "Delete");
+                final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, null, "Cancel", "Delete");
+
+                String text = "Are you sure you want to make " + binding.getAccount().getNameSurname() + " out of friendship?";
+                TextView content = dialog.findViewById(R.id.dialog_content_text);
+
+                TypedValue typedValue = new TypedValue();
+                Resources.Theme theme = getTheme();
+                theme.resolveAttribute(R.attr.colorAccent, typedValue, true);
+                @ColorInt int color = typedValue.data;
+
+                SpannableString ss = new SpannableString(text);
+                ForegroundColorSpan fcsColor = new ForegroundColorSpan(color);
+
+                ss.setSpan(fcsColor, 30, 30 + binding.getAccount().getNameSurname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                content.setText(ss);
+
                 TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
                 positiveBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
