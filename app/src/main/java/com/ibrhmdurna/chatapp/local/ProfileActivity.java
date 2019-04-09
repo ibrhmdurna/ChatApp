@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
@@ -36,6 +37,9 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
     private RelativeLayout addFriendLayout, sendMessageView;
     private TextView cancelReqView, addFriendView, friendInfoText;
 
+    private RelativeLayout rootView;
+    private SpinKitView loadingBar;
+
     private String uid;
 
     @Override
@@ -50,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
     private void getProfileInformation(){
         uid = getIntent().getStringExtra("user_id");
 
-        AbstractFind find = new Find(new ProfileFindInfo(this, binding, profileImage, profileText, phoneLayout, cancelReqView, addFriendLayout, addFriendView, confirmLayout, sendMessageView, friendInfoText, uid));
+        AbstractFind find = new Find(new ProfileFindInfo(this, binding, profileImage, profileText, phoneLayout, cancelReqView, addFriendLayout, addFriendView, confirmLayout, sendMessageView, friendInfoText, uid, rootView, loadingBar));
         find.getInformation();
     }
 
@@ -76,6 +80,8 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
         addFriendLayout = findViewById(R.id.add_friend_layout);
         sendMessageView = findViewById(R.id.sendMessageView);
         friendInfoText = findViewById(R.id.friendInfoText);
+        rootView = findViewById(R.id.rootView);
+        loadingBar = findViewById(R.id.loadingBar);
     }
 
     @Override

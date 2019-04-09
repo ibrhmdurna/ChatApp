@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,9 +35,12 @@ public class ProfileFindInfo implements IFind {
     private RelativeLayout addFriendLayout, sendMessageView;
     private TextView cancelRequest, addFriendView, friendInfoText;
 
+    private RelativeLayout rootView;
+    private SpinKitView loadingBar;
+
     private String uid;
 
-    public ProfileFindInfo(Context context, ActivityProfileBinding binding, CircleImageView profileImage, TextView profileText, LinearLayout phoneLayout, TextView cancelRequest, RelativeLayout addFriendLayout, TextView addFriendView, LinearLayout confirmLayout, RelativeLayout sendMessageView, TextView friendInfoText, String uid) {
+    public ProfileFindInfo(Context context, ActivityProfileBinding binding, CircleImageView profileImage, TextView profileText, LinearLayout phoneLayout, TextView cancelRequest, RelativeLayout addFriendLayout, TextView addFriendView, LinearLayout confirmLayout, RelativeLayout sendMessageView, TextView friendInfoText, String uid, RelativeLayout rootView, SpinKitView loadingBar) {
         this.context = context;
         this.binding = binding;
         this.profileImage = profileImage;
@@ -49,6 +53,8 @@ public class ProfileFindInfo implements IFind {
         this.sendMessageView = sendMessageView;
         this.friendInfoText = friendInfoText;
         this.uid = uid;
+        this.rootView = rootView;
+        this.loadingBar = loadingBar;
     }
 
     @Override
@@ -86,24 +92,24 @@ public class ProfileFindInfo implements IFind {
                     phoneLayout.setVisibility(account.getPhone().trim().length() > 0 ? View.VISIBLE : View.GONE);
 
                     binding.setAccount(account);
-                    //rootView.setVisibility(View.VISIBLE);
-                    //loadingBar.setIndeterminate(false);
-                    //loadingBar.setVisibility(View.GONE);
+                    rootView.setVisibility(View.VISIBLE);
+                    loadingBar.setIndeterminate(false);
+                    loadingBar.setVisibility(View.GONE);
                 }
                 else {
                     Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
-                    //rootView.setVisibility(View.VISIBLE);
-                    //loadingBar.setIndeterminate(false);
-                    //loadingBar.setVisibility(View.GONE);
+                    rootView.setVisibility(View.VISIBLE);
+                    loadingBar.setIndeterminate(false);
+                    loadingBar.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                //rootView.setVisibility(View.VISIBLE);
-                //loadingBar.setIndeterminate(false);
-                //loadingBar.setVisibility(View.GONE);
+                rootView.setVisibility(View.VISIBLE);
+                loadingBar.setIndeterminate(false);
+                loadingBar.setVisibility(View.GONE);
             }
         });
 
