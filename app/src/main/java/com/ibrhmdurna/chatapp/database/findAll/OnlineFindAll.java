@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,21 +25,19 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class FriendFindAll implements IFind {
+public class OnlineFindAll implements IFind {
 
     private Activity context;
 
     private List<Friend> friendList;
     private FriendAdapter friendAdapter;
     private RecyclerView friendView;
-    private TextView notFoundView;
-    private LinearLayout friendLayout;
+    private LinearLayout onlineLayout;
 
-    public FriendFindAll(Activity context, RecyclerView friendView, TextView notFoundView, LinearLayout friendLayout) {
+    public OnlineFindAll(Activity context, RecyclerView friendView, LinearLayout onlineLayout) {
         this.context = context;
         this.friendView = friendView;
-        this.notFoundView = notFoundView;
-        this.friendLayout = friendLayout;
+        this.onlineLayout = onlineLayout;
     }
 
     @Override
@@ -53,14 +50,10 @@ public class FriendFindAll implements IFind {
 
         String uid = FirebaseAuth.getInstance().getUid();
 
-        notFoundView.setVisibility(View.VISIBLE);
-        notFoundView.setText("No Friends");
-
         FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if(dataSnapshot.exists()){
-                    notFoundView.setVisibility(View.GONE);
                     final String friend_id = dataSnapshot.getKey();
 
                     final Friend friend = dataSnapshot.getValue(Friend.class);
@@ -70,9 +63,10 @@ public class FriendFindAll implements IFind {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if(dataSnapshot.exists()){
                                 Account account = dataSnapshot.getValue(Account.class);
+                                account.setUid(friend_id);
                                 friend.setAccount(account);
 
-                                if(!friend.getAccount().isOnline()){
+                                if(friend.getAccount().isOnline()){
                                     friendList.add(friend);
                                 }
                                 else {
@@ -80,10 +74,10 @@ public class FriendFindAll implements IFind {
                                 }
 
                                 if(friendList.size() > 0){
-                                    friendLayout.setVisibility(View.VISIBLE);
+                                    onlineLayout.setVisibility(View.VISIBLE);
                                 }
                                 else {
-                                    friendLayout.setVisibility(View.GONE);
+                                    onlineLayout.setVisibility(View.GONE);
                                 }
 
                                 sortArrayList();
@@ -112,11 +106,10 @@ public class FriendFindAll implements IFind {
                     friendAdapter.notifyItemRemoved(position);
                 }
 
+                /*
                 if(friendList.size() <= 0){
-                    friendLayout.setVisibility(View.GONE);
-                    notFoundView.setVisibility(View.VISIBLE);
-                    notFoundView.setText("No Friends");
-                }
+                    onlineLayout.setVisibility(View.GONE);
+                }*/
             }
 
             @Override

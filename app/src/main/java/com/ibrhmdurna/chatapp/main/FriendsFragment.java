@@ -2,6 +2,7 @@ package com.ibrhmdurna.chatapp.main;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,10 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
+import com.ibrhmdurna.chatapp.database.bridge.FindAll;
+import com.ibrhmdurna.chatapp.database.findAll.FriendFindAll;
+import com.ibrhmdurna.chatapp.database.findAll.OnlineFindAll;
 import com.ibrhmdurna.chatapp.util.adapter.MessagesAdapter;
 
 import java.util.ArrayList;
@@ -27,11 +33,9 @@ public class FriendsFragment extends Fragment implements ViewComponentFactory {
 
     private View view;
 
-    private List<String> list, list2;
-    private MessagesAdapter messagesAdapter, messagesAdapter2;
     private RecyclerView onlineView, friendsView;
     private TextView notFoundView;
-    private LinearLayout rootView;
+    private LinearLayout onlineLayout, friendLayout;
 
     public FriendsFragment() {
         // Required empty public constructor
@@ -43,57 +47,39 @@ public class FriendsFragment extends Fragment implements ViewComponentFactory {
         App.Theme.getInstance().getTheme(getContext());
         view = inflater.inflate(R.layout.fragment_friends, container, false);
 
-        list = new ArrayList<>();
-        list2 = new ArrayList<>();
-        messagesAdapter = new MessagesAdapter(list);
-        messagesAdapter2 = new MessagesAdapter(list2);
-        onlineView = view.findViewById(R.id.online_container);
-        friendsView = view.findViewById(R.id.friends_container);
-        rootView = view.findViewById(R.id.root_view);
-        notFoundView = getActivity().findViewById(R.id.not_found_view);
-
-        /*
-        for (int i = 0; i < 5; i++){
-            list.add("Online " + i);
-        }
-
-
-        for (int i = 0; i < 10; i++){
-            list2.add("Friends " + i);
-        }
-        */
-
-        if(list2.size() == 0){
-            rootView.setVisibility(View.GONE);
-            notFoundView.setVisibility(View.VISIBLE);
-            notFoundView.setText("No Friends");
-        }
-        else {
-            rootView.setVisibility(View.VISIBLE);
-            notFoundView.setVisibility(View.GONE);
-        }
-
-        onlineView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        onlineView.setHasFixedSize(true);
-        onlineView.setAdapter(messagesAdapter);
-
-        friendsView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        friendsView.setHasFixedSize(true);
-        friendsView.setAdapter(messagesAdapter2);
-
-        messagesAdapter.notifyDataSetChanged();
-        messagesAdapter2.notifyDataSetChanged();
+        toolsManagement();
 
         return view;
     }
 
+    private void getOnline(){
+        AbstractFindAll findAll = new FindAll(new OnlineFindAll(getActivity(), onlineView, onlineLayout));
+        findAll.getInformation();
+    }
+
+    private void getFriends(){
+        AbstractFindAll findAll = new FindAll(new FriendFindAll(getActivity(), friendsView, notFoundView,friendLayout));
+        findAll.getInformation();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getFriends();
+        getOnline();
+    }
+
     @Override
     public void toolsManagement() {
-        // ---- COMPONENT ----
+        buildView();
     }
 
     @Override
     public void buildView() {
-        // ---- COMPONENT ----
+        onlineView = view.findViewById(R.id.online_container);
+        friendsView = view.findViewById(R.id.friends_container);
+        notFoundView = getActivity().findViewById(R.id.not_found_view);
+        onlineLayout = view.findViewById(R.id.online_layout);
+        friendLayout = view.findViewById(R.id.friend_layout);
     }
 }

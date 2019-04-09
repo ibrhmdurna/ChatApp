@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -14,11 +15,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.database.Delete;
-import com.ibrhmdurna.chatapp.database.Insert;
 import com.ibrhmdurna.chatapp.local.ProfileActivity;
 import com.ibrhmdurna.chatapp.models.Account;
-import com.ibrhmdurna.chatapp.models.Request;
+import com.ibrhmdurna.chatapp.models.Friend;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -27,103 +26,80 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestViewHolder> {
+public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendViewHolder> {
 
     private Context context;
-    private List<Request> requestList;
+    private List<Friend> friendList;
 
-    public RequestAdapter(Context context, List<Request> requestList){
+    public FriendAdapter(Context context, List<Friend> friendList) {
         this.context = context;
-        this.requestList = requestList;
+        this.friendList = friendList;
     }
 
     @NonNull
     @Override
-    public RequestViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.request_layout, viewGroup, false);
-        return new RequestViewHolder(view);
+    public FriendViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.friend_layout, viewGroup, false);
+        return new FriendViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final RequestViewHolder requestViewHolder, final int i) {
-        final Request request = requestList.get(i);
+    public void onBindViewHolder(@NonNull final FriendViewHolder friendViewHolder, int i) {
 
-        FirebaseDatabase.getInstance().getReference().child("Accounts").child(request.getAccount().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    Account account = dataSnapshot.getValue(Account.class);
-                    account.setUid(dataSnapshot.getKey());
-                    request.setAccount(account);
+        final Friend friend = friendList.get(i);
 
-                    requestViewHolder.setNameSurname(request.getAccount().getNameSurname());
-                    requestViewHolder.setEmail(request.getAccount().getEmail());
-                    requestViewHolder.setProfileImage(request.getAccount().getThumb_image(), request.getAccount().getName());
-                }
-            }
+        friendViewHolder.setNameSurname(friend.getAccount().getNameSurname());
+        friendViewHolder.setEmail(friend.getAccount().getEmail());
+        friendViewHolder.setProfileImage(friend.getAccount().getThumb_image(), friend.getAccount().getName());
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        if(getItemCount() - 1 == i){
-            requestViewHolder.line.setVisibility(View.GONE);
+        if(friend.getAccount().isOnline()){
+            friendViewHolder.onlineView.setVisibility(View.VISIBLE);
         }
         else {
-            requestViewHolder.line.setVisibility(View.VISIBLE);
+            friendViewHolder.onlineView.setVisibility(View.GONE);
         }
 
-        requestViewHolder.cancelView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Delete.getInstance().request(request.getAccount().getUid());
-            }
-        });
+        if(getItemCount() - 1 == i){
+            friendViewHolder.line.setVisibility(View.GONE);
+        }
+        else {
+            friendViewHolder.line.setVisibility(View.VISIBLE);
+        }
 
-        requestViewHolder.confirmView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Insert.getInstance().friend(request.getAccount().getUid());
-            }
-        });
-
-        requestViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        friendViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent profileIntent = new Intent(context, ProfileActivity.class);
-                profileIntent.putExtra("user_id", request.getAccount().getUid());
+                profileIntent.putExtra("user_id", friend.getAccount().getUid());
                 context.startActivity(profileIntent);
             }
         });
+
     }
 
     @Override
     public int getItemCount() {
-        return requestList.size();
+        return friendList.size();
     }
 
-    public class RequestViewHolder extends RecyclerView.ViewHolder{
+    public class FriendViewHolder extends RecyclerView.ViewHolder{
 
         private CircleImageView profileImage;
         private TextView profileText;
         private TextView nameSurname, email;
-
-        private TextView cancelView, confirmView;
+        private ImageView onlineView;
 
         private View line;
 
-        public RequestViewHolder(@NonNull View itemView) {
+        public FriendViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            profileImage = itemView.findViewById(R.id.request_profile_image);
-            profileText = itemView.findViewById(R.id.request_profile_text);
-            nameSurname = itemView.findViewById(R.id.request_name_surname);
-            email = itemView.findViewById(R.id.request_email);
-            line = itemView.findViewById(R.id.request_line);
-            cancelView = itemView.findViewById(R.id.req_cancel);
-            confirmView = itemView.findViewById(R.id.req_confirm);
+            profileImage = itemView.findViewById(R.id.friend_profile_image);
+            profileText = itemView.findViewById(R.id.friend_profile_image_text);
+            nameSurname = itemView.findViewById(R.id.friend_name_surname);
+            email = itemView.findViewById(R.id.friend_email);
+            line = itemView.findViewById(R.id.friend_line);
+            onlineView = itemView.findViewById(R.id.friend_online_icon);
         }
 
         public void setEmail(String value){

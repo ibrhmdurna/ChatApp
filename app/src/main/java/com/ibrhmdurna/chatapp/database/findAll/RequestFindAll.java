@@ -2,12 +2,14 @@ package com.ibrhmdurna.chatapp.database.findAll;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -41,45 +43,16 @@ public class RequestFindAll implements IFind {
     public void getInformation() {
         requestList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        requestAdapter = new RequestAdapter(requestList);
+        requestAdapter = new RequestAdapter(context, requestList);
         requestView.setLayoutManager(layoutManager);
         requestView.setAdapter(requestAdapter);
-        requestView.setHasFixedSize(true);
 
         String uid = FirebaseAuth.getInstance().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                requestList.clear();
-                if(dataSnapshot.exists()){
-                    requestView.setVisibility(View.VISIBLE);
-                    notFoundView.setVisibility(View.GONE);
+        requestView.setVisibility(View.GONE);
+        notFoundView.setVisibility(View.VISIBLE);
+        notFoundView.setText("No Request");
 
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        Request request = snapshot.getValue(Request.class);
-                        Account account = new Account();
-                        account.setUid(snapshot.getKey());
-                        request.setAccount(account);
-                        requestList.add(request);
-                    }
-
-                    sortArrayList();
-                }
-                else {
-                    requestView.setVisibility(View.GONE);
-                    notFoundView.setVisibility(View.VISIBLE);
-                    notFoundView.setText("No Request");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        /*
         FirebaseDatabase.getInstance().getReference().child("Request").child(uid).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -112,8 +85,6 @@ public class RequestFindAll implements IFind {
                     requestAdapter.notifyItemRemoved(position);
                 }
 
-                requestAdapter.notifyDataSetChanged();
-
                 if(requestList.size() <= 0){
                     requestView.setVisibility(View.GONE);
                     notFoundView.setVisibility(View.VISIBLE);
@@ -131,7 +102,15 @@ public class RequestFindAll implements IFind {
 
             }
         });
-        */
+    }
+
+    private int findPosition(long time){
+        for(int i = 0; i < requestList.size(); i++){
+            if(requestList.get(i).getTime() == time){
+                return i;
+            }
+        }
+        return -1;
     }
 
     private void sortArrayList(){

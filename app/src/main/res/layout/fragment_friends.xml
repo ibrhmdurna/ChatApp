@@ -14,9 +14,11 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/online_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -33,16 +35,18 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
                 tools:itemCount="5"
-                tools:listitem="@layout/messages_layout"
+                tools:listitem="@layout/friend_layout"
                 android:background="@drawable/rounded_background"
                 android:backgroundTint="?attr/backgroundCardColor">
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/friend_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -59,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
                 tools:itemCount="15"
-                tools:listitem="@layout/messages_layout"
+                tools:listitem="@layout/friend_layout"
                 android:background="@drawable/rounded_background"
                 android:backgroundTint="?attr/backgroundCardColor">
             </android.support.v7.widget.RecyclerView>
