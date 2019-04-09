@@ -199,8 +199,8 @@ public class Insert {
         String uid = FirebaseAuth.getInstance().getUid();
 
         Map requestMap = new HashMap();
-        requestMap.put("Request/" + uid + "/" + id + "/seen", false);
-        requestMap.put("Request/" + uid + "/" + id + "/time", ServerValue.TIMESTAMP);
+        requestMap.put("Request/" + id + "/" + uid + "/seen", false);
+        requestMap.put("Request/" + id + "/" + uid + "/time", ServerValue.TIMESTAMP);
 
         FirebaseDatabase.getInstance().getReference().updateChildren(requestMap);
     }

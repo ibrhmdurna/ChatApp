@@ -5,6 +5,8 @@ public class Request {
     private boolean seen;
     private Long time;
 
+    private Account account;
+
     public Request() {
     }
 
@@ -27,5 +29,13 @@ public class Request {
 
     public void setTime(Long time) {
         this.time = time;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

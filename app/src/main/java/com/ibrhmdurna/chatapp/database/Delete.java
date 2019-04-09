@@ -28,13 +28,13 @@ public class Delete {
     public void myRequest(String id){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).child(id).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("Request").child(id).child(uid).removeValue();
     }
 
     public void request(String id){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Request").child(id).child(uid).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).child(id).removeValue();
     }
 
     public void recent(String recent_id){

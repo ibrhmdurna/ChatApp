@@ -11,8 +11,8 @@
         android:id="@+id/requestsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:itemCount="15"
-        tools:listitem="@layout/messages_layout"
+        tools:itemCount="10"
+        tools:listitem="@layout/request_layout"
         android:nestedScrollingEnabled="false"
         android:background="@drawable/rounded_background"
         android:backgroundTint="?attr/backgroundCardColor">

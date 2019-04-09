@@ -1,0 +1,24 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginStart="5dp"
+        app:srcCompat="@drawable/ic_badge_background"
+        android:gravity="center"/>
+
+    <ImageView
+        android:id="@+id/badge"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginStart="5dp"
+        app:srcCompat="@drawable/notification_badge"
+        android:gravity="center"
+        android:padding="2dp"
+        android:translationZ="1dp"/>
+</FrameLayout>

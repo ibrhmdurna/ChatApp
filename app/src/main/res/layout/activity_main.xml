@@ -95,7 +95,6 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="0dp"
             android:background="?attr/backgroundBrushColor"
             app:elevation="0dp"
             app:itemIconSize="22sp"
@@ -103,7 +102,8 @@
             app:itemTextAppearanceActive="@style/BottomItemActiveTextAppearance"
             app:itemTextAppearanceInactive="@style/BottomItemInactiveTextAppearance"
             app:labelVisibilityMode="labeled"
-            app:menu="@menu/bottom_menu"/>
+            app:menu="@menu/bottom_menu"
+            android:visibility="visible"/>
     </RelativeLayout>
 
     <TextView
@@ -115,6 +115,7 @@
         android:layout_gravity="bottom"
         android:visibility="visible"
         app:layout_anchor="@id/appbar"
-        app:layout_anchorGravity="bottom"/>
+        app:layout_anchorGravity="bottom"
+        android:translationZ="2dp"/>
 
 </android.support.design.widget.CoordinatorLayout>

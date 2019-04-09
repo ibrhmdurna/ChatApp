@@ -48,6 +48,7 @@ public class RecentFindAll implements IFind {
         recentAdapter = new RecentAdapter(context, recentList);
         recentView.setLayoutManager(layoutManager);
         recentView.setAdapter(recentAdapter);
+        recentView.setHasFixedSize(true);
 
         String uid = FirebaseAuth.getInstance().getUid();
 
@@ -129,6 +130,4 @@ public class RecentFindAll implements IFind {
         }
         return -1;
     }
-
-
 }

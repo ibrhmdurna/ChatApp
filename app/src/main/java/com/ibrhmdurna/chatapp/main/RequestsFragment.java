@@ -13,6 +13,9 @@ import android.widget.TextView;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
+import com.ibrhmdurna.chatapp.database.bridge.FindAll;
+import com.ibrhmdurna.chatapp.database.findAll.RequestFindAll;
 import com.ibrhmdurna.chatapp.util.adapter.MessagesAdapter;
 
 import java.util.ArrayList;
@@ -26,10 +29,7 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
 
     private View view;
 
-    private List<String> list;
-    private MessagesAdapter messagesAdapter;
-    private RecyclerView recyclerView;
-    private TextView notFoundView;
+    private RecyclerView requestView;
 
     public RequestsFragment() {
         // Required empty public constructor
@@ -41,44 +41,29 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
         App.Theme.getInstance().getTheme(getContext());
         view = inflater.inflate(R.layout.fragment_requests, container, false);
 
-        list = new ArrayList<>();
-        messagesAdapter = new MessagesAdapter(list);
-        recyclerView = view.findViewById(R.id.requestsContainer);
-        notFoundView = getActivity().findViewById(R.id.not_found_view);
-
-
-        /*
-        for (int i = 0; i < 10; i++){
-            list.add("Request " + i);
-        }
-        */
-
-        if(list.size() == 0){
-            recyclerView.setVisibility(View.GONE);
-            notFoundView.setVisibility(View.VISIBLE);
-            notFoundView.setText("No Requests");
-        }
-        else {
-            recyclerView.setVisibility(View.VISIBLE);
-            notFoundView.setVisibility(View.GONE);
-        }
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(messagesAdapter);
-
-        messagesAdapter.notifyDataSetChanged();
+        toolsManagement();
 
         return view;
     }
 
+    private void getRequest(){
+        AbstractFindAll findAll = new FindAll(new RequestFindAll(getActivity(), requestView));
+        findAll.getInformation();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getRequest();
+    }
+
     @Override
     public void toolsManagement() {
-        // ---- COMPONENT ----
+        buildView();
     }
 
     @Override
     public void buildView() {
-        // ---- COMPONENT ----
+        requestView = view.findViewById(R.id.requestsContainer);
     }
 }

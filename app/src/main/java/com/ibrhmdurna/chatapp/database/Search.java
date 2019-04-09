@@ -133,6 +133,7 @@ public class Search {
 
                     Intent mainIntent = new Intent(context, MainActivity.class);
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    mainIntent.putExtra("page", "Main");
                     context.startActivity(mainIntent);
                     context.finish();
                 }

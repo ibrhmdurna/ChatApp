@@ -2,6 +2,8 @@ package com.ibrhmdurna.chatapp.main;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -12,6 +14,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,9 +23,14 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.models.Request;
 import com.ibrhmdurna.chatapp.start.StartActivity;
 
 public class MainActivity extends AppCompatActivity implements ViewComponentFactory {
@@ -35,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     private TextView notFoundView;
 
     private String page;
+
+    private View notificationBadge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +63,60 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
             showFragment(new AccountFragment(), "AccountFragment");
             bottomNavigationView.setSelectedItemId(R.id.account_item);
         }
+
+    }
+
+    private void requestListener(){
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    boolean allSeen = true;
+
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        Request request = snapshot.getValue(Request.class);
+
+                        if(request.isSeen()){
+                            allSeen = true;
+                        }
+                        else {
+                            allSeen = false;
+                            break;
+                        }
+                    }
+
+                    if(!allSeen){
+                        addBadgeView(2);
+                    }
+                    else {
+                        removeBadgeView();
+                    }
+                }
+                else {
+                    removeBadgeView();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void addBadgeView(int position){
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(position);
+
+        notificationBadge = LayoutInflater.from(this).inflate(R.layout.view_notification_badge, menuView, false);
+        itemView.addView(notificationBadge);
+    }
+
+    private void removeBadgeView(){
+        if(notificationBadge != null)
+            notificationBadge.setVisibility(View.GONE);
     }
 
     private void showFragment(Fragment fragment, String tag){
@@ -244,5 +308,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         if(currentUser == null){
             sendToStart();
         }
+
+        requestListener();
     }
 }

@@ -123,7 +123,7 @@ public class ProfileFindInfo implements IFind {
                     confirmLayout.setVisibility(View.GONE);
                 }
                 else {
-                    database.child("Request").child(current_uid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    database.child("Request").child(uid).child(current_uid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if(dataSnapshot.exists()){
@@ -142,7 +142,7 @@ public class ProfileFindInfo implements IFind {
                         }
                     });
 
-                    database.child("Request").child(uid).child(current_uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    database.child("Request").child(current_uid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if(dataSnapshot.exists()){
