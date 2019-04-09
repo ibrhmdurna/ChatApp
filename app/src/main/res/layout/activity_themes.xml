@@ -73,74 +73,57 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <RelativeLayout
+                        <LinearLayout
+                            android:id="@+id/dark_mode_view"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:background="@drawable/ic_left_circle_view_top"
-                                android:translationZ="2dp"/>
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:background="@drawable/ic_right_circle_view_top"
-                                android:translationZ="2dp"
-                                android:layout_alignParentEnd="true"/>
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingStart="25dp"
+                            android:paddingEnd="25dp"
+                            android:paddingTop="15dp"
+                            android:paddingBottom="15dp"
+                            style="@style/CustomTransparentViewStyle"
+                            android:backgroundTint="?attr/backgroundCardColor"
+                            android:onClick="onClick">
 
                             <LinearLayout
-                                android:id="@+id/dark_mode_view"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:paddingStart="25dp"
-                                android:paddingEnd="25dp"
-                                android:paddingTop="15dp"
-                                android:paddingBottom="15dp"
-                                android:background="@drawable/rounded_background"
-                                android:backgroundTint="?attr/backgroundCardColor">
+                                android:layout_weight="2"
+                                android:orientation="vertical">
 
-                                <LinearLayout
+                                <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="2"
-                                    android:orientation="vertical">
+                                    android:text="Dark Mode"
+                                    android:textSize="18sp"
+                                    android:textColor="?attr/primaryTextColor"/>
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Dark Mode"
-                                        android:textSize="18sp"
-                                        android:textColor="?attr/primaryTextColor"/>
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Use a darker theme to keep your eyes comfortable at night"/>
-                                </LinearLayout>
-
-                                <View
-                                    android:layout_width="1dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="0"
-                                    android:background="?attr/lineColor"
-                                    android:layout_margin="10dp"/>
-
-                                <com.suke.widget.SwitchButton
-                                    android:id="@+id/dark_mode_switch"
-                                    android:layout_width="50dp"
-                                    android:layout_height="30dp"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="0"
-                                    app:sb_checkline_color="?attr/colorAccent"
-                                    app:sb_checked_color="?attr/colorAccent"
-                                    app:sb_uncheckcircle_color="@android:color/transparent"
-                                    app:sb_background="@android:color/transparent"
-                                    app:sb_uncheck_color="?attr/lineColor"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Use a darker theme to keep your eyes comfortable at night"/>
                             </LinearLayout>
-                        </RelativeLayout>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0"
+                                android:background="?attr/lineColor"
+                                android:layout_margin="10dp"/>
+
+                            <com.suke.widget.SwitchButton
+                                android:id="@+id/dark_mode_switch"
+                                android:layout_width="50dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="0"
+                                app:sb_checkline_color="?attr/colorAccent"
+                                app:sb_checked_color="?attr/colorAccent"
+                                app:sb_uncheckcircle_color="@android:color/transparent"
+                                app:sb_background="@android:color/transparent"
+                                app:sb_uncheck_color="?attr/lineColor"/>
+                        </LinearLayout>
 
                         <TextView
                             android:layout_width="wrap_content"

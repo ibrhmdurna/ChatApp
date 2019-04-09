@@ -68,6 +68,7 @@
                     app:civ_border_width="1dp" />
 
                 <RelativeLayout
+                    android:id="@+id/sendMessageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -100,6 +101,7 @@
                 android:layout_marginTop="10dp">
 
                 <TextView
+                    android:id="@+id/friendInfoText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="You are friends"
@@ -187,6 +189,59 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/profile_confirm_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="20dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Wants to be your friend?"
+                            android:textSize="16sp"
+                            android:textColor="?attr/primaryTextColor"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="20dp">
+
+                            <TextView
+                                android:id="@+id/confirm_cancel_btn"
+                                android:layout_width="120dp"
+                                android:layout_height="35dp"
+                                style="@style/CustomButtonStyle"
+                                android:text="Cancel"
+                                android:backgroundTint="?attr/backgroundBrushColor"
+                                android:gravity="center"
+                                android:layout_marginEnd="15dp"
+                                android:onClick="onClick"/>
+
+                            <TextView
+                                android:id="@+id/confirm_btn"
+                                android:layout_width="120dp"
+                                android:layout_height="35dp"
+                                style="@style/CustomButtonStyle"
+                                android:text="Confirm"
+                                android:textColor="@android:color/white"
+                                android:gravity="center"
+                                android:layout_marginStart="15dp"
+                                android:onClick="onClick"/>
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="?attr/lineColor"/>
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -214,7 +269,6 @@
                             android:layout_marginTop="15dp"
                             android:background="?attr/lineColor" />
                     </LinearLayout>
-
 
                     <LinearLayout
                         android:id="@+id/profilePhoneLayout"
@@ -328,19 +382,34 @@
                     </LinearLayout>
                 </LinearLayout>
             </android.support.v4.widget.NestedScrollView>
-
-
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/bottom_view"
+            android:id="@+id/add_friend_layout"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="79dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:visibility="gone">
+            android:visibility="visible">
 
-            <LinearLayout
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/ic_left_circle_view"
+                android:translationZ="2dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="55dp"/>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/ic_right_circle_view"
+                android:translationZ="2dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="55dp"/>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_alignParentBottom="true"
@@ -350,30 +419,26 @@
                 <TextView
                     android:id="@+id/cancel_req_btn"
                     style="@style/CustomTransparentViewStyle"
-                    android:layout_width="match_parent"
+                    android:layout_width="200dp"
                     android:layout_height="45dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_weight="1"
                     android:gravity="center"
+                    android:layout_centerInParent="true"
                     android:text="Cancel request"
-                    android:textColor="@color/selector_transparent_view_text_color"
-                    android:visibility="gone" />
+                    android:textColor="@android:color/holo_red_light"
+                    android:visibility="gone"
+                    android:onClick="onClick"/>
 
                 <TextView
                     android:id="@+id/add_friend_btn"
                     style="@style/CustomTransparentViewStyle"
-                    android:layout_width="match_parent"
+                    android:layout_width="200dp"
                     android:layout_height="45dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_weight="1"
                     android:gravity="center"
+                    android:layout_centerInParent="true"
                     android:text="Add to friends"
-                    android:textColor="@color/selector_transparent_view_text_color" />
-            </LinearLayout>
+                    android:textColor="?attr/colorAccent"
+                    android:onClick="onClick"/>
+            </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
 </layout>

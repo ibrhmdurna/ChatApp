@@ -3,6 +3,7 @@ package com.ibrhmdurna.chatapp.main;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.ibrhmdurna.chatapp.application.App;
@@ -170,7 +172,15 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
                 searchInput.getText().clear();
                 break;
             case R.id.clear_recent_btn:
-                DialogController.getInstance().dialogClear(this);
+                final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, "Clear search history?", "Cancel", "Clear");
+                TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
+                positiveBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        Delete.getInstance().allRecent();
+                    }
+                });
                 break;
         }
     }

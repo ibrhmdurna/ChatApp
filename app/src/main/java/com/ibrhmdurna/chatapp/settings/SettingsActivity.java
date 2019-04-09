@@ -16,6 +16,7 @@ import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.start.StartActivity;
 import com.ibrhmdurna.chatapp.util.Environment;
+import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
 public class SettingsActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
     @Override
@@ -25,41 +26,6 @@ public class SettingsActivity extends AppCompatActivity implements ViewComponent
         setContentView(R.layout.activity_settings);
 
         toolsManagement();
-    }
-
-    private void dialogLogout(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View view = getLayoutInflater().inflate(R.layout.dialog_layout, null);
-        App.Theme.getInstance().getTheme(view.getContext());
-        builder.setView(view);
-        final AlertDialog dialog = builder.create();
-
-        TextView content = view.findViewById(R.id.dialog_content_text);
-        content.setText("Log out of ChatApp?");
-
-        TextView negativeBtn = view.findViewById(R.id.dialog_negative_btn);
-        negativeBtn.setText("Cancel");
-        negativeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        TextView positiveBtn = view.findViewById(R.id.dialog_positive_btn);
-        positiveBtn.setText("Logout");
-        positiveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                FirebaseAuth.getInstance().signOut();
-                sendToStart();
-            }
-        });
-
-        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
     }
 
     private void sendToStart(){
@@ -116,7 +82,16 @@ public class SettingsActivity extends AppCompatActivity implements ViewComponent
                 startActivity(aboutIntent);
                 break;
             case R.id.logout_item:
-                dialogLogout();
+                final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, "Log out of ChatApp?", "Cancel", "Logout");
+                TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
+                positiveBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        FirebaseAuth.getInstance().signOut();
+                        sendToStart();
+                    }
+                });
                 break;
         }
     }

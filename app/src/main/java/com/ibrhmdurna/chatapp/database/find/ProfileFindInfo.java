@@ -4,9 +4,11 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,23 +30,35 @@ public class ProfileFindInfo implements IFind {
     private TextView profileText;
     private LinearLayout phoneLayout;
 
+    private LinearLayout confirmLayout;
+    private RelativeLayout addFriendLayout, sendMessageView;
+    private TextView cancelRequest, addFriendView, friendInfoText;
+
     private String uid;
 
-    public ProfileFindInfo(Context context, ActivityProfileBinding binding, CircleImageView profileImage, TextView profileText, LinearLayout phoneLayout, String uid) {
+    public ProfileFindInfo(Context context, ActivityProfileBinding binding, CircleImageView profileImage, TextView profileText, LinearLayout phoneLayout, TextView cancelRequest, RelativeLayout addFriendLayout, TextView addFriendView, LinearLayout confirmLayout, RelativeLayout sendMessageView, TextView friendInfoText, String uid) {
         this.context = context;
         this.binding = binding;
         this.profileImage = profileImage;
         this.profileText = profileText;
         this.phoneLayout = phoneLayout;
+        this.addFriendLayout = addFriendLayout;
+        this.cancelRequest = cancelRequest;
+        this.addFriendView = addFriendView;
+        this.confirmLayout = confirmLayout;
+        this.sendMessageView = sendMessageView;
+        this.friendInfoText = friendInfoText;
         this.uid = uid;
     }
 
     @Override
     public void getInformation() {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Accounts");
+        final String current_uid = FirebaseAuth.getInstance().getUid();
+
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.keepSynced(true);
 
-        database.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        database.child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -90,6 +104,60 @@ public class ProfileFindInfo implements IFind {
                 //rootView.setVisibility(View.VISIBLE);
                 //loadingBar.setIndeterminate(false);
                 //loadingBar.setVisibility(View.GONE);
+            }
+        });
+
+        database.child("Friends").child(current_uid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    addFriendLayout.setVisibility(View.GONE);
+                    sendMessageView.setVisibility(View.VISIBLE);
+                    friendInfoText.setVisibility(View.VISIBLE);
+                    confirmLayout.setVisibility(View.GONE);
+                }
+                else {
+                    database.child("Request").child(current_uid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                cancelRequest.setVisibility(View.VISIBLE);
+                                addFriendView.setVisibility(View.GONE);
+                            }
+                            else {
+                                cancelRequest.setVisibility(View.GONE);
+                                addFriendView.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    database.child("Request").child(uid).child(current_uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                confirmLayout.setVisibility(View.VISIBLE);
+                            }
+                            else {
+                                confirmLayout.setVisibility(View.GONE);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }

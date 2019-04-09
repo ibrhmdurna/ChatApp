@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.ybq.android.spinkit.SpinKitView;
@@ -27,6 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.models.Account;
@@ -79,8 +81,14 @@ public class Search {
                 }
                 else {
                     loading.dismiss();
-                    AlertDialog errorDialog = DialogController.getInstance().dialogError(context);
-                    errorDialog.show();
+                    final AlertDialog dialog = DialogController.getInstance().dialogCustom(context, "Cannot Sign in. Please check the from and try again.", null, "Dismiss");
+                    TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
+                    positiveBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
                 }
 
                 loading.dismiss();

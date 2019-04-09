@@ -75,7 +75,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentView
         recentViewHolder.getClearBtn().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Delete.getInstance().deleteRecent(recent.getAccount().getUid());
+                Delete.getInstance().recent(recent.getAccount().getUid());
             }
         });
     }

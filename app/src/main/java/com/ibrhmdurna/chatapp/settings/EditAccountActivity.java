@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -474,7 +475,16 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
 
     private void onBack(){
         if(saveBtn.isEnabled()){
-            DialogController.getInstance().dialogUnsaved(this);
+            final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, "You have unsaved changes. Are you sure want to cancel?", "No", "Yes");
+            TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
+            positiveBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    finish();
+                    ImageController.getInstance().setProfileImageBytes(null);
+                }
+            });
         }
         else {
             ImageController.getInstance().setProfileImageBytes(null);

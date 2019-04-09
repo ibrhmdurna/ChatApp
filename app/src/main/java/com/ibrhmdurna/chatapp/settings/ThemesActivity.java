@@ -199,6 +199,10 @@ public class ThemesActivity extends AppCompatActivity implements ViewComponentFa
                 editor.apply();
                 restart();
                 break;
+            case R.id.dark_mode_view:
+                Intent darkIntent = new Intent(this, DarkModeActivity.class);
+                startActivity(darkIntent);
+                break;
             case R.id.color_accent_layout:
                 selectedListAllVisibilityGone();
                 findViewById(R.id.color_accent_selected).setVisibility(View.VISIBLE);

@@ -3,22 +3,28 @@ package com.ibrhmdurna.chatapp.util.dialog;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 
 @SuppressLint("ValidFragment")
 public class MoreBottomSheetDialog extends BottomSheetDialogFragment {
 
     private BottomSheetListener mListener;
-    private boolean isFriend;
+    private String uid;
 
     @SuppressLint("ValidFragment")
-    public MoreBottomSheetDialog(boolean isFriend){
-        this.isFriend = isFriend;
+    public MoreBottomSheetDialog(String uid){
+        this.uid = uid;
     }
 
     @SuppressLint("RestrictedApi")
@@ -36,7 +42,7 @@ public class MoreBottomSheetDialog extends BottomSheetDialogFragment {
         LinearLayout shareItem = contentView.findViewById(R.id.share_item);
         LinearLayout blockItem = contentView.findViewById(R.id.block_item);
         LinearLayout reportItem = contentView.findViewById(R.id.report_item);
-        LinearLayout deleteItem = contentView.findViewById(R.id.delete_friend_item);
+        final LinearLayout deleteItem = contentView.findViewById(R.id.delete_friend_item);
 
         shareItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,9 +68,24 @@ public class MoreBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        if(!isFriend){
-            deleteItem.setVisibility(View.GONE);
-        }
+        String current_uid = FirebaseAuth.getInstance().getUid();
+
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(current_uid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    deleteItem.setVisibility(View.VISIBLE);
+                }
+                else {
+                    deleteItem.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         deleteItem.setOnClickListener(new View.OnClickListener() {
             @Override

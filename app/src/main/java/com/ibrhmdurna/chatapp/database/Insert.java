@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,12 +23,15 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.models.Account;
+import com.ibrhmdurna.chatapp.models.Request;
 import com.ibrhmdurna.chatapp.util.controller.AppController;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -165,7 +170,14 @@ public class Insert {
                 }
                 else {
                     loadingBar.dismiss();
-                    DialogController.getInstance().dialogError(context);
+                    final AlertDialog dialog = DialogController.getInstance().dialogCustom(context, "Cannot Sign in. Please check the from and try again.", null, "Dismiss");
+                    TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
+                    positiveBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
                 }
             }
         });
@@ -180,5 +192,35 @@ public class Insert {
 
         FirebaseDatabase.getInstance().getReference().child("Recent").child(uid).child(id).setValue(recentMap);
 
+    }
+
+    public void request(String id){
+
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        Map requestMap = new HashMap();
+        requestMap.put("Request/" + uid + "/" + id + "/seen", false);
+        requestMap.put("Request/" + uid + "/" + id + "/time", ServerValue.TIMESTAMP);
+
+        FirebaseDatabase.getInstance().getReference().updateChildren(requestMap);
+    }
+
+    public void friend(String id){
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        String currentDate = java.text.DateFormat.getDateInstance().format(new Date());
+
+        Map friendMap = new HashMap();
+        friendMap.put("Friends/" + uid + "/" + id + "/date", currentDate);
+        friendMap.put("Friends/" + uid + "/" + id + "/time", ServerValue.TIMESTAMP);
+        friendMap.put("Friends/" + id + "/" + uid + "/date", currentDate);
+        friendMap.put("Friends/" + id + "/" + uid + "/time", ServerValue.TIMESTAMP);
+
+        friendMap.put("Request/" + uid + "/" + id + "/seen", null);
+        friendMap.put("Request/" + uid + "/" + id + "/time", null);
+        friendMap.put("Request/" + id + "/" + uid + "/seen", null);
+        friendMap.put("Request/" + id + "/" + uid + "/time", null);
+
+        FirebaseDatabase.getInstance().getReference().updateChildren(friendMap);
     }
 }
