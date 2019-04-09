@@ -73,21 +73,17 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    boolean allSeen = true;
+                    int count = 0;
 
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                         Request request = snapshot.getValue(Request.class);
 
-                        if(request.isSeen()){
-                            allSeen = true;
-                        }
-                        else {
-                            allSeen = false;
-                            break;
+                        if(!request.isSeen()){
+                            count++;
                         }
                     }
 
-                    if(!allSeen){
+                    if(count > 0){
                         addBadgeView(2);
                     }
                     else {
@@ -131,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         transaction.addToBackStack(tag);
         transaction.commit();
     }
-
 
     private void bottomViewItemSelected(){
 

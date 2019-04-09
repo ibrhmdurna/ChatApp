@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
 import com.ibrhmdurna.chatapp.database.bridge.FindAll;
 import com.ibrhmdurna.chatapp.database.findAll.RequestFindAll;
@@ -30,6 +31,7 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
     private View view;
 
     private RecyclerView requestView;
+    private TextView notFoundView;
 
     public RequestsFragment() {
         // Required empty public constructor
@@ -47,7 +49,7 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
     }
 
     private void getRequest(){
-        AbstractFindAll findAll = new FindAll(new RequestFindAll(getActivity(), requestView));
+        AbstractFindAll findAll = new FindAll(new RequestFindAll(getActivity(), requestView, notFoundView));
         findAll.getInformation();
     }
 
@@ -55,6 +57,7 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
     public void onStart() {
         super.onStart();
         getRequest();
+        Update.getInstance().seenAllRequest();
     }
 
     @Override
@@ -65,5 +68,6 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
     @Override
     public void buildView() {
         requestView = view.findViewById(R.id.requestsContainer);
+        notFoundView = getActivity().findViewById(R.id.not_found_view);
     }
 }

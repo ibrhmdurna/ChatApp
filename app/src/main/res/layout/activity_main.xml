@@ -115,7 +115,6 @@
         android:layout_gravity="bottom"
         android:visibility="visible"
         app:layout_anchor="@id/appbar"
-        app:layout_anchorGravity="bottom"
-        android:translationZ="2dp"/>
+        app:layout_anchorGravity="bottom"/>
 
 </android.support.design.widget.CoordinatorLayout>
