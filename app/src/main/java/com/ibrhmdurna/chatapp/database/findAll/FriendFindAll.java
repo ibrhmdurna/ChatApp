@@ -70,6 +70,7 @@ public class FriendFindAll implements IFind {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if(dataSnapshot.exists()){
                                 Account account = dataSnapshot.getValue(Account.class);
+                                account.setUid(dataSnapshot.getKey());
                                 friend.setAccount(account);
 
                                 if(!friend.getAccount().isOnline()){

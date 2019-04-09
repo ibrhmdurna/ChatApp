@@ -31,6 +31,7 @@
                 android:layout_gravity="center">
 
                 <TextView
+                    android:id="@+id/chat_name_surname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Name Surname"
@@ -40,6 +41,7 @@
                     android:textStyle="bold"/>
 
                 <TextView
+                    android:id="@+id/chat_last_seen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Touch for account information"
@@ -53,15 +55,16 @@
                 android:layout_marginEnd="15dp">
 
                 <TextView
+                    android:id="@+id/chat_profile_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="N"
                     android:textSize="18sp"
                     android:translationZ="1dp"
                     android:textColor="@android:color/white"
                     android:layout_centerInParent="true"/>
 
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/chat_profile_image"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     app:civ_border_color="@android:color/darker_gray"
@@ -113,7 +116,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:hint="Type a message..."
-            android:padding="10dp"
+            android:padding="5dp"
             android:inputType="textMultiLine|textCapSentences"
             android:scrollbars="vertical"
             android:maxLines="5"
@@ -132,6 +135,7 @@
             android:onClick="onClick"/>
 
         <ImageButton
+            android:id="@+id/send_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

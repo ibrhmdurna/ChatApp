@@ -87,7 +87,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
-                        android:visibility="gone">
+                        android:visibility="gone"
+                        android:onClick="onClick">
 
                         <ImageView
                             android:layout_width="37dp"
@@ -97,12 +98,14 @@
                             android:backgroundTint="@android:color/darker_gray"/>
 
                         <ImageButton
+                            android:id="@+id/sendMessageBtn"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:layout_centerInParent="true"
                             android:src="@drawable/ic_message_icon"
                             style="@style/CustomTransparentViewStyle"
-                            android:backgroundTint="?attr/extColor"/>
+                            android:backgroundTint="?attr/extColor"
+                            android:onClick="onClick"/>
                     </RelativeLayout>
                 </RelativeLayout>
 

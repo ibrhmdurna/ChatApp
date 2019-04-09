@@ -14,9 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
+import com.ibrhmdurna.chatapp.database.bridge.Find;
+import com.ibrhmdurna.chatapp.database.find.ChatFindInfo;
 import com.ibrhmdurna.chatapp.image.CameraActivity;
 import com.ibrhmdurna.chatapp.image.GalleryActivity;
 import com.ibrhmdurna.chatapp.R;
@@ -28,9 +32,9 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 
-public class ChatActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, OnEmojiPopupShownListener, OnEmojiPopupDismissListener, GalleryBottomSheetDialog.BottomSheetListener {
+import de.hdodenhof.circleimageview.CircleImageView;
 
-    private SharedPreferences prefs;
+public class ChatActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, OnEmojiPopupShownListener, OnEmojiPopupDismissListener, GalleryBottomSheetDialog.BottomSheetListener {
 
     private ViewGroup rootView;
     private EmojiPopup emojiPopup;
@@ -38,17 +42,29 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     private ImageButton emojiBtn;
     private ImageView backgroundView;
 
+    private CircleImageView profileImage;
+    private TextView profileText, nameSurname, lastSeen;
+
+    private String uid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        uid = getIntent().getStringExtra("user_id");
+
         toolsManagement();
     }
 
+    private void getInformation(){
+        AbstractFind find = new Find(new ChatFindInfo(this, profileImage, profileText, nameSurname, lastSeen, uid));
+        find.getInformation();
+    }
+
     private void backgroundProcess(){
-        prefs = getSharedPreferences("CHAT", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("CHAT", MODE_PRIVATE);
 
         String backgroundImage = prefs.getString("BACKGROUND_IMAGE", null);
         int backgroundColor = prefs.getInt("BACKGROUND_COLOR", 0);
@@ -61,6 +77,12 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         else if(backgroundColor != 0){
             backgroundView.setImageResource(backgroundColor);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getInformation();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -89,6 +111,10 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         emojiBtn = findViewById(R.id.chat_emoji_btn);
         messageInput = findViewById(R.id.message_input);
         backgroundView = findViewById(R.id.chat_background_view);
+        profileImage = findViewById(R.id.chat_profile_image);
+        profileText = findViewById(R.id.chat_profile_text);
+        nameSurname = findViewById(R.id.chat_name_surname);
+        lastSeen = findViewById(R.id.chat_last_seen);
     }
 
     @Override
@@ -122,6 +148,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
                 break;
             case R.id.toolbar_view:
                 Intent profileIntent = new Intent(this, ProfileActivity.class);
+                profileIntent.putExtra("user_id", uid);
                 startActivity(profileIntent);
                 break;
         }

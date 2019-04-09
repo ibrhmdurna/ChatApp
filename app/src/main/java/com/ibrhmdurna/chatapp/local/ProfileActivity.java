@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
@@ -126,6 +127,11 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
                 addFriendLayout.setVisibility(View.GONE);
                 friendInfoText.setVisibility(View.VISIBLE);
                 sendMessageView.setVisibility(View.VISIBLE);
+                break;
+            case R.id.sendMessageBtn:
+                Intent chatIntent = new Intent(this, ChatActivity.class);
+                chatIntent.putExtra("user_id", uid);
+                startActivity(chatIntent);
                 break;
         }
     }
