@@ -50,71 +50,49 @@ public class OnlineFindAll implements IFind {
 
         String uid = FirebaseAuth.getInstance().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addChildEventListener(new ChildEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                friendList.clear();
                 if(dataSnapshot.exists()){
-                    final String friend_id = dataSnapshot.getKey();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        final String friend_id = snapshot.getKey();
 
-                    final Friend friend = dataSnapshot.getValue(Friend.class);
+                        final Friend friend = snapshot.getValue(Friend.class);
 
-                    FirebaseDatabase.getInstance().getReference().child("Accounts").child(friend_id).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()){
-                                Account account = dataSnapshot.getValue(Account.class);
-                                account.setUid(friend_id);
-                                friend.setAccount(account);
+                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(friend_id).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    Account account = dataSnapshot.getValue(Account.class);
+                                    account.setUid(friend_id);
+                                    friend.setAccount(account);
 
-                                if(friend.getAccount().isOnline()){
-                                    friendList.add(friend);
+                                    if(friend.getAccount().isOnline()){
+                                        friendList.add(friend);
+                                    }
+                                    else {
+                                        friendList.remove(friend);
+                                    }
+
+                                    if(friendList.size() > 0){
+                                        onlineLayout.setVisibility(View.VISIBLE);
+                                    }
+                                    else {
+                                        onlineLayout.setVisibility(View.GONE);
+                                    }
+
+                                    friendAdapter.notifyDataSetChanged();
                                 }
-                                else {
-                                    friendList.remove(friend);
-                                }
-
-                                if(friendList.size() > 0){
-                                    onlineLayout.setVisibility(View.VISIBLE);
-                                }
-                                else {
-                                    onlineLayout.setVisibility(View.GONE);
-                                }
-
-                                sortArrayList();
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                Long time = (Long) dataSnapshot.child("time").getValue();
-                int position = findPosition(time);
-                if(position != -1){
-                    friendList.remove(position);
-                    friendAdapter.notifyItemRemoved(position);
-                }
-
-                /*
-                if(friendList.size() <= 0){
-                    onlineLayout.setVisibility(View.GONE);
-                }*/
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override
@@ -122,15 +100,6 @@ public class OnlineFindAll implements IFind {
 
             }
         });
-    }
-
-    private int findPosition(long time){
-        for(int i = 0; i < friendList.size(); i++){
-            if(friendList.get(i).getTime() == time){
-                return i;
-            }
-        }
-        return -1;
     }
 
     private void sortArrayList(){

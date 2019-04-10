@@ -45,8 +45,6 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentView
 
     @Override
     public void onBindViewHolder(@NonNull RecentViewHolder recentViewHolder, final int i) {
-        shortArrayList();
-
         final Recent recent = recentList.get(i);
 
         recentViewHolder.setNameSurname(recent.getAccount().getNameSurname());
@@ -76,15 +74,6 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentView
             @Override
             public void onClick(View v) {
                 Delete.getInstance().recent(recent.getAccount().getUid());
-            }
-        });
-    }
-
-    private void shortArrayList(){
-        Collections.sort(recentList, new Comparator<Recent>() {
-            @Override
-            public int compare(Recent o1, Recent o2) {
-                return Long.compare(o2.getTime(),o1.getTime());
             }
         });
     }

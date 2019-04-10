@@ -3,6 +3,7 @@ package com.ibrhmdurna.chatapp.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +37,7 @@ public class FriendsFragment extends Fragment implements ViewComponentFactory {
     private RecyclerView onlineView, friendsView;
     private TextView notFoundView;
     private LinearLayout onlineLayout, friendLayout;
+    private BottomNavigationView bottomNavigationView;
 
     public FriendsFragment() {
         // Required empty public constructor
@@ -58,7 +60,7 @@ public class FriendsFragment extends Fragment implements ViewComponentFactory {
     }
 
     private void getFriends(){
-        AbstractFindAll findAll = new FindAll(new FriendFindAll(getActivity(), friendsView, notFoundView,friendLayout));
+        AbstractFindAll findAll = new FindAll(new FriendFindAll(getActivity(), friendsView, notFoundView,friendLayout, bottomNavigationView));
         findAll.getInformation();
     }
 
@@ -78,7 +80,8 @@ public class FriendsFragment extends Fragment implements ViewComponentFactory {
     public void buildView() {
         onlineView = view.findViewById(R.id.online_container);
         friendsView = view.findViewById(R.id.friends_container);
-        notFoundView = getActivity().findViewById(R.id.not_found_view);
+        notFoundView = getActivity().findViewById(R.id.friend_not_found_view);
+        bottomNavigationView = getActivity().findViewById(R.id.mainBottomNavigationView);
         onlineLayout = view.findViewById(R.id.online_layout);
         friendLayout = view.findViewById(R.id.friend_layout);
     }

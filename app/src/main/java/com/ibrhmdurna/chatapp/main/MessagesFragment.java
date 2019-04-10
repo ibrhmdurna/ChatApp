@@ -45,7 +45,7 @@ public class MessagesFragment extends Fragment implements ViewComponentFactory {
         list = new ArrayList<>();
         messagesAdapter = new MessagesAdapter(list);
         recyclerView = view.findViewById(R.id.messagesContainer);
-        notFoundView = getActivity().findViewById(R.id.not_found_view);
+        notFoundView = getActivity().findViewById(R.id.messages_not_found_view);
 
         /*
         for (int i = 0; i < 20; i++){

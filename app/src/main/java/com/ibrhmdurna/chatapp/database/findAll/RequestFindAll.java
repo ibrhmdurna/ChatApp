@@ -3,6 +3,7 @@ package com.ibrhmdurna.chatapp.database.findAll;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Request;
@@ -32,11 +34,13 @@ public class RequestFindAll implements IFind {
     private RequestAdapter requestAdapter;
     private RecyclerView requestView;
     private TextView notFoundView;
+    private BottomNavigationView bottomNavigationView;
 
-    public RequestFindAll(Activity context, RecyclerView requestView, TextView notFoundView) {
+    public RequestFindAll(Activity context, RecyclerView requestView, TextView notFoundView, BottomNavigationView bottomNavigationView) {
         this.context = context;
         this.requestView = requestView;
         this.notFoundView = notFoundView;
+        this.bottomNavigationView = bottomNavigationView;
     }
 
     @Override
@@ -49,52 +53,36 @@ public class RequestFindAll implements IFind {
 
         String uid = FirebaseAuth.getInstance().getUid();
 
-        requestView.setVisibility(View.GONE);
-        notFoundView.setVisibility(View.VISIBLE);
-        notFoundView.setText("No Request");
-
-        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).addChildEventListener(new ChildEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                requestList.clear();
                 if(dataSnapshot.exists()){
-                    requestView.setVisibility(View.VISIBLE);
-                    notFoundView.setVisibility(View.GONE);
-                    final String request_id = dataSnapshot.getKey();
+                    if(bottomNavigationView.getSelectedItemId() == R.id.requests_item){
+                        requestView.setVisibility(View.VISIBLE);
+                        notFoundView.setVisibility(View.GONE);
+                    }
 
-                    final Request request = dataSnapshot.getValue(Request.class);
-                    Account account = new Account();
-                    account.setUid(request_id);
-                    request.setAccount(account);
-                    requestList.add(request);
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        final String request_id = snapshot.getKey();
+
+                        final Request request = snapshot.getValue(Request.class);
+                        Account account = new Account();
+                        account.setUid(request_id);
+                        request.setAccount(account);
+                        requestList.add(request);
+                    }
 
                     sortArrayList();
+
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                Long time = (Long) dataSnapshot.child("time").getValue();
-                int position = findPosition(time);
-                if(position != -1){
-                    requestList.remove(position);
-                    requestAdapter.notifyItemRemoved(position);
+                else {
+                    if(bottomNavigationView.getSelectedItemId() == R.id.requests_item){
+                        requestView.setVisibility(View.GONE);
+                        notFoundView.setVisibility(View.VISIBLE);
+                        notFoundView.setText("No Request");
+                    }
                 }
-
-                if(requestList.size() <= 0){
-                    requestView.setVisibility(View.GONE);
-                    notFoundView.setVisibility(View.VISIBLE);
-                    notFoundView.setText("No Request");
-                }
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override
@@ -102,15 +90,6 @@ public class RequestFindAll implements IFind {
 
             }
         });
-    }
-
-    private int findPosition(long time){
-        for(int i = 0; i < requestList.size(); i++){
-            if(requestList.get(i).getTime() == time){
-                return i;
-            }
-        }
-        return -1;
     }
 
     private void sortArrayList(){

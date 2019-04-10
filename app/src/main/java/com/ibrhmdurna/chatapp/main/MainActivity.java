@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     private AppBarLayout mainAppBarLayout;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private BottomNavigationView bottomNavigationView;
-    private TextView notFoundView;
+    private TextView messageNotFoundView, friendsNotFoundView, requestNotFoundView;
 
     private String page;
 
@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         FirebaseDatabase.getInstance().getReference().child("Request").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count = 0;
                 if(dataSnapshot.exists()){
-                    int count = 0;
 
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                         Request request = snapshot.getValue(Request.class);
@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
                         collapsingToolbarLayout.setTitle("Requests");
                         toolbar.getMenu().clear();
                         toolbar.inflateMenu(R.menu.main_menu);
+                        removeBadgeView();
                         break;
                     case R.id.account_item:
                         showFragment(new AccountFragment(), "AccountFragment");
@@ -171,7 +172,9 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
 
                 mainAppBarLayout.setVisibility(View.VISIBLE);
                 fullFrame.setVisibility(View.GONE);
-                notFoundView.setVisibility(View.GONE);
+                messageNotFoundView.setVisibility(View.GONE);
+                friendsNotFoundView.setVisibility(View.GONE);
+                requestNotFoundView.setVisibility(View.GONE);
                 return true;
             }
         });
@@ -217,7 +220,9 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         collapsingToolbarLayout = findViewById(R.id.collapsingToolbar);
         bottomNavigationView = findViewById(R.id.mainBottomNavigationView);
         mainAppBarLayout = findViewById(R.id.appbar);
-        notFoundView = findViewById(R.id.not_found_view);
+        messageNotFoundView = findViewById(R.id.messages_not_found_view);
+        friendsNotFoundView = findViewById(R.id.friend_not_found_view);
+        requestNotFoundView = findViewById(R.id.request_not_found_view);
     }
 
     @Override

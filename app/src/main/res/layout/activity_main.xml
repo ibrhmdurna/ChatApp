@@ -107,13 +107,35 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/not_found_view"
+        android:id="@+id/messages_not_found_view"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:gravity="center"
         android:textSize="18sp"
         android:layout_gravity="bottom"
-        android:visibility="visible"
+        android:visibility="gone"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom"/>
+
+    <TextView
+        android:id="@+id/friend_not_found_view"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:layout_gravity="bottom"
+        android:visibility="gone"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom"/>
+
+    <TextView
+        android:id="@+id/request_not_found_view"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:layout_gravity="bottom"
+        android:visibility="gone"
         app:layout_anchor="@id/appbar"
         app:layout_anchorGravity="bottom"/>
 

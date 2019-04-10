@@ -3,6 +3,7 @@ package com.ibrhmdurna.chatapp.database.findAll;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Friend;
@@ -35,12 +37,14 @@ public class FriendFindAll implements IFind {
     private RecyclerView friendView;
     private TextView notFoundView;
     private LinearLayout friendLayout;
+    private BottomNavigationView bottomNavigationView;
 
-    public FriendFindAll(Activity context, RecyclerView friendView, TextView notFoundView, LinearLayout friendLayout) {
+    public FriendFindAll(Activity context, RecyclerView friendView, TextView notFoundView, LinearLayout friendLayout, BottomNavigationView bottomNavigationView) {
         this.context = context;
         this.friendView = friendView;
         this.notFoundView = notFoundView;
         this.friendLayout = friendLayout;
+        this.bottomNavigationView = bottomNavigationView;
     }
 
     @Override
@@ -53,76 +57,60 @@ public class FriendFindAll implements IFind {
 
         String uid = FirebaseAuth.getInstance().getUid();
 
-        notFoundView.setVisibility(View.VISIBLE);
-        notFoundView.setText("No Friends");
-
-        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addChildEventListener(new ChildEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                friendList.clear();
                 if(dataSnapshot.exists()){
-                    notFoundView.setVisibility(View.GONE);
-                    final String friend_id = dataSnapshot.getKey();
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        if(bottomNavigationView.getSelectedItemId() == R.id.friends_item){
+                            notFoundView.setVisibility(View.GONE);
+                        }
 
-                    final Friend friend = dataSnapshot.getValue(Friend.class);
+                        final String friend_id = snapshot.getKey();
 
-                    FirebaseDatabase.getInstance().getReference().child("Accounts").child(friend_id).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()){
-                                Account account = dataSnapshot.getValue(Account.class);
-                                account.setUid(dataSnapshot.getKey());
-                                friend.setAccount(account);
+                        final Friend friend = snapshot.getValue(Friend.class);
 
-                                if(!friend.getAccount().isOnline()){
-                                    friendList.add(friend);
+                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(friend_id).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    Account account = dataSnapshot.getValue(Account.class);
+                                    account.setUid(dataSnapshot.getKey());
+                                    friend.setAccount(account);
+
+                                    if(!friend.getAccount().isOnline()){
+                                        friendList.add(friend);
+                                    }
+                                    else {
+                                        friendList.remove(friend);
+                                    }
+
+                                    if(friendList.size() > 0){
+                                        friendLayout.setVisibility(View.VISIBLE);
+                                    }
+                                    else {
+                                        friendLayout.setVisibility(View.GONE);
+                                    }
+
+                                    friendAdapter.notifyDataSetChanged();
                                 }
-                                else {
-                                    friendList.remove(friend);
-                                }
-
-                                if(friendList.size() > 0){
-                                    friendLayout.setVisibility(View.VISIBLE);
-                                }
-                                else {
-                                    friendLayout.setVisibility(View.GONE);
-                                }
-
-                                sortArrayList();
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                Long time = (Long) dataSnapshot.child("time").getValue();
-                int position = findPosition(time);
-                if(position != -1){
-                    friendList.remove(position);
-                    friendAdapter.notifyItemRemoved(position);
+                else {
+                    if(bottomNavigationView.getSelectedItemId() == R.id.friends_item){
+                        friendLayout.setVisibility(View.GONE);
+                        notFoundView.setVisibility(View.VISIBLE);
+                        notFoundView.setText("No Friends");
+                    }
                 }
-
-                if(friendList.size() <= 0){
-                    friendLayout.setVisibility(View.GONE);
-                    notFoundView.setVisibility(View.VISIBLE);
-                    notFoundView.setText("No Friends");
-                }
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override

@@ -2,6 +2,7 @@ package com.ibrhmdurna.chatapp.main;
 
 
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +34,8 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
     private RecyclerView requestView;
     private TextView notFoundView;
 
+    private BottomNavigationView bottomNavigationView;
+
     public RequestsFragment() {
         // Required empty public constructor
     }
@@ -49,7 +52,7 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
     }
 
     private void getRequest(){
-        AbstractFindAll findAll = new FindAll(new RequestFindAll(getActivity(), requestView, notFoundView));
+        AbstractFindAll findAll = new FindAll(new RequestFindAll(getActivity(), requestView, notFoundView, bottomNavigationView));
         findAll.getInformation();
     }
 
@@ -68,6 +71,7 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
     @Override
     public void buildView() {
         requestView = view.findViewById(R.id.requestsContainer);
-        notFoundView = getActivity().findViewById(R.id.not_found_view);
+        notFoundView = getActivity().findViewById(R.id.request_not_found_view);
+        bottomNavigationView = getActivity().findViewById(R.id.mainBottomNavigationView);
     }
 }
