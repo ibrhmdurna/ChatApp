@@ -7,6 +7,11 @@ public class Find extends AbstractFind {
     }
 
     @Override
+    public void buildView() {
+        IFind.buildView();
+    }
+
+    @Override
     public void getInformation() {
         IFind.getInformation();
     }

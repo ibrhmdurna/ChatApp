@@ -1,8 +1,6 @@
 package com.ibrhmdurna.chatapp.database.findAll;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +8,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -28,7 +25,7 @@ import java.util.List;
 
 public class RequestFindAll implements IFind {
 
-    private Activity context;
+    private View context;
 
     private List<Request> requestList;
     private RequestAdapter requestAdapter;
@@ -36,18 +33,23 @@ public class RequestFindAll implements IFind {
     private TextView notFoundView;
     private BottomNavigationView bottomNavigationView;
 
-    public RequestFindAll(Activity context, RecyclerView requestView, TextView notFoundView, BottomNavigationView bottomNavigationView) {
+    public RequestFindAll(View context) {
         this.context = context;
-        this.requestView = requestView;
-        this.notFoundView = notFoundView;
-        this.bottomNavigationView = bottomNavigationView;
+        buildView();
+    }
+
+    @Override
+    public void buildView() {
+        requestView = context.findViewById(R.id.requestsContainer);
+        notFoundView = context.getRootView().findViewById(R.id.request_not_found_view);
+        bottomNavigationView = context.getRootView().findViewById(R.id.mainBottomNavigationView);
     }
 
     @Override
     public void getInformation() {
         requestList = new ArrayList<>();
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        requestAdapter = new RequestAdapter(context, requestList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context.getContext());
+        requestAdapter = new RequestAdapter(context.getContext(), requestList);
         requestView.setLayoutManager(layoutManager);
         requestView.setAdapter(requestAdapter);
 

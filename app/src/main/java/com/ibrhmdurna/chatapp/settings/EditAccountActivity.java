@@ -262,7 +262,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
     }
 
     private void getAccountInformation(){
-        AbstractFind findAccount = new Find(new AccountEditFindInfo(this, binding, profileImage, profileText));
+        AbstractFind findAccount = new Find(new AccountEditFindInfo(binding));
         findAccount.getInformation();
     }
 

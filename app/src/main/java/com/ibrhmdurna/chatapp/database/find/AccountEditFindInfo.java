@@ -1,6 +1,6 @@
 package com.ibrhmdurna.chatapp.database.find;
 
-import android.content.Context;
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
@@ -21,16 +21,19 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountEditFindInfo implements IFind {
 
-    private Context context;
     private ActivityEditAccountBinding binding;
     private CircleImageView profileImage;
     private TextView profileText;
 
-    public AccountEditFindInfo(Context context, ActivityEditAccountBinding binding, CircleImageView profileImage, TextView profileText) {
-        this.context = context;
+    public AccountEditFindInfo(ActivityEditAccountBinding binding) {
         this.binding = binding;
-        this.profileImage = profileImage;
-        this.profileText = profileText;
+        buildView();
+    }
+
+    @Override
+    public void buildView() {
+        profileImage = binding.getRoot().findViewById(R.id.profileImage);
+        profileText = binding.getRoot().findViewById(R.id.profileImageText);
     }
 
     @Override
@@ -62,13 +65,13 @@ public class AccountEditFindInfo implements IFind {
                     binding.setAccount(account);
                 }
                 else {
-                    Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(binding.getRoot().getContext(), "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(binding.getRoot().getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

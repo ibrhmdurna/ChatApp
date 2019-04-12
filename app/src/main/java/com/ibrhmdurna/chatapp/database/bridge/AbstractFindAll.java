@@ -8,5 +8,7 @@ public abstract class AbstractFindAll {
         this.IFind = IFind;
     }
 
+    public abstract void buildView();
+
     public abstract void getInformation();
 }

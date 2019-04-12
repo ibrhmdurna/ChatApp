@@ -29,13 +29,6 @@ import java.util.List;
  */
 public class RequestsFragment extends Fragment implements ViewComponentFactory {
 
-    private View view;
-
-    private RecyclerView requestView;
-    private TextView notFoundView;
-
-    private BottomNavigationView bottomNavigationView;
-
     public RequestsFragment() {
         // Required empty public constructor
     }
@@ -44,7 +37,7 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         App.Theme.getInstance().getTheme(getContext());
-        view = inflater.inflate(R.layout.fragment_requests, container, false);
+        View view = inflater.inflate(R.layout.fragment_requests, container, false);
 
         toolsManagement();
 
@@ -52,7 +45,7 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
     }
 
     private void getRequest(){
-        AbstractFindAll findAll = new FindAll(new RequestFindAll(getActivity(), requestView, notFoundView, bottomNavigationView));
+        AbstractFindAll findAll = new FindAll(new RequestFindAll(getView()));
         findAll.getInformation();
     }
 
@@ -70,8 +63,6 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
 
     @Override
     public void buildView() {
-        requestView = view.findViewById(R.id.requestsContainer);
-        notFoundView = getActivity().findViewById(R.id.request_not_found_view);
-        bottomNavigationView = getActivity().findViewById(R.id.mainBottomNavigationView);
+        // ------ COMPONENT -----
     }
 }

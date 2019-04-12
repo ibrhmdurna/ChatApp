@@ -1,18 +1,16 @@
 package com.ibrhmdurna.chatapp.database.findAll;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,7 +28,7 @@ import java.util.List;
 
 public class FriendFindAll implements IFind {
 
-    private Activity context;
+    private Fragment context;
 
     private List<Friend> friendList;
     private FriendAdapter friendAdapter;
@@ -39,21 +37,28 @@ public class FriendFindAll implements IFind {
     private LinearLayout friendLayout;
     private BottomNavigationView bottomNavigationView;
 
-    public FriendFindAll(Activity context, RecyclerView friendView, TextView notFoundView, LinearLayout friendLayout, BottomNavigationView bottomNavigationView) {
+    public FriendFindAll(Fragment context) {
         this.context = context;
-        this.friendView = friendView;
-        this.notFoundView = notFoundView;
-        this.friendLayout = friendLayout;
-        this.bottomNavigationView = bottomNavigationView;
+        buildView();
+    }
+
+    @Override
+    public void buildView() {
+        friendView = context.getView().findViewById(R.id.friends_container);
+        notFoundView = context.getActivity().findViewById(R.id.friend_not_found_view);
+        bottomNavigationView = context.getActivity().findViewById(R.id.mainBottomNavigationView);
+        friendLayout = context.getView().findViewById(R.id.friend_layout);
     }
 
     @Override
     public void getInformation() {
         friendList = new ArrayList<>();
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        friendAdapter = new FriendAdapter(context, friendList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context.getContext());
+        friendAdapter = new FriendAdapter(context.getContext(), friendList);
         friendView.setLayoutManager(layoutManager);
         friendView.setAdapter(friendAdapter);
+
+
 
         String uid = FirebaseAuth.getInstance().getUid();
 

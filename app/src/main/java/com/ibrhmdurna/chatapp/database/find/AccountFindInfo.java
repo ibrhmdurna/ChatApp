@@ -1,6 +1,5 @@
 package com.ibrhmdurna.chatapp.database.find;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -25,7 +24,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountFindInfo implements IFind {
 
-    private Context context;
     private FragmentAccountBinding binding;
     private RelativeLayout rootView;
     private SpinKitView loadingBar;
@@ -33,14 +31,18 @@ public class AccountFindInfo implements IFind {
     private TextView profileText;
     private LinearLayout phoneLayout;
 
-    public AccountFindInfo(Context context, FragmentAccountBinding binding, RelativeLayout rootView, SpinKitView loadingBar, CircleImageView profileImage, TextView profileText, LinearLayout phoneLayout) {
-        this.context = context;
+    public AccountFindInfo(FragmentAccountBinding binding) {
         this.binding = binding;
-        this.rootView = rootView;
-        this.loadingBar = loadingBar;
-        this.profileImage = profileImage;
-        this.profileText = profileText;
-        this.phoneLayout = phoneLayout;
+        buildView();
+    }
+
+    @Override
+    public void buildView() {
+        rootView = binding.getRoot().findViewById(R.id.rootView);
+        loadingBar = binding.getRoot().findViewById(R.id.loadingBar);
+        profileImage = binding.getRoot().findViewById(R.id.profileImage);
+        profileText = binding.getRoot().findViewById(R.id.profileImageText);
+        phoneLayout = binding.getRoot().findViewById(R.id.account_phone_layout);
     }
 
     @Override
@@ -83,7 +85,7 @@ public class AccountFindInfo implements IFind {
                     loadingBar.setVisibility(View.GONE);
                 }
                 else {
-                    Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(binding.getRoot().getContext(), "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
                     rootView.setVisibility(View.VISIBLE);
                     loadingBar.setIndeterminate(false);
                     loadingBar.setVisibility(View.GONE);
@@ -92,7 +94,7 @@ public class AccountFindInfo implements IFind {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(binding.getRoot().getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                 rootView.setVisibility(View.VISIBLE);
                 loadingBar.setIndeterminate(false);
                 loadingBar.setVisibility(View.GONE);
@@ -136,12 +138,12 @@ public class AccountFindInfo implements IFind {
     }
 
     private void convertGender(Account account){
-        String[] genders = context.getResources().getStringArray(R.array.gender);
+        String[] genders = binding.getRoot().getContext().getResources().getStringArray(R.array.gender);
         account.setConvertGender(genders[account.getGender() - 1]);
     }
 
     private void convertLocation(Account account){
-        String[] locations = context.getResources().getStringArray(R.array.countries_array);
+        String[] locations = binding.getRoot().getContext().getResources().getStringArray(R.array.countries_array);
         account.setConvertLocation(locations[account.getLocation() - 1]);
     }
 }

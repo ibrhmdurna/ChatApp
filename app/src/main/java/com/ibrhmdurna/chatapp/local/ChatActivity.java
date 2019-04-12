@@ -42,9 +42,6 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     private ImageButton emojiBtn;
     private ImageView backgroundView;
 
-    private CircleImageView profileImage;
-    private TextView profileText, nameSurname, lastSeen;
-
     private String uid;
 
     @Override
@@ -59,7 +56,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     }
 
     private void getInformation(){
-        AbstractFind find = new Find(new ChatFindInfo(this, profileImage, profileText, nameSurname, lastSeen, uid));
+        AbstractFind find = new Find(new ChatFindInfo(this, uid));
         find.getInformation();
     }
 
@@ -111,10 +108,6 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         emojiBtn = findViewById(R.id.chat_emoji_btn);
         messageInput = findViewById(R.id.message_input);
         backgroundView = findViewById(R.id.chat_background_view);
-        profileImage = findViewById(R.id.chat_profile_image);
-        profileText = findViewById(R.id.chat_profile_text);
-        nameSurname = findViewById(R.id.chat_name_surname);
-        lastSeen = findViewById(R.id.chat_last_seen);
     }
 
     @Override

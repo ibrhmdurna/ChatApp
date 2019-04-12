@@ -34,12 +34,7 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
 
     private FragmentAccountBinding binding;
     private ImageButton settingsButton;
-    private CircleImageView profileImage;
-    private TextView profileText;
     private LinearLayout friendView;
-    private RelativeLayout rootView;
-    private SpinKitView loadingBar;
-    private LinearLayout phoneLayout;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -56,7 +51,7 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
     }
 
     private void getAccountInformation(){
-        AbstractFind find = new Find(new AccountFindInfo(getContext(), binding, rootView, loadingBar, profileImage, profileText, phoneLayout));
+        AbstractFind find = new Find(new AccountFindInfo(binding));
         find.getInformation();
     }
 
@@ -73,13 +68,8 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
 
     @Override
     public void buildView(){
-        profileImage = binding.getRoot().findViewById(R.id.profileImage);
-        profileText = binding.getRoot().findViewById(R.id.profileImageText);
         settingsButton = binding.getRoot().findViewById(R.id.account_settings_button);
         friendView = binding.getRoot().findViewById(R.id.account_friends_button);
-        rootView = binding.getRoot().findViewById(R.id.rootView);
-        loadingBar = binding.getRoot().findViewById(R.id.loadingBar);
-        phoneLayout = binding.getRoot().findViewById(R.id.account_phone_layout);
     }
 
     @Override

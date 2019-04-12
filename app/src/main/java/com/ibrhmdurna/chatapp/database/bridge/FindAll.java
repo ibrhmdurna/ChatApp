@@ -7,6 +7,11 @@ public class FindAll extends AbstractFindAll {
     }
 
     @Override
+    public void buildView() {
+        IFind.buildView();
+    }
+
+    @Override
     public void getInformation() {
         IFind.getInformation();
     }

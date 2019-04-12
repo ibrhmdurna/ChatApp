@@ -32,13 +32,6 @@ import java.util.List;
  */
 public class FriendsFragment extends Fragment implements ViewComponentFactory {
 
-    private View view;
-
-    private RecyclerView onlineView, friendsView;
-    private TextView notFoundView;
-    private LinearLayout onlineLayout, friendLayout;
-    private BottomNavigationView bottomNavigationView;
-
     public FriendsFragment() {
         // Required empty public constructor
     }
@@ -47,7 +40,7 @@ public class FriendsFragment extends Fragment implements ViewComponentFactory {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         App.Theme.getInstance().getTheme(getContext());
-        view = inflater.inflate(R.layout.fragment_friends, container, false);
+        View view = inflater.inflate(R.layout.fragment_friends, container, false);
 
         toolsManagement();
 
@@ -55,12 +48,12 @@ public class FriendsFragment extends Fragment implements ViewComponentFactory {
     }
 
     private void getOnline(){
-        AbstractFindAll findAll = new FindAll(new OnlineFindAll(getActivity(), onlineView, onlineLayout));
+        AbstractFindAll findAll = new FindAll(new OnlineFindAll(this));
         findAll.getInformation();
     }
 
     private void getFriends(){
-        AbstractFindAll findAll = new FindAll(new FriendFindAll(getActivity(), friendsView, notFoundView,friendLayout, bottomNavigationView));
+        AbstractFindAll findAll = new FindAll(new FriendFindAll(this));
         findAll.getInformation();
     }
 
@@ -78,11 +71,6 @@ public class FriendsFragment extends Fragment implements ViewComponentFactory {
 
     @Override
     public void buildView() {
-        onlineView = view.findViewById(R.id.online_container);
-        friendsView = view.findViewById(R.id.friends_container);
-        notFoundView = getActivity().findViewById(R.id.friend_not_found_view);
-        bottomNavigationView = getActivity().findViewById(R.id.mainBottomNavigationView);
-        onlineLayout = view.findViewById(R.id.online_layout);
-        friendLayout = view.findViewById(R.id.friend_layout);
+        // ---- COMPONENT ----
     }
 }

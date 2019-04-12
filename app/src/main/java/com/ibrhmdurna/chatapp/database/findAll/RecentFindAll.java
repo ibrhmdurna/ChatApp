@@ -15,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Recent;
@@ -35,11 +36,16 @@ public class RecentFindAll implements IFind {
 
     private NestedScrollView noRecentLayout, recentLayout;
 
-    public RecentFindAll(Activity context, RecyclerView recentView, NestedScrollView noRecentLayout, NestedScrollView recentLayout){
+    public RecentFindAll(Activity context){
         this.context = context;
-        this.recentView = recentView;
-        this.noRecentLayout = noRecentLayout;
-        this.recentLayout = recentLayout;
+        buildView();
+    }
+
+    @Override
+    public void buildView() {
+        noRecentLayout = context.findViewById(R.id.no_recent_layout);
+        recentLayout = context.findViewById(R.id.recent_layout);
+        recentView = context.findViewById(R.id.recent_container);
     }
 
     @Override

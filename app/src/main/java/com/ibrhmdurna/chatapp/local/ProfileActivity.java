@@ -37,16 +37,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ProfileActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, MoreBottomSheetDialog.BottomSheetListener {
 
     private ActivityProfileBinding binding;
-    private CircleImageView profileImage;
-    private TextView profileText;
-    private LinearLayout phoneLayout;
 
     private LinearLayout confirmLayout;
     private RelativeLayout addFriendLayout, sendMessageView;
     private TextView cancelReqView, addFriendView, friendInfoText;
-
-    private RelativeLayout rootView;
-    private SpinKitView loadingBar;
 
     private String uid;
 
@@ -62,7 +56,7 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
     private void getProfileInformation(){
         uid = getIntent().getStringExtra("user_id");
 
-        AbstractFind find = new Find(new ProfileFindInfo(this, binding, profileImage, profileText, phoneLayout, cancelReqView, addFriendLayout, addFriendView, confirmLayout, sendMessageView, friendInfoText, uid, rootView, loadingBar));
+        AbstractFind find = new Find(new ProfileFindInfo(binding, uid));
         find.getInformation();
     }
 
@@ -79,17 +73,12 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
 
     @Override
     public void buildView() {
-        profileImage = findViewById(R.id.profileImage);
-        profileText = findViewById(R.id.profileImageText);
-        phoneLayout = findViewById(R.id.profilePhoneLayout);
         cancelReqView = findViewById(R.id.cancel_req_btn);
         addFriendView = findViewById(R.id.add_friend_btn);
         confirmLayout = findViewById(R.id.profile_confirm_layout);
         addFriendLayout = findViewById(R.id.add_friend_layout);
         sendMessageView = findViewById(R.id.sendMessageView);
         friendInfoText = findViewById(R.id.friendInfoText);
-        rootView = findViewById(R.id.rootView);
-        loadingBar = findViewById(R.id.loadingBar);
     }
 
     @Override

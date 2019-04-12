@@ -43,7 +43,6 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
     private NestedScrollView recentLayout;
     private NestedScrollView searchLayout;
 
-    private RecyclerView recentView;
     private RecyclerView searchView;
 
     private SpinKitView loadingBar;
@@ -58,7 +57,7 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
     }
 
     private void recentProcess(){
-        AbstractFindAll recentFindAll = new FindAll(new RecentFindAll(this, recentView, noRecentLayout, recentLayout));
+        AbstractFindAll recentFindAll = new FindAll(new RecentFindAll(this));
         recentFindAll.getInformation();
     }
 
@@ -144,7 +143,6 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
         recentLayout = findViewById(R.id.recent_layout);
         searchLayout = findViewById(R.id.search_layout);
         searchView = findViewById(R.id.search_container);
-        recentView = findViewById(R.id.recent_container);
         loadingBar = findViewById(R.id.search_loading_bar);
     }
 

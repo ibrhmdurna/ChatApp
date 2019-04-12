@@ -1,6 +1,5 @@
 package com.ibrhmdurna.chatapp.database.find;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -25,7 +24,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFindInfo implements IFind {
 
-    private Context context;
     private ActivityProfileBinding binding;
     private CircleImageView profileImage;
     private TextView profileText;
@@ -40,21 +38,25 @@ public class ProfileFindInfo implements IFind {
 
     private String uid;
 
-    public ProfileFindInfo(Context context, ActivityProfileBinding binding, CircleImageView profileImage, TextView profileText, LinearLayout phoneLayout, TextView cancelRequest, RelativeLayout addFriendLayout, TextView addFriendView, LinearLayout confirmLayout, RelativeLayout sendMessageView, TextView friendInfoText, String uid, RelativeLayout rootView, SpinKitView loadingBar) {
-        this.context = context;
+    public ProfileFindInfo(ActivityProfileBinding binding,String uid) {
         this.binding = binding;
-        this.profileImage = profileImage;
-        this.profileText = profileText;
-        this.phoneLayout = phoneLayout;
-        this.addFriendLayout = addFriendLayout;
-        this.cancelRequest = cancelRequest;
-        this.addFriendView = addFriendView;
-        this.confirmLayout = confirmLayout;
-        this.sendMessageView = sendMessageView;
-        this.friendInfoText = friendInfoText;
         this.uid = uid;
-        this.rootView = rootView;
-        this.loadingBar = loadingBar;
+        buildView();
+    }
+
+    @Override
+    public void buildView() {
+        profileImage = binding.getRoot().findViewById(R.id.profileImage);
+        profileText = binding.getRoot().findViewById(R.id.profileImageText);
+        phoneLayout = binding.getRoot().findViewById(R.id.profilePhoneLayout);
+        cancelRequest = binding.getRoot().findViewById(R.id.cancel_req_btn);
+        addFriendView = binding.getRoot().findViewById(R.id.add_friend_btn);
+        confirmLayout = binding.getRoot().findViewById(R.id.profile_confirm_layout);
+        addFriendLayout = binding.getRoot().findViewById(R.id.add_friend_layout);
+        sendMessageView = binding.getRoot().findViewById(R.id.sendMessageView);
+        friendInfoText = binding.getRoot().findViewById(R.id.friendInfoText);
+        rootView = binding.getRoot().findViewById(R.id.rootView);
+        loadingBar = binding.getRoot().findViewById(R.id.loadingBar);
     }
 
     @Override
@@ -97,7 +99,7 @@ public class ProfileFindInfo implements IFind {
                     loadingBar.setVisibility(View.GONE);
                 }
                 else {
-                    Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(binding.getRoot().getContext(), "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
                     rootView.setVisibility(View.VISIBLE);
                     loadingBar.setIndeterminate(false);
                     loadingBar.setVisibility(View.GONE);
@@ -106,7 +108,7 @@ public class ProfileFindInfo implements IFind {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(binding.getRoot().getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                 rootView.setVisibility(View.VISIBLE);
                 loadingBar.setIndeterminate(false);
                 loadingBar.setVisibility(View.GONE);
@@ -204,12 +206,12 @@ public class ProfileFindInfo implements IFind {
     }
 
     private void convertGender(Account account){
-        String[] genders = context.getResources().getStringArray(R.array.gender);
+        String[] genders = binding.getRoot().getContext().getResources().getStringArray(R.array.gender);
         account.setConvertGender(genders[account.getGender() - 1]);
     }
 
     private void convertLocation(Account account){
-        String[] locations = context.getResources().getStringArray(R.array.countries_array);
+        String[] locations = binding.getRoot().getContext().getResources().getStringArray(R.array.countries_array);
         account.setConvertLocation(locations[account.getLocation() - 1]);
     }
 }

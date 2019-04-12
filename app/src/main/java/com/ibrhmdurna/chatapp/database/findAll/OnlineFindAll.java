@@ -3,6 +3,7 @@ package com.ibrhmdurna.chatapp.database.findAll;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Friend;
@@ -27,24 +29,29 @@ import java.util.List;
 
 public class OnlineFindAll implements IFind {
 
-    private Activity context;
+    private Fragment context;
 
     private List<Friend> friendList;
     private FriendAdapter friendAdapter;
     private RecyclerView friendView;
     private LinearLayout onlineLayout;
 
-    public OnlineFindAll(Activity context, RecyclerView friendView, LinearLayout onlineLayout) {
+    public OnlineFindAll(Fragment context) {
         this.context = context;
-        this.friendView = friendView;
-        this.onlineLayout = onlineLayout;
+        buildView();
+    }
+
+    @Override
+    public void buildView() {
+        friendView = context.getView().findViewById(R.id.online_container);
+        onlineLayout = context.getView().findViewById(R.id.online_layout);
     }
 
     @Override
     public void getInformation() {
         friendList = new ArrayList<>();
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        friendAdapter = new FriendAdapter(context, friendList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context.getContext());
+        friendAdapter = new FriendAdapter(context.getContext(), friendList);
         friendView.setLayoutManager(layoutManager);
         friendView.setAdapter(friendAdapter);
 

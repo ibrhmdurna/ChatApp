@@ -1,5 +1,6 @@
 package com.ibrhmdurna.chatapp.database.find;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -18,7 +19,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatFindInfo implements IFind {
 
-    private Context context;
+    private Activity context;
 
     private CircleImageView profileImage;
     private TextView profileText;
@@ -27,13 +28,18 @@ public class ChatFindInfo implements IFind {
 
     private String uid;
 
-    public ChatFindInfo(Context context, CircleImageView profileImage, TextView profileText, TextView nameSurname, TextView lastSeen, String uid) {
+    public ChatFindInfo(Activity context, String uid) {
         this.context = context;
-        this.profileImage = profileImage;
-        this.profileText = profileText;
-        this.nameSurname = nameSurname;
-        this.lastSeen = lastSeen;
         this.uid = uid;
+        buildView();
+    }
+
+    @Override
+    public void buildView() {
+        profileImage = context.findViewById(R.id.chat_profile_image);
+        profileText = context.findViewById(R.id.chat_profile_text);
+        nameSurname = context.findViewById(R.id.chat_name_surname);
+        lastSeen = context.findViewById(R.id.chat_last_seen);
     }
 
     @Override
