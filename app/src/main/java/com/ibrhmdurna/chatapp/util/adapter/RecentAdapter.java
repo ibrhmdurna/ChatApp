@@ -1,7 +1,6 @@
 package com.ibrhmdurna.chatapp.util.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -18,10 +17,10 @@ import com.ibrhmdurna.chatapp.database.Insert;
 import com.ibrhmdurna.chatapp.local.ProfileActivity;
 import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.models.Recent;
-import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -122,7 +121,20 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentView
                 profileText.setVisibility(View.VISIBLE);
             }
             else {
-                UniversalImageLoader.setImage(value, profileImage, null, "");
+                final Picasso picasso = Picasso.get();
+                picasso.setIndicatorsEnabled(true);
+                picasso.load(value).networkPolicy(NetworkPolicy.OFFLINE)
+                        .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        picasso.load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                    }
+                });
                 profileText.setText(null);
                 profileText.setVisibility(View.GONE);
             }

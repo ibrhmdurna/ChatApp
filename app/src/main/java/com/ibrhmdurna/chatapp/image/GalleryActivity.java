@@ -32,6 +32,7 @@ import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -265,5 +266,12 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
     @Override
     public void onBackPressed() {
         onBack();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImageLoader.getInstance().clearMemoryCache();
+        ImageLoader.getInstance().clearDiskCache();
     }
 }

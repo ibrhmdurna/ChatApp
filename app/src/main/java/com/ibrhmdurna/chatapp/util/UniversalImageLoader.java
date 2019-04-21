@@ -15,6 +15,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
 public class UniversalImageLoader {
 
@@ -26,8 +27,8 @@ public class UniversalImageLoader {
 
     public ImageLoaderConfiguration getConfig() {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.default_avatar)
-                .showImageOnFail(R.drawable.default_avatar)
+                .showImageOnLoading(R.color.colorDefaultBackground)
+                .showImageOnFail(R.color.colorDefaultBackground)
                 .cacheOnDisk(true).cacheInMemory(true)
                 .cacheOnDisk(true).resetViewBeforeLoading(true)
                 .imageScaleType(ImageScaleType.EXACTLY)

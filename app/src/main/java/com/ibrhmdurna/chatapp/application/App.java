@@ -35,6 +35,9 @@ public class App extends Application {
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(this);
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
 
+        ImageLoader.getInstance().clearMemoryCache();
+        ImageLoader.getInstance().clearDiskCache();
+
         Picasso.Builder builder = new Picasso.Builder(this);
         builder.downloader(new OkHttp3Downloader(this, Integer.MAX_VALUE));
         Picasso built = builder.build();

@@ -136,7 +136,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 final Picasso picasso = Picasso.get();
                 picasso.setIndicatorsEnabled(true);
                 picasso.load(value).networkPolicy(NetworkPolicy.OFFLINE)
-                        .placeholder(R.color.colorDefaultBackground).into(profileImage, new Callback() {
+                        .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
                     @Override
                     public void onSuccess() {
 
@@ -144,7 +144,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
                     @Override
                     public void onError(Exception e) {
-                        picasso.load(value).placeholder(R.color.colorDefaultBackground).into(profileImage);
+                        picasso.load(value).placeholder(R.drawable.default_avatar).into(profileImage);
                     }
                 });
                 profileText.setText(null);

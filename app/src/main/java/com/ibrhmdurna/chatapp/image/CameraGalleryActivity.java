@@ -15,6 +15,7 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.util.adapter.AlbumAdapter;
 import com.ibrhmdurna.chatapp.util.Environment;
 import com.ibrhmdurna.chatapp.util.controller.FileController;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -82,5 +83,12 @@ public class CameraGalleryActivity extends AppCompatActivity implements ViewComp
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onBackPressed();
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImageLoader.getInstance().clearMemoryCache();
+        ImageLoader.getInstance().clearDiskCache();
     }
 }

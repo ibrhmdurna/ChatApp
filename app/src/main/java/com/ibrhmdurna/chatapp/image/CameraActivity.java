@@ -244,6 +244,11 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     public void toolsManagement(){
         buildView();
         cameraProcess();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         galleryProcess();
     }
 

@@ -65,8 +65,7 @@
                         android:layout_width="120dp"
                         android:layout_height="120dp"
                         app:civ_border_color="?attr/searchColor"
-                        app:civ_border_width="1dp"
-                        android:src="?attr/searchColor"/>
+                        app:civ_border_width="1dp"/>
                 </RelativeLayout>
 
                 <TextView

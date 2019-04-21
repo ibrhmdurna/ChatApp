@@ -18,7 +18,9 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.databinding.FragmentAccountBinding;
 import com.ibrhmdurna.chatapp.models.Account;
-import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -56,7 +58,7 @@ public class AccountFindInfo implements IFind {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Account account = dataSnapshot.getValue(Account.class);
+                    final Account account = dataSnapshot.getValue(Account.class);
 
                     String image = account.getProfile_image();
 
@@ -69,7 +71,20 @@ public class AccountFindInfo implements IFind {
                         profileText.setVisibility(View.VISIBLE);
                     }
                     else {
-                        UniversalImageLoader.setImage(account.getProfile_image(), profileImage, null, "");
+                        final Picasso picasso = Picasso.get();
+                        picasso.setIndicatorsEnabled(true);
+                        picasso.load(account.getProfile_image()).networkPolicy(NetworkPolicy.OFFLINE)
+                                .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                picasso.load(account.getProfile_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+                            }
+                        });
                         profileText.setText(null);
                         profileText.setVisibility(View.GONE);
                     }

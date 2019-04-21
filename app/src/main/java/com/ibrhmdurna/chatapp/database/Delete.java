@@ -20,6 +20,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.ibrhmdurna.chatapp.main.MainActivity;
+import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.start.StartActivity;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
@@ -83,76 +84,82 @@ public class Delete {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(context, "Successful", Toast.LENGTH_SHORT).show();
-
                     final String uid = FirebaseAuth.getInstance().getUid();
 
-                    // Profile Image Deleted
-                    FirebaseStorage.getInstance().getReference().child("Accounts").child(uid).delete();
-
-                    // Friends Deleted
-                    FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if(dataSnapshot.exists()){
-                                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                                    String friend_id = snapshot.getKey();
-                                    FirebaseDatabase.getInstance().getReference().child("Friends").child(friend_id).child(uid).removeValue();
+
+                                Account account = dataSnapshot.getValue(Account.class);
+
+                                String profile_image = account.getProfile_image();
+
+                                if(!profile_image.substring(0,8).equals("default_")){
+                                    // Profile Image Deleted
+                                    FirebaseStorage.getInstance().getReferenceFromUrl(account.getProfile_image()).delete();
+                                    FirebaseStorage.getInstance().getReferenceFromUrl(account.getThumb_image()).delete();
                                 }
 
-                                dataSnapshot.getRef().removeValue();
-                            }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
-                    // Recent Deleted
-                    FirebaseDatabase.getInstance().getReference().child("Recent").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()){
-                                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                                    snapshot.getRef().addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            if(dataSnapshot.exists()){
-                                                for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
-                                                    String recent_uid = snapshot1.getKey();
-                                                    if(recent_uid.equals(uid)){
-                                                        snapshot1.getRef().removeValue();
-                                                        break;
-                                                    }
-                                                }
+                                // Friends Deleted
+                                FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.exists()){
+                                            for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                                                String friend_id = snapshot.getKey();
+                                                FirebaseDatabase.getInstance().getReference().child("Friends").child(friend_id).child(uid).removeValue();
                                             }
+
+                                            dataSnapshot.getRef().removeValue();
                                         }
+                                    }
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                                    }
+                                });
+
+                                // Recent Deleted
+                                FirebaseDatabase.getInstance().getReference().child("Recent").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.exists()){
+                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                                                snapshot.getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if(dataSnapshot.exists()){
+                                                            for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
+                                                                String recent_uid = snapshot1.getKey();
+                                                                if(recent_uid.equals(uid)){
+                                                                    snapshot1.getRef().removeValue();
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                            }
+
+                                            dataSnapshot.getRef().child(uid).removeValue();
                                         }
-                                    });
-                                }
+                                    }
 
-                                dataSnapshot.getRef().child(uid).removeValue();
-                            }
-                        }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    }
+                                });
 
-                        }
-                    });
-
-                    // Account Deleted
-                    FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                currentUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                dataSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful()){
@@ -168,11 +175,17 @@ public class Delete {
                                         }
                                     }
                                 });
+
                             }
-                            else {
+                            else{
                                 Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
                             }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
                         }
                     });
 
