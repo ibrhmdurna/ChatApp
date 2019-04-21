@@ -1,17 +1,13 @@
 package com.ibrhmdurna.chatapp.database.findAll;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -57,39 +53,53 @@ public class OnlineFindAll implements IFind {
 
         String uid = FirebaseAuth.getInstance().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                friendList.clear();
                 if(dataSnapshot.exists()){
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                         final String friend_id = snapshot.getKey();
 
                         final Friend friend = snapshot.getValue(Friend.class);
 
-                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(friend_id).addValueEventListener(new ValueEventListener() {
+                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(friend_id).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                friendList.clear();
                                 if(dataSnapshot.exists()){
-                                    Account account = dataSnapshot.getValue(Account.class);
+                                    final Account account = dataSnapshot.getValue(Account.class);
                                     account.setUid(friend_id);
                                     friend.setAccount(account);
 
-                                    if(friend.getAccount().isOnline()){
-                                        friendList.add(friend);
-                                    }
-                                    else {
-                                        friendList.remove(friend);
-                                    }
+                                    dataSnapshot.child("online").getRef().addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if(dataSnapshot.exists()){
+                                                account.setOnline((boolean) dataSnapshot.getValue());
 
-                                    if(friendList.size() > 0){
-                                        onlineLayout.setVisibility(View.VISIBLE);
-                                    }
-                                    else {
-                                        onlineLayout.setVisibility(View.GONE);
-                                    }
+                                                if(account.isOnline()){
+                                                    friendList.add(friend);
+                                                }
+                                                else{
+                                                    friendList.remove(friend);
+                                                }
 
-                                    friendAdapter.notifyDataSetChanged();
+                                                if(friendList.size() > 0){
+                                                    onlineLayout.setVisibility(View.VISIBLE);
+                                                }
+                                                else {
+                                                    onlineLayout.setVisibility(View.GONE);
+                                                }
+
+                                                friendAdapter.notifyDataSetChanged();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
                                 }
                             }
 

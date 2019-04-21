@@ -105,8 +105,10 @@
                                     android:src="@drawable/ic_password_icon" />
 
                                 <android.support.design.widget.TextInputLayout
+                                    android:id="@+id/password_input"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginStart="20dp"
                                     app:errorEnabled="true"
                                     app:hintEnabled="false"
                                     app:passwordToggleEnabled="true">
@@ -114,7 +116,6 @@
                                     <android.support.design.widget.TextInputEditText
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginStart="20dp"
                                         android:backgroundTint="@color/colorGray"
                                         android:hint="Current Password"
                                         android:inputType="textPassword" />
@@ -136,6 +137,7 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="25dp"
                             android:enabled="false"
+                            android:onClick="onClick"
                             android:text="Delete Account"
                             android:textColor="@color/selector_button_text_color" />
                     </LinearLayout>

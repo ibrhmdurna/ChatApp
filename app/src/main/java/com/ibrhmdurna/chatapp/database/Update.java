@@ -61,7 +61,7 @@ public class Update{
 
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "This may take some time.\nPlease keep waiting... ");
+        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "This may take some time.\nPlease wait... ");
         loadingBar.show();
 
         final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -191,7 +191,7 @@ public class Update{
 
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "Please keep waiting...");
+        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "Please wait...");
         loadingBar.show();
 
         final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -287,7 +287,7 @@ public class Update{
 
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "Please keep waiting...");
+        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "Please wait...");
         loadingBar.show();
 
         newEmailInput.setError(null);

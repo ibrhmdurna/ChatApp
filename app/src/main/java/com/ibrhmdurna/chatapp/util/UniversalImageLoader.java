@@ -26,8 +26,8 @@ public class UniversalImageLoader {
 
     public ImageLoaderConfiguration getConfig() {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.color.colorDefaultBackground)
-                .showImageOnFail(R.color.colorDefaultBackground)
+                .showImageOnLoading(R.drawable.default_avatar)
+                .showImageOnFail(R.drawable.default_avatar)
                 .cacheOnDisk(true).cacheInMemory(true)
                 .cacheOnDisk(true).resetViewBeforeLoading(true)
                 .imageScaleType(ImageScaleType.EXACTLY)

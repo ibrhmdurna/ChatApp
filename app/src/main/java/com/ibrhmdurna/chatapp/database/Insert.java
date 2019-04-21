@@ -55,7 +55,7 @@ public class Insert {
 
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "Creating an account may take some time.\nPlease keep waiting... ");
+        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "Creating an account may take some time.\nPlease wait... ");
         loadingBar.show();
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(account.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -113,6 +113,7 @@ public class Insert {
                                                                             loadingBar.dismiss();
                                                                             Intent mainIntent = new Intent(context, MainActivity.class);
                                                                             mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                                            mainIntent.putExtra("page", "Main");
                                                                             context.startActivity(mainIntent);
                                                                             context.finish();
                                                                         }

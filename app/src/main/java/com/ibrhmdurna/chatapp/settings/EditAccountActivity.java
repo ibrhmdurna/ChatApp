@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 import com.ibrhmdurna.chatapp.R;
@@ -181,15 +183,21 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
 
     private void profileImageProcess(){
 
-        byte[] bytes = ImageController.getInstance().getProfileImageBytes();
+        final byte[] bytes = ImageController.getInstance().getProfileImageBytes();
 
         if(bytes != null){
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            profileImage.setImageBitmap(bitmap);
-            profileText.setText(null);
-            profileText.setVisibility(View.GONE);
-            profileImage.setSaveEnabled(true);
-            checkInput();
+            Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    profileImage.setImageBitmap(bitmap);
+                    profileText.setText(null);
+                    profileText.setVisibility(View.GONE);
+                    profileImage.setSaveEnabled(true);
+                    checkInput();
+                }
+            },10);
         }
     }
 

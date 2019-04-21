@@ -1,7 +1,27 @@
 package com.ibrhmdurna.chatapp.database;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.ibrhmdurna.chatapp.main.MainActivity;
+import com.ibrhmdurna.chatapp.start.StartActivity;
+import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
 public class Delete {
 
@@ -47,5 +67,122 @@ public class Delete {
         String uid = FirebaseAuth.getInstance().getUid();
 
         FirebaseDatabase.getInstance().getReference().child("Recent").child(uid).removeValue();
+    }
+
+    public void deleteAccount(final Activity context, final TextInputLayout passwordInput){
+
+        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "Deleting account. Please wait...");
+        loadingBar.show();
+
+        final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), passwordInput.getEditText().getText().toString());
+
+        passwordInput.setError(null);
+
+        currentUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(context, "Successful", Toast.LENGTH_SHORT).show();
+
+                    final String uid = FirebaseAuth.getInstance().getUid();
+
+                    // Profile Image Deleted
+                    FirebaseStorage.getInstance().getReference().child("Accounts").child(uid).delete();
+
+                    // Friends Deleted
+                    FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                                    String friend_id = snapshot.getKey();
+                                    FirebaseDatabase.getInstance().getReference().child("Friends").child(friend_id).child(uid).removeValue();
+                                }
+
+                                dataSnapshot.getRef().removeValue();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    // Recent Deleted
+                    FirebaseDatabase.getInstance().getReference().child("Recent").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                                    snapshot.getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if(dataSnapshot.exists()){
+                                                for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
+                                                    String recent_uid = snapshot1.getKey();
+                                                    if(recent_uid.equals(uid)){
+                                                        snapshot1.getRef().removeValue();
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                }
+
+                                dataSnapshot.getRef().child(uid).removeValue();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    // Account Deleted
+                    FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                currentUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            loadingBar.dismiss();
+
+                                            Intent startIntent = new Intent(context, StartActivity.class);
+                                            context.startActivity(startIntent);
+                                            context.finish();
+                                        }
+                                        else{
+                                            Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                                            loadingBar.dismiss();
+                                        }
+                                    }
+                                });
+                            }
+                            else {
+                                Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                                loadingBar.dismiss();
+                            }
+                        }
+                    });
+
+
+                }
+                else{
+                    passwordInput.setError("Password is incorrect.");
+                    loadingBar.dismiss();
+                }
+            }
+        });
     }
 }

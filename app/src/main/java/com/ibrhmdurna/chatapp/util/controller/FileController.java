@@ -305,7 +305,7 @@ public class FileController {
         private AlertDialog loading;
         private boolean isRegister;
 
-        public PhotoCompressAsyncTask(Activity context, boolean isRegister){
+        private PhotoCompressAsyncTask(Activity context, boolean isRegister){
             this.context = context;
             this.isRegister = isRegister;
         }

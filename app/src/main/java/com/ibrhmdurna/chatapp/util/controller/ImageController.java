@@ -17,11 +17,9 @@ public class ImageController {
     public ImageController() {
     }
 
-    public static synchronized ImageController getInstance(){
+    public static ImageController getInstance(){
         if(instance == null){
-            synchronized (ImageController.class){
-                instance = new ImageController();
-            }
+            instance = new ImageController();
         }
         return instance;
     }
