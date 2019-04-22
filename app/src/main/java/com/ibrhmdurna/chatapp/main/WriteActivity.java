@@ -25,7 +25,7 @@ import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.util.Environment;
-import com.ibrhmdurna.chatapp.util.adapter.MessagesAdapter;
+import com.ibrhmdurna.chatapp.util.adapter.MessageAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,29 +46,6 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
         setContentView(R.layout.activity_write);
 
         toolsManagement();
-
-        List<String> list = new ArrayList<>();
-
-        /*
-        for(int i = 0; i < 20; i++){
-            list.add("Write " + i);
-        }*/
-
-        RecyclerView recyclerView = findViewById(R.id.write_container);
-        MessagesAdapter adapter = new MessagesAdapter(list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapter);
-
-        if(list.size() == 0){
-            noWriteView.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-        }
-        else {
-            noWriteView.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
     }
 
     private void inputProcess(){

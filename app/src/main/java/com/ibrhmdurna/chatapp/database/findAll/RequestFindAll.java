@@ -46,7 +46,7 @@ public class RequestFindAll implements IFind {
     }
 
     @Override
-    public void getInformation() {
+    public void getContent() {
         requestList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(context.getContext());
         requestAdapter = new RequestAdapter(context.getContext(), requestList);

@@ -10,5 +10,5 @@ public abstract class AbstractFindAll {
 
     public abstract void buildView();
 
-    public abstract void getInformation();
+    public abstract void getContent();
 }

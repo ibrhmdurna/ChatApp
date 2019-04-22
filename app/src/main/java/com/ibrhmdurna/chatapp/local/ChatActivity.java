@@ -7,6 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -16,14 +19,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
 import com.ibrhmdurna.chatapp.database.bridge.Find;
+import com.ibrhmdurna.chatapp.database.bridge.FindAll;
 import com.ibrhmdurna.chatapp.database.find.ChatFindInfo;
+import com.ibrhmdurna.chatapp.database.findAll.MessageFindAll;
+import com.ibrhmdurna.chatapp.database.message.Text;
+import com.ibrhmdurna.chatapp.database.strategy.SendMessage;
 import com.ibrhmdurna.chatapp.image.CameraActivity;
 import com.ibrhmdurna.chatapp.image.GalleryActivity;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.util.Environment;
 import com.ibrhmdurna.chatapp.util.dialog.GalleryBottomSheetDialog;
 import com.vanniktech.emoji.EmojiEditText;
@@ -41,6 +51,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     private EmojiEditText messageInput;
     private ImageButton emojiBtn;
     private ImageView backgroundView;
+    private ImageButton sendBtn;
 
     private String uid;
 
@@ -55,9 +66,22 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         toolsManagement();
     }
 
-    private void getInformation(){
+    private void loadMessage(){
+        AbstractFindAll findAll = new FindAll(new MessageFindAll(this, uid));
+        findAll.getContent();
+    }
+
+    private void sendMessage(){
+        SendMessage message = new SendMessage(new Text());
+        message.setChatUid(uid);
+        message.setMessage(new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "", "Text", null, false, false, false));
+        message.Send();
+        messageInput.getText().clear();
+    }
+
+    private void getContent(){
         AbstractFind find = new Find(new ChatFindInfo(this, uid));
-        find.getInformation();
+        find.getContent();
     }
 
     private void backgroundProcess(){
@@ -76,10 +100,36 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         }
     }
 
+    private void inputProcess(){
+
+        sendBtn.setEnabled(false);
+
+        messageInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(messageInput.getText().toString().trim().length() > 0)
+                    sendBtn.setEnabled(true);
+                else
+                    sendBtn.setEnabled(false);
+            }
+        });
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        getInformation();
+        getContent();
+        loadMessage();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -108,6 +158,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         emojiBtn = findViewById(R.id.chat_emoji_btn);
         messageInput = findViewById(R.id.message_input);
         backgroundView = findViewById(R.id.chat_background_view);
+        sendBtn = findViewById(R.id.send_btn);
     }
 
     @Override
@@ -116,6 +167,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         buildView();
         emojiProcess();
         backgroundProcess();
+        inputProcess();
     }
 
     @Override
@@ -143,6 +195,9 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
                 Intent profileIntent = new Intent(this, ProfileActivity.class);
                 profileIntent.putExtra("user_id", uid);
                 startActivity(profileIntent);
+                break;
+            case R.id.send_btn:
+                sendMessage();
                 break;
         }
     }

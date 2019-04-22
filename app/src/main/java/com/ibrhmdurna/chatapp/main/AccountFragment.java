@@ -52,7 +52,7 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
 
     private void getAccountInformation(){
         AbstractFind find = new Find(new AccountFindInfo(binding));
-        find.getInformation();
+        find.getContent();
     }
 
     private void clickProcess(){

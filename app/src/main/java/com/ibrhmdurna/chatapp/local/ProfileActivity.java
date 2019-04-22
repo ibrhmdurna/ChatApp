@@ -57,7 +57,7 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
         uid = getIntent().getStringExtra("user_id");
 
         AbstractFind find = new Find(new ProfileFindInfo(binding, uid));
-        find.getInformation();
+        find.getContent();
     }
 
     @Override

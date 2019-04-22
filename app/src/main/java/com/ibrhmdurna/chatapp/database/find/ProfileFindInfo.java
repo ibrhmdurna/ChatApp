@@ -62,7 +62,7 @@ public class ProfileFindInfo implements IFind {
     }
 
     @Override
-    public void getInformation() {
+    public void getContent() {
         final String current_uid = FirebaseAuth.getInstance().getUid();
 
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();

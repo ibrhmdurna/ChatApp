@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.util.adapter.MessagesAdapter;
+import com.ibrhmdurna.chatapp.util.adapter.MessageAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +26,6 @@ public class MessagesFragment extends Fragment implements ViewComponentFactory {
 
     private View view;
 
-    private List<String> list;
-    private MessagesAdapter messagesAdapter;
-    private RecyclerView recyclerView;
-
-    private TextView notFoundView;
-
     public MessagesFragment() {
         // Required empty public constructor
     }
@@ -42,32 +36,7 @@ public class MessagesFragment extends Fragment implements ViewComponentFactory {
         App.Theme.getInstance().getTheme(getContext());
         view = inflater.inflate(R.layout.fragment_messages, container, false);
 
-        list = new ArrayList<>();
-        messagesAdapter = new MessagesAdapter(list);
-        recyclerView = view.findViewById(R.id.messagesContainer);
-        notFoundView = getActivity().findViewById(R.id.messages_not_found_view);
 
-        /*
-        for (int i = 0; i < 20; i++){
-            list.add("Messages " + i);
-        }
-        */
-
-        if(list.size() == 0){
-            recyclerView.setVisibility(View.GONE);
-            notFoundView.setVisibility(View.VISIBLE);
-            notFoundView.setText("No Messages");
-        }
-        else {
-            recyclerView.setVisibility(View.VISIBLE);
-            notFoundView.setVisibility(View.GONE);
-        }
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(messagesAdapter);
-
-        messagesAdapter.notifyDataSetChanged();
 
         return view;
     }

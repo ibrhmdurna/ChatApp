@@ -12,7 +12,7 @@ public class Find extends AbstractFind {
     }
 
     @Override
-    public void getInformation() {
-        IFind.getInformation();
+    public void getContent() {
+        IFind.getContent();
     }
 }

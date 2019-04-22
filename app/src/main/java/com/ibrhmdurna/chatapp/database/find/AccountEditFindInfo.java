@@ -38,7 +38,7 @@ public class AccountEditFindInfo implements IFind {
     }
 
     @Override
-    public void getInformation() {
+    public void getContent() {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         //DatabaseReference database = FirebaseDB.getInstance().getDatabase().child("Accounts");

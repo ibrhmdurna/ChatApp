@@ -49,7 +49,7 @@ public class RecentFindAll implements IFind {
     }
 
     @Override
-    public void getInformation() {
+    public void getContent() {
         recentList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         recentAdapter = new RecentAdapter(context, recentList);

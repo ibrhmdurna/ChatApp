@@ -44,7 +44,7 @@ public class OnlineFindAll implements IFind {
     }
 
     @Override
-    public void getInformation() {
+    public void getContent() {
         friendList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(context.getContext());
         friendAdapter = new FriendAdapter(context.getContext(), friendList);

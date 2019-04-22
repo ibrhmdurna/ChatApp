@@ -13,7 +13,7 @@ public class ChatFindAll implements IFind {
     }
 
     @Override
-    public void getInformation() {
+    public void getContent() {
         Log.e("------", "Chat List");
     }
 }

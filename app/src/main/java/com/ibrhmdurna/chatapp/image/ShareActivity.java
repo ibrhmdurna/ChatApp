@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
+import com.ibrhmdurna.chatapp.database.message.Image;
+import com.ibrhmdurna.chatapp.database.strategy.SendMessage;
 import com.ibrhmdurna.chatapp.local.ChatActivity;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.util.controller.FileController;
@@ -47,6 +49,11 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
         setContentView(R.layout.activity_share);
 
         toolsManagement();
+    }
+
+    private void sendMessage(){
+        SendMessage message = new SendMessage(new Image());
+        message.Send();
     }
 
     private void shareProcess(){
@@ -192,7 +199,8 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
                 imageRotate();
                 break;
             case R.id.share_button:
-                shareProcess();
+                //shareProcess();
+                sendMessage();
                 break;
             case R.id.image_edit_item_view:
                 Intent editIntent = new Intent(getApplicationContext(), CropActivity.class);

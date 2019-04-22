@@ -58,7 +58,7 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
 
     private void recentProcess(){
         AbstractFindAll recentFindAll = new FindAll(new RecentFindAll(this));
-        recentFindAll.getInformation();
+        recentFindAll.getContent();
     }
 
     private void searchProcess(){

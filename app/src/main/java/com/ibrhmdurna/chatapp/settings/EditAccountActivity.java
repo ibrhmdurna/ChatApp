@@ -197,7 +197,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
                     profileImage.setSaveEnabled(true);
                     checkInput();
                 }
-            },10);
+            },100);
         }
     }
 
@@ -271,7 +271,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
 
     private void getAccountInformation(){
         AbstractFind findAccount = new Find(new AccountEditFindInfo(binding));
-        findAccount.getInformation();
+        findAccount.getContent();
     }
 
     private void watcherProcess(){

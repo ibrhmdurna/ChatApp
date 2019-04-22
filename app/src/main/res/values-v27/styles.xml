@@ -11,6 +11,7 @@
         <item name="primaryTextColor">@android:color/black</item>
         <item name="backgroundBrushColor">@color/colorPrimaryDark</item>
         <item name="backgroundCardColor">@android:color/white</item>
+        <item name="messageBackgroundColor">@color/colorMessageBackground</item>
         <item name="buttonControlColor">@color/colorGray</item>
         <item name="lineColor">@color/colorLightGray</item>
         <item name="rippleColor">@color/colorGray</item>
@@ -30,6 +31,7 @@
         <item name="primaryTextColor">@android:color/white</item>
         <item name="backgroundBrushColor">@color/colorBackground</item>
         <item name="backgroundCardColor">@color/colorLightBlack</item>
+        <item name="messageBackgroundColor">@color/colorLightBlack</item>
         <item name="buttonControlColor">@color/colorLightBlack</item>
         <item name="lineColor">@color/colorDarkGray</item>
         <item name="rippleColor">@color/colorDarkGray</item>
