@@ -1,8 +1,13 @@
 package com.ibrhmdurna.chatapp.database.find;
 
 import android.app.Activity;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -12,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.models.Account;
+import com.ibrhmdurna.chatapp.util.GetTimeAgo;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -82,6 +88,26 @@ public class ChatFindInfo implements IFind {
                     }
 
                     nameSurname.setText(account.getNameSurname());
+
+                    if(account.isOnline()){
+                        lastSeen.setText("online");
+                    }
+                    else{
+                        Handler h = new Handler();
+                        h.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(account.getLastSeen() != null){
+                                    String lastSeenTime = GetTimeAgo.getInstance().getLastSeenAgo(account.getLastSeen());
+                                    lastSeen.setText(lastSeenTime);
+                                }
+                                else{
+                                    lastSeen.setVisibility(View.GONE);
+                                }
+
+                            }
+                        }, 1500);
+                    }
                 }
             }
 

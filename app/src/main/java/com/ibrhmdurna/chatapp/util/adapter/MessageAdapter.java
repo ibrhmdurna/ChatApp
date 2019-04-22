@@ -147,13 +147,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 else{
                     timeText.setVisibility(View.VISIBLE);
-                    String time = GetTimeAgo.getInstance().getMessageAgo(context, message.getTime());
+                    String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
                     timeText.setText(time);
                 }
             }
             else{
                 timeText.setVisibility(View.VISIBLE);
-                String time = GetTimeAgo.getInstance().getMessageAgo(context, message.getTime());
+                String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
                 timeText.setText(time);
             }
 
@@ -243,13 +243,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 else{
                     timeText.setVisibility(View.VISIBLE);
-                    String time = GetTimeAgo.getInstance().getMessageAgo(context, message.getTime());
+                    String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
                     timeText.setText(time);
                 }
             }
             else{
                 timeText.setVisibility(View.VISIBLE);
-                String time = GetTimeAgo.getInstance().getMessageAgo(context, message.getTime());
+                String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
                 timeText.setText(time);
             }
 
