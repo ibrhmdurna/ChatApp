@@ -410,10 +410,10 @@ public class Update{
         String uid = FirebaseAuth.getInstance().getUid();
 
         if(listener){
-            FirebaseDatabase.getInstance().getReference().child("Messages").child(chatUid).child(uid).addValueEventListener(messageEventListener);
+            FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).addValueEventListener(messageEventListener);
         }
         else{
-            FirebaseDatabase.getInstance().getReference().child("Messages").child(chatUid).child(uid).removeEventListener(messageEventListener);
+            FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).removeEventListener(messageEventListener);
         }
     }
 
@@ -421,10 +421,10 @@ public class Update{
         String uid = FirebaseAuth.getInstance().getUid();
 
         if(listener){
-            FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).addValueEventListener(chatEventListener);
+            FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).addValueEventListener(chatEventListener);
         }
         else{
-            FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).removeEventListener(chatEventListener);
+            FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).removeEventListener(chatEventListener);
         }
     }
 

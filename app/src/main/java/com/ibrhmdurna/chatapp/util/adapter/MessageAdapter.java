@@ -98,7 +98,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         Message message = messageList.get(position);
 
-        if(message.getType().equals("Text")){
+        if(message != null && message.getType().equals("Text")){
             if(message.getFrom().equals(uid))
                 return 0;
             else
@@ -224,16 +224,16 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if(message.isReceive()){
                     sendIcon.setVisibility(View.GONE);
                     if(position == messageList.size() - 1){
-                        FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).child("seen").addValueEventListener(seenEventListener);
+                        FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").addValueEventListener(seenEventListener);
                     }
                     else{
-                        FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).child("seen").removeEventListener(seenEventListener);
+                        FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
                         seenLayout.setVisibility(View.GONE);
                     }
                 }
             }
             else{
-                FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).child("seen").removeEventListener(seenEventListener);
+                FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
                 seenLayout.setVisibility(View.GONE);
             }
 

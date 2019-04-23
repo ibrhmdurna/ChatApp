@@ -102,7 +102,7 @@ public class FriendFindAll implements IFind {
                                                     friendLayout.setVisibility(View.GONE);
                                                 }
 
-                                                friendAdapter.notifyDataSetChanged();
+                                                sortArrayList();
                                             }
                                         }
 
@@ -140,15 +140,6 @@ public class FriendFindAll implements IFind {
     @Override
     public void getMore() {
 
-    }
-
-    private int findPosition(long time){
-        for(int i = 0; i < friendList.size(); i++){
-            if(friendList.get(i).getTime() == time){
-                return i;
-            }
-        }
-        return -1;
     }
 
     private void sortArrayList(){

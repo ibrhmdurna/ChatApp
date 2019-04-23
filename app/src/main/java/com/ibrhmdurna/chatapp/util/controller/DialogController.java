@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Delete;
+import com.ibrhmdurna.chatapp.local.ProfileActivity;
+import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.models.Message;
 
 public class DialogController {
@@ -126,6 +130,49 @@ public class DialogController {
                 ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("Copied Text", message.getMessage());
                 clipboard.setPrimaryClip(clip);
+            }
+        });
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCanceledOnTouchOutside(true);
+
+        return dialog;
+    }
+
+    public AlertDialog dialogChat(final Fragment context, final String chatUid){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context.getContext());
+        View view = context.getLayoutInflater().inflate(R.layout.dialog_chat, null);
+        App.Theme.getInstance().getTheme(view.getContext());
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+
+        LinearLayout viewItem = view.findViewById(R.id.view_item);
+        viewItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent profileIntent = new Intent(context.getActivity(), ProfileActivity.class);
+                profileIntent.putExtra("user_id", chatUid);
+                context.startActivity(profileIntent);
+            }
+        });
+
+        LinearLayout clearItem = view.findViewById(R.id.clear_item);
+        clearItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Delete.getInstance().clearChat(chatUid);
+            }
+        });
+
+        LinearLayout deleteItem = view.findViewById(R.id.delete_item);
+        deleteItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Delete.getInstance().deleteChat(chatUid);
             }
         });
 

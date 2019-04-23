@@ -13,6 +13,9 @@ import android.widget.TextView;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
+import com.ibrhmdurna.chatapp.database.bridge.FindAll;
+import com.ibrhmdurna.chatapp.database.findAll.ChatFindAll;
 import com.ibrhmdurna.chatapp.util.adapter.MessageAdapter;
 
 import java.util.ArrayList;
@@ -36,9 +39,20 @@ public class MessagesFragment extends Fragment implements ViewComponentFactory {
         App.Theme.getInstance().getTheme(getContext());
         view = inflater.inflate(R.layout.fragment_messages, container, false);
 
-
+        toolsManagement();
 
         return view;
+    }
+
+    private void getChats(){
+        AbstractFindAll findAll = new FindAll(new ChatFindAll(this));
+        findAll.getContent();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getChats();
     }
 
     @Override

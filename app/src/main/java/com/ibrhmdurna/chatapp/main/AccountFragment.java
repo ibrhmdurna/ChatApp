@@ -87,7 +87,6 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
                 break;
             case R.id.account_friends_button:
                 Intent friends = new Intent(getActivity(), FriendsActivity.class);
-                friends.putExtra("isAccount", true);
                 startActivity(friends);
                 break;
         }

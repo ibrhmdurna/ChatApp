@@ -1,5 +1,6 @@
 package com.ibrhmdurna.chatapp.database.find;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -32,6 +33,9 @@ public class AccountFindInfo implements IFind {
     private CircleImageView profileImage;
     private TextView profileText;
     private LinearLayout phoneLayout;
+    private TextView friendCount;
+
+    private String uid;
 
     public AccountFindInfo(FragmentAccountBinding binding) {
         this.binding = binding;
@@ -45,11 +49,12 @@ public class AccountFindInfo implements IFind {
         profileImage = binding.getRoot().findViewById(R.id.profileImage);
         profileText = binding.getRoot().findViewById(R.id.profileImageText);
         phoneLayout = binding.getRoot().findViewById(R.id.account_phone_layout);
+        friendCount = binding.getRoot().findViewById(R.id.accountFriendText);
     }
 
     @Override
     public void getContent() {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Accounts");
         database.keepSynced(true);
@@ -95,9 +100,8 @@ public class AccountFindInfo implements IFind {
                     phoneLayout.setVisibility(account.getPhone().trim().length() > 0 ? View.VISIBLE : View.GONE);
 
                     binding.setAccount(account);
-                    rootView.setVisibility(View.VISIBLE);
-                    loadingBar.setIndeterminate(false);
-                    loadingBar.setVisibility(View.GONE);
+
+                    getMore();
                 }
                 else {
                     Toast.makeText(binding.getRoot().getContext(), "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
@@ -119,7 +123,28 @@ public class AccountFindInfo implements IFind {
 
     @Override
     public void getMore() {
-        // NOTHING...
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    friendCount.setText(dataSnapshot.getChildrenCount() + " Friends");
+                    rootView.setVisibility(View.VISIBLE);
+                    loadingBar.setIndeterminate(false);
+                    loadingBar.setVisibility(View.GONE);
+                }
+                else{
+                    rootView.setVisibility(View.VISIBLE);
+                    loadingBar.setIndeterminate(false);
+                    loadingBar.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void setProfileImage(int index, CircleImageView profileImage) {

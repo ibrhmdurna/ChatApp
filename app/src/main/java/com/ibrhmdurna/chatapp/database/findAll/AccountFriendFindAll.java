@@ -1,11 +1,15 @@
 package com.ibrhmdurna.chatapp.database.findAll;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -23,31 +27,33 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class OnlineFindAll implements IFind {
+public class AccountFriendFindAll implements IFind {
 
-    private Fragment context;
+    private Activity context;
 
     private List<Friend> friendList;
     private FriendAdapter friendAdapter;
     private RecyclerView friendView;
-    private LinearLayout onlineLayout;
+    private NestedScrollView notFoundView;
+    private EditText searchInput;
 
-    public OnlineFindAll(Fragment context) {
+    public AccountFriendFindAll(Activity context){
         this.context = context;
         buildView();
     }
 
     @Override
     public void buildView() {
-        friendView = context.getView().findViewById(R.id.online_container);
-        onlineLayout = context.getView().findViewById(R.id.online_layout);
+        friendView = context.findViewById(R.id.friends_container);
+        notFoundView = context.findViewById(R.id.no_friends_view);
+        searchInput = context.findViewById(R.id.friends_search_input);
     }
 
     @Override
     public void getContent() {
         friendList = new ArrayList<>();
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context.getContext());
-        friendAdapter = new FriendAdapter(context.getContext(), friendList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        friendAdapter = new FriendAdapter(context, friendList);
         friendView.setLayoutManager(layoutManager);
         friendView.setAdapter(friendAdapter);
 
@@ -56,8 +62,13 @@ public class OnlineFindAll implements IFind {
         FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                friendList.clear();
                 if(dataSnapshot.exists()){
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    friendView.setVisibility(View.VISIBLE);
+                    notFoundView.setVisibility(View.GONE);
+
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+
                         final String friend_id = snapshot.getKey();
 
                         final Friend friend = snapshot.getValue(Friend.class);
@@ -65,41 +76,13 @@ public class OnlineFindAll implements IFind {
                         FirebaseDatabase.getInstance().getReference().child("Accounts").child(friend_id).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                friendList.clear();
                                 if(dataSnapshot.exists()){
                                     final Account account = dataSnapshot.getValue(Account.class);
-                                    account.setUid(friend_id);
+                                    account.setUid(dataSnapshot.getKey());
                                     friend.setAccount(account);
+                                    friendList.add(friend);
 
-                                    dataSnapshot.child("online").getRef().addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            if(dataSnapshot.exists()){
-                                                account.setOnline((boolean) dataSnapshot.getValue());
-
-                                                if(account.isOnline()){
-                                                    friendList.add(friend);
-                                                }
-                                                else{
-                                                    friendList.remove(friend);
-                                                }
-
-                                                if(friendList.size() > 0){
-                                                    onlineLayout.setVisibility(View.VISIBLE);
-                                                }
-                                                else {
-                                                    onlineLayout.setVisibility(View.GONE);
-                                                }
-
-                                                sortArrayList();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                        }
-                                    });
+                                    sortArrayList();
                                 }
                             }
 
@@ -109,6 +92,12 @@ public class OnlineFindAll implements IFind {
                             }
                         });
                     }
+
+                    getMore();
+                }
+                else{
+                    friendView.setVisibility(View.GONE);
+                    notFoundView.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -121,7 +110,43 @@ public class OnlineFindAll implements IFind {
 
     @Override
     public void getMore() {
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filter(s.toString());
+            }
+        });
+    }
+
+    private void filter(String text){
+        List<Friend> filterList = new ArrayList<>();
+
+        for(Friend friend : friendList){
+            if(friend.getAccount().getNameSurname().toLowerCase().contains(text.toLowerCase())){
+                filterList.add(friend);
+            }
+        }
+
+        if(filterList.size() > 0){
+            friendView.setVisibility(View.VISIBLE);
+            notFoundView.setVisibility(View.GONE);
+        }
+        else{
+            friendView.setVisibility(View.GONE);
+            notFoundView.setVisibility(View.VISIBLE);
+        }
+
+        friendAdapter.filterList(filterList);
     }
 
     private void sortArrayList(){

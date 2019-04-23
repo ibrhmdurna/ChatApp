@@ -110,7 +110,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
-            android:background="@drawable/rounded_background">
+            android:background="@drawable/rounded_background"
+            android:visibility="gone">
         </android.support.v7.widget.RecyclerView>
 
         <android.support.v4.widget.NestedScrollView

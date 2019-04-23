@@ -214,4 +214,17 @@ public class Delete {
         String uid = FirebaseAuth.getInstance().getUid();
         FirebaseDatabase.getInstance().getReference().child("Messages").child(chatUid).child(uid).child(message.getMessage_id()).removeValue();
     }
+
+    public void clearChat(String chatUid){
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).removeValue();
+    }
+
+    public void deleteChat(String chatUid){
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).removeValue();
+    }
 }

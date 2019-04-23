@@ -52,7 +52,6 @@
                     android:id="@+id/message_profile_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="A"
                     android:textSize="18sp"
                     android:textColor="@android:color/white"
                     android:layout_centerInParent="true"/>

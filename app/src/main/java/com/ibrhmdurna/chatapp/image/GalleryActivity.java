@@ -107,6 +107,7 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
         String instagramPath = root + "/Pictures/Instagram";
         String picsArtPath = root + "/Pictures/PicsArt";
         String snapchatPath = root + "/Snapchat";
+        String zedgePath = root + "/zedge/wallpaper";
 
         if(FileController.getInstance().isEmptyFile(root)){
             files.add(new File("All Photos", root, FileController.getInstance().getAllGallery(this), FileController.getInstance().getAllGalleryImageCount(this)));
@@ -140,6 +141,9 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
         }
         if(FileController.getInstance().isEmptyFile(whatsAppPath)){
             files.add(new File("WhatsApp Images", whatsAppPath, FileController.getInstance().getAlbumLastPhoto(whatsAppPath), FileController.getInstance().getAlbumPhotoCount(whatsAppPath)));
+        }
+        if(FileController.getInstance().isEmptyFile(zedgePath)){
+            files.add(new File("Zedge", zedgePath, FileController.getInstance().getAlbumLastPhoto(zedgePath), FileController.getInstance().getAlbumPhotoCount(zedgePath)));
         }
 
         getGallery();

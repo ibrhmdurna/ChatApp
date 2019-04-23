@@ -93,8 +93,7 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
                 moreBottomSheetDialog.show(getSupportFragmentManager(), "bottom_sheet");
                 break;
             case R.id.profileFriendsView:
-                Intent friends = new Intent(this, FriendsActivity.class);
-                friends.putExtra("isAccount", false);
+                Intent friends = new Intent(this, ProfileFriendsActivity.class);
                 startActivity(friends);
                 break;
             case R.id.add_friend_btn:

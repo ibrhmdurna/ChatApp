@@ -9,14 +9,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.local.ProfileActivity;
+import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Friend;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -43,32 +51,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
         final Friend friend = friendList.get(i);
 
-        friendViewHolder.setNameSurname(friend.getAccount().getNameSurname());
-        friendViewHolder.setEmail(friend.getAccount().getEmail());
-        friendViewHolder.setProfileImage(friend.getAccount().getThumb_image(), friend.getAccount().getName());
-
-        if(friend.getAccount().isOnline()){
-            friendViewHolder.onlineView.setVisibility(View.VISIBLE);
-        }
-        else {
-            friendViewHolder.onlineView.setVisibility(View.GONE);
-        }
-
-        if(getItemCount() - 1 == i){
-            friendViewHolder.line.setVisibility(View.GONE);
-        }
-        else {
-            friendViewHolder.line.setVisibility(View.VISIBLE);
-        }
-
-        friendViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent profileIntent = new Intent(context, ProfileActivity.class);
-                profileIntent.putExtra("user_id", friend.getAccount().getUid());
-                context.startActivity(profileIntent);
-            }
-        });
+        friendViewHolder.setData(friend, i);
 
     }
 
@@ -97,12 +80,34 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             onlineView = itemView.findViewById(R.id.friend_online_icon);
         }
 
-        public void setEmail(String value){
-            email.setText(value);
-        }
+        private void setData(final Friend friend, int position){
 
-        public void setNameSurname(String value){
-            nameSurname.setText(value);
+            nameSurname.setText(friend.getAccount().getNameSurname());
+            email.setText(friend.getAccount().getEmail());
+            setProfileImage(friend.getAccount().getThumb_image(), friend.getAccount().getName());
+
+            if(position == friendList.size() - 1){
+                line.setVisibility(View.GONE);
+            }
+            else{
+                line.setVisibility(View.VISIBLE);
+            }
+
+            if(friend.getAccount().isOnline()){
+                onlineView.setVisibility(View.VISIBLE);
+            }
+            else{
+                onlineView.setVisibility(View.GONE);
+            }
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent profileIntent = new Intent(context, ProfileActivity.class);
+                    profileIntent.putExtra("user_id", friend.getAccount().getUid());
+                    context.startActivity(profileIntent);
+                }
+            });
         }
 
         public void setProfileImage(final String value, String nameValue){
@@ -170,5 +175,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
                     break;
             }
         }
+    }
+    public void filterList(List<Friend> filterList){
+        friendList = filterList;
+        notifyDataSetChanged();
     }
 }
