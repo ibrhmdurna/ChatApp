@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Connection;
 import com.ibrhmdurna.chatapp.models.Request;
 import com.ibrhmdurna.chatapp.start.StartActivity;
 
@@ -310,5 +311,17 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         }
 
         requestListener();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Connection.getInstance().onConnect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Connection.getInstance().onDisconnect();
     }
 }

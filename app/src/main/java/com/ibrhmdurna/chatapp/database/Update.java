@@ -385,4 +385,76 @@ public class Update{
             }
         });
     }
+
+    public void typing(String chatUid, final boolean value){
+
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    dataSnapshot.child("typing").getRef().setValue(value);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void messageSeen(String chatUid, boolean listener){
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        if(listener){
+            FirebaseDatabase.getInstance().getReference().child("Messages").child(chatUid).child(uid).addValueEventListener(messageEventListener);
+        }
+        else{
+            FirebaseDatabase.getInstance().getReference().child("Messages").child(chatUid).child(uid).removeEventListener(messageEventListener);
+        }
+    }
+
+    public void chatSeen(String chatUid, boolean listener){
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        if(listener){
+            FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).addValueEventListener(chatEventListener);
+        }
+        else{
+            FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).removeEventListener(chatEventListener);
+        }
+    }
+
+    private ValueEventListener messageEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    snapshot.child("seen").getRef().setValue(true);
+                }
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    private ValueEventListener chatEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                dataSnapshot.getRef().child("seen").setValue(true);
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 }

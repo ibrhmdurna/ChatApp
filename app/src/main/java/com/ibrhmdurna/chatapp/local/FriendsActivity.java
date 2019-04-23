@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Connection;
 import com.ibrhmdurna.chatapp.util.Environment;
 import com.ibrhmdurna.chatapp.util.adapter.MessageAdapter;
 
@@ -149,5 +150,17 @@ public class FriendsActivity extends AppCompatActivity implements ViewComponentF
                 searchClearView.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Connection.getInstance().onConnect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Connection.getInstance().onDisconnect();
     }
 }

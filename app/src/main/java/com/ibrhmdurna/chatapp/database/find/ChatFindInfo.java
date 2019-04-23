@@ -1,8 +1,12 @@
 package com.ibrhmdurna.chatapp.database.find;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Handler;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
@@ -10,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -17,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.models.Account;
+import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.util.GetTimeAgo;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -52,9 +58,9 @@ public class ChatFindInfo implements IFind {
     @Override
     public void getContent() {
 
-        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     final Account account = dataSnapshot.getValue(Account.class);
 
@@ -89,25 +95,7 @@ public class ChatFindInfo implements IFind {
 
                     nameSurname.setText(account.getNameSurname());
 
-                    if(account.isOnline()){
-                        lastSeen.setText("online");
-                    }
-                    else{
-                        Handler h = new Handler();
-                        h.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(account.getLastSeen() != null){
-                                    String lastSeenTime = GetTimeAgo.getInstance().getLastSeenAgo(account.getLastSeen());
-                                    lastSeen.setText(lastSeenTime);
-                                }
-                                else{
-                                    lastSeen.setVisibility(View.GONE);
-                                }
-
-                            }
-                        }, 1500);
-                    }
+                    typingListener(account);
                 }
             }
 
@@ -117,6 +105,102 @@ public class ChatFindInfo implements IFind {
             }
         });
 
+    }
+
+    @Override
+    public void getMore() {
+        // NOTHING...
+    }
+
+    private void typingListener(final Account account){
+        String currentUid = FirebaseAuth.getInstance().getUid();
+
+        FirebaseDatabase.getInstance().getReference().child("Chats").child(currentUid).child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Chat chat = dataSnapshot.getValue(Chat.class);
+
+                    if(chat.isTyping()){
+                        TypedValue typedValue = new TypedValue();
+                        Resources.Theme theme = context.getTheme();
+                        theme.resolveAttribute(R.attr.colorAccent, typedValue, true);
+                        @ColorInt int color = typedValue.data;
+                        lastSeen.setText("typing...");
+                        lastSeen.setTextColor(color);
+                        lastSeen.setTypeface(lastSeen.getTypeface(), Typeface.ITALIC);
+                    }
+                    else{
+                        onlineListener(account);
+                    }
+                }
+                else{
+                    onlineListener(account);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void onlineListener(final Account account){
+        if(account.isOnline()){
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = context.getTheme();
+            theme.resolveAttribute(R.attr.colorControlNormal, typedValue, true);
+            @ColorInt int color = typedValue.data;
+            lastSeen.setText("Online");
+            lastSeen.setTextColor(color);
+            lastSeen.setTypeface(Typeface.DEFAULT);
+        }
+        else{
+            Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(account.getLast_seen() != null){
+                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).child("online").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    boolean isOnline = (boolean) dataSnapshot.getValue();
+
+                                    TypedValue typedValue = new TypedValue();
+                                    Resources.Theme theme = context.getTheme();
+                                    theme.resolveAttribute(R.attr.colorControlNormal, typedValue, true);
+                                    @ColorInt int color = typedValue.data;
+                                    lastSeen.setTextColor(color);
+                                    lastSeen.setTypeface(Typeface.DEFAULT);
+
+                                    if(isOnline){
+                                        lastSeen.setText("Online");
+                                    }
+                                    else{
+                                        String lastSeenTime = GetTimeAgo.getInstance().getLastSeenAgo(account.getLast_seen());
+                                        lastSeen.setText(lastSeenTime);
+                                    }
+                                }
+                                else{
+                                    lastSeen.setVisibility(View.GONE);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                    else{
+                        lastSeen.setVisibility(View.GONE);
+                    }
+
+                }
+            }, 1500);
+        }
     }
 
     private void setProfileImage(int index, CircleImageView profileImage) {

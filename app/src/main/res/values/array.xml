@@ -248,4 +248,11 @@
         <item>Male</item>
         <item>Female</item>
     </string-array>
+
+    <array name="refresh_colors">
+        <item>@color/colorGray</item>
+        <item>@color/colorDefaultBackground</item>
+        <item>@color/colorGray</item>
+        <item>@color/colorDefaultBackground</item>
+    </array>
 </resources>

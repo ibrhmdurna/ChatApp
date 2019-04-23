@@ -185,6 +185,11 @@ public class ProfileFindInfo implements IFind {
         });
     }
 
+    @Override
+    public void getMore() {
+        // NOTHING...
+    }
+
     private void setProfileImage(int index, CircleImageView profileImage) {
         switch (index){
             case 0:

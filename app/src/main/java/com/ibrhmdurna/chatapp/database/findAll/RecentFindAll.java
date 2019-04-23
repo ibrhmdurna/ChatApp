@@ -110,6 +110,11 @@ public class RecentFindAll implements IFind {
         });
     }
 
+    @Override
+    public void getMore() {
+
+    }
+
     private void shortArrayList(){
         Collections.sort(recentList, new Comparator<Recent>() {
             @Override

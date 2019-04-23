@@ -46,6 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Touch for account information"
+                    android:textColor="?attr/colorControlNormal"
                     android:textSize="13sp"/>
             </LinearLayout>
 
@@ -74,13 +75,21 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/chat_container"
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/chat_swipe_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/chat_toolbar"
-        android:layout_above="@id/chat_bottom_view">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_above="@id/chat_bottom_view"
+        app:refreshColors="@array/refresh_colors"
+        app:refreshType="water_drop">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/chat_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
+    </com.baoyz.widget.PullRefreshLayout>
 
     <ImageView
         android:id="@+id/chat_background_view"

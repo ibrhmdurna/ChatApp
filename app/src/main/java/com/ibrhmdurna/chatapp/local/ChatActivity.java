@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -17,11 +19,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
+import com.ibrhmdurna.chatapp.database.Connection;
+import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
 import com.ibrhmdurna.chatapp.database.bridge.Find;
@@ -42,8 +50,6 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class ChatActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, OnEmojiPopupShownListener, OnEmojiPopupDismissListener, GalleryBottomSheetDialog.BottomSheetListener {
 
     private ViewGroup rootView;
@@ -52,6 +58,8 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     private ImageButton emojiBtn;
     private ImageView backgroundView;
     private ImageButton sendBtn;
+
+    private PullRefreshLayout swipeRefreshLayout;
 
     private String uid;
 
@@ -67,8 +75,42 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     }
 
     private void loadMessage(){
-        AbstractFindAll findAll = new FindAll(new MessageFindAll(this, uid));
+        final AbstractFindAll findAll = new FindAll(new MessageFindAll(this, uid));
         findAll.getContent();
+
+        FirebaseDatabase.getInstance().getReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    if(dataSnapshot.getChildrenCount() > 75){
+                        swipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+                            @Override
+                            public void onRefresh() {
+                                Handler h = new Handler();
+                                h.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        findAll.getMore();
+                                        swipeRefreshLayout.setRefreshing(false);
+                                    }
+                                },500);
+                            }
+                        });
+                    }
+                    else{
+                        swipeRefreshLayout.setEnabled(false);
+                    }
+                }
+                else{
+                    swipeRefreshLayout.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void sendMessage(){
@@ -117,10 +159,15 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(messageInput.getText().toString().trim().length() > 0)
+                if(messageInput.getText().toString().trim().length() > 0) {
                     sendBtn.setEnabled(true);
-                else
+                    Update.getInstance().typing(uid, true);
+                }
+                else{
                     sendBtn.setEnabled(false);
+                    Update.getInstance().typing(uid, false);
+                }
+
             }
         });
     }
@@ -130,6 +177,8 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         super.onStart();
         getContent();
         loadMessage();
+        Update.getInstance().messageSeen(uid, true);
+        Update.getInstance().chatSeen(uid, true);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -159,6 +208,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         messageInput = findViewById(R.id.message_input);
         backgroundView = findViewById(R.id.chat_background_view);
         sendBtn = findViewById(R.id.send_btn);
+        swipeRefreshLayout = findViewById(R.id.chat_swipe_container);
     }
 
     @Override
@@ -228,5 +278,20 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
                 startActivity(cameraIntent);
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Connection.getInstance().onConnect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Connection.getInstance().onDisconnect();
+        Update.getInstance().typing(uid, false);
+        Update.getInstance().messageSeen(uid, false);
+        Update.getInstance().chatSeen(uid, false);
     }
 }

@@ -14,7 +14,7 @@ public class Account {
     private String thumb_image;
     private String search_name;
     private boolean online;
-    private Long lastSeen;
+    private Long last_seen;
 
     private String convertGender;
     private String convertLocation;
@@ -22,7 +22,7 @@ public class Account {
     public Account() {
     }
 
-    public Account(String email, String name, String surname, String phone, String birthday, int gender, int location, String profile_image, String thumb_image, String search_name, boolean online, Long lastSeen) {
+    public Account(String email, String name, String surname, String phone, String birthday, int gender, int location, String profile_image, String thumb_image, String search_name, boolean online, Long last_seen) {
         this.email = email;
         this.name = name;
         this.surname = surname;
@@ -34,7 +34,7 @@ public class Account {
         this.thumb_image = thumb_image;
         this.search_name = search_name;
         this.online = online;
-        this.lastSeen = lastSeen;
+        this.last_seen = last_seen;
     }
 
     public String getUid() {
@@ -133,12 +133,12 @@ public class Account {
         this.online = online;
     }
 
-    public Long getLastSeen() {
-        return lastSeen;
+    public Long getLast_seen() {
+        return last_seen;
     }
 
-    public void setLastSeen(Long lastSeen) {
-        this.lastSeen = lastSeen;
+    public void setLast_seen(Long last_seen) {
+        this.last_seen = last_seen;
     }
 
     public String getConvertGender() {

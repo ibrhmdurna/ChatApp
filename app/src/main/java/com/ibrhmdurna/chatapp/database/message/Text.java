@@ -42,32 +42,25 @@ public class Text extends MessageStrategy {
         messageMap.put("receive", message.isReceive());
         messageMap.put("time", ServerValue.TIMESTAMP);
 
-        FirebaseDatabase.getInstance().getReference().updateChildren(chatsMap).addOnCompleteListener(new OnCompleteListener() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                if(task.isSuccessful()){
+        FirebaseDatabase.getInstance().getReference().updateChildren(chatsMap);
 
-                    messageReference.child(message.getFrom()).child(chatUid).child(message_id).setValue(messageMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+        messageReference.child(message.getFrom()).child(chatUid).child(message_id).setValue(messageMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    messageReference.child(message.getFrom()).child(chatUid).child(message_id).child("send").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                messageReference.child(message.getFrom()).child(chatUid).child(message_id).child("send").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        messageReference.child(chatUid).child(message.getFrom()).child(message_id).setValue(messageMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if(task.isSuccessful()){
-                                                    messageReference.child(message.getFrom()).child(chatUid).child(message_id).child("receive").setValue(true);
-                                                }
-                                            }
-                                        });
+                            messageReference.child(chatUid).child(message.getFrom()).child(message_id).setValue(messageMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        messageReference.child(message.getFrom()).child(chatUid).child(message_id).child("receive").setValue(true);
                                     }
-                                });
-                            }
+                                }
+                            });
                         }
                     });
-
                 }
             }
         });

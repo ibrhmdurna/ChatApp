@@ -16,4 +16,9 @@ public class ChatFindAll implements IFind {
     public void getContent() {
         Log.e("------", "Chat List");
     }
+
+    @Override
+    public void getMore() {
+
+    }
 }

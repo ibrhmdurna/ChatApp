@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.models.Account;
+import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.start.StartActivity;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
@@ -197,5 +198,20 @@ public class Delete {
                 }
             }
         });
+    }
+
+    public void unSendMessage(Message message, String chatUid){
+        myMessage(message, chatUid);
+        message(message, chatUid);
+    }
+
+    public void myMessage(Message message, String chatUid){
+        String uid = FirebaseAuth.getInstance().getUid();
+        FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).child(message.getMessage_id()).removeValue();
+    }
+
+    public void message(Message message, String chatUid){
+        String uid = FirebaseAuth.getInstance().getUid();
+        FirebaseDatabase.getInstance().getReference().child("Messages").child(chatUid).child(uid).child(message.getMessage_id()).removeValue();
     }
 }

@@ -15,4 +15,9 @@ public class FindAll extends AbstractFindAll {
     public void getContent() {
         IFind.getContent();
     }
+
+    @Override
+    public void getMore() {
+        IFind.getMore();
+    }
 }

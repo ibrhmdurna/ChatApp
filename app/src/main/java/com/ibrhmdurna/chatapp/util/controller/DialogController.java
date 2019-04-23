@@ -1,14 +1,20 @@
 package com.ibrhmdurna.chatapp.util.controller;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Delete;
+import com.ibrhmdurna.chatapp.models.Message;
 
 public class DialogController {
 
@@ -73,6 +79,59 @@ public class DialogController {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
+
+        return dialog;
+    }
+
+    public AlertDialog dialogMessage(final Activity context, final Message message, final String chatUid, final boolean myMessage){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = context.getLayoutInflater().inflate(R.layout.dialog_message, null);
+        App.Theme.getInstance().getTheme(view.getContext());
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+
+        LinearLayout deleteItem = view.findViewById(R.id.delete_item);
+        deleteItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                if(myMessage){
+                    Delete.getInstance().myMessage(message, chatUid);
+                }
+                else{
+                    Delete.getInstance().myMessage(message, chatUid);
+                }
+            }
+        });
+
+        LinearLayout unsendItem = view.findViewById(R.id.unSend_item);
+        if(myMessage){
+            unsendItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    Delete.getInstance().unSendMessage(message, chatUid);
+                }
+            });
+        }
+        else{
+            unsendItem.setVisibility(View.GONE);
+        }
+
+        LinearLayout copyItem = view.findViewById(R.id.copy_item);
+        copyItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Copied Text", message.getMessage());
+                clipboard.setPrimaryClip(clip);
+            }
+        });
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCanceledOnTouchOutside(true);
 
         return dialog;
     }

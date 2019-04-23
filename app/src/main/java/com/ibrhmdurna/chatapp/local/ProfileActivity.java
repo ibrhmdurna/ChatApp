@@ -23,6 +23,7 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Connection;
 import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Insert;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
@@ -172,5 +173,17 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
                 });
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Connection.getInstance().onConnect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Connection.getInstance().onDisconnect();
     }
 }

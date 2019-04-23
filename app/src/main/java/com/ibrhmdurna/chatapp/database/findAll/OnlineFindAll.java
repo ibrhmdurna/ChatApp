@@ -1,5 +1,6 @@
 package com.ibrhmdurna.chatapp.database.findAll;
 
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -117,6 +118,11 @@ public class OnlineFindAll implements IFind {
 
             }
         });
+    }
+
+    @Override
+    public void getMore() {
+
     }
 
     private void sortArrayList(){

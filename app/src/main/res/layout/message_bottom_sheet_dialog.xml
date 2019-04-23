@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal">
+
+   <RelativeLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+
+       <TextView
+           android:id="@+id/sheet_title"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Options"
+           android:layout_marginStart="25dp"
+           android:layout_marginTop="10dp"
+           android:layout_marginBottom="10dp"
+           android:layout_marginEnd="25dp"
+           android:textSize="20sp"
+           android:textColor="@android:color/white"/>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           android:background="@drawable/custom_circle_text_view"
+           android:backgroundTint="?attr/backgroundCardColor"
+           android:gravity="center"
+           android:layout_below="@id/sheet_title">
+
+           <LinearLayout
+               android:id="@+id/delete_item"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:padding="20dp"
+               android:background="@drawable/top_item_view"
+               android:backgroundTint="?attr/backgroundCardColor">
+
+               <ImageView
+                   android:layout_width="18dp"
+                   android:layout_height="18dp"
+                   android:layout_gravity="center"
+                   android:src="@drawable/ic_share_icon"
+                   android:visibility="gone"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Delete Message"
+                   android:textColor="?attr/primaryTextColor"
+                   android:textSize="16sp"
+                   android:layout_marginStart="20dp"/>
+           </LinearLayout>
+
+           <LinearLayout
+               android:id="@+id/copy_item"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:padding="20dp"
+               android:foreground="?attr/selectableItemBackground">
+
+               <ImageView
+                   android:layout_width="18dp"
+                   android:layout_height="18dp"
+                   android:layout_gravity="center"
+                   android:src="@drawable/ic_block_icon"
+                   android:visibility="gone"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Copy Text"
+                   android:textColor="?attr/primaryTextColor"
+                   android:textSize="16sp"
+                   android:layout_marginStart="20dp"/>
+           </LinearLayout>
+       </LinearLayout>
+   </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

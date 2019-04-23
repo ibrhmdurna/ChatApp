@@ -13,6 +13,8 @@ public class Message {
 
     private boolean profileVisibility;
 
+    private String message_id;
+
     public Message() {
     }
 
@@ -97,5 +99,13 @@ public class Message {
 
     public void setProfileVisibility(boolean profileVisibility) {
         this.profileVisibility = profileVisibility;
+    }
+
+    public String getMessage_id() {
+        return message_id;
+    }
+
+    public void setMessage_id(String message_id) {
+        this.message_id = message_id;
     }
 }

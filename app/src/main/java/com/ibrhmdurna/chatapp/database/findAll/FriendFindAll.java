@@ -1,5 +1,6 @@
 package com.ibrhmdurna.chatapp.database.findAll;
 
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -83,7 +84,7 @@ public class FriendFindAll implements IFind {
 
                                     dataSnapshot.child("online").getRef().addValueEventListener(new ValueEventListener() {
                                         @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                                             if(dataSnapshot.exists()){
                                                 account.setOnline((boolean) dataSnapshot.getValue());
 
@@ -134,6 +135,11 @@ public class FriendFindAll implements IFind {
 
             }
         });
+    }
+
+    @Override
+    public void getMore() {
+
     }
 
     private int findPosition(long time){

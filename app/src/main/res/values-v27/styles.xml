@@ -18,6 +18,7 @@
         <item name="pvtRadiusColor">@android:color/white</item>
         <item name="searchColor">@color/colorLightGray</item>
         <item name="extColor">@color/colorLightGray</item>
+        <item name="colorControlNormal">@color/colorDarkGray</item>
     </style>
 
     <style name="AppTheme.DarkTheme" parent="Theme.AppCompat.NoActionBar">
@@ -38,6 +39,7 @@
         <item name="pvtRadiusColor">@color/colorLightBlack</item>
         <item name="searchColor">@color/colorLightBlack</item>
         <item name="extColor">@color/colorLightBlack</item>
+        <item name="colorControlNormal">@color/colorGray</item>
     </style>
 
     <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">

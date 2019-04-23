@@ -94,6 +94,11 @@ public class RequestFindAll implements IFind {
         });
     }
 
+    @Override
+    public void getMore() {
+
+    }
+
     private void sortArrayList(){
         Collections.sort(requestList, new Comparator<Request>() {
             @Override

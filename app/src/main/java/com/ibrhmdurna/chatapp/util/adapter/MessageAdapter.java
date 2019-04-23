@@ -3,6 +3,7 @@ package com.ibrhmdurna.chatapp.util.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.util.GetTimeAgo;
+import com.ibrhmdurna.chatapp.util.controller.DialogController;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -131,9 +133,18 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             rootView = itemView.findViewById(R.id.root_view);
         }
 
-        public void setData(Message message, int position){
+        public void setData(final Message message, int position){
 
             messageContent.setText(message.getMessage());
+
+            messageContent.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    AlertDialog dialog = DialogController.getInstance().dialogMessage(context, message, chatUid, false);
+                    dialog.show();
+                    return true;
+                }
+            });
 
             if(position > 0){
                 Message topMessage = messageList.get(position - 1);
@@ -167,7 +178,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             if(position == messageList.size() - 1){
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                lp.setMargins(0, 0, 0, 50);
+                lp.setMargins(0, 0, 0, 40);
                 rootView.setLayoutParams(lp);
             }
             else {
@@ -196,39 +207,34 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             rootView = itemView.findViewById(R.id.root_view);
         }
 
-        public void setData(Message message, int position){
+        public void setData(final Message message, int position){
 
             messageContent.setText(message.getMessage());
+
+            messageContent.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    AlertDialog dialog = DialogController.getInstance().dialogMessage(context, message, chatUid, true);
+                    dialog.show();
+                    return true;
+                }
+            });
 
             if(message.isSend()){
                 if(message.isReceive()){
                     sendIcon.setVisibility(View.GONE);
                     if(position == messageList.size() - 1){
-                        FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).child("seen").addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()){
-                                    boolean isSeen = (boolean) dataSnapshot.getValue();
-
-                                    if(isSeen){
-                                        seenLayout.setVisibility(View.VISIBLE);
-                                    }
-                                    else{
-                                        seenLayout.setVisibility(View.GONE);
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
+                        FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).child("seen").addValueEventListener(seenEventListener);
                     }
                     else{
+                        FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).child("seen").removeEventListener(seenEventListener);
                         seenLayout.setVisibility(View.GONE);
                     }
                 }
+            }
+            else{
+                FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).child("seen").removeEventListener(seenEventListener);
+                seenLayout.setVisibility(View.GONE);
             }
 
             if(position > 0){
@@ -254,9 +260,16 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
 
             if(position == messageList.size() - 1){
-                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                lp.setMargins(0, 0, 0, 50);
-                rootView.setLayoutParams(lp);
+                if(seenLayout.getVisibility() == View.VISIBLE){
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    lp.setMargins(0, 0, 0, 0);
+                    rootView.setLayoutParams(lp);
+                }
+                else{
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    lp.setMargins(0, 0, 0, 40);
+                    rootView.setLayoutParams(lp);
+                }
             }
             else {
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -264,6 +277,27 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 rootView.setLayoutParams(lp);
             }
         }
+
+        private ValueEventListener seenEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    boolean isSeen = (boolean) dataSnapshot.getValue();
+
+                    if(isSeen){
+                        seenLayout.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        seenLayout.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
     }
 
     private void profileImageProcess(final CircleImageView profileImage, final TextView profileText){
