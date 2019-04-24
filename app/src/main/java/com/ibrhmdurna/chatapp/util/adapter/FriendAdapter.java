@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
@@ -194,11 +195,14 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             friendUid = friend.getAccount().getUid();
 
-            FirebaseDatabase.getInstance().getReference().child("Request").child(friend.getAccount().getUid()).removeEventListener(requestEventListener);
-            FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).child(friendUid).removeEventListener(friendEventListener);
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.keepSynced(true);
+
+            databaseReference.child("Request").child(friend.getAccount().getUid()).removeEventListener(requestEventListener);
+            databaseReference.child("Friends").child(uid).child(friendUid).removeEventListener(friendEventListener);
 
             if(!friendUid.equals(uid)){
-                FirebaseDatabase.getInstance().getReference().child("Request").child(friend.getAccount().getUid()).addListenerForSingleValueEvent(requestEventListener);
+                databaseReference.child("Request").child(friend.getAccount().getUid()).addListenerForSingleValueEvent(requestEventListener);
             }
             else{
                 addItem.setVisibility(View.GONE);
@@ -285,7 +289,10 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     addItem.setVisibility(View.GONE);
                     deleteItem.setVisibility(View.GONE);
 
-                    FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).child(friendUid).addListenerForSingleValueEvent(friendEventListener);
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                    databaseReference.keepSynced(true);
+
+                    databaseReference.child("Friends").child(uid).child(friendUid).addListenerForSingleValueEvent(friendEventListener);
                 }
             }
 

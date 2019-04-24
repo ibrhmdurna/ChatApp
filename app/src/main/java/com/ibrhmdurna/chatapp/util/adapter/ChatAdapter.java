@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
@@ -98,15 +99,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
             chatUid = chat.getChatUid();
 
-            FirebaseDatabase.getInstance().getReference().child("Accounts").child(chatUid).removeEventListener(accountEventListener);
-            FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).child(chat.getLast_message_id()).removeEventListener(lastMessageEventListener);
-            FirebaseDatabase.getInstance().getReference().child("Messages").child(chatUid).child(uid).removeEventListener(messageEventListener);
-            FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).child("typing").removeEventListener(chatEventListener);
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.keepSynced(true);
 
-            FirebaseDatabase.getInstance().getReference().child("Accounts").child(chatUid).addListenerForSingleValueEvent(accountEventListener);
-            FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).child(chat.getLast_message_id()).addValueEventListener(lastMessageEventListener);
-            FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).addValueEventListener(messageEventListener);
-            FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).child("typing").addValueEventListener(chatEventListener);
+            databaseReference.child("Accounts").child(chatUid).removeEventListener(accountEventListener);
+            databaseReference.child("Messages").child(uid).child(chatUid).child(chat.getLast_message_id()).removeEventListener(lastMessageEventListener);
+            databaseReference.child("Messages").child(chatUid).child(uid).removeEventListener(messageEventListener);
+            databaseReference.child("Chats").child(uid).child(chatUid).child("typing").removeEventListener(chatEventListener);
+
+            databaseReference.child("Accounts").child(chatUid).addListenerForSingleValueEvent(accountEventListener);
+            databaseReference.child("Messages").child(uid).child(chatUid).child(chat.getLast_message_id()).addValueEventListener(lastMessageEventListener);
+            databaseReference.child("Messages").child(uid).child(chatUid).addValueEventListener(messageEventListener);
+            databaseReference.child("Chats").child(uid).child(chatUid).child("typing").addValueEventListener(chatEventListener);
 
             String chatTime = GetTimeAgo.getInstance().getChatTimeAgo(chat.getTime());
             time.setText(chatTime);

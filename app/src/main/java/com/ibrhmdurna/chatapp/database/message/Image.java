@@ -1,11 +1,9 @@
 package com.ibrhmdurna.chatapp.database.message;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -23,17 +21,10 @@ import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.util.controller.FileController;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Image extends MessageStrategy {
-
-    private Activity context;
-
-    public Image(Activity context){
-        this.context = context;
-    }
 
     @Override
     public void Send(final Message message, final String chatUid) {
@@ -43,6 +34,7 @@ public class Image extends MessageStrategy {
         final String message_id = FirebaseDatabase.getInstance().getReference().child("Messages").child(message.getFrom()).child(chatUid).push().getKey();
 
         final DatabaseReference messageReference = FirebaseDatabase.getInstance().getReference().child("Messages");
+        messageReference.keepSynced(true);
 
         Map chatMap = new HashMap();
         chatMap.put("last_message_id", message_id);
@@ -54,7 +46,10 @@ public class Image extends MessageStrategy {
         chatsMap.put("Chats/" + message.getFrom() + "/" + chatUid, chatMap);
         chatsMap.put("Chats/" + chatUid + "/" + message.getFrom(), chatMap);
 
-        FirebaseDatabase.getInstance().getReference().updateChildren(chatsMap);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
+
+        databaseReference.updateChildren(chatsMap);
 
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         Bitmap bitmap = BitmapFactory.decodeFile(message.getPath(), bmOptions);

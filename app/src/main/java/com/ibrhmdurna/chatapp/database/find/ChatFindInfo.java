@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
@@ -58,7 +59,10 @@ public class ChatFindInfo implements IFind {
     @Override
     public void getContent() {
 
-        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addValueEventListener(new ValueEventListener() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
+
+        databaseReference.child("Accounts").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -115,7 +119,10 @@ public class ChatFindInfo implements IFind {
     private void typingListener(final Account account){
         String currentUid = FirebaseAuth.getInstance().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Chats").child(currentUid).child(uid).addValueEventListener(new ValueEventListener() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
+
+        databaseReference.child("Chats").child(currentUid).child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -162,7 +169,11 @@ public class ChatFindInfo implements IFind {
                 @Override
                 public void run() {
                     if(account.getLast_seen() != null){
-                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).child("online").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                        databaseReference.keepSynced(true);
+
+                        databaseReference.child("Accounts").child(uid).child("online").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if(dataSnapshot.exists()){

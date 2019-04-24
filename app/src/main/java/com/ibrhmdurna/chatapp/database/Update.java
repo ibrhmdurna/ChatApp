@@ -30,6 +30,7 @@ import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -370,7 +371,10 @@ public class Update{
     public void seenAllRequest(){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
+
+        databaseReference.child("Request").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -391,7 +395,10 @@ public class Update{
 
         String uid = FirebaseAuth.getInstance().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid);
+        databaseReference.keepSynced(true);
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -409,22 +416,28 @@ public class Update{
     public void messageSeen(String chatUid, boolean listener){
         String uid = FirebaseAuth.getInstance().getUid();
 
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
+
         if(listener){
-            FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).addValueEventListener(messageEventListener);
+            databaseReference.child("Messages").child(uid).child(chatUid).addValueEventListener(messageEventListener);
         }
         else{
-            FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).removeEventListener(messageEventListener);
+            databaseReference.child("Messages").child(uid).child(chatUid).removeEventListener(messageEventListener);
         }
     }
 
     public void chatSeen(String chatUid, boolean listener){
         String uid = FirebaseAuth.getInstance().getUid();
 
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
+
         if(listener){
-            FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).addValueEventListener(chatEventListener);
+            databaseReference.child("Chats").child(uid).child(chatUid).addValueEventListener(chatEventListener);
         }
         else{
-            FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).removeEventListener(chatEventListener);
+            databaseReference.child("Chats").child(uid).child(chatUid).removeEventListener(chatEventListener);
         }
     }
 

@@ -21,6 +21,7 @@ public class Text extends MessageStrategy {
         final String message_id = FirebaseDatabase.getInstance().getReference().child("Messages").child(message.getFrom()).child(chatUid).push().getKey();
 
         final DatabaseReference messageReference = FirebaseDatabase.getInstance().getReference().child("Messages");
+        messageReference.keepSynced(true);
 
         Map chatMap = new HashMap();
         chatMap.put("last_message_id", message_id);
@@ -32,7 +33,10 @@ public class Text extends MessageStrategy {
         chatsMap.put("Chats/" + message.getFrom() + "/" + chatUid, chatMap);
         chatsMap.put("Chats/" + chatUid + "/" + message.getFrom(), chatMap);
 
-        FirebaseDatabase.getInstance().getReference().updateChildren(chatsMap);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
+
+        databaseReference.updateChildren(chatsMap);
 
         final Map messageMap = new HashMap();
         messageMap.put("from", message.getFrom());

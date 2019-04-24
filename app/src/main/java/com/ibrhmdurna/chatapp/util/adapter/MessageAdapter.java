@@ -22,6 +22,7 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
@@ -268,20 +269,24 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
 
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.keepSynced(true);
+
             if(message.isSend()){
                 if(message.isReceive()){
                     sendIcon.setVisibility(View.GONE);
+
                     if(position == messageList.size() - 1){
-                        FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").addValueEventListener(seenEventListener);
+                        databaseReference.child("Chats").child(chatUid).child(uid).child("seen").addValueEventListener(seenEventListener);
                     }
                     else{
-                        FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
+                        databaseReference.child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
                         seenLayout.setVisibility(View.GONE);
                     }
                 }
             }
             else{
-                FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
+                databaseReference.child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
                 seenLayout.setVisibility(View.GONE);
             }
 
@@ -453,20 +458,23 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             }
 
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.keepSynced(true);
+
             if(message.isSend()){
                 if(message.isReceive()){
                     sendIcon.setVisibility(View.GONE);
                     if(position == messageList.size() - 1){
-                        FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").addValueEventListener(seenEventListener);
+                        databaseReference.child("Chats").child(chatUid).child(uid).child("seen").addValueEventListener(seenEventListener);
                     }
                     else{
-                        FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
+                        databaseReference.child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
                         seenLayout.setVisibility(View.GONE);
                     }
                 }
             }
             else{
-                FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
+                databaseReference.child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
                 seenLayout.setVisibility(View.GONE);
             }
 
@@ -723,7 +731,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private void profileImageProcess(final CircleImageView profileImage, final TextView profileText){
 
-        FirebaseDatabase.getInstance().getReference().child("Accounts").child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
+
+        databaseReference.child("Accounts").child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
