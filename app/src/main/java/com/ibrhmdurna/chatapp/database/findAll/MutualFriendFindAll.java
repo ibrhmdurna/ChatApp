@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -70,9 +71,10 @@ public class MutualFriendFindAll implements IFind {
                 friendList.clear();
                 if(dataSnapshot.exists()){
 
+                    boolean notFound = true;
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                         if(!snapshot.getKey().equals(myUid)){
-
+                            notFound = false;
                             FirebaseDatabase.getInstance().getReference().child("Friends").child(myUid).child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -89,6 +91,11 @@ public class MutualFriendFindAll implements IFind {
                                                     friendList.add(mutualFriend);
 
                                                     sortArrayList();
+
+                                                    if(friendView.getVisibility() == View.GONE){
+                                                        friendView.setVisibility(View.VISIBLE);
+                                                        notFoundView.setVisibility(View.GONE);
+                                                    }
                                                 }
                                             }
 
@@ -98,6 +105,10 @@ public class MutualFriendFindAll implements IFind {
                                             }
                                         });
                                     }
+                                    else{
+                                        friendView.setVisibility(View.GONE);
+                                        notFoundView.setVisibility(View.VISIBLE);
+                                    }
                                 }
 
                                 @Override
@@ -105,15 +116,10 @@ public class MutualFriendFindAll implements IFind {
 
                                 }
                             });
-
                         }
                     }
 
-                    if(friendList.size() > 0){
-                        friendView.setVisibility(View.VISIBLE);
-                        notFoundView.setVisibility(View.GONE);
-                    }
-                    else{
+                    if(notFound){
                         friendView.setVisibility(View.GONE);
                         notFoundView.setVisibility(View.VISIBLE);
                     }

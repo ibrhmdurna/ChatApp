@@ -68,10 +68,10 @@
 
         <TextView
             android:id="@+id/friend_add_item"
-            android:layout_width="wrap_content"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
-            android:maxWidth="80dp"
             android:text="Add"
+            android:textAlignment="center"
             android:maxLines="1"
             android:ellipsize="end"
             android:paddingStart="15dp"
@@ -85,10 +85,10 @@
 
         <TextView
             android:id="@+id/friend_cancel_item"
-            android:layout_width="wrap_content"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
-            android:maxWidth="80dp"
             android:text="Cancel"
+            android:textAlignment="center"
             android:maxLines="1"
             android:ellipsize="end"
             android:paddingStart="15dp"
@@ -103,10 +103,10 @@
 
         <TextView
             android:id="@+id/friend_delete_item"
-            android:layout_width="wrap_content"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
-            android:maxWidth="80dp"
             android:text="Delete"
+            android:textAlignment="center"
             android:maxLines="1"
             android:ellipsize="end"
             android:paddingStart="15dp"

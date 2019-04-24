@@ -93,7 +93,7 @@ public class OnlineFindAll implements IFind {
                                                     onlineLayout.setVisibility(View.GONE);
                                                 }
 
-                                                sortArrayList();
+                                                friendAdapter.notifyDataSetChanged();
                                             }
                                         }
 

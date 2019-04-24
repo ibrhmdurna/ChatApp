@@ -282,6 +282,8 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
                 else{
                     cancelItem.setVisibility(View.GONE);
+                    addItem.setVisibility(View.GONE);
+                    deleteItem.setVisibility(View.GONE);
 
                     FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).child(friendUid).addListenerForSingleValueEvent(friendEventListener);
                 }
@@ -298,9 +300,13 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     deleteItem.setVisibility(View.VISIBLE);
+                    addItem.setVisibility(View.GONE);
+                    cancelItem.setVisibility(View.GONE);
                 }
                 else{
                     addItem.setVisibility(View.VISIBLE);
+                    cancelItem.setVisibility(View.GONE);
+                    deleteItem.setVisibility(View.GONE);
                 }
             }
 

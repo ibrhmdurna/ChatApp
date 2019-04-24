@@ -93,7 +93,7 @@ public class AccountFriendFindAll implements IFind {
                                     friend.setAccount(account);
                                     friendList.add(friend);
 
-                                    sortArrayList();
+                                    friendAdapter.notifyDataSetChanged();
                                 }
                             }
 
@@ -178,16 +178,5 @@ public class AccountFriendFindAll implements IFind {
         }
 
         friendAdapter.filterList(filterList);
-    }
-
-    private void sortArrayList(){
-        Collections.sort(friendList, new Comparator<Friend>() {
-            @Override
-            public int compare(Friend o1, Friend o2) {
-                return o2.getAccount().getName().compareTo(o1.getAccount().getName());
-            }
-        });
-
-        friendAdapter.notifyDataSetChanged();
     }
 }

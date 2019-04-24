@@ -103,7 +103,7 @@ public class FriendFindAll implements IFind {
                                                     friendLayout.setVisibility(View.GONE);
                                                 }
 
-                                                sortArrayList();
+                                                friendAdapter.notifyDataSetChanged();
                                             }
                                         }
 

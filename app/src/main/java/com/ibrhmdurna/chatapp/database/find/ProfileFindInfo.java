@@ -1,7 +1,10 @@
 package com.ibrhmdurna.chatapp.database.find;
 
+import android.annotation.SuppressLint;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,11 +37,16 @@ public class ProfileFindInfo implements IFind {
     private LinearLayout confirmLayout;
     private RelativeLayout addFriendLayout, sendMessageView;
     private TextView cancelRequest, addFriendView, friendInfoText;
+    private TextView friendsItem, mutualItem;
+    private ImageView onlineView;
 
     private RelativeLayout rootView;
     private SpinKitView loadingBar;
 
-    private String uid;
+    private final String uid;
+    private String current_uid;
+
+    private DatabaseReference database;
 
     public ProfileFindInfo(ActivityProfileBinding binding,String uid) {
         this.binding = binding;
@@ -59,136 +67,223 @@ public class ProfileFindInfo implements IFind {
         friendInfoText = binding.getRoot().findViewById(R.id.friendInfoText);
         rootView = binding.getRoot().findViewById(R.id.rootView);
         loadingBar = binding.getRoot().findViewById(R.id.loadingBar);
+        friendsItem = binding.getRoot().findViewById(R.id.profileFriendsCount);
+        mutualItem = binding.getRoot().findViewById(R.id.profileMutualCount);
+        onlineView = binding.getRoot().findViewById(R.id.profileOnlineView);
     }
 
     @Override
     public void getContent() {
-        final String current_uid = FirebaseAuth.getInstance().getUid();
+        current_uid = FirebaseAuth.getInstance().getUid();
 
-        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        database = FirebaseDatabase.getInstance().getReference();
         database.keepSynced(true);
 
-        database.child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    final Account account = dataSnapshot.getValue(Account.class);
+        database.child("Accounts").child(uid).removeEventListener(accountEventListener);
+        database.child("Friends").child(current_uid).child(uid).removeEventListener(friendEventListener);
+        database.child("Friends").child(uid).removeEventListener(friendEventListener2);
 
-                    String image = account.getProfile_image();
-
-                    if(image.substring(0, 8).equals("default_")){
-                        String value = image.substring(8,9);
-                        int index = Integer.parseInt(value);
-                        setProfileImage(index, profileImage);
-                        String name = account.getName().substring(0,1);
-                        profileText.setText(name);
-                        profileText.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        final Picasso picasso = Picasso.get();
-                        picasso.setIndicatorsEnabled(true);
-                        picasso.load(account.getProfile_image()).networkPolicy(NetworkPolicy.OFFLINE)
-                                .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
-                            @Override
-                            public void onSuccess() {
-
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-                                picasso.load(account.getProfile_image()).placeholder(R.drawable.default_avatar).into(profileImage);
-                            }
-                        });
-                        profileText.setText(null);
-                        profileText.setVisibility(View.GONE);
-                    }
-
-                    convertGender(account);
-                    convertLocation(account);
-
-                    phoneLayout.setVisibility(account.getPhone().trim().length() > 0 ? View.VISIBLE : View.GONE);
-
-                    binding.setAccount(account);
-                    rootView.setVisibility(View.VISIBLE);
-                    loadingBar.setIndeterminate(false);
-                    loadingBar.setVisibility(View.GONE);
-                }
-                else {
-                    Toast.makeText(binding.getRoot().getContext(), "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
-                    rootView.setVisibility(View.VISIBLE);
-                    loadingBar.setIndeterminate(false);
-                    loadingBar.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(binding.getRoot().getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                rootView.setVisibility(View.VISIBLE);
-                loadingBar.setIndeterminate(false);
-                loadingBar.setVisibility(View.GONE);
-            }
-        });
-
-        database.child("Friends").child(current_uid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    addFriendLayout.setVisibility(View.GONE);
-                    sendMessageView.setVisibility(View.VISIBLE);
-                    friendInfoText.setVisibility(View.VISIBLE);
-                    confirmLayout.setVisibility(View.GONE);
-                }
-                else {
-                    database.child("Request").child(uid).child(current_uid).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()){
-                                cancelRequest.setVisibility(View.VISIBLE);
-                                addFriendView.setVisibility(View.GONE);
-                            }
-                            else {
-                                cancelRequest.setVisibility(View.GONE);
-                                addFriendView.setVisibility(View.VISIBLE);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
-                    database.child("Request").child(current_uid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()){
-                                confirmLayout.setVisibility(View.VISIBLE);
-                            }
-                            else {
-                                confirmLayout.setVisibility(View.GONE);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        database.child("Accounts").child(uid).addValueEventListener(accountEventListener);
+        database.child("Friends").child(current_uid).child(uid).addValueEventListener(friendEventListener);
+        database.child("Friends").child(uid).addValueEventListener(friendEventListener2);
     }
 
     @Override
     public void getMore() {
         // NOTHING...
     }
+
+    private ValueEventListener accountEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                final Account account = dataSnapshot.getValue(Account.class);
+
+                String image = account.getProfile_image();
+
+                if(image.substring(0, 8).equals("default_")){
+                    String value = image.substring(8,9);
+                    int index = Integer.parseInt(value);
+                    setProfileImage(index, profileImage);
+                    String name = account.getName().substring(0,1);
+                    profileText.setText(name);
+                    profileText.setVisibility(View.VISIBLE);
+                }
+                else {
+                    final Picasso picasso = Picasso.get();
+                    picasso.setIndicatorsEnabled(true);
+                    picasso.load(account.getProfile_image()).networkPolicy(NetworkPolicy.OFFLINE)
+                            .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            picasso.load(account.getProfile_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+                        }
+                    });
+                    profileText.setText(null);
+                    profileText.setVisibility(View.GONE);
+                }
+
+                Handler h = new Handler();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(friendInfoText.getVisibility() == View.VISIBLE){
+                            if(account.isOnline()){
+                                onlineView.setVisibility(View.VISIBLE);
+                            }
+                            else{
+                                Handler h = new Handler();
+                                h.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dataSnapshot.child("online").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if(dataSnapshot.exists()){
+                                                    boolean isOnline = (boolean) dataSnapshot.getValue();
+
+                                                    if(isOnline){
+                                                        onlineView.setVisibility(View.VISIBLE);
+                                                    }
+                                                    else{
+                                                        onlineView.setVisibility(View.GONE);
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+                                },1500);
+                            }
+                        }
+                    }
+                }, 1000);
+
+                convertGender(account);
+                convertLocation(account);
+
+                phoneLayout.setVisibility(account.getPhone().trim().length() > 0 ? View.VISIBLE : View.GONE);
+
+                binding.setAccount(account);
+                rootView.setVisibility(View.VISIBLE);
+                loadingBar.setIndeterminate(false);
+                loadingBar.setVisibility(View.GONE);
+            }
+            else {
+                Toast.makeText(binding.getRoot().getContext(), "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                rootView.setVisibility(View.VISIBLE);
+                loadingBar.setIndeterminate(false);
+                loadingBar.setVisibility(View.GONE);
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+            Toast.makeText(binding.getRoot().getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            rootView.setVisibility(View.VISIBLE);
+            loadingBar.setIndeterminate(false);
+            loadingBar.setVisibility(View.GONE);
+        }
+    };
+
+    private ValueEventListener friendEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                addFriendLayout.setVisibility(View.GONE);
+                sendMessageView.setVisibility(View.VISIBLE);
+                friendInfoText.setVisibility(View.VISIBLE);
+                confirmLayout.setVisibility(View.GONE);
+            }
+            else {
+                database.child("Request").child(uid).child(current_uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            cancelRequest.setVisibility(View.VISIBLE);
+                            addFriendView.setVisibility(View.GONE);
+                        }
+                        else {
+                            cancelRequest.setVisibility(View.GONE);
+                            addFriendView.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                database.child("Request").child(current_uid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            confirmLayout.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            confirmLayout.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    private ValueEventListener friendEventListener2 = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                friendsItem.setText(dataSnapshot.getChildrenCount() + " Friends");
+
+                final int[] count = {0};
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    if(!current_uid.equals(snapshot.getKey())){
+                        database.child("Friends").child(current_uid).child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    count[0]++;
+                                    mutualItem.setText(count[0] + " Mutual F.");
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+
+
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 
     private void setProfileImage(int index, CircleImageView profileImage) {
         switch (index){
