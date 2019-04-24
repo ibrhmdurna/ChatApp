@@ -6,29 +6,35 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.text.format.DateFormat;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.github.mmin18.widget.RealtimeBlurView;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
 import com.ibrhmdurna.chatapp.settings.EditAccountActivity;
 import com.ibrhmdurna.chatapp.start.RegisterFinishActivity;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Date;
 
 public class FileController {
 
@@ -244,6 +250,14 @@ public class FileController {
         new ImageMessageCompressAsyncTask(path, chatUid, imageName).execute(bitmap);
     }
 
+    public void compressToDownloadImage(String url, String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, RealtimeBlurView blurView){
+        new DownloadMyImageCompressAsyncTask(chatUid, imageName, loadingBar, imageView, blurView).execute(url);
+    }
+
+    public void compressToDownloadAndSaveImage(String url, String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, RealtimeBlurView blurView){
+        new DownloadImageCompressAsyncTask(chatUid, imageName, loadingBar, imageView, blurView).execute(url);
+    }
+
     private static class PhotoCompressAsyncTask extends AsyncTask<Bitmap, byte[], byte[]>{
 
         @SuppressLint("StaticFieldLeak")
@@ -295,13 +309,14 @@ public class FileController {
         }
     }
 
-    private static class ImageMessageCompressAsyncTask extends AsyncTask<Bitmap, byte[], String>{
+    private static class ImageMessageCompressAsyncTask extends AsyncTask<Bitmap, String, String>{
 
         private String path;
         private String imageName;
         private String chatUid;
 
         public ImageMessageCompressAsyncTask(String path, String chatUid, String imageName){
+            this.path = path;
             this.imageName = imageName;
             this.chatUid = chatUid;
         }
@@ -343,6 +358,259 @@ public class FileController {
             FirebaseDatabase.getInstance().getReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(s + "/" + imageName + ".jpg");
 
             super.onPostExecute(s);
+        }
+    }
+
+    private static class ImageMessageSaveCompressAsyncTask extends AsyncTask<Bitmap, String, String>{
+
+        private String path;
+        private String imageName;
+        private String chatUid;
+
+        @SuppressLint("StaticFieldLeak")
+        private SpinKitView loadingBar;
+        @SuppressLint("StaticFieldLeak")
+        private ImageView imageView;
+        @SuppressLint("StaticFieldLeak")
+        private RealtimeBlurView blurView;
+
+        public ImageMessageSaveCompressAsyncTask(String path, String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, RealtimeBlurView blurView){
+            this.path = path;
+            this.imageName = imageName;
+            this.chatUid = chatUid;
+            this.loadingBar = loadingBar;
+            this.imageView = imageView;
+            this.blurView = blurView;
+        }
+
+        @Override
+        protected String doInBackground(Bitmap... bitmaps) {
+
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmaps[0].compress(Bitmap.CompressFormat.JPEG, 80, bytes);
+
+            String ExternalStorageDirectory = Environment.getExternalStorageDirectory().getPath()+"/DCIM/ChatApp";
+            File fileInfo = new File(ExternalStorageDirectory);
+            File file = new File(ExternalStorageDirectory + File.separator, imageName + ".jpg");
+
+            FileOutputStream fileOutputStream = null;
+            try {
+                if(fileInfo.isDirectory() || fileInfo.mkdirs()){
+                    file.createNewFile();
+                    fileOutputStream = new FileOutputStream(file);
+                    fileOutputStream.write(bytes.toByteArray());
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }finally {
+                if(fileOutputStream != null){
+                    try {
+                        fileOutputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            return fileOutputStream != null ? ExternalStorageDirectory : path;
+        }
+
+        @Override
+        protected void onPostExecute(final String s) {
+
+            final String newPath = s + "/" + imageName + ".jpg";
+
+            FirebaseDatabase.getInstance().getReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(newPath).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        FirebaseDatabase.getInstance().getReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("download").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    File imgFile = new File(newPath);
+
+                                    if(imgFile.exists()){
+                                        Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                                        imageView.setImageBitmap(bitmap);
+                                        loadingBar.setVisibility(View.GONE);
+                                        loadingBar.setIndeterminate(false);
+                                        blurView.setVisibility(View.GONE);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+
+            super.onPostExecute(s);
+        }
+    }
+
+    private static class DownloadMyImageCompressAsyncTask extends AsyncTask<String, String, Bitmap>{
+
+        private String imageName;
+        private String chatUid;
+
+        @SuppressLint("StaticFieldLeak")
+        private SpinKitView loadingBar;
+        @SuppressLint("StaticFieldLeak")
+        private ImageView imageView;
+
+        @SuppressLint("StaticFieldLeak")
+        private RealtimeBlurView blurView;
+
+        public DownloadMyImageCompressAsyncTask(String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, RealtimeBlurView blurView){
+            this.imageName = imageName;
+            this.chatUid = chatUid;
+            this.loadingBar = loadingBar;
+            this.imageView = imageView;
+            this.blurView = blurView;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            loadingBar.setVisibility(View.VISIBLE);
+            loadingBar.setIndeterminate(true);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            Bitmap bm = null;
+            InputStream is = null;
+            BufferedInputStream bis = null;
+            try
+            {
+                URLConnection conn = new URL(strings[0]).openConnection();
+                conn.connect();
+                is = conn.getInputStream();
+                bis = new BufferedInputStream(is, 8192);
+                bm = BitmapFactory.decodeStream(bis);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            finally {
+                if (bis != null)
+                {
+                    try
+                    {
+                        bis.close();
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                if (is != null)
+                {
+                    try
+                    {
+                        is.close();
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return bm;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+
+            loadingBar.setVisibility(View.GONE);
+            loadingBar.setIndeterminate(false);
+            imageView.setImageBitmap(bitmap);
+            blurView.setVisibility(View.GONE);
+
+            new ImageMessageCompressAsyncTask("", chatUid, imageName).execute(bitmap);
+
+            super.onPostExecute(bitmap);
+        }
+    }
+
+    private static class DownloadImageCompressAsyncTask extends AsyncTask<String, String, Bitmap>{
+
+        private String imageName;
+        private String chatUid;
+
+        @SuppressLint("StaticFieldLeak")
+        private SpinKitView loadingBar;
+        @SuppressLint("StaticFieldLeak")
+        private ImageView imageView;
+        @SuppressLint("StaticFieldLeak")
+        private RealtimeBlurView blurView;
+
+        public DownloadImageCompressAsyncTask(String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, RealtimeBlurView blurView){
+            this.imageName = imageName;
+            this.chatUid = chatUid;
+            this.loadingBar = loadingBar;
+            this.imageView = imageView;
+            this.blurView = blurView;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            loadingBar.setVisibility(View.VISIBLE);
+            loadingBar.setIndeterminate(true);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            Bitmap bm = null;
+            InputStream is = null;
+            BufferedInputStream bis = null;
+            try
+            {
+                URLConnection conn = new URL(strings[0]).openConnection();
+                conn.connect();
+                is = conn.getInputStream();
+                bis = new BufferedInputStream(is, 8192);
+                bm = BitmapFactory.decodeStream(bis);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            finally {
+                if (bis != null)
+                {
+                    try
+                    {
+                        bis.close();
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                if (is != null)
+                {
+                    try
+                    {
+                        is.close();
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return bm;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+
+            new ImageMessageSaveCompressAsyncTask("", chatUid, imageName, loadingBar, imageView, blurView).execute(bitmap);
+
+            super.onPostExecute(bitmap);
         }
     }
 }

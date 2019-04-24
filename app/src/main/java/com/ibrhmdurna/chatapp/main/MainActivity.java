@@ -309,8 +309,9 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         if(currentUser == null){
             sendToStart();
         }
-
-        requestListener();
+        else{
+            requestListener();
+        }
     }
 
     @Override

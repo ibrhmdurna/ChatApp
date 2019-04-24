@@ -124,33 +124,49 @@ public class Image extends MessageStrategy {
                                                                         @Override
                                                                         public void onComplete(@NonNull Task task) {
                                                                             if(task.isSuccessful()){
-                                                                                filepath.putBytes(data).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+
+                                                                                thumbPath.putBytes(thumb_data).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                                                                     @Override
                                                                                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                                                                         if(task.isSuccessful()){
-                                                                                            filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                                            thumbPath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                                                                 @Override
                                                                                                 public void onSuccess(Uri uri) {
-                                                                                                    String downloadUrl2 = uri.toString();
+                                                                                                    final String thumbDownloadUrl2 = uri.toString();
 
-                                                                                                    final Map messageMap = new HashMap();
-                                                                                                    messageMap.put("from", message.getFrom());
-                                                                                                    messageMap.put("message", message.getMessage());
-                                                                                                    messageMap.put("url", downloadUrl2);
-                                                                                                    messageMap.put("type", message.getType());
-                                                                                                    messageMap.put("send", message.isSend());
-                                                                                                    messageMap.put("seen", message.isSeen());
-                                                                                                    messageMap.put("receive", message.isReceive());
-                                                                                                    messageMap.put("time", ServerValue.TIMESTAMP);
-                                                                                                    messageMap.put("path", "");
-                                                                                                    messageMap.put("download", message.isDownload());
-                                                                                                    messageMap.put("size", storageMetadata.getSizeBytes());
-
-                                                                                                    messageReference.child(chatUid).child(message.getFrom()).child(message_id).setValue(messageMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                                    filepath.putBytes(data).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                                                                                         @Override
-                                                                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                                                                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                                                                                             if(task.isSuccessful()){
-                                                                                                                messageReference.child(message.getFrom()).child(chatUid).child(message_id).child("receive").setValue(true);
+                                                                                                                filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                                                                    @Override
+                                                                                                                    public void onSuccess(Uri uri) {
+                                                                                                                        String downloadUrl2 = uri.toString();
+
+                                                                                                                        final Map messageMap = new HashMap();
+                                                                                                                        messageMap.put("from", message.getFrom());
+                                                                                                                        messageMap.put("message", message.getMessage());
+                                                                                                                        messageMap.put("url", downloadUrl2);
+                                                                                                                        messageMap.put("type", message.getType());
+                                                                                                                        messageMap.put("send", message.isSend());
+                                                                                                                        messageMap.put("seen", message.isSeen());
+                                                                                                                        messageMap.put("receive", message.isReceive());
+                                                                                                                        messageMap.put("time", ServerValue.TIMESTAMP);
+                                                                                                                        messageMap.put("path", "");
+                                                                                                                        messageMap.put("thumb", thumbDownloadUrl2);
+                                                                                                                        messageMap.put("download", message.isDownload());
+                                                                                                                        messageMap.put("size", storageMetadata.getSizeBytes());
+
+                                                                                                                        messageReference.child(chatUid).child(message.getFrom()).child(message_id).setValue(messageMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                                                            @Override
+                                                                                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                                                                                if(task.isSuccessful()){
+                                                                                                                                    messageReference.child(message.getFrom()).child(chatUid).child(message_id).child("receive").setValue(true);
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        });
+                                                                                                                    }
+                                                                                                                });
                                                                                                             }
                                                                                                         }
                                                                                                     });

@@ -12,10 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mmin18.widget.RealtimeBlurView;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,6 +29,7 @@ import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.util.GetTimeAgo;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
+import com.ibrhmdurna.chatapp.util.controller.FileController;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -66,6 +70,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case 2:
                 View view2 = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.my_image_message_layout, viewGroup, false);
                 return new ImageMyMessageViewHolder(view2);
+            case 3:
+                View view3 = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.image_message_layout, viewGroup, false);
+                return new ImageMessageViewHolder(view3);
         }
 
         return null;
@@ -102,6 +109,27 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case 2:
                 ImageMyMessageViewHolder viewHolder3 = (ImageMyMessageViewHolder)viewHolder;
                 viewHolder3.setData(messageList.get(i), i);
+                break;
+            case 3:
+                for(int x = 0; x < messageList.size() - 1; x++){
+
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
+                    String currentTime = simpleDateFormat.format(new Date(messageList.get(x).getTime()));
+                    String oldTime = simpleDateFormat.format(new Date(messageList.get(x + 1).getTime()));
+
+                    if(currentTime.equals(oldTime) && messageList.get(x).getFrom().equals(messageList.get(x + 1).getFrom())){
+                        messageList.get(x).setProfileVisibility(false);
+                        messageList.get(x + 1).setProfileVisibility(true);
+                    }
+                    else{
+                        messageList.get(x).setProfileVisibility(true);
+                    }
+                }
+
+                messageList.get(messageList.size() - 1).setProfileVisibility(true);
+
+                ImageMessageViewHolder viewHolder4 = (ImageMessageViewHolder)viewHolder;
+                viewHolder4.setData(messageList.get(i), i);
                 break;
         }
     }
@@ -330,6 +358,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private RelativeLayout rootView;
         private TextView imageSizeText;
         private LinearLayout downloadLayout;
+        private SpinKitView loadingBar;
+        private RealtimeBlurView blurLayout;
 
         public ImageMyMessageViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -342,9 +372,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             rootView = itemView.findViewById(R.id.root_view);
             imageSizeText = itemView.findViewById(R.id.image_size_text);
             downloadLayout = itemView.findViewById(R.id.image_download_layout);
+            loadingBar = itemView.findViewById(R.id.downloading_progress);
+            blurLayout = itemView.findViewById(R.id.blur_layout);
         }
 
-        public void setData(Message message, int position){
+        public void setData(final Message message, int position){
 
             if(message.getMessage().equals("")){
                messageContent.setVisibility(View.GONE);
@@ -356,29 +388,68 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             downloadLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "Downloading...", Toast.LENGTH_SHORT).show();
+                    downloadLayout.setVisibility(View.GONE);
+                    FileController.getInstance().compressToDownloadImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, blurLayout);
                 }
             });
 
             if(message.getPath().equals("")){
 
+                if(message.getThumb() != null){
+                    final Picasso picasso = Picasso.get();
+                    picasso.setIndicatorsEnabled(true);
+                    picasso.load(message.getThumb()).networkPolicy(NetworkPolicy.OFFLINE)
+                            .into(imageView, new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    blurLayout.setVisibility(View.VISIBLE);
+
+                                    if(message.getSize() != null){
+                                        imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
+                                    }
+
+                                    downloadLayout.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    picasso.load(message.getThumb()).into(imageView);
+                                }
+                            });
+                }
             }
             else{
                 File imgFile = new File(message.getPath());
 
-
-                /*
                 if(imgFile.exists()){
                     Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-
-                }*/
-
-                if(message.getThumb() != null){
-                    Picasso.get().load(message.getThumb()).networkPolicy(NetworkPolicy.OFFLINE).into(imageView);
+                    imageView.setImageBitmap(bitmap);
+                    downloadLayout.setVisibility(View.GONE);
+                    blurLayout.setVisibility(View.GONE);
                 }
+                else{
+                    if(message.getThumb() != null){
+                        final Picasso picasso = Picasso.get();
+                        picasso.setIndicatorsEnabled(true);
+                        picasso.load(message.getThumb()).networkPolicy(NetworkPolicy.OFFLINE)
+                                .into(imageView, new Callback() {
+                                    @Override
+                                    public void onSuccess() {
+                                        blurLayout.setVisibility(View.VISIBLE);
 
-                if(message.getSize() != null){
-                    imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
+                                        if(message.getSize() != null){
+                                            imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
+                                        }
+
+                                        downloadLayout.setVisibility(View.VISIBLE);
+                                    }
+
+                                    @Override
+                                    public void onError(Exception e) {
+                                        picasso.load(message.getThumb()).into(imageView);
+                                    }
+                                });
+                    }
                 }
             }
 
@@ -461,6 +532,173 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             }
         };
+    }
+
+    private class ImageMessageViewHolder extends RecyclerView.ViewHolder{
+
+        private ImageView imageView;
+        private EmojiTextView messageContent;
+        private TextView timeText;
+        private CircleImageView profileImage;
+        private RelativeLayout profileLayout;
+        private TextView profileText;
+        private RelativeLayout rootView;
+        private TextView imageSizeText;
+        private LinearLayout downloadLayout;
+        private SpinKitView loadingBar;
+        private RealtimeBlurView blurLayout;
+
+        public ImageMessageViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            imageView = itemView.findViewById(R.id.message_image);
+            profileLayout = itemView.findViewById(R.id.message_profile_layout);
+            profileImage = itemView.findViewById(R.id.message_profile_image);
+            profileText = itemView.findViewById(R.id.message_profile_text);
+            messageContent = itemView.findViewById(R.id.message_content);
+            timeText = itemView.findViewById(R.id.message_time_view);
+            rootView = itemView.findViewById(R.id.root_view);
+            imageSizeText = itemView.findViewById(R.id.image_size_text);
+            downloadLayout = itemView.findViewById(R.id.image_download_layout);
+            loadingBar = itemView.findViewById(R.id.downloading_progress);
+            blurLayout = itemView.findViewById(R.id.blur_layout);
+        }
+
+        public void setData(final Message message, int position){
+
+            if(message.getMessage().equals("")){
+                messageContent.setVisibility(View.GONE);
+            }
+            else{
+                messageContent.setText(message.getMessage());
+            }
+
+            /*
+            messageContent.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    AlertDialog dialog = DialogController.getInstance().dialogMessage(context, message, chatUid, false);
+                    dialog.show();
+                    return true;
+                }
+            });*/
+
+            if(message.getPath().equals("")){
+
+                if(message.getThumb() != null){
+                    final Picasso picasso = Picasso.get();
+                    picasso.setIndicatorsEnabled(true);
+                    picasso.load(message.getThumb()).networkPolicy(NetworkPolicy.OFFLINE)
+                            .into(imageView, new Callback() {
+                                @Override
+                                public void onSuccess() {
+
+                                    blurLayout.setVisibility(View.VISIBLE);
+
+                                    if(message.getSize() != null){
+                                        imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
+                                    }
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    picasso.load(message.getThumb()).into(imageView);
+                                }
+                            });
+                }
+
+                if(!message.isDownload()){
+                    FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, blurLayout);
+                }
+                else{
+                    downloadLayout.setVisibility(View.VISIBLE);
+                }
+            }
+            else{
+                File imgFile = new File(message.getPath());
+
+                if(imgFile.exists()){
+                    Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    imageView.setImageBitmap(bitmap);
+                    downloadLayout.setVisibility(View.GONE);
+                    blurLayout.setVisibility(View.GONE);
+                }
+                else{
+                    if(message.getThumb() != null){
+                        final Picasso picasso = Picasso.get();
+                        picasso.setIndicatorsEnabled(true);
+                        picasso.load(message.getThumb()).networkPolicy(NetworkPolicy.OFFLINE)
+                                .into(imageView, new Callback() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                        blurLayout.setVisibility(View.VISIBLE);
+
+                                        if(message.getSize() != null){
+                                            imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
+                                        }
+
+                                        downloadLayout.setVisibility(View.VISIBLE);
+                                    }
+
+                                    @Override
+                                    public void onError(Exception e) {
+                                        picasso.load(message.getThumb()).into(imageView);
+                                    }
+                                });
+                    }
+                }
+            }
+
+            downloadLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    downloadLayout.setVisibility(View.GONE);
+                    FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, blurLayout);
+                }
+            });
+
+            if(position > 0){
+                Message topMessage = messageList.get(position - 1);
+
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
+                String messageTime = simpleDateFormat.format(new Date(message.getTime()));
+                String topMessageTime = simpleDateFormat.format(new Date(topMessage.getTime()));
+
+                if(messageTime.equals(topMessageTime)){
+                    timeText.setVisibility(View.GONE);
+                }
+                else{
+                    timeText.setVisibility(View.VISIBLE);
+                    String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
+                    timeText.setText(time);
+                }
+            }
+            else{
+                timeText.setVisibility(View.VISIBLE);
+                String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
+                timeText.setText(time);
+            }
+
+            if(message.isProfileVisibility()){
+                profileLayout.setVisibility(View.VISIBLE);
+                profileImageProcess(profileImage, profileText);
+            }
+            else{
+                profileLayout.setVisibility(View.INVISIBLE);
+            }
+
+            if(position == messageList.size() - 1){
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(0, 0, 0, 40);
+                rootView.setLayoutParams(lp);
+            }
+            else {
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(0, 0, 0, 0);
+                rootView.setLayoutParams(lp);
+            }
+        }
     }
 
     private String getStringSizeLengthFile(long size) {

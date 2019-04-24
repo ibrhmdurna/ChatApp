@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
@@ -45,7 +46,9 @@ public class ChatsFragment extends Fragment implements ViewComponentFactory {
     @Override
     public void onStart() {
         super.onStart();
-        getChats();
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+            getChats();
+        }
     }
 
     @Override

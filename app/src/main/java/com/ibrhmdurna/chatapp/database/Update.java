@@ -37,6 +37,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.models.Account;
+import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.util.controller.AppController;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
@@ -403,7 +404,6 @@ public class Update{
 
             }
         });
-
     }
 
     public void messageSeen(String chatUid, boolean listener){
