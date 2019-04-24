@@ -9,9 +9,15 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.format.DateFormat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 import com.ibrhmdurna.chatapp.settings.EditAccountActivity;
 import com.ibrhmdurna.chatapp.start.RegisterFinishActivity;
 
@@ -37,70 +43,6 @@ public class FileController {
             }
         }
         return instance;
-    }
-
-    public void insertImage(Bitmap bitmap){
-        Date d = new Date();
-        CharSequence s  = DateFormat.format("yyyyMMdd", d.getTime());
-        String newImageName = "IMG_"+s+"_"+System.currentTimeMillis()+".jpg";
-
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bytes);
-
-        String ExternalStorageDirectory = Environment.getExternalStorageDirectory().getPath()+"/DCIM/ChatApp/Sent";
-        File fileInfo = new File(ExternalStorageDirectory);
-        File file = new File(ExternalStorageDirectory + File.separator, newImageName);
-
-        FileOutputStream fileOutputStream = null;
-        try {
-            if(fileInfo.isDirectory() || fileInfo.mkdirs()){
-                file.createNewFile();
-                fileOutputStream = new FileOutputStream(file);
-                fileOutputStream.write(bytes.toByteArray());
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }finally {
-            if(fileOutputStream != null){
-                try {
-                    fileOutputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    public void insertProfileImage(Bitmap bitmap){
-        Date d = new Date();
-        CharSequence s  = DateFormat.format("yyyyMMdd", d.getTime());
-        String newImageName = "IMG_"+s+"_"+System.currentTimeMillis()+".jpg";
-
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bytes);
-
-        String ExternalStorageDirectory = Environment.getExternalStorageDirectory().getPath()+"/DCIM/ChatApp/Profile";
-        File fileInfo = new File(ExternalStorageDirectory);
-        File file = new File(ExternalStorageDirectory + File.separator, newImageName);
-
-        FileOutputStream fileOutputStream = null;
-        try {
-            if(fileInfo.isDirectory() || fileInfo.mkdirs()){
-                file.createNewFile();
-                fileOutputStream = new FileOutputStream(file);
-                fileOutputStream.write(bytes.toByteArray());
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }finally {
-            if(fileOutputStream != null){
-                try {
-                    fileOutputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     public ArrayList<String> getFolderFile(String path){
@@ -298,6 +240,10 @@ public class FileController {
         new PhotoCompressAsyncTask(context, isRegister).execute(bitmap);
     }
 
+    public void compressToImageMessage(Bitmap bitmap, String path, String chatUid, String imageName){
+        new ImageMessageCompressAsyncTask(path, chatUid, imageName).execute(bitmap);
+    }
+
     private static class PhotoCompressAsyncTask extends AsyncTask<Bitmap, byte[], byte[]>{
 
         @SuppressLint("StaticFieldLeak")
@@ -346,6 +292,57 @@ public class FileController {
             }
 
             super.onPostExecute(data);
+        }
+    }
+
+    private static class ImageMessageCompressAsyncTask extends AsyncTask<Bitmap, byte[], String>{
+
+        private String path;
+        private String imageName;
+        private String chatUid;
+
+        public ImageMessageCompressAsyncTask(String path, String chatUid, String imageName){
+            this.imageName = imageName;
+            this.chatUid = chatUid;
+        }
+
+        @Override
+        protected String doInBackground(Bitmap... bitmaps) {
+
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmaps[0].compress(Bitmap.CompressFormat.JPEG, 80, bytes);
+
+            String ExternalStorageDirectory = Environment.getExternalStorageDirectory().getPath()+"/DCIM/ChatApp/Sent";
+            File fileInfo = new File(ExternalStorageDirectory);
+            File file = new File(ExternalStorageDirectory + File.separator, imageName + ".jpg");
+
+            FileOutputStream fileOutputStream = null;
+            try {
+                if(fileInfo.isDirectory() || fileInfo.mkdirs()){
+                    file.createNewFile();
+                    fileOutputStream = new FileOutputStream(file);
+                    fileOutputStream.write(bytes.toByteArray());
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }finally {
+                if(fileOutputStream != null){
+                    try {
+                        fileOutputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            return fileOutputStream != null ? ExternalStorageDirectory : path;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            FirebaseDatabase.getInstance().getReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(s + "/" + imageName + ".jpg");
+
+            super.onPostExecute(s);
         }
     }
 }

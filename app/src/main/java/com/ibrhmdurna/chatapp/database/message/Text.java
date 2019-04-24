@@ -32,6 +32,8 @@ public class Text extends MessageStrategy {
         chatsMap.put("Chats/" + message.getFrom() + "/" + chatUid, chatMap);
         chatsMap.put("Chats/" + chatUid + "/" + message.getFrom(), chatMap);
 
+        FirebaseDatabase.getInstance().getReference().updateChildren(chatsMap);
+
         final Map messageMap = new HashMap();
         messageMap.put("from", message.getFrom());
         messageMap.put("message", message.getMessage());
@@ -41,8 +43,6 @@ public class Text extends MessageStrategy {
         messageMap.put("seen", message.isSeen());
         messageMap.put("receive", message.isReceive());
         messageMap.put("time", ServerValue.TIMESTAMP);
-
-        FirebaseDatabase.getInstance().getReference().updateChildren(chatsMap);
 
         messageReference.child(message.getFrom()).child(chatUid).child(message_id).setValue(messageMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

@@ -19,6 +19,8 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
 
     private int position;
 
+    private String uid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTransparentTheme(this);
@@ -26,6 +28,8 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_crop);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        uid = getIntent().getStringExtra("user_id");
 
         toolsManagement();
     }
@@ -51,9 +55,10 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
             ImageController.getInstance().setImage(cropImageView.getCroppedBitmap());
         }
 
-        Intent chatIntent = new Intent(this, ShareActivity.class);
-        chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(chatIntent);
+        Intent shareIntent = new Intent(this, ShareActivity.class);
+        shareIntent.putExtra("user_id", uid);
+        shareIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(shareIntent);
         finish();
     }
 

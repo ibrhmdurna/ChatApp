@@ -177,6 +177,7 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
         switch (action){
             case "gallery":
                 Intent galleryIntent = new Intent(this, GalleryActivity.class);
+                galleryIntent.putExtra("user_id", "");
                 galleryIntent.putExtra("isContext", "Background");
                 startActivity(galleryIntent);
                 break;

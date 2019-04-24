@@ -187,12 +187,14 @@ public class RegisterFinishActivity extends AppCompatActivity implements ViewCom
         switch (action){
             case "gallery":
                 Intent galleryIntent = new Intent(this, GalleryActivity.class);
+                galleryIntent.putExtra("user_id", "");
                 galleryIntent.putExtra("isContext","Profile");
                 galleryIntent.putExtra("isRegister", true);
                 startActivity(galleryIntent);
                 break;
             case "camera":
                 Intent cameraIntent = new Intent(this, CameraActivity.class);
+                cameraIntent.putExtra("user_id", "");
                 cameraIntent.putExtra("isContext","Profile");
                 cameraIntent.putExtra("isRegister", true);
                 startActivity(cameraIntent);

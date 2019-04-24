@@ -27,20 +27,20 @@
                 android:layout_centerVertical="true">
 
                 <TextView
+                    android:id="@+id/profile_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="A"
                     android:layout_centerInParent="true"
                     android:textSize="18sp"
                     android:textColor="@android:color/white"
                     android:translationZ="1dp"/>
 
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    app:civ_border_color="@android:color/darker_gray"
-                    app:civ_border_width="1dp"
-                    android:src="@drawable/ic_avatar_0"/>
+                    app:civ_border_color="?attr/searchColor"
+                    app:civ_border_width="1dp"/>
             </RelativeLayout>
 
             <LinearLayout

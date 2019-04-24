@@ -583,6 +583,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
                 break;
             case "camera":
                 Intent cameraIntent = new Intent(this, CameraActivity.class);
+                cameraIntent.putExtra("user_id", "");
                 cameraIntent.putExtra("isContext","Profile");
                 cameraIntent.putExtra("isRegister", false);
                 startActivity(cameraIntent);

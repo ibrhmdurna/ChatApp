@@ -269,11 +269,13 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         switch (action){
             case "gallery":
                 Intent galleryIntent = new Intent(this, GalleryActivity.class);
+                galleryIntent.putExtra("user_id", uid);
                 galleryIntent.putExtra("isContext","Share");
                 startActivity(galleryIntent);
                 break;
             case "camera":
                 Intent cameraIntent = new Intent(this, CameraActivity.class);
+                cameraIntent.putExtra("user_id", uid);
                 cameraIntent.putExtra("isContext","Share");
                 startActivity(cameraIntent);
                 break;

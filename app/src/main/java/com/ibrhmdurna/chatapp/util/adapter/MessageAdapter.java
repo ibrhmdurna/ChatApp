@@ -2,6 +2,8 @@ package com.ibrhmdurna.chatapp.util.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +31,8 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.vanniktech.emoji.EmojiTextView;
 
+import java.io.File;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -58,6 +63,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case 1:
                 View view1 = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.message_layout, viewGroup, false);
                 return new TextMessageViewHolder(view1);
+            case 2:
+                View view2 = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.my_image_message_layout, viewGroup, false);
+                return new ImageMyMessageViewHolder(view2);
         }
 
         return null;
@@ -91,6 +99,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 TextMessageViewHolder viewHolder2 = (TextMessageViewHolder)viewHolder;
                 viewHolder2.setData(messageList.get(i), i);
                 break;
+            case 2:
+                ImageMyMessageViewHolder viewHolder3 = (ImageMyMessageViewHolder)viewHolder;
+                viewHolder3.setData(messageList.get(i), i);
+                break;
         }
     }
 
@@ -103,6 +115,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 return 0;
             else
                 return 1;
+        }
+        else if (message != null && message.getType().equals("Image")){
+            if(message.getFrom().equals(uid)){
+                return 2;
+            }
+            else{
+                return 3;
+            }
         }
 
         return -1;
@@ -298,6 +318,169 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             }
         };
+    }
+
+    private class ImageMyMessageViewHolder extends RecyclerView.ViewHolder{
+
+        private ImageView imageView;
+        private EmojiTextView messageContent;
+        private TextView timeText;
+        private ImageView sendIcon;
+        private LinearLayout seenLayout;
+        private RelativeLayout rootView;
+        private TextView imageSizeText;
+        private LinearLayout downloadLayout;
+
+        public ImageMyMessageViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            imageView = itemView.findViewById(R.id.message_image);
+            messageContent = itemView.findViewById(R.id.message_content);
+            timeText = itemView.findViewById(R.id.message_time_view);
+            seenLayout = itemView.findViewById(R.id.message_seen_layout);
+            sendIcon = itemView.findViewById(R.id.message_send_icon);
+            rootView = itemView.findViewById(R.id.root_view);
+            imageSizeText = itemView.findViewById(R.id.image_size_text);
+            downloadLayout = itemView.findViewById(R.id.image_download_layout);
+        }
+
+        public void setData(Message message, int position){
+
+            if(message.getMessage().equals("")){
+               messageContent.setVisibility(View.GONE);
+            }
+            else{
+                messageContent.setText(message.getMessage());
+            }
+
+            downloadLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "Downloading...", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            if(message.getPath().equals("")){
+
+            }
+            else{
+                File imgFile = new File(message.getPath());
+
+
+                /*
+                if(imgFile.exists()){
+                    Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+
+                }*/
+
+                if(message.getThumb() != null){
+                    Picasso.get().load(message.getThumb()).networkPolicy(NetworkPolicy.OFFLINE).into(imageView);
+                }
+
+                if(message.getSize() != null){
+                    imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
+                }
+            }
+
+            if(message.isSend()){
+                if(message.isReceive()){
+                    sendIcon.setVisibility(View.GONE);
+                    if(position == messageList.size() - 1){
+                        FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").addValueEventListener(seenEventListener);
+                    }
+                    else{
+                        FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
+                        seenLayout.setVisibility(View.GONE);
+                    }
+                }
+            }
+            else{
+                FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
+                seenLayout.setVisibility(View.GONE);
+            }
+
+            if(position > 0){
+                Message topMessage = messageList.get(position - 1);
+
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
+                String messageTime = simpleDateFormat.format(new Date(message.getTime()));
+                String topMessageTime = simpleDateFormat.format(new Date(topMessage.getTime()));
+
+                if(messageTime.equals(topMessageTime)){
+                    timeText.setVisibility(View.GONE);
+                }
+                else{
+                    timeText.setVisibility(View.VISIBLE);
+                    String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
+                    timeText.setText(time);
+                }
+            }
+            else{
+                timeText.setVisibility(View.VISIBLE);
+                String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
+                timeText.setText(time);
+            }
+
+            if(position == messageList.size() - 1){
+                if(seenLayout.getVisibility() == View.VISIBLE){
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    lp.setMargins(0, 0, 0, 0);
+                    rootView.setLayoutParams(lp);
+                }
+                else{
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    lp.setMargins(0, 0, 0, 40);
+                    rootView.setLayoutParams(lp);
+                }
+            }
+            else {
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(0, 0, 0, 0);
+                rootView.setLayoutParams(lp);
+            }
+
+        }
+
+        private ValueEventListener seenEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    boolean isSeen = (boolean) dataSnapshot.getValue();
+
+                    if(isSeen){
+                        seenLayout.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        seenLayout.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+    }
+
+    private String getStringSizeLengthFile(long size) {
+
+        DecimalFormat df = new DecimalFormat("0.00");
+
+        float sizeKb = 1024.0f;
+        float sizeMb = sizeKb * sizeKb;
+        float sizeGb = sizeMb * sizeKb;
+        float sizeTerra = sizeGb * sizeKb;
+
+
+        if(size < sizeMb)
+            return df.format(size / sizeKb)+ " KB";
+        else if(size < sizeGb)
+            return df.format(size / sizeMb) + " MB";
+        else if(size < sizeTerra)
+            return df.format(size / sizeGb) + " GB";
+
+        return "";
     }
 
     private void profileImageProcess(final CircleImageView profileImage, final TextView profileText){

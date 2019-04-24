@@ -11,6 +11,12 @@ public class Message {
     private boolean seen;
     private boolean receive;
 
+    // For image message
+    private String path;
+    private String thumb;
+    private boolean download;
+    private Long size;
+
     private boolean profileVisibility;
 
     private String message_id;
@@ -107,5 +113,37 @@ public class Message {
 
     public void setMessage_id(String message_id) {
         this.message_id = message_id;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public boolean isDownload() {
+        return download;
+    }
+
+    public void setDownload(boolean download) {
+        this.download = download;
+    }
+
+    public Long getSize() {
+        return size;
+    }
+
+    public void setSize(Long size) {
+        this.size = size;
+    }
+
+    public String getThumb() {
+        return thumb;
+    }
+
+    public void setThumb(String thumb) {
+        this.thumb = thumb;
     }
 }

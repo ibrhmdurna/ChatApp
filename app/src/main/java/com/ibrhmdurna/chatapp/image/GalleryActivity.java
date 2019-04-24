@@ -49,6 +49,8 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
     private String isContext = "Share";
     private boolean isRegister;
 
+    private String uid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTheme(this);
@@ -57,6 +59,7 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
 
         isContext = getIntent().getStringExtra("isContext");
         isRegister = getIntent().getBooleanExtra("isRegister", false);
+        uid = getIntent().getStringExtra("user_id");
 
         permissionProcess();
     }
@@ -190,7 +193,7 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
 
     private void getAlbumPhoto(final List<String> list){
         galleryContainer.removeAllViews();
-        final AlbumAdapter albumAdapter = new AlbumAdapter(this, list, isContext, isRegister);
+        final AlbumAdapter albumAdapter = new AlbumAdapter(this, list, isContext, isRegister, uid);
         galleryContainer.setAdapter(albumAdapter);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);

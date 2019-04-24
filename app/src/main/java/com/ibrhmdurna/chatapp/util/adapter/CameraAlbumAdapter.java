@@ -26,11 +26,14 @@ public class CameraAlbumAdapter extends RecyclerView.Adapter<CameraAlbumAdapter.
     private String isContext;
     private boolean isRegister;
 
-    public CameraAlbumAdapter(AppCompatActivity context, List<String> list, String isContext, boolean isRegister){
+    private String uid;
+
+    public CameraAlbumAdapter(AppCompatActivity context, List<String> list, String isContext, boolean isRegister, String uid){
         this.context = context;
         this.list = list;
         this.isContext = isContext;
         this.isRegister = isRegister;
+        this.uid = uid;
         ImageController.getInstance().setPath(list);
     }
 
@@ -51,6 +54,7 @@ public class CameraAlbumAdapter extends RecyclerView.Adapter<CameraAlbumAdapter.
                 switch (isContext) {
                     case "Share":
                         Intent shareIntent = new Intent(context, ShareActivity.class);
+                        shareIntent.putExtra("user_id", uid);
                         shareIntent.putExtra("position", i);
                         context.startActivity(shareIntent);
                         context.overridePendingTransition(0, 0);

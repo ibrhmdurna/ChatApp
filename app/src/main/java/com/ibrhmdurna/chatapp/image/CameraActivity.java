@@ -50,6 +50,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     private RecyclerView galleryContainer;
 
+    private String uid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTransparentTheme(this);
@@ -57,6 +59,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_camera);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        uid = getIntent().getStringExtra("user_id");
 
         permissionProcess();
     }
@@ -67,7 +71,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     private void getAlbumPhoto(final List<String> list){
         galleryContainer.removeAllViews();
-        final CameraAlbumAdapter albumAdapter = new CameraAlbumAdapter(this, list, isContext, isRegister);
+        final CameraAlbumAdapter albumAdapter = new CameraAlbumAdapter(this, list, isContext, isRegister, uid);
         galleryContainer.setAdapter(albumAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -143,6 +147,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 switch (isContext) {
                     case "Share":
                         Intent shareIntent = new Intent(getApplicationContext(), ShareActivity.class);
+                        shareIntent.putExtra("user_id", uid);
                         startActivity(shareIntent);
                         overridePendingTransition(0, 0);
                         break;
@@ -290,6 +295,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.camera_all_photo_item:
                 Intent galleryIntent = new Intent(this, CameraGalleryActivity.class);
+                galleryIntent.putExtra("user_id", uid);
                 galleryIntent.putExtra("isContext", isContext);
                 startActivity(galleryIntent);
                 break;

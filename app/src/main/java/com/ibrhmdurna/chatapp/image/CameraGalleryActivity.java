@@ -27,6 +27,8 @@ public class CameraGalleryActivity extends AppCompatActivity implements ViewComp
     private String isContext = "Share";
     private boolean isRegister;
 
+    private String uid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTheme(this);
@@ -35,13 +37,14 @@ public class CameraGalleryActivity extends AppCompatActivity implements ViewComp
 
         isContext = getIntent().getStringExtra("isContext");
         isRegister = getIntent().getBooleanExtra("isRegister", false);
+        uid = getIntent().getStringExtra("user_id");
 
         toolsManagement();
     }
 
     private void getAlbumPhoto(final List<String> list){
         galleryContainer.removeAllViews();
-        final AlbumAdapter albumAdapter = new AlbumAdapter(this, list, isContext, isRegister);
+        final AlbumAdapter albumAdapter = new AlbumAdapter(this, list, isContext, isRegister, uid);
         galleryContainer.setAdapter(albumAdapter);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);

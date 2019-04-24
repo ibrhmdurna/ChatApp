@@ -16,12 +16,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.github.chrisbanes.photoview.PhotoView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
+import com.ibrhmdurna.chatapp.database.bridge.Find;
+import com.ibrhmdurna.chatapp.database.find.ShareFindInfo;
 import com.ibrhmdurna.chatapp.database.message.Image;
 import com.ibrhmdurna.chatapp.database.strategy.SendMessage;
 import com.ibrhmdurna.chatapp.local.ChatActivity;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.util.controller.FileController;
 import com.ibrhmdurna.chatapp.util.controller.ImageController;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
@@ -42,22 +47,44 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
     private String path;
     private int position;
 
+    private String uid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTransparentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
 
+        uid = getIntent().getStringExtra("user_id");
+
         toolsManagement();
     }
 
+    private void getContent(){
+        AbstractFind find = new Find(new ShareFindInfo(this, uid));
+        find.getContent();
+    }
+
     private void sendMessage(){
-        SendMessage message = new SendMessage(new Image());
+        SendMessage message = new SendMessage(new Image(this));
+        message.setChatUid(uid);
+        Message messageModel = new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "", "Image", null, false, false, false);
+        messageModel.setDownload(false);
+        messageModel.setPath(path);
+        message.setMessage(messageModel);
         message.Send();
+
+        Intent chatIntent = new Intent(this, ChatActivity.class);
+        chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(chatIntent);
+
+        ImageController.getInstance().setCameraImage(null);
+        ImageController.getInstance().setImage(null);
+        ImageController.getInstance().setCameraCroppedImage(null);
     }
 
     private void shareProcess(){
-        if(ImageController.getInstance().getCameraCroppedImage() != null){
+        /*if(ImageController.getInstance().getCameraCroppedImage() != null){
             FileController.getInstance().insertImage(ImageController.getInstance().getCameraCroppedImage());
         }
         else if(ImageController.getInstance().getCameraImage() != null){
@@ -70,7 +97,7 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
             Drawable drawable = imageView.getDrawable();
             FileController.getInstance().insertImage(((BitmapDrawable)drawable).getBitmap());
         }
-
+        */
 
         Intent chatIntent = new Intent(this, ChatActivity.class);
         chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -172,6 +199,7 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
         toolbarProcess();
         buildView();
         emojiProcess();
+        getContent();
     }
 
     @Override
@@ -204,6 +232,7 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
                 break;
             case R.id.image_edit_item_view:
                 Intent editIntent = new Intent(getApplicationContext(), CropActivity.class);
+                editIntent.putExtra("user_id", uid);
                 editIntent.putExtra("position", position);
                 startActivity(editIntent);
                 overridePendingTransition(0,0);
