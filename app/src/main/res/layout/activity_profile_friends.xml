@@ -117,6 +117,7 @@
                 android:layout_height="wrap_content"
                 app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
                 android:background="@drawable/rounded_background"
+                android:backgroundTint="?attr/backgroundCardColor"
                 android:visibility="gone"
                 android:nestedScrollingEnabled="false">
             </android.support.v7.widget.RecyclerView>
@@ -139,8 +140,6 @@
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
-
-
 
     <RelativeLayout
         android:id="@+id/bottom_view"
@@ -165,6 +164,7 @@
             android:translationZ="2dp"/>
 
         <android.support.design.widget.TabLayout
+            android:id="@+id/bottom_tab_selected"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_alignParentBottom="true"
@@ -174,11 +174,13 @@
             app:tabTextAppearance="@style/TextAppearance.AppCompat.Medium">
 
             <android.support.design.widget.TabItem
+                android:id="@+id/friends_item"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Friends"/>
 
             <android.support.design.widget.TabItem
+                android:id="@+id/mutual_item"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Mutual"/>

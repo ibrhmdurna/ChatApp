@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         page = getIntent().getStringExtra("page");
 
         if(page.equals("Main")){
-            showFragment(new MessagesFragment(), "MessagesFragment");
+            showFragment(new ChatsFragment(), "ChatsFragment");
         }
         else {
             showFragment(new AccountFragment(), "AccountFragment");
@@ -136,10 +136,10 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.messages_item:
-                        showFragment(new MessagesFragment(), "MessagesFragment");
-                        App.Background.getInstance().clearThisPage("MessagesFragment");
-                        App.Background.getInstance().addPage("MessagesFragment");
-                        collapsingToolbarLayout.setTitle("Messages");
+                        showFragment(new ChatsFragment(), "ChatsFragment");
+                        App.Background.getInstance().clearThisPage("ChatsFragment");
+                        App.Background.getInstance().addPage("ChatsFragment");
+                        collapsingToolbarLayout.setTitle("Chats");
                         toolbar.getMenu().clear();
                         toolbar.inflateMenu(R.menu.messages_main_menu);
                         break;
@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         if(page.equals("Main")){
             if(App.Background.getInstance().pageStackChildCount() > 1){
                 switch (App.Background.getInstance().getPageStackList().get(App.Background.getInstance().pageStackChildCount() - 2)){
-                    case "MessagesFragment":
+                    case "ChatsFragment":
                         App.Background.getInstance().removePage();
                         bottomNavigationView.setSelectedItemId(R.id.messages_item);
                         toolbar.getMenu().clear();

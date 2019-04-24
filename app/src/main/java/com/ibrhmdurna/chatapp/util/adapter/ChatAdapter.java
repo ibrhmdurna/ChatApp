@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -270,28 +271,41 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                         messageCount.setVisibility(View.VISIBLE);
                         messageCount.setText(count + "");
 
-                        TypedValue typedValue = new TypedValue();
-                        Resources.Theme theme = context.getContext().getTheme();
-                        theme.resolveAttribute(R.attr.colorAccent, typedValue, true);
-                        @ColorInt int color = typedValue.data;
-                        time.setTextColor(color);
+                        try {
+                            TypedValue typedValue = new TypedValue();
+                            Resources.Theme theme = context.getContext().getTheme();
+                            theme.resolveAttribute(R.attr.colorAccent, typedValue, true);
+                            @ColorInt int color = typedValue.data;
+                            time.setTextColor(color);
+                        }catch (Exception e){
+                            Log.e("Error", e.getMessage());
+                        }
+
                     }
                     else{
-                        TypedValue typedValue = new TypedValue();
-                        Resources.Theme theme = context.getContext().getTheme();
-                        theme.resolveAttribute(R.attr.colorControlNormal, typedValue, true);
-                        @ColorInt int color = typedValue.data;
-                        time.setTextColor(color);
+                        try {
+                            TypedValue typedValue = new TypedValue();
+                            Resources.Theme theme = context.getContext().getTheme();
+                            theme.resolveAttribute(R.attr.colorControlNormal, typedValue, true);
+                            @ColorInt int color = typedValue.data;
+                            time.setTextColor(color);
+                        }catch (Exception e){
+                            Log.e("Error", e.getMessage());
+                        }
 
                         messageCount.setVisibility(View.GONE);
                     }
                 }
                 else{
-                    TypedValue typedValue = new TypedValue();
-                    Resources.Theme theme = context.getContext().getTheme();
-                    theme.resolveAttribute(R.attr.colorControlNormal, typedValue, true);
-                    @ColorInt int color = typedValue.data;
-                    time.setTextColor(color);
+                    try {
+                        TypedValue typedValue = new TypedValue();
+                        Resources.Theme theme = context.getContext().getTheme();
+                        theme.resolveAttribute(R.attr.colorControlNormal, typedValue, true);
+                        @ColorInt int color = typedValue.data;
+                        time.setTextColor(color);
+                    }catch (Exception e){
+                        Log.e("Error", e.getMessage());
+                    }
 
                     messageCount.setVisibility(View.GONE);
                 }

@@ -1,6 +1,6 @@
 package com.ibrhmdurna.chatapp.database.findAll;
 
-import android.os.Handler;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
+import com.ibrhmdurna.chatapp.local.ProfileActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Friend;
 import com.ibrhmdurna.chatapp.util.adapter.FriendAdapter;
@@ -54,7 +55,7 @@ public class FriendFindAll implements IFind {
     public void getContent() {
         friendList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(context.getContext());
-        friendAdapter = new FriendAdapter(context.getContext(), friendList);
+        friendAdapter = new FriendAdapter(context.getContext(), friendList, 0);
         friendView.setLayoutManager(layoutManager);
         friendView.setAdapter(friendAdapter);
 
@@ -120,6 +121,8 @@ public class FriendFindAll implements IFind {
                             }
                         });
                     }
+
+
                 }
                 else {
                     if(bottomNavigationView.getSelectedItemId() == R.id.friends_item){
@@ -135,11 +138,20 @@ public class FriendFindAll implements IFind {
 
             }
         });
+
+        getMore();
     }
 
     @Override
     public void getMore() {
-
+        friendAdapter.setOnItemClickListener(new FriendAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(String uid) {
+                Intent profileIntent = new Intent(context.getActivity(), ProfileActivity.class);
+                profileIntent.putExtra("user_id", uid);
+                context.startActivity(profileIntent);
+            }
+        });
     }
 
     private void sortArrayList(){

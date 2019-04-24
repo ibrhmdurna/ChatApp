@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="end"
-            android:layout_marginEnd="15dp"
+            android:layout_marginEnd="20dp"
             android:padding="5dp"
             android:background="@drawable/gray_rounded_background"
             android:backgroundTint="?attr/backgroundBrushColor"
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_seen_icon"
                 android:layout_gravity="center"
-                android:layout_marginEnd="10dp"/>
+                android:layout_marginEnd="6dp"/>
 
             <TextView
                 android:layout_width="wrap_content"

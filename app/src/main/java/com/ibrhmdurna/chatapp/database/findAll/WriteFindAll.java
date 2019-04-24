@@ -10,8 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -20,8 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
+import com.ibrhmdurna.chatapp.local.ChatActivity;
 import com.ibrhmdurna.chatapp.local.ProfileActivity;
-import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Friend;
 import com.ibrhmdurna.chatapp.util.adapter.FriendAdapter;
@@ -31,52 +30,51 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class AccountFriendFindAll implements IFind {
+public class WriteFindAll implements IFind {
 
     private Activity context;
 
     private List<Friend> friendList;
     private FriendAdapter friendAdapter;
     private RecyclerView friendView;
+    private LinearLayout writeLayout;
     private NestedScrollView notFoundView;
     private EditText searchInput;
-    private RelativeLayout bottomLayout;
+    private LinearLayout newGroupLayout;
+    private LinearLayout addFriendLayout;
 
-    private String uid;
-
-    public AccountFriendFindAll(Activity context, String uid){
+    public WriteFindAll(Activity context){
         this.context = context;
-        this.uid = uid;
         buildView();
     }
 
     @Override
     public void buildView() {
-        friendView = context.findViewById(R.id.friends_container);
-        notFoundView = context.findViewById(R.id.no_friends_view);
-        searchInput = context.findViewById(R.id.friends_search_input);
-        if(!uid.equals(FirebaseAuth.getInstance().getUid())){
-            bottomLayout = context.findViewById(R.id.bottom_layout);
-        }
+        friendView = context.findViewById(R.id.write_container);
+        writeLayout = context.findViewById(R.id.write_layout);
+        notFoundView = context.findViewById(R.id.no_write_view);
+        searchInput = context.findViewById(R.id.search_input);
+        newGroupLayout = context.findViewById(R.id.write_new_group_layout);
+        addFriendLayout = context.findViewById(R.id.write_add_friend_layout);
     }
 
     @Override
     public void getContent() {
         friendList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        friendAdapter = new FriendAdapter(context, friendList, 1);
+        friendAdapter = new FriendAdapter(context, friendList, 0);
         friendView.setLayoutManager(layoutManager);
         friendView.setAdapter(friendAdapter);
+
+        String uid = FirebaseAuth.getInstance().getUid();
 
         FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 friendList.clear();
                 if(dataSnapshot.exists()){
-                    friendView.setVisibility(View.VISIBLE);
+                    writeLayout.setVisibility(View.VISIBLE);
                     notFoundView.setVisibility(View.GONE);
-                    if(bottomLayout != null)
-                        bottomLayout.setVisibility(View.VISIBLE);
 
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
 
@@ -105,10 +103,8 @@ public class AccountFriendFindAll implements IFind {
                     }
                 }
                 else{
-                    friendView.setVisibility(View.GONE);
+                    writeLayout.setVisibility(View.GONE);
                     notFoundView.setVisibility(View.VISIBLE);
-                    if(bottomLayout != null)
-                        bottomLayout.setVisibility(View.GONE);
                 }
             }
 
@@ -137,24 +133,24 @@ public class AccountFriendFindAll implements IFind {
             @Override
             public void afterTextChanged(Editable s) {
                 filter(s.toString());
+
+                if(searchInput.getText().toString().length() > 0){
+                    newGroupLayout.setVisibility(View.GONE);
+                    addFriendLayout.setVisibility(View.GONE);
+                }
+                else{
+                    newGroupLayout.setVisibility(View.VISIBLE);
+                    addFriendLayout.setVisibility(View.VISIBLE);
+                }
             }
         });
-
-        final String myUid = FirebaseAuth.getInstance().getUid();
 
         friendAdapter.setOnItemClickListener(new FriendAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String uid) {
-                if(myUid.equals(uid)){
-                    Intent mainIntent = new Intent(context, MainActivity.class);
-                    mainIntent.putExtra("page", "Account");
-                    context.startActivity(mainIntent);
-                }
-                else{
-                    Intent profileIntent = new Intent(context, ProfileActivity.class);
-                    profileIntent.putExtra("user_id", uid);
-                    context.startActivity(profileIntent);
-                }
+                Intent chatIntent = new Intent(context, ChatActivity.class);
+                chatIntent.putExtra("user_id", uid);
+                context.startActivity(chatIntent);
             }
         });
     }

@@ -1,6 +1,7 @@
 package com.ibrhmdurna.chatapp.local;
 
 import android.content.Context;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -17,11 +18,16 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.database.Connection;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
+import com.ibrhmdurna.chatapp.database.bridge.FindAll;
+import com.ibrhmdurna.chatapp.database.findAll.AccountFriendFindAll;
+import com.ibrhmdurna.chatapp.database.findAll.MutualFriendFindAll;
 import com.ibrhmdurna.chatapp.util.Environment;
 
 public class ProfileFriendsActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
@@ -31,6 +37,9 @@ public class ProfileFriendsActivity extends AppCompatActivity implements ViewCom
     private LinearLayout searchInputLayout;
     private EditText searchInput;
     private ImageButton searchClearView;
+    private TabLayout tabLayout;
+
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +47,45 @@ public class ProfileFriendsActivity extends AppCompatActivity implements ViewCom
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_friends);
 
+        uid = getIntent().getStringExtra("user_id");
+
         toolsManagement();
+    }
+
+    private void getFriends(){
+        AbstractFindAll findAll = new FindAll(new AccountFriendFindAll(this, uid));
+        findAll.getContent();
+    }
+
+    private void getMutual(){
+        AbstractFindAll findAll = new FindAll(new MutualFriendFindAll(this, uid));
+        findAll.getContent();
+    }
+
+    private void tabProcess(){
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()){
+                    case 0:
+                        getFriends();
+                        break;
+                    case 1:
+                        getMutual();
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     private void inputProcess(){
@@ -72,6 +119,8 @@ public class ProfileFriendsActivity extends AppCompatActivity implements ViewCom
         Environment.getInstance().toolbarProcess(this, R.id.friends_toolbar);
         buildView();
         inputProcess();
+        tabProcess();
+        getFriends();
     }
 
     @Override
@@ -81,6 +130,7 @@ public class ProfileFriendsActivity extends AppCompatActivity implements ViewCom
         searchInputLayout = findViewById(R.id.friends_search_layout);
         searchInput = findViewById(R.id.friends_search_input);
         searchClearView = findViewById(R.id.clear_search_btn);
+        tabLayout = findViewById(R.id.bottom_tab_selected);
     }
 
     @Override

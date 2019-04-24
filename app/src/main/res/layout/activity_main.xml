@@ -28,7 +28,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleGravity="top|center_horizontal"
-            app:title="Messages"
+            app:title="Chats"
             app:expandedTitleTextAppearance="@style/ExpandedTitleTextAppearance"
             app:collapsedTitleTextAppearance="@style/CollapsedTitleTextAppearance"
             app:expandedTitleMarginTop="-100dp">

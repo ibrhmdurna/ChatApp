@@ -1,12 +1,8 @@
 package com.ibrhmdurna.chatapp.local;
 
 import android.content.Context;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,9 +16,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
@@ -31,10 +27,6 @@ import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
 import com.ibrhmdurna.chatapp.database.bridge.FindAll;
 import com.ibrhmdurna.chatapp.database.findAll.AccountFriendFindAll;
 import com.ibrhmdurna.chatapp.util.Environment;
-import com.ibrhmdurna.chatapp.util.adapter.MessageAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FriendsActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
@@ -54,7 +46,7 @@ public class FriendsActivity extends AppCompatActivity implements ViewComponentF
     }
 
     private void getFriends(){
-        AbstractFindAll findAll = new FindAll(new AccountFriendFindAll(this));
+        AbstractFindAll findAll = new FindAll(new AccountFriendFindAll(this, FirebaseAuth.getInstance().getUid()));
         findAll.getContent();
     }
 

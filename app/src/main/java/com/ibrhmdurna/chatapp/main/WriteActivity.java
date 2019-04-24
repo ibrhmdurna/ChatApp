@@ -1,6 +1,7 @@
 package com.ibrhmdurna.chatapp.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +26,9 @@ import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Connection;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
+import com.ibrhmdurna.chatapp.database.bridge.FindAll;
+import com.ibrhmdurna.chatapp.database.findAll.WriteFindAll;
 import com.ibrhmdurna.chatapp.util.Environment;
 import com.ibrhmdurna.chatapp.util.adapter.MessageAdapter;
 
@@ -38,7 +42,6 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
     private LinearLayout searchInputLayout;
     private EditText searchInput;
     private ImageButton searchClearView;
-    private NestedScrollView noWriteView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,11 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
         setContentView(R.layout.activity_write);
 
         toolsManagement();
+    }
+
+    private void getFriends(){
+        AbstractFindAll findAll = new FindAll(new WriteFindAll(this));
+        findAll.getContent();
     }
 
     private void inputProcess(){
@@ -82,7 +90,6 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
         searchInputLayout = findViewById(R.id.write_search_layout);
         searchInput = findViewById(R.id.search_input);
         searchClearView = findViewById(R.id.clear_search_btn);
-        noWriteView = findViewById(R.id.no_write_view);
     }
 
     @Override
@@ -132,6 +139,10 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
                 searchInput.getText().clear();
                 searchClearView.setVisibility(View.GONE);
                 break;
+            case R.id.write_add_friend_layout:
+                Intent searchIntent = new Intent(this, SearchActivity.class);
+                startActivity(searchIntent);
+                break;
         }
     }
 
@@ -139,6 +150,7 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
     protected void onResume() {
         super.onResume();
         Connection.getInstance().onConnect();
+        getFriends();
     }
 
     @Override

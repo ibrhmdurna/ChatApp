@@ -94,6 +94,7 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
                 break;
             case R.id.profileFriendsView:
                 Intent friends = new Intent(this, ProfileFriendsActivity.class);
+                friends.putExtra("user_id", uid);
                 startActivity(friends);
                 break;
             case R.id.add_friend_btn:

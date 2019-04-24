@@ -10,8 +10,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +29,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class AccountFriendFindAll implements IFind {
+public class MutualFriendFindAll implements IFind {
 
     private Activity context;
 
@@ -40,11 +38,10 @@ public class AccountFriendFindAll implements IFind {
     private RecyclerView friendView;
     private NestedScrollView notFoundView;
     private EditText searchInput;
-    private RelativeLayout bottomLayout;
 
     private String uid;
 
-    public AccountFriendFindAll(Activity context, String uid){
+    public MutualFriendFindAll(Activity context, String uid){
         this.context = context;
         this.uid = uid;
         buildView();
@@ -55,9 +52,6 @@ public class AccountFriendFindAll implements IFind {
         friendView = context.findViewById(R.id.friends_container);
         notFoundView = context.findViewById(R.id.no_friends_view);
         searchInput = context.findViewById(R.id.friends_search_input);
-        if(!uid.equals(FirebaseAuth.getInstance().getUid())){
-            bottomLayout = context.findViewById(R.id.bottom_layout);
-        }
     }
 
     @Override
@@ -68,47 +62,66 @@ public class AccountFriendFindAll implements IFind {
         friendView.setLayoutManager(layoutManager);
         friendView.setAdapter(friendAdapter);
 
+        final String myUid = FirebaseAuth.getInstance().getUid();
+
         FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 friendList.clear();
                 if(dataSnapshot.exists()){
-                    friendView.setVisibility(View.VISIBLE);
-                    notFoundView.setVisibility(View.GONE);
-                    if(bottomLayout != null)
-                        bottomLayout.setVisibility(View.VISIBLE);
 
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        if(!snapshot.getKey().equals(myUid)){
 
-                        final String friend_id = snapshot.getKey();
+                            FirebaseDatabase.getInstance().getReference().child("Friends").child(myUid).child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.exists()){
+                                        final Friend mutualFriend = dataSnapshot.getValue(Friend.class);
 
-                        final Friend friend = snapshot.getValue(Friend.class);
+                                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(dataSnapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if(dataSnapshot.exists()){
+                                                    final Account account = dataSnapshot.getValue(Account.class);
+                                                    account.setUid(dataSnapshot.getKey());
+                                                    mutualFriend.setAccount(account);
+                                                    friendList.add(mutualFriend);
 
-                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(friend_id).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()){
-                                    final Account account = dataSnapshot.getValue(Account.class);
-                                    account.setUid(dataSnapshot.getKey());
-                                    friend.setAccount(account);
-                                    friendList.add(friend);
+                                                    sortArrayList();
+                                                }
+                                            }
 
-                                    sortArrayList();
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            }
-                        });
+                                }
+                            });
+
+                        }
                     }
+
+                    if(friendList.size() > 0){
+                        friendView.setVisibility(View.VISIBLE);
+                        notFoundView.setVisibility(View.GONE);
+                    }
+                    else{
+                        friendView.setVisibility(View.GONE);
+                        notFoundView.setVisibility(View.VISIBLE);
+                    }
+
                 }
                 else{
                     friendView.setVisibility(View.GONE);
                     notFoundView.setVisibility(View.VISIBLE);
-                    if(bottomLayout != null)
-                        bottomLayout.setVisibility(View.GONE);
                 }
             }
 

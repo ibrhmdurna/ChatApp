@@ -21,7 +21,8 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/friend_profile_image"
                 android:layout_width="45dp"
-                android:layout_height="45dp"/>
+                android:layout_height="45dp"
+                android:src="@drawable/ic_avatar_3"/>
 
             <TextView
                 android:id="@+id/friend_profile_image_text"
@@ -49,6 +50,7 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textSize="18sp"
+                android:text="Name Surname"
                 android:textColor="?attr/primaryTextColor"
                 android:layout_marginEnd="5dp"/>
 
@@ -59,18 +61,62 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textSize="14sp"
+                android:text="email"
                 android:gravity="center_vertical"
                 android:layout_marginEnd="10dp"/>
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/friend_online_icon"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
-            android:layout_weight="0"
-            android:src="@drawable/ic_online_icon"
+        <TextView
+            android:id="@+id/friend_add_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="80dp"
+            android:text="Add"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:layout_gravity="center"
-            android:layout_marginEnd="5dp"
+            android:textColor="@android:color/white"
+            style="@style/CustomButtonStyle"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/friend_cancel_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="80dp"
+            android:text="Cancel"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_gravity="center"
+            android:textColor="?attr/primaryTextColor"
+            style="@style/CustomButtonStyle"
+            android:backgroundTint="?attr/backgroundBrushColor"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/friend_delete_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="80dp"
+            android:text="Delete"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            style="@style/CustomButtonStyle"
+            android:backgroundTint="@android:color/holo_red_light"
             android:visibility="gone"/>
     </LinearLayout>
 
