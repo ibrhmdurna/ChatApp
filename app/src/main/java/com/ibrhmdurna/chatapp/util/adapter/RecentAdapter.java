@@ -122,7 +122,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentView
             }
             else {
                 final Picasso picasso = Picasso.get();
-                picasso.setIndicatorsEnabled(true);
+                picasso.setIndicatorsEnabled(false);
                 picasso.load(value).networkPolicy(NetworkPolicy.OFFLINE)
                         .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
                     @Override

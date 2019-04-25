@@ -1,23 +1,15 @@
 package com.ibrhmdurna.chatapp.database.find;
 
 import android.app.Activity;
-import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.os.Handler;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
@@ -39,6 +31,7 @@ public class ChatFindInfo implements IFind {
     private TextView profileText;
     private TextView nameSurname;
     private TextView lastSeen;
+    private TextView typingView;
 
     private String uid;
 
@@ -54,15 +47,12 @@ public class ChatFindInfo implements IFind {
         profileText = context.findViewById(R.id.chat_profile_text);
         nameSurname = context.findViewById(R.id.chat_name_surname);
         lastSeen = context.findViewById(R.id.chat_last_seen);
+        typingView = context.findViewById(R.id.chat_typing);
     }
 
     @Override
     public void getContent() {
-
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Accounts").child(uid).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -80,7 +70,7 @@ public class ChatFindInfo implements IFind {
                     }
                     else {
                         final Picasso picasso = Picasso.get();
-                        picasso.setIndicatorsEnabled(true);
+                        picasso.setIndicatorsEnabled(false);
                         picasso.load(account.getThumb_image()).networkPolicy(NetworkPolicy.OFFLINE)
                                 .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
                             @Override
@@ -119,23 +109,15 @@ public class ChatFindInfo implements IFind {
     private void typingListener(final Account account){
         String currentUid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Chats").child(currentUid).child(uid).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Chats").child(currentUid).child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     Chat chat = dataSnapshot.getValue(Chat.class);
 
                     if(chat.isTyping()){
-                        TypedValue typedValue = new TypedValue();
-                        Resources.Theme theme = context.getTheme();
-                        theme.resolveAttribute(R.attr.colorAccent, typedValue, true);
-                        @ColorInt int color = typedValue.data;
-                        lastSeen.setText("typing...");
-                        lastSeen.setTextColor(color);
-                        lastSeen.setTypeface(lastSeen.getTypeface(), Typeface.ITALIC);
+                        typingView.setVisibility(View.VISIBLE);
+                        lastSeen.setVisibility(View.GONE);
                     }
                     else{
                         onlineListener(account);
@@ -155,13 +137,9 @@ public class ChatFindInfo implements IFind {
 
     private void onlineListener(final Account account){
         if(account.isOnline()){
-            TypedValue typedValue = new TypedValue();
-            Resources.Theme theme = context.getTheme();
-            theme.resolveAttribute(R.attr.colorControlNormal, typedValue, true);
-            @ColorInt int color = typedValue.data;
+            typingView.setVisibility(View.GONE);
+            lastSeen.setVisibility(View.VISIBLE);
             lastSeen.setText("Online");
-            lastSeen.setTextColor(color);
-            lastSeen.setTypeface(Typeface.DEFAULT);
         }
         else{
             Handler h = new Handler();
@@ -170,31 +148,26 @@ public class ChatFindInfo implements IFind {
                 public void run() {
                     if(account.getLast_seen() != null){
 
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                        databaseReference.keepSynced(true);
-
-                        databaseReference.child("Accounts").child(uid).child("online").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).child("online").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if(dataSnapshot.exists()){
                                     boolean isOnline = (boolean) dataSnapshot.getValue();
 
-                                    TypedValue typedValue = new TypedValue();
-                                    Resources.Theme theme = context.getTheme();
-                                    theme.resolveAttribute(R.attr.colorControlNormal, typedValue, true);
-                                    @ColorInt int color = typedValue.data;
-                                    lastSeen.setTextColor(color);
-                                    lastSeen.setTypeface(Typeface.DEFAULT);
+                                    if(typingView.getVisibility() != View.VISIBLE){
+                                        lastSeen.setVisibility(View.VISIBLE);
+                                        if(isOnline){
+                                            lastSeen.setText("Online");
+                                        }
+                                        else{
+                                            String lastSeenTime = GetTimeAgo.getInstance().getLastSeenAgo(account.getLast_seen());
+                                            lastSeen.setText(lastSeenTime);
+                                        }
+                                    }
 
-                                    if(isOnline){
-                                        lastSeen.setText("Online");
-                                    }
-                                    else{
-                                        String lastSeenTime = GetTimeAgo.getInstance().getLastSeenAgo(account.getLast_seen());
-                                        lastSeen.setText(lastSeenTime);
-                                    }
                                 }
                                 else{
+                                    typingView.setVisibility(View.GONE);
                                     lastSeen.setVisibility(View.GONE);
                                 }
                             }
@@ -206,6 +179,7 @@ public class ChatFindInfo implements IFind {
                         });
                     }
                     else{
+                        typingView.setVisibility(View.GONE);
                         lastSeen.setVisibility(View.GONE);
                     }
 

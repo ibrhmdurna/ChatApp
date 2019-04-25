@@ -28,24 +28,18 @@ public class Connection {
     public void onConnect(){
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if(currentUser != null){
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.keepSynced(true);
-
-            databaseReference.child("Accounts").child(currentUser.getUid()).child("online").setValue(true);
+            FirebaseDatabase.getInstance().getReference().child("Accounts").child(currentUser.getUid()).child("online").setValue(true);
         }
     }
 
     public void onDisconnect(){
         final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if(currentUser != null){
-            final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.keepSynced(true);
-
-            databaseReference.child("Accounts").child(currentUser.getUid()).child("online").setValue(false).addOnCompleteListener(new OnCompleteListener<Void>() {
+            FirebaseDatabase.getInstance().getReference().child("Accounts").child(currentUser.getUid()).child("online").setValue(false).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
-                        databaseReference.child("Accounts").child(currentUser.getUid()).child("last_seen").setValue(ServerValue.TIMESTAMP);
+                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(currentUser.getUid()).child("last_seen").setValue(ServerValue.TIMESTAMP);
                     }
                 }
             });

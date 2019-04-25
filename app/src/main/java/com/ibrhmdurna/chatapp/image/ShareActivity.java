@@ -49,6 +49,8 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
 
     private String uid;
 
+    private boolean isCamera;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTransparentTheme(this);
@@ -56,6 +58,7 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
         setContentView(R.layout.activity_share);
 
         uid = getIntent().getStringExtra("user_id");
+        isCamera = getIntent().getBooleanExtra("isCamera",false);
 
         toolsManagement();
     }
@@ -81,6 +84,28 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
         ImageController.getInstance().setCameraImage(null);
         ImageController.getInstance().setImage(null);
         ImageController.getInstance().setCameraCroppedImage(null);
+    }
+
+    private void sendCameraMessage(){
+        String cameraPath = ImageController.getInstance().getCameraPath();
+
+        if(cameraPath != null){
+            SendMessage message = new SendMessage(new Image());
+            message.setChatUid(uid);
+            Message messageModel = new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "", "Image", null, false, false, false);
+            messageModel.setDownload(false);
+            messageModel.setPath(cameraPath);
+            message.setMessage(messageModel);
+            message.Send();
+
+            Intent chatIntent = new Intent(this, ChatActivity.class);
+            chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(chatIntent);
+
+            ImageController.getInstance().setCameraImage(null);
+            ImageController.getInstance().setImage(null);
+            ImageController.getInstance().setCameraCroppedImage(null);
+        }
     }
 
     private void shareProcess(){
@@ -227,8 +252,12 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
                 imageRotate();
                 break;
             case R.id.share_button:
-                //shareProcess();
-                sendMessage();
+                if(isCamera){
+                    sendCameraMessage();
+                }
+                else {
+                    sendMessage();
+                }
                 break;
             case R.id.image_edit_item_view:
                 Intent editIntent = new Intent(getApplicationContext(), CropActivity.class);

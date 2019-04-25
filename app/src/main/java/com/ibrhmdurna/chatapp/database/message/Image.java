@@ -34,7 +34,6 @@ public class Image extends MessageStrategy {
         final String message_id = FirebaseDatabase.getInstance().getReference().child("Messages").child(message.getFrom()).child(chatUid).push().getKey();
 
         final DatabaseReference messageReference = FirebaseDatabase.getInstance().getReference().child("Messages");
-        messageReference.keepSynced(true);
 
         Map chatMap = new HashMap();
         chatMap.put("last_message_id", message_id);
@@ -42,21 +41,18 @@ public class Image extends MessageStrategy {
         chatMap.put("seen", false);
         chatMap.put("typing", false);
 
-        Map chatsMap = new HashMap();
+        final Map chatsMap = new HashMap();
         chatsMap.put("Chats/" + message.getFrom() + "/" + chatUid, chatMap);
         chatsMap.put("Chats/" + chatUid + "/" + message.getFrom(), chatMap);
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.updateChildren(chatsMap);
-
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         Bitmap bitmap = BitmapFactory.decodeFile(message.getPath(), bmOptions);
-        Bitmap thumb_bitmap = bitmap;
+
+        BitmapFactory.Options bmOptions2 = new BitmapFactory.Options();
+        Bitmap thumb_bitmap = BitmapFactory.decodeFile(message.getPath(), bmOptions2);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 5, baos);
+        thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 3, baos);
         final byte[] thumb_data = baos.toByteArray();
 
         ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
@@ -156,6 +152,7 @@ public class Image extends MessageStrategy {
                                                                                                                             @Override
                                                                                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                                                                                 if(task.isSuccessful()){
+                                                                                                                                    FirebaseDatabase.getInstance().getReference().updateChildren(chatsMap);
                                                                                                                                     messageReference.child(message.getFrom()).child(chatUid).child(message_id).child("receive").setValue(true);
                                                                                                                                 }
                                                                                                                             }

@@ -1,22 +1,16 @@
 package com.ibrhmdurna.chatapp.util.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Typeface;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -80,6 +74,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         private TextView time;
         private TextView messageCount;
         private View line;
+        private TextView youText;
+        private ImageView photoImage;
+        private TextView typingLayout;
+        private TextView timeAccentText;
 
         private String chatUid;
 
@@ -93,11 +91,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             time = itemView.findViewById(R.id.chat_time_text);
             messageCount = itemView.findViewById(R.id.chat_message_count);
             line = itemView.findViewById(R.id.chat_line);
+            youText = itemView.findViewById(R.id.you_view);
+            photoImage = itemView.findViewById(R.id.photo_image);
+            typingLayout = itemView.findViewById(R.id.typing_layout);
+            timeAccentText = itemView.findViewById(R.id.chat_time_accent_text);
         }
 
         public void setData(final Chat chat, int position){
 
             chatUid = chat.getChatUid();
+
+            typingLayout.setVisibility(View.GONE);
+            youText.setVisibility(View.GONE);
+            photoImage.setVisibility(View.GONE);
 
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
             databaseReference.keepSynced(true);
@@ -114,6 +120,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
             String chatTime = GetTimeAgo.getInstance().getChatTimeAgo(chat.getTime());
             time.setText(chatTime);
+            timeAccentText.setText(chatTime);
 
             if(position == chatList.size() - 1){
                 line.setVisibility(View.GONE);
@@ -154,7 +161,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             }
             else {
                 final Picasso picasso = Picasso.get();
-                picasso.setIndicatorsEnabled(true);
+                picasso.setIndicatorsEnabled(false);
                 picasso.load(value).networkPolicy(NetworkPolicy.OFFLINE)
                         .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
                     @Override
@@ -232,19 +239,37 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                 if(dataSnapshot.exists()){
                     Message message = dataSnapshot.getValue(Message.class);
 
-                    TypedValue typedValue = new TypedValue();
-                    Resources.Theme theme = context.getContext().getTheme();
-                    theme.resolveAttribute(R.attr.colorControlNormal, typedValue, true);
-                    @ColorInt int color = typedValue.data;
-                    lastMessage.setTextColor(color);
-                    lastMessage.setTypeface(Typeface.DEFAULT);
+                    typingLayout.setVisibility(View.GONE);
+                    lastMessage.setVisibility(View.VISIBLE);
 
-                    if(message.getFrom().equals(uid)){
-                        lastMessage.setText("You : " + message.getMessage());
-                    }
-                    else{
+                    if(message.getType().equals("Text")){
                         lastMessage.setText(message.getMessage());
+
+                        if(message.getFrom().equals(uid)){
+                            youText.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            youText.setVisibility(View.GONE);
+                        }
                     }
+                    else if (message.getType().equals("Image")){
+                        photoImage.setVisibility(View.VISIBLE);
+
+                        if(message.getFrom().equals(uid)){
+                            youText.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            youText.setVisibility(View.GONE);
+                        }
+
+                        if(message.getMessage().equals("")){
+                            lastMessage.setText("Photo");
+                        }
+                        else{
+                            lastMessage.setText(message.getMessage());
+                        }
+                    }
+
                 }
                 else{
                     lastMessage.setText(null);
@@ -274,43 +299,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                     if(count > 0){
                         messageCount.setVisibility(View.VISIBLE);
                         messageCount.setText(count + "");
-
-                        try {
-                            TypedValue typedValue = new TypedValue();
-                            Resources.Theme theme = context.getContext().getTheme();
-                            theme.resolveAttribute(R.attr.colorAccent, typedValue, true);
-                            @ColorInt int color = typedValue.data;
-                            time.setTextColor(color);
-                        }catch (Exception e){
-                            Log.e("Error", e.getMessage());
-                        }
+                        timeAccentText.setVisibility(View.VISIBLE);
+                        time.setVisibility(View.GONE);
 
                     }
                     else{
-                        try {
-                            TypedValue typedValue = new TypedValue();
-                            Resources.Theme theme = context.getContext().getTheme();
-                            theme.resolveAttribute(R.attr.colorControlNormal, typedValue, true);
-                            @ColorInt int color = typedValue.data;
-                            time.setTextColor(color);
-                        }catch (Exception e){
-                            Log.e("Error", e.getMessage());
-                        }
-
+                        timeAccentText.setVisibility(View.GONE);
+                        time.setVisibility(View.VISIBLE);
                         messageCount.setVisibility(View.GONE);
                     }
                 }
                 else{
-                    try {
-                        TypedValue typedValue = new TypedValue();
-                        Resources.Theme theme = context.getContext().getTheme();
-                        theme.resolveAttribute(R.attr.colorControlNormal, typedValue, true);
-                        @ColorInt int color = typedValue.data;
-                        time.setTextColor(color);
-                    }catch (Exception e){
-                        Log.e("Error", e.getMessage());
-                    }
-
+                    timeAccentText.setVisibility(View.GONE);
+                    time.setVisibility(View.VISIBLE);
                     messageCount.setVisibility(View.GONE);
                 }
             }
@@ -328,13 +329,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                     boolean isTyping = (boolean) dataSnapshot.getValue();
 
                     if(isTyping){
-                        TypedValue typedValue = new TypedValue();
-                        Resources.Theme theme = context.getContext().getTheme();
-                        theme.resolveAttribute(R.attr.colorAccent, typedValue, true);
-                        @ColorInt int color = typedValue.data;
-                        lastMessage.setTextColor(color);
-                        lastMessage.setText("typing...");
-                        lastMessage.setTypeface(lastMessage.getTypeface(), Typeface.ITALIC);
+                        typingLayout.setVisibility(View.VISIBLE);
+                        lastMessage.setVisibility(View.GONE);
+                        photoImage.setVisibility(View.GONE);
+                        youText.setVisibility(View.GONE);
                     }
                 }
             }

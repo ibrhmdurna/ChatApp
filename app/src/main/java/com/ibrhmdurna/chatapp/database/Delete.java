@@ -44,47 +44,32 @@ public class Delete {
     public void friend(String id){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Friends").child(uid).child(id).removeValue();
-        databaseReference.child("Friends").child(id).child(uid).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).child(id).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(id).child(uid).removeValue();
     }
 
     public void myRequest(String id){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Request").child(id).child(uid).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("Request").child(id).child(uid).removeValue();
     }
 
     public void request(String id){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Request").child(uid).child(id).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).child(id).removeValue();
     }
 
     public void recent(String recent_id){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Recent").child(uid).child(recent_id).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("Recent").child(uid).child(recent_id).removeValue();
     }
 
     public void allRecent(){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Recent").child(uid).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("Recent").child(uid).removeValue();
     }
 
     public void deleteAccount(final Activity context, final TextInputLayout passwordInput){
@@ -103,10 +88,7 @@ public class Delete {
                 if(task.isSuccessful()){
                     final String uid = FirebaseAuth.getInstance().getUid();
 
-                    final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                    databaseReference.keepSynced(true);
-
-                    databaseReference.child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if(dataSnapshot.exists()){
@@ -123,7 +105,7 @@ public class Delete {
 
 
                                 // Friends Deleted
-                                databaseReference.child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         if(dataSnapshot.exists()){
@@ -143,7 +125,7 @@ public class Delete {
                                 });
 
                                 // Recent Deleted
-                                databaseReference.child("Recent").addListenerForSingleValueEvent(new ValueEventListener() {
+                                FirebaseDatabase.getInstance().getReference().child("Recent").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         if(dataSnapshot.exists()){
@@ -227,37 +209,25 @@ public class Delete {
     public void myMessage(Message message, String chatUid){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Messages").child(uid).child(chatUid).child(message.getMessage_id()).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).child(message.getMessage_id()).removeValue();
     }
 
     public void message(Message message, String chatUid){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Messages").child(chatUid).child(uid).child(message.getMessage_id()).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("Messages").child(chatUid).child(uid).child(message.getMessage_id()).removeValue();
     }
 
     public void clearChat(String chatUid){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Messages").child(uid).child(chatUid).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).removeValue();
     }
 
     public void deleteChat(String chatUid){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Chats").child(uid).child(chatUid).removeValue();
-        databaseReference.child("Messages").child(uid).child(chatUid).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).removeValue();
+        FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).removeValue();
     }
 }

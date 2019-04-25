@@ -69,10 +69,7 @@ public class WriteFindAll implements IFind {
 
         String uid = FirebaseAuth.getInstance().getUid();
 
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 friendList.clear();
@@ -86,7 +83,7 @@ public class WriteFindAll implements IFind {
 
                         final Friend friend = snapshot.getValue(Friend.class);
 
-                        databaseReference.child("Accounts").child(friend_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(friend_id).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if(dataSnapshot.exists()){
@@ -95,7 +92,7 @@ public class WriteFindAll implements IFind {
                                     friend.setAccount(account);
                                     friendList.add(friend);
 
-                                    sortArrayList();
+                                    friendAdapter.notifyDataSetChanged();
                                 }
                             }
 
@@ -178,16 +175,5 @@ public class WriteFindAll implements IFind {
         }
 
         friendAdapter.filterList(filterList);
-    }
-
-    private void sortArrayList(){
-        Collections.sort(friendList, new Comparator<Friend>() {
-            @Override
-            public int compare(Friend o1, Friend o2) {
-                return o2.getAccount().getName().compareTo(o1.getAccount().getName());
-            }
-        });
-
-        friendAdapter.notifyDataSetChanged();
     }
 }

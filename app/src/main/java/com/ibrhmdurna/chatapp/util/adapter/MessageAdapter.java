@@ -112,6 +112,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 viewHolder3.setData(messageList.get(i), i);
                 break;
             case 3:
+                /*
                 for(int x = 0; x < messageList.size() - 1; x++){
 
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
@@ -127,7 +128,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 }
 
-                messageList.get(messageList.size() - 1).setProfileVisibility(true);
+                messageList.get(messageList.size() - 1).setProfileVisibility(true);*/
 
                 ImageMessageViewHolder viewHolder4 = (ImageMessageViewHolder)viewHolder;
                 viewHolder4.setData(messageList.get(i), i);
@@ -269,24 +270,23 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
 
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.keepSynced(true);
+            sendIcon.setVisibility(View.VISIBLE);
 
             if(message.isSend()){
                 if(message.isReceive()){
                     sendIcon.setVisibility(View.GONE);
 
                     if(position == messageList.size() - 1){
-                        databaseReference.child("Chats").child(chatUid).child(uid).child("seen").addValueEventListener(seenEventListener);
+                        FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").addValueEventListener(seenEventListener);
                     }
                     else{
-                        databaseReference.child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
+                        FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
                         seenLayout.setVisibility(View.GONE);
                     }
                 }
             }
             else{
-                databaseReference.child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
+                FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
                 seenLayout.setVisibility(View.GONE);
             }
 
@@ -387,6 +387,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                messageContent.setVisibility(View.GONE);
             }
             else{
+                messageContent.setVisibility(View.VISIBLE);
                 messageContent.setText(message.getMessage());
             }
 
@@ -400,20 +401,21 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             if(message.getPath().equals("")){
 
+                blurLayout.setVisibility(View.VISIBLE);
+                if(message.getSize() != null){
+                    imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
+                }
+
+                downloadLayout.setVisibility(View.VISIBLE);
+
                 if(message.getThumb() != null){
                     final Picasso picasso = Picasso.get();
-                    picasso.setIndicatorsEnabled(true);
+                    picasso.setIndicatorsEnabled(false);
                     picasso.load(message.getThumb()).networkPolicy(NetworkPolicy.OFFLINE)
                             .into(imageView, new Callback() {
                                 @Override
                                 public void onSuccess() {
-                                    blurLayout.setVisibility(View.VISIBLE);
 
-                                    if(message.getSize() != null){
-                                        imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
-                                    }
-
-                                    downloadLayout.setVisibility(View.VISIBLE);
                                 }
 
                                 @Override
@@ -434,19 +436,21 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 else{
                     if(message.getThumb() != null){
+                        blurLayout.setVisibility(View.VISIBLE);
+
+                        if(message.getSize() != null){
+                            imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
+                        }
+
+                        downloadLayout.setVisibility(View.VISIBLE);
+
                         final Picasso picasso = Picasso.get();
-                        picasso.setIndicatorsEnabled(true);
+                        picasso.setIndicatorsEnabled(false);
                         picasso.load(message.getThumb()).networkPolicy(NetworkPolicy.OFFLINE)
                                 .into(imageView, new Callback() {
                                     @Override
                                     public void onSuccess() {
-                                        blurLayout.setVisibility(View.VISIBLE);
 
-                                        if(message.getSize() != null){
-                                            imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
-                                        }
-
-                                        downloadLayout.setVisibility(View.VISIBLE);
                                     }
 
                                     @Override
@@ -458,23 +462,22 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             }
 
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.keepSynced(true);
+            sendIcon.setVisibility(View.VISIBLE);
 
             if(message.isSend()){
                 if(message.isReceive()){
                     sendIcon.setVisibility(View.GONE);
                     if(position == messageList.size() - 1){
-                        databaseReference.child("Chats").child(chatUid).child(uid).child("seen").addValueEventListener(seenEventListener);
+                        FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").addValueEventListener(seenEventListener);
                     }
                     else{
-                        databaseReference.child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
+                        FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
                         seenLayout.setVisibility(View.GONE);
                     }
                 }
             }
             else{
-                databaseReference.child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
+                FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").removeEventListener(seenEventListener);
                 seenLayout.setVisibility(View.GONE);
             }
 
@@ -578,6 +581,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 messageContent.setVisibility(View.GONE);
             }
             else{
+                messageContent.setVisibility(View.VISIBLE);
                 messageContent.setText(message.getMessage());
             }
 
@@ -593,19 +597,20 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             if(message.getPath().equals("")){
 
+                blurLayout.setVisibility(View.VISIBLE);
+
+                if(message.getSize() != null){
+                    imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
+                }
+
                 if(message.getThumb() != null){
                     final Picasso picasso = Picasso.get();
-                    picasso.setIndicatorsEnabled(true);
+                    picasso.setIndicatorsEnabled(false);
                     picasso.load(message.getThumb()).networkPolicy(NetworkPolicy.OFFLINE)
                             .into(imageView, new Callback() {
                                 @Override
                                 public void onSuccess() {
 
-                                    blurLayout.setVisibility(View.VISIBLE);
-
-                                    if(message.getSize() != null){
-                                        imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
-                                    }
                                 }
 
                                 @Override
@@ -633,20 +638,21 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 else{
                     if(message.getThumb() != null){
+
+                        blurLayout.setVisibility(View.VISIBLE);
+
+                        if(message.getSize() != null){
+                            imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
+                        }
+
+                        downloadLayout.setVisibility(View.VISIBLE);
+
                         final Picasso picasso = Picasso.get();
-                        picasso.setIndicatorsEnabled(true);
+                        picasso.setIndicatorsEnabled(false);
                         picasso.load(message.getThumb()).networkPolicy(NetworkPolicy.OFFLINE)
                                 .into(imageView, new Callback() {
                                     @Override
                                     public void onSuccess() {
-
-                                        blurLayout.setVisibility(View.VISIBLE);
-
-                                        if(message.getSize() != null){
-                                            imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
-                                        }
-
-                                        downloadLayout.setVisibility(View.VISIBLE);
                                     }
 
                                     @Override
@@ -688,13 +694,16 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 timeText.setText(time);
             }
 
+            profileLayout.setVisibility(View.VISIBLE);
+            profileImageProcess(profileImage, profileText);
+
+            /*
             if(message.isProfileVisibility()){
-                profileLayout.setVisibility(View.VISIBLE);
-                profileImageProcess(profileImage, profileText);
+
             }
             else{
                 profileLayout.setVisibility(View.INVISIBLE);
-            }
+            }*/
 
             if(position == messageList.size() - 1){
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -731,10 +740,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private void profileImageProcess(final CircleImageView profileImage, final TextView profileText){
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Accounts").child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Accounts").child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -750,7 +756,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                     else {
                         final Picasso picasso = Picasso.get();
-                        picasso.setIndicatorsEnabled(true);
+                        picasso.setIndicatorsEnabled(false);
                         picasso.load(account.getThumb_image()).networkPolicy(NetworkPolicy.OFFLINE)
                                 .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
                             @Override

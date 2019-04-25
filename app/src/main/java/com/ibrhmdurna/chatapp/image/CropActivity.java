@@ -12,6 +12,7 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.util.controller.ImageController;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.isseiaoki.simplecropview.CropImageView;
+import com.squareup.picasso.Picasso;
 
 public class CropActivity extends AppCompatActivity implements View.OnClickListener, ViewComponentFactory {
 
@@ -39,7 +40,7 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         position = getIntent().getIntExtra("position", 0);
 
         if(ImageController.getInstance().getCameraImage() != null){
-            cropImageView.setImageBitmap(ImageController.getInstance().getCameraPath());
+            UniversalImageLoader.setImage(ImageController.getInstance().getCameraPath(), cropImageView, null, "file://");
         }
         else {
             String path = ImageController.getInstance().getPath().get(position);

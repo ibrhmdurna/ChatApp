@@ -195,14 +195,11 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             friendUid = friend.getAccount().getUid();
 
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.keepSynced(true);
-
-            databaseReference.child("Request").child(friend.getAccount().getUid()).removeEventListener(requestEventListener);
-            databaseReference.child("Friends").child(uid).child(friendUid).removeEventListener(friendEventListener);
+            FirebaseDatabase.getInstance().getReference().child("Request").child(friend.getAccount().getUid()).removeEventListener(requestEventListener);
+            FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).child(friendUid).removeEventListener(friendEventListener);
 
             if(!friendUid.equals(uid)){
-                databaseReference.child("Request").child(friend.getAccount().getUid()).addListenerForSingleValueEvent(requestEventListener);
+                FirebaseDatabase.getInstance().getReference().child("Request").child(friend.getAccount().getUid()).addListenerForSingleValueEvent(requestEventListener);
             }
             else{
                 addItem.setVisibility(View.GONE);
@@ -289,10 +286,7 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     addItem.setVisibility(View.GONE);
                     deleteItem.setVisibility(View.GONE);
 
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                    databaseReference.keepSynced(true);
-
-                    databaseReference.child("Friends").child(uid).child(friendUid).addListenerForSingleValueEvent(friendEventListener);
+                    FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).child(friendUid).addListenerForSingleValueEvent(friendEventListener);
                 }
             }
 
@@ -336,7 +330,7 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
         else {
             final Picasso picasso = Picasso.get();
-            picasso.setIndicatorsEnabled(true);
+            picasso.setIndicatorsEnabled(false);
             picasso.load(value).networkPolicy(NetworkPolicy.OFFLINE)
                     .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
                 @Override

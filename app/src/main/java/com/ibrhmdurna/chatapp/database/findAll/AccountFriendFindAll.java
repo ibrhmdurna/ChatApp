@@ -69,10 +69,7 @@ public class AccountFriendFindAll implements IFind {
         friendView.setLayoutManager(layoutManager);
         friendView.setAdapter(friendAdapter);
 
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 friendList.clear();
@@ -88,7 +85,7 @@ public class AccountFriendFindAll implements IFind {
 
                         final Friend friend = snapshot.getValue(Friend.class);
 
-                        databaseReference.child("Accounts").child(friend_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(friend_id).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if(dataSnapshot.exists()){

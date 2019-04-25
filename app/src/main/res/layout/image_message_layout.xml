@@ -67,8 +67,25 @@
 
                 <RelativeLayout
                     android:layout_width="230dp"
-                    android:layout_height="220dp"
+                    android:layout_height="230dp"
                     android:layout_gravity="center">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/ic_left_circle_view_top"
+                        android:backgroundTint="?attr/colorAccent"
+                        android:layout_marginStart="5dp"
+                        android:translationZ="2dp"/>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/ic_right_circle_view_top"
+                        android:backgroundTint="?attr/colorAccent"
+                        android:translationZ="2dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_alignParentEnd="true"/>
 
                     <LinearLayout
                         android:id="@+id/image_download_layout"
@@ -111,7 +128,7 @@
                     <com.github.mmin18.widget.RealtimeBlurView
                         android:id="@+id/blur_layout"
                         android:layout_width="230dp"
-                        android:layout_height="220dp"
+                        android:layout_height="230dp"
                         android:translationZ="1dp"
                         app:realtimeBlurRadius="10dp"
                         app:realtimeOverlayColor="#8000"
@@ -120,8 +137,27 @@
                     <ImageView
                         android:id="@+id/message_image"
                         android:layout_width="230dp"
-                        android:layout_height="220dp"
+                        android:layout_height="230dp"
                         android:scaleType="centerCrop"/>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/ic_left_circle_view"
+                        android:backgroundTint="?attr/colorAccent"
+                        android:translationZ="2dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_alignParentBottom="true"/>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/ic_right_circle_view"
+                        android:backgroundTint="?attr/colorAccent"
+                        android:translationZ="2dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"/>
                 </RelativeLayout>
 
             <com.vanniktech.emoji.EmojiTextView
@@ -131,6 +167,9 @@
                 android:maxWidth="240dp"
                 android:text="Content"
                 android:textSize="15sp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:textColor="@android:color/white"/>
             </LinearLayout>
         </LinearLayout>

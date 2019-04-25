@@ -49,10 +49,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
     public void onBindViewHolder(@NonNull final RequestViewHolder requestViewHolder, final int i) {
         final Request request = requestList.get(i);
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Accounts").child(request.getAccount().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Accounts").child(request.getAccount().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -150,7 +147,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
             }
             else {
                 final Picasso picasso = Picasso.get();
-                picasso.setIndicatorsEnabled(true);
+                picasso.setIndicatorsEnabled(false);
                 picasso.load(value).networkPolicy(NetworkPolicy.OFFLINE)
                         .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
                     @Override

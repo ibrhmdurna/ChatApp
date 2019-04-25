@@ -56,10 +56,7 @@ public class AccountFindInfo implements IFind {
     public void getContent() {
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Accounts");
-        database.keepSynced(true);
-
-        database.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -77,7 +74,7 @@ public class AccountFindInfo implements IFind {
                     }
                     else {
                         final Picasso picasso = Picasso.get();
-                        picasso.setIndicatorsEnabled(true);
+                        picasso.setIndicatorsEnabled(false);
                         picasso.load(account.getProfile_image()).networkPolicy(NetworkPolicy.OFFLINE)
                                 .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
                             @Override
@@ -123,10 +120,8 @@ public class AccountFindInfo implements IFind {
 
     @Override
     public void getMore() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
 
-        databaseReference.child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

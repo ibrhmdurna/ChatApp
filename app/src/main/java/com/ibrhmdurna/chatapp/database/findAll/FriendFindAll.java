@@ -62,10 +62,7 @@ public class FriendFindAll implements IFind {
 
         String uid = FirebaseAuth.getInstance().getUid();
 
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -78,7 +75,7 @@ public class FriendFindAll implements IFind {
 
                         final Friend friend = snapshot.getValue(Friend.class);
 
-                        databaseReference.child("Accounts").child(friend_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(friend_id).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 friendList.clear();

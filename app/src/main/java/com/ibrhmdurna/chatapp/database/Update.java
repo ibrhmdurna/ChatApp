@@ -50,7 +50,7 @@ public class Update{
 
     private Update(){}
 
-    public static Update getInstance() {
+    public static synchronized Update getInstance() {
         if(instance == null){
             synchronized (Update.class){
                 instance = new Update();
@@ -374,7 +374,7 @@ public class Update{
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
 
-        databaseReference.child("Request").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){

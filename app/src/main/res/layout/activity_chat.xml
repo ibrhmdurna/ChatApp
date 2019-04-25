@@ -48,6 +48,16 @@
                     android:text="Touch for account information"
                     android:textColor="?attr/colorControlNormal"
                     android:textSize="13sp"/>
+
+                <TextView
+                    android:id="@+id/chat_typing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="typing..."
+                    android:textColor="?attr/colorAccent"
+                    android:textStyle="italic"
+                    android:visibility="gone"
+                    android:textSize="13sp"/>
             </LinearLayout>
 
             <RelativeLayout

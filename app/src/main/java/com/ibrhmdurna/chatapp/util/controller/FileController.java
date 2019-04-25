@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -36,6 +37,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 
 public class FileController {
 
@@ -259,6 +261,10 @@ public class FileController {
         new DownloadImageCompressAsyncTask(chatUid, imageName, loadingBar, imageView, blurView).execute(url);
     }
 
+    public void compressToCameraImageSave(Bitmap bitmap){
+        new CameraImageSaveCompressAsyncTask().execute(bitmap);
+    }
+
     private static class PhotoCompressAsyncTask extends AsyncTask<Bitmap, byte[], byte[]>{
 
         @SuppressLint("StaticFieldLeak")
@@ -325,12 +331,16 @@ public class FileController {
         @Override
         protected String doInBackground(Bitmap... bitmaps) {
 
+            Date d = new Date();
+            CharSequence s  = DateFormat.format("yyyyMMdd", d.getTime());
+            String newImageName = "IMG_"+s+"_"+System.currentTimeMillis()+".jpg";
+
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             bitmaps[0].compress(Bitmap.CompressFormat.JPEG, 80, bytes);
 
             String ExternalStorageDirectory = Environment.getExternalStorageDirectory().getPath()+"/DCIM/ChatApp/Sent";
             File fileInfo = new File(ExternalStorageDirectory);
-            File file = new File(ExternalStorageDirectory + File.separator, imageName + ".jpg");
+            File file = new File(ExternalStorageDirectory + File.separator, newImageName);
 
             FileOutputStream fileOutputStream = null;
             try {
@@ -351,16 +361,13 @@ public class FileController {
                 }
             }
 
-            return fileOutputStream != null ? ExternalStorageDirectory : path;
+            return fileOutputStream != null ? file.getAbsolutePath() : path;
         }
 
         @Override
         protected void onPostExecute(String s) {
 
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.keepSynced(true);
-
-            databaseReference.child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(s + "/" + imageName + ".jpg");
+            FirebaseDatabase.getInstance().getReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(s);
 
             super.onPostExecute(s);
         }
@@ -391,12 +398,16 @@ public class FileController {
         @Override
         protected String doInBackground(Bitmap... bitmaps) {
 
+            Date d = new Date();
+            CharSequence s  = DateFormat.format("yyyyMMdd", d.getTime());
+            String newImageName = "IMG_"+s+"_"+System.currentTimeMillis()+".jpg";
+
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             bitmaps[0].compress(Bitmap.CompressFormat.JPEG, 80, bytes);
 
             String ExternalStorageDirectory = Environment.getExternalStorageDirectory().getPath()+"/DCIM/ChatApp";
             File fileInfo = new File(ExternalStorageDirectory);
-            File file = new File(ExternalStorageDirectory + File.separator, imageName + ".jpg");
+            File file = new File(ExternalStorageDirectory + File.separator, newImageName);
 
             FileOutputStream fileOutputStream = null;
             try {
@@ -417,13 +428,13 @@ public class FileController {
                 }
             }
 
-            return fileOutputStream != null ? ExternalStorageDirectory : path;
+            return fileOutputStream != null ? file.getAbsolutePath() : path;
         }
 
         @Override
         protected void onPostExecute(final String s) {
 
-            final String newPath = s + "/" + imageName + ".jpg";
+            final String newPath = s;
 
             final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
             databaseReference.keepSynced(true);
@@ -619,6 +630,51 @@ public class FileController {
             new ImageMessageSaveCompressAsyncTask("", chatUid, imageName, loadingBar, imageView, blurView).execute(bitmap);
 
             super.onPostExecute(bitmap);
+        }
+    }
+
+    private static class CameraImageSaveCompressAsyncTask extends AsyncTask<Bitmap, String, String>{
+
+        @Override
+        protected String doInBackground(Bitmap... bitmaps) {
+
+            Date d = new Date();
+            CharSequence s  = DateFormat.format("yyyyMMdd", d.getTime());
+            String newImageName = "IMG_"+s+"_"+System.currentTimeMillis()+".jpg";
+
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmaps[0].compress(Bitmap.CompressFormat.JPEG, 80, bytes);
+
+            String ExternalStorageDirectory = Environment.getExternalStorageDirectory().getPath()+"/DCIM/Camera";
+            File fileInfo = new File(ExternalStorageDirectory);
+            File file = new File(ExternalStorageDirectory + File.separator, newImageName);
+
+            FileOutputStream fileOutputStream = null;
+            try {
+                if(fileInfo.isDirectory() || fileInfo.mkdirs()){
+                    file.createNewFile();
+                    fileOutputStream = new FileOutputStream(file);
+                    fileOutputStream.write(bytes.toByteArray());
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }finally {
+                if(fileOutputStream != null){
+                    try {
+                        fileOutputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            return file.getAbsolutePath();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            ImageController.getInstance().setCameraPath(s);
+            super.onPostExecute(s);
         }
     }
 }

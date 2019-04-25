@@ -141,13 +141,15 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 matrix.postRotate(90);
                 Bitmap image = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
-                ImageController.getInstance().setCameraPath(image);
+                FileController.getInstance().compressToCameraImageSave(image);
+                //ImageController.getInstance().setCameraPath(image);
                 ImageController.getInstance().setCameraImage(image);
 
                 switch (isContext) {
                     case "Share":
                         Intent shareIntent = new Intent(getApplicationContext(), ShareActivity.class);
                         shareIntent.putExtra("user_id", uid);
+                        shareIntent.putExtra("isCamera", true);
                         startActivity(shareIntent);
                         overridePendingTransition(0, 0);
                         break;
@@ -249,11 +251,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     public void toolsManagement(){
         buildView();
         cameraProcess();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         galleryProcess();
     }
 

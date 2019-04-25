@@ -42,10 +42,7 @@ public class AccountEditFindInfo implements IFind {
     public void getContent() {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -62,7 +59,7 @@ public class AccountEditFindInfo implements IFind {
                     }
                     else {
                         final Picasso picasso = Picasso.get();
-                        picasso.setIndicatorsEnabled(true);
+                        picasso.setIndicatorsEnabled(false);
                         picasso.load(account.getThumb_image()).networkPolicy(NetworkPolicy.OFFLINE)
                                 .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
                             @Override

@@ -111,7 +111,7 @@ public class ProfileFindInfo implements IFind {
                 }
                 else {
                     final Picasso picasso = Picasso.get();
-                    picasso.setIndicatorsEnabled(true);
+                    picasso.setIndicatorsEnabled(false);
                     picasso.load(account.getProfile_image()).networkPolicy(NetworkPolicy.OFFLINE)
                             .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
                         @Override

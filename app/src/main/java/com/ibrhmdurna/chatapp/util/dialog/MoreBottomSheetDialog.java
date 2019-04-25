@@ -71,10 +71,7 @@ public class MoreBottomSheetDialog extends BottomSheetDialogFragment {
 
         String current_uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Friends").child(current_uid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(current_uid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
