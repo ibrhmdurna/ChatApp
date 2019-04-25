@@ -101,10 +101,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
             chatUid = chat.getChatUid();
 
-            typingLayout.setVisibility(View.GONE);
-            youText.setVisibility(View.GONE);
-            photoImage.setVisibility(View.GONE);
-
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
             databaseReference.keepSynced(true);
 
@@ -243,6 +239,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                     lastMessage.setVisibility(View.VISIBLE);
 
                     if(message.getType().equals("Text")){
+                        photoImage.setVisibility(View.GONE);
                         lastMessage.setText(message.getMessage());
 
                         if(message.getFrom().equals(uid)){

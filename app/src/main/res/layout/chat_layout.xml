@@ -83,8 +83,9 @@
 
                 <TextView
                     android:id="@+id/typing_layout"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="typing..."
                     android:textColor="?attr/colorAccent"
                     android:textStyle="italic"
@@ -123,8 +124,8 @@
 
                 <TextView
                     android:id="@+id/chat_message_count"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:layout_weight="0"
                     android:background="@drawable/ic_notif_coin"
