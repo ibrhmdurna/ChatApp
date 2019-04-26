@@ -4,7 +4,6 @@ public class Message {
 
     private String from;
     private String message;
-    private String url;
     private String type;
     private Long time;
     private boolean send;
@@ -12,8 +11,8 @@ public class Message {
     private boolean receive;
 
     // For image message
+    private String url;
     private String path;
-    private String thumb;
     private boolean download;
     private Long size;
 
@@ -24,10 +23,9 @@ public class Message {
     public Message() {
     }
 
-    public Message(String from, String message, String url, String type, Long time, boolean send, boolean seen, boolean receive) {
+    public Message(String from, String message, String type, Long time, boolean send, boolean seen, boolean receive) {
         this.from = from;
         this.message = message;
-        this.url = url;
         this.type = type;
         this.time = time;
         this.send = send;
@@ -137,13 +135,5 @@ public class Message {
 
     public void setSize(Long size) {
         this.size = size;
-    }
-
-    public String getThumb() {
-        return thumb;
-    }
-
-    public void setThumb(String thumb) {
-        this.thumb = thumb;
     }
 }

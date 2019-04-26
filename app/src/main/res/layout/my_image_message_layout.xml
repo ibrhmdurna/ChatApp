@@ -39,45 +39,29 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@drawable/my_ripple_message_background"
-                android:padding="10dp"
+                android:padding="5dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginBottom="1dp"
                 android:layout_gravity="end">
 
                 <RelativeLayout
-                    android:layout_width="230dp"
-                    android:layout_height="230dp"
+                    android:layout_width="240dp"
+                    android:layout_height="240dp"
                     android:layout_gravity="center">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/ic_left_circle_view_top"
-                        android:backgroundTint="?attr/messageBackgroundColor"
-                        android:layout_marginStart="5dp"
-                        android:translationZ="2dp"/>
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/ic_right_circle_view_top"
-                        android:backgroundTint="?attr/messageBackgroundColor"
-                        android:translationZ="2dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_alignParentEnd="true"/>
 
                     <LinearLayout
                         android:id="@+id/image_download_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_centerInParent="true"
-                        android:translationZ="2dp"
+                        android:layout_centerHorizontal="true"
+                        android:translationZ="1dp"
                         style="@style/CustomTransparentViewStyle"
                         android:backgroundTint="@color/colorTransparent"
                         android:elevation="0dp"
                         android:padding="10dp"
-                        android:visibility="gone">
+                        android:visibility="gone"
+                        android:layout_marginTop="150dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -95,8 +79,8 @@
 
                     <com.github.ybq.android.spinkit.SpinKitView
                         android:id="@+id/downloading_progress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_centerInParent="true"
                         android:indeterminate="true"
                         android:visibility="gone"
@@ -104,39 +88,16 @@
                         app:SpinKit_Color="?attr/colorAccent"
                         android:translationZ="2dp"/>
 
-                    <com.github.mmin18.widget.RealtimeBlurView
-                        android:id="@+id/blur_layout"
-                        android:layout_width="230dp"
-                        android:layout_height="230dp"
-                        android:translationZ="1dp"
-                        app:realtimeBlurRadius="10dp"
-                        app:realtimeOverlayColor="#8000"
-                        android:visibility="gone"/>
-
-                    <ImageView
+                    <com.makeramen.roundedimageview.RoundedImageView
                         android:id="@+id/message_image"
-                        android:layout_width="230dp"
-                        android:layout_height="230dp"
-                        android:scaleType="centerCrop"/>
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:scaleType="centerCrop"
+                        app:riv_corner_radius="24dp"
+                        android:src="@drawable/ic_photo_default_background"/>
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/ic_left_circle_view"
-                        android:backgroundTint="?attr/messageBackgroundColor"
-                        android:translationZ="2dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_alignParentBottom="true"/>
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/ic_right_circle_view"
-                        android:backgroundTint="?attr/messageBackgroundColor"
-                        android:translationZ="2dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"/>
                 </RelativeLayout>
 
                 <com.vanniktech.emoji.EmojiTextView
@@ -146,9 +107,10 @@
                     android:text="Content"
                     android:maxWidth="240dp"
                     android:textSize="15sp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="5dp"
                     android:gravity="bottom"
                     android:textColor="?attr/primaryTextColor"/>
             </LinearLayout>

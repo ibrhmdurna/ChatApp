@@ -2,8 +2,6 @@ package com.ibrhmdurna.chatapp.models;
 
 public class Chat {
 
-    private String last_message_id;
-    private String last_message;
     private Long time;
     private boolean seen;
     private boolean typing;
@@ -13,20 +11,10 @@ public class Chat {
     public Chat() {
     }
 
-    public Chat(String last_message_id, String last_message, Long time, boolean seen, boolean typing) {
-        this.last_message_id = last_message_id;
-        this.last_message = last_message;
+    public Chat(Long time, boolean seen, boolean typing) {
         this.time = time;
         this.seen = seen;
         this.typing = typing;
-    }
-
-    public String getLast_message() {
-        return last_message;
-    }
-
-    public void setLast_message(String last_message) {
-        this.last_message = last_message;
     }
 
     public Long getTime() {
@@ -51,14 +39,6 @@ public class Chat {
 
     public void setTyping(boolean typing) {
         this.typing = typing;
-    }
-
-    public String getLast_message_id() {
-        return last_message_id;
-    }
-
-    public void setLast_message_id(String last_message_id) {
-        this.last_message_id = last_message_id;
     }
 
     public String getChatUid() {

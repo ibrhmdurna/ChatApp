@@ -105,12 +105,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             databaseReference.keepSynced(true);
 
             databaseReference.child("Accounts").child(chatUid).removeEventListener(accountEventListener);
-            databaseReference.child("Messages").child(uid).child(chatUid).child(chat.getLast_message_id()).removeEventListener(lastMessageEventListener);
+            databaseReference.child("Messages").child(uid).child(chatUid).limitToLast(1).removeEventListener(lastMessageEventListener);
             databaseReference.child("Messages").child(chatUid).child(uid).removeEventListener(messageEventListener);
             databaseReference.child("Chats").child(uid).child(chatUid).child("typing").removeEventListener(chatEventListener);
 
             databaseReference.child("Accounts").child(chatUid).addListenerForSingleValueEvent(accountEventListener);
-            databaseReference.child("Messages").child(uid).child(chatUid).child(chat.getLast_message_id()).addValueEventListener(lastMessageEventListener);
+            databaseReference.child("Messages").child(uid).child(chatUid).limitToLast(1).addValueEventListener(lastMessageEventListener);
             databaseReference.child("Messages").child(uid).child(chatUid).addValueEventListener(messageEventListener);
             databaseReference.child("Chats").child(uid).child(chatUid).child("typing").addValueEventListener(chatEventListener);
 
@@ -233,42 +233,54 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Message message = dataSnapshot.getValue(Message.class);
+                    Message message = null;
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        message = snapshot.getValue(Message.class);
+                    }
 
-                    typingLayout.setVisibility(View.GONE);
-                    lastMessage.setVisibility(View.VISIBLE);
+                    if(message != null){
+                        typingLayout.setVisibility(View.GONE);
+                        lastMessage.setVisibility(View.VISIBLE);
 
-                    if(message.getType().equals("Text")){
-                        photoImage.setVisibility(View.GONE);
-                        lastMessage.setText(message.getMessage());
+                        if(message.getType().equals("Text")){
+                            photoImage.setVisibility(View.GONE);
+                            lastMessage.setText(message.getMessage());
 
-                        if(message.getFrom().equals(uid)){
-                            youText.setVisibility(View.VISIBLE);
+                            if(message.getFrom().equals(uid)){
+                                youText.setVisibility(View.VISIBLE);
+                            }
+                            else{
+                                youText.setVisibility(View.GONE);
+                            }
                         }
-                        else{
-                            youText.setVisibility(View.GONE);
+                        else if (message.getType().equals("Image")){
+                            photoImage.setVisibility(View.VISIBLE);
+
+                            if(message.getFrom().equals(uid)){
+                                youText.setVisibility(View.VISIBLE);
+                            }
+                            else{
+                                youText.setVisibility(View.GONE);
+                            }
+
+                            if(message.getMessage().equals("")){
+                                lastMessage.setText("Photo");
+                            }
+                            else{
+                                lastMessage.setText(message.getMessage());
+                            }
                         }
                     }
-                    else if (message.getType().equals("Image")){
-                        photoImage.setVisibility(View.VISIBLE);
-
-                        if(message.getFrom().equals(uid)){
-                            youText.setVisibility(View.VISIBLE);
-                        }
-                        else{
-                            youText.setVisibility(View.GONE);
-                        }
-
-                        if(message.getMessage().equals("")){
-                            lastMessage.setText("Photo");
-                        }
-                        else{
-                            lastMessage.setText(message.getMessage());
-                        }
+                    else {
+                        youText.setVisibility(View.GONE);
+                        photoImage.setVisibility(View.GONE);
+                        lastMessage.setText(null);
                     }
 
                 }
                 else{
+                    youText.setVisibility(View.GONE);
+                    photoImage.setVisibility(View.GONE);
                     lastMessage.setText(null);
                 }
             }

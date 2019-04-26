@@ -29,8 +29,10 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.util.GetTimeAgo;
+import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 import com.ibrhmdurna.chatapp.util.controller.FileController;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -112,7 +114,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 viewHolder3.setData(messageList.get(i), i);
                 break;
             case 3:
-                /*
                 for(int x = 0; x < messageList.size() - 1; x++){
 
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
@@ -128,7 +129,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 }
 
-                messageList.get(messageList.size() - 1).setProfileVisibility(true);*/
+                messageList.get(messageList.size() - 1).setProfileVisibility(true);
 
                 ImageMessageViewHolder viewHolder4 = (ImageMessageViewHolder)viewHolder;
                 viewHolder4.setData(messageList.get(i), i);
@@ -355,7 +356,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private class ImageMyMessageViewHolder extends RecyclerView.ViewHolder{
 
-        private ImageView imageView;
+        private RoundedImageView imageView;
         private EmojiTextView messageContent;
         private TextView timeText;
         private ImageView sendIcon;
@@ -364,7 +365,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private TextView imageSizeText;
         private LinearLayout downloadLayout;
         private SpinKitView loadingBar;
-        private RealtimeBlurView blurLayout;
 
         public ImageMyMessageViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -378,7 +378,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             imageSizeText = itemView.findViewById(R.id.image_size_text);
             downloadLayout = itemView.findViewById(R.id.image_download_layout);
             loadingBar = itemView.findViewById(R.id.downloading_progress);
-            blurLayout = itemView.findViewById(R.id.blur_layout);
         }
 
         public void setData(final Message message, int position){
@@ -395,70 +394,31 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 @Override
                 public void onClick(View v) {
                     downloadLayout.setVisibility(View.GONE);
-                    FileController.getInstance().compressToDownloadImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, blurLayout);
+                    FileController.getInstance().compressToDownloadImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView);
                 }
             });
 
             if(message.getPath().equals("")){
 
-                blurLayout.setVisibility(View.VISIBLE);
                 if(message.getSize() != null){
                     imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
                 }
 
                 downloadLayout.setVisibility(View.VISIBLE);
-
-                if(message.getThumb() != null){
-                    final Picasso picasso = Picasso.get();
-                    picasso.setIndicatorsEnabled(false);
-                    picasso.load(message.getThumb()).networkPolicy(NetworkPolicy.OFFLINE)
-                            .into(imageView, new Callback() {
-                                @Override
-                                public void onSuccess() {
-
-                                }
-
-                                @Override
-                                public void onError(Exception e) {
-                                    picasso.load(message.getThumb()).into(imageView);
-                                }
-                            });
-                }
             }
             else{
                 File imgFile = new File(message.getPath());
 
                 if(imgFile.exists()){
-                    Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    imageView.setImageBitmap(bitmap);
+                    UniversalImageLoader.setImage(message.getPath(), imageView, null, "file://");
                     downloadLayout.setVisibility(View.GONE);
-                    blurLayout.setVisibility(View.GONE);
                 }
                 else{
-                    if(message.getThumb() != null){
-                        blurLayout.setVisibility(View.VISIBLE);
-
-                        if(message.getSize() != null){
-                            imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
-                        }
-
-                        downloadLayout.setVisibility(View.VISIBLE);
-
-                        final Picasso picasso = Picasso.get();
-                        picasso.setIndicatorsEnabled(false);
-                        picasso.load(message.getThumb()).networkPolicy(NetworkPolicy.OFFLINE)
-                                .into(imageView, new Callback() {
-                                    @Override
-                                    public void onSuccess() {
-
-                                    }
-
-                                    @Override
-                                    public void onError(Exception e) {
-                                        picasso.load(message.getThumb()).into(imageView);
-                                    }
-                                });
+                    if(message.getSize() != null){
+                        imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
                     }
+
+                    downloadLayout.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -547,7 +507,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private class ImageMessageViewHolder extends RecyclerView.ViewHolder{
 
-        private ImageView imageView;
+        private RoundedImageView imageView;
         private EmojiTextView messageContent;
         private TextView timeText;
         private CircleImageView profileImage;
@@ -557,7 +517,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private TextView imageSizeText;
         private LinearLayout downloadLayout;
         private SpinKitView loadingBar;
-        private RealtimeBlurView blurLayout;
 
         public ImageMessageViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -572,7 +531,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             imageSizeText = itemView.findViewById(R.id.image_size_text);
             downloadLayout = itemView.findViewById(R.id.image_download_layout);
             loadingBar = itemView.findViewById(R.id.downloading_progress);
-            blurLayout = itemView.findViewById(R.id.blur_layout);
         }
 
         public void setData(final Message message, int position){
@@ -597,31 +555,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             if(message.getPath().equals("")){
 
-                blurLayout.setVisibility(View.VISIBLE);
-
                 if(message.getSize() != null){
                     imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
                 }
 
-                if(message.getThumb() != null){
-                    final Picasso picasso = Picasso.get();
-                    picasso.setIndicatorsEnabled(false);
-                    picasso.load(message.getThumb()).networkPolicy(NetworkPolicy.OFFLINE)
-                            .into(imageView, new Callback() {
-                                @Override
-                                public void onSuccess() {
-
-                                }
-
-                                @Override
-                                public void onError(Exception e) {
-                                    picasso.load(message.getThumb()).into(imageView);
-                                }
-                            });
-                }
-
                 if(!message.isDownload()){
-                    FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, blurLayout);
+                    FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView);
                 }
                 else{
                     downloadLayout.setVisibility(View.VISIBLE);
@@ -631,36 +570,15 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 File imgFile = new File(message.getPath());
 
                 if(imgFile.exists()){
-                    Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    imageView.setImageBitmap(bitmap);
+                    UniversalImageLoader.setImage(message.getPath(), imageView, null, "file://");
                     downloadLayout.setVisibility(View.GONE);
-                    blurLayout.setVisibility(View.GONE);
                 }
                 else{
-                    if(message.getThumb() != null){
-
-                        blurLayout.setVisibility(View.VISIBLE);
-
-                        if(message.getSize() != null){
-                            imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
-                        }
-
-                        downloadLayout.setVisibility(View.VISIBLE);
-
-                        final Picasso picasso = Picasso.get();
-                        picasso.setIndicatorsEnabled(false);
-                        picasso.load(message.getThumb()).networkPolicy(NetworkPolicy.OFFLINE)
-                                .into(imageView, new Callback() {
-                                    @Override
-                                    public void onSuccess() {
-                                    }
-
-                                    @Override
-                                    public void onError(Exception e) {
-                                        picasso.load(message.getThumb()).into(imageView);
-                                    }
-                                });
+                    if(message.getSize() != null){
+                        imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
                     }
+
+                    downloadLayout.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -668,7 +586,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 @Override
                 public void onClick(View v) {
                     downloadLayout.setVisibility(View.GONE);
-                    FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, blurLayout);
+                    FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView);
                 }
             });
 

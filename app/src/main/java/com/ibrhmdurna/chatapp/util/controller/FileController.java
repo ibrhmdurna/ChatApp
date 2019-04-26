@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ibrhmdurna.chatapp.settings.EditAccountActivity;
 import com.ibrhmdurna.chatapp.start.RegisterFinishActivity;
+import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -253,12 +254,12 @@ public class FileController {
         new ImageMessageCompressAsyncTask(path, chatUid, imageName).execute(bitmap);
     }
 
-    public void compressToDownloadImage(String url, String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, RealtimeBlurView blurView){
-        new DownloadMyImageCompressAsyncTask(chatUid, imageName, loadingBar, imageView, blurView).execute(url);
+    public void compressToDownloadImage(String url, String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView){
+        new DownloadMyImageCompressAsyncTask(chatUid, imageName, loadingBar, imageView).execute(url);
     }
 
-    public void compressToDownloadAndSaveImage(String url, String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, RealtimeBlurView blurView){
-        new DownloadImageCompressAsyncTask(chatUid, imageName, loadingBar, imageView, blurView).execute(url);
+    public void compressToDownloadAndSaveImage(String url, String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView){
+        new DownloadImageCompressAsyncTask(chatUid, imageName, loadingBar, imageView).execute(url);
     }
 
     public void compressToCameraImageSave(Bitmap bitmap){
@@ -383,16 +384,13 @@ public class FileController {
         private SpinKitView loadingBar;
         @SuppressLint("StaticFieldLeak")
         private ImageView imageView;
-        @SuppressLint("StaticFieldLeak")
-        private RealtimeBlurView blurView;
 
-        public ImageMessageSaveCompressAsyncTask(String path, String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, RealtimeBlurView blurView){
+        public ImageMessageSaveCompressAsyncTask(String path, String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView){
             this.path = path;
             this.imageName = imageName;
             this.chatUid = chatUid;
             this.loadingBar = loadingBar;
             this.imageView = imageView;
-            this.blurView = blurView;
         }
 
         @Override
@@ -450,11 +448,9 @@ public class FileController {
                                     File imgFile = new File(newPath);
 
                                     if(imgFile.exists()){
-                                        Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                                        imageView.setImageBitmap(bitmap);
+                                        UniversalImageLoader.setImage(newPath, imageView, null, "file://");
                                         loadingBar.setVisibility(View.GONE);
                                         loadingBar.setIndeterminate(false);
-                                        blurView.setVisibility(View.GONE);
                                     }
                                 }
                             }
@@ -477,15 +473,11 @@ public class FileController {
         @SuppressLint("StaticFieldLeak")
         private ImageView imageView;
 
-        @SuppressLint("StaticFieldLeak")
-        private RealtimeBlurView blurView;
-
-        public DownloadMyImageCompressAsyncTask(String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, RealtimeBlurView blurView){
+        public DownloadMyImageCompressAsyncTask(String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView){
             this.imageName = imageName;
             this.chatUid = chatUid;
             this.loadingBar = loadingBar;
             this.imageView = imageView;
-            this.blurView = blurView;
         }
 
         @Override
@@ -545,7 +537,6 @@ public class FileController {
             loadingBar.setVisibility(View.GONE);
             loadingBar.setIndeterminate(false);
             imageView.setImageBitmap(bitmap);
-            blurView.setVisibility(View.GONE);
 
             new ImageMessageCompressAsyncTask("", chatUid, imageName).execute(bitmap);
 
@@ -562,15 +553,12 @@ public class FileController {
         private SpinKitView loadingBar;
         @SuppressLint("StaticFieldLeak")
         private ImageView imageView;
-        @SuppressLint("StaticFieldLeak")
-        private RealtimeBlurView blurView;
 
-        public DownloadImageCompressAsyncTask(String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, RealtimeBlurView blurView){
+        public DownloadImageCompressAsyncTask(String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView){
             this.imageName = imageName;
             this.chatUid = chatUid;
             this.loadingBar = loadingBar;
             this.imageView = imageView;
-            this.blurView = blurView;
         }
 
         @Override
@@ -627,7 +615,7 @@ public class FileController {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
 
-            new ImageMessageSaveCompressAsyncTask("", chatUid, imageName, loadingBar, imageView, blurView).execute(bitmap);
+            new ImageMessageSaveCompressAsyncTask("", chatUid, imageName, loadingBar, imageView).execute(bitmap);
 
             super.onPostExecute(bitmap);
         }

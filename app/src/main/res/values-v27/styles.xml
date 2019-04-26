@@ -19,6 +19,7 @@
         <item name="searchColor">@color/colorLightGray</item>
         <item name="extColor">@color/colorLightGray</item>
         <item name="colorControlNormal">@color/colorDarkGray</item>
+        <item name="photoBackgroundColor">#A5A5A5</item>
     </style>
 
     <style name="AppTheme.DarkTheme" parent="Theme.AppCompat.NoActionBar">
@@ -40,6 +41,7 @@
         <item name="searchColor">@color/colorLightBlack</item>
         <item name="extColor">@color/colorLightBlack</item>
         <item name="colorControlNormal">@color/colorGray</item>
+        <item name="photoBackgroundColor">#2D2D2D</item>
     </style>
 
     <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">

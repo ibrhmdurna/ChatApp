@@ -11,5 +11,6 @@
         <attr name="searchColor" format="color|reference"/>
         <attr name="extColor" format="color|reference"/>
         <attr name="messageBackgroundColor" format="color|reference"/>
+        <attr name="photoBackgroundColor" format="color|reference"/>
     </declare-styleable>
 </resources>

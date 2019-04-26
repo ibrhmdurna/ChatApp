@@ -34,7 +34,6 @@ public class UniversalImageLoader {
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .considerExifParams(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
-                .displayer(new FadeInBitmapDisplayer(400))
                 .build();
 
         return new ImageLoaderConfiguration.Builder(mContext)

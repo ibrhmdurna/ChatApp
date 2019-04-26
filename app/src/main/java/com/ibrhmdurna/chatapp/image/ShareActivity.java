@@ -70,12 +70,10 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
 
     private void sendMessage(){
         SendMessage message = new SendMessage(new Image());
-        message.setChatUid(uid);
-        Message messageModel = new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "", "Image", null, false, false, false);
-        messageModel.setDownload(false);
-        messageModel.setPath(path);
-        message.setMessage(messageModel);
-        message.Send();
+        Message messageObject = new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "Image", null, false, false, false);
+        messageObject.setDownload(false);
+        messageObject.setPath(path);
+        message.Send(messageObject, uid);
 
         Intent chatIntent = new Intent(this, ChatActivity.class);
         chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -91,12 +89,10 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
 
         if(cameraPath != null){
             SendMessage message = new SendMessage(new Image());
-            message.setChatUid(uid);
-            Message messageModel = new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "", "Image", null, false, false, false);
-            messageModel.setDownload(false);
-            messageModel.setPath(cameraPath);
-            message.setMessage(messageModel);
-            message.Send();
+            Message messageObject = new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "Image", null, false, false, false);
+            messageObject.setDownload(false);
+            messageObject.setPath(cameraPath);
+            message.Send(messageObject, uid);
 
             Intent chatIntent = new Intent(this, ChatActivity.class);
             chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

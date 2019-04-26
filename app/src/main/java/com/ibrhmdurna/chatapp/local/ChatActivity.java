@@ -45,6 +45,7 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.util.Environment;
 import com.ibrhmdurna.chatapp.util.dialog.GalleryBottomSheetDialog;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
@@ -83,7 +84,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    if(dataSnapshot.getChildrenCount() > 75){
+                    if(dataSnapshot.getChildrenCount() > 30){
                         swipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
                             @Override
                             public void onRefresh() {
@@ -116,9 +117,8 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
 
     private void sendMessage(){
         SendMessage message = new SendMessage(new Text());
-        message.setChatUid(uid);
-        message.setMessage(new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "", "Text", null, false, false, false));
-        message.Send();
+        Message messageObject = new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "Text", null, false, false, false);
+        message.Send(messageObject, uid);
         messageInput.getText().clear();
     }
 
@@ -296,5 +296,12 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         Update.getInstance().typing(uid, false);
         Update.getInstance().messageSeen(uid, false);
         Update.getInstance().chatSeen(uid, false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImageLoader.getInstance().clearMemoryCache();
+        ImageLoader.getInstance().clearDiskCache();
     }
 }

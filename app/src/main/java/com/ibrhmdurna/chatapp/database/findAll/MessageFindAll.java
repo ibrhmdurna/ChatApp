@@ -2,10 +2,14 @@ package com.ibrhmdurna.chatapp.database.findAll;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +34,7 @@ public class MessageFindAll implements IFind {
 
     private String chatUid;
 
-    private static int PAGE_COUNT = 75;
+    private static int PAGE_COUNT = 30;
     private static int PAGE = 1;
 
     private int TOTAL_MESSAGE;
@@ -52,6 +56,10 @@ public class MessageFindAll implements IFind {
         layoutManager = new LinearLayoutManager(context);
         layoutManager.setStackFromEnd(true);
         messageAdapter = new MessageAdapter(context, messageList, chatUid);
+        messageView.setHasFixedSize(true);
+        messageView.setItemViewCacheSize(100);
+        messageView.setDrawingCacheEnabled(true);
+        messageView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
         messageView.setLayoutManager(layoutManager);
         messageView.setAdapter(messageAdapter);
 
