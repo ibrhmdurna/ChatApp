@@ -9,7 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.local.ChatActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Chat;
@@ -30,6 +33,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.vanniktech.emoji.EmojiTextView;
 
+import java.io.File;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -137,8 +141,48 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    AlertDialog dialog = DialogController.getInstance().dialogChat(context, chatUid);
+                    final AlertDialog dialog = DialogController.getInstance().dialogChat(context, chatUid);
                     dialog.show();
+
+                    final CheckBox deviceCheck = dialog.findViewById(R.id.delete_device_check);
+
+                    LinearLayout clearItem = dialog.findViewById(R.id.clear_item);
+                    clearItem.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            final AlertDialog confirmDialog = DialogController.getInstance().dialogCustom(context.getActivity(), "Clear chat with \"" + nameSurname.getText() + "\"?", "Cancel", "Clear");
+                            confirmDialog.show();
+                            TextView positiveView = confirmDialog.findViewById(R.id.dialog_positive_btn);
+                            positiveView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    confirmDialog.dismiss();
+                                    Delete.getInstance().clearChat(chatUid, deviceCheck.isChecked());
+
+
+                                }
+                            });
+                        }
+                    });
+
+                    LinearLayout deleteItem = dialog.findViewById(R.id.delete_item);
+                    deleteItem.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            final AlertDialog confirmDialog = DialogController.getInstance().dialogCustom(context.getActivity(), "Delete chat with \"" + nameSurname.getText() + "\"?", "Cancel", "Delete");
+                            confirmDialog.show();
+                            TextView positiveView = confirmDialog.findViewById(R.id.dialog_positive_btn);
+                            positiveView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    confirmDialog.dismiss();
+                                    Delete.getInstance().deleteChat(chatUid, deviceCheck.isChecked());
+                                }
+                            });
+                        }
+                    });
                     return true;
                 }
             });

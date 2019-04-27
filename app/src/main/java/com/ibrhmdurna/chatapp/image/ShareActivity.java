@@ -3,9 +3,11 @@ package com.ibrhmdurna.chatapp.image;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +29,7 @@ import com.ibrhmdurna.chatapp.database.message.Image;
 import com.ibrhmdurna.chatapp.database.strategy.SendMessage;
 import com.ibrhmdurna.chatapp.local.ChatActivity;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.models.File;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.util.controller.FileController;
 import com.ibrhmdurna.chatapp.util.controller.ImageController;
@@ -35,6 +39,8 @@ import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
+
+import java.io.ByteArrayOutputStream;
 
 public class ShareActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, OnEmojiPopupShownListener, OnEmojiPopupDismissListener {
 
@@ -49,7 +55,7 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
 
     private String uid;
 
-    private boolean isCamera;
+    private Bitmap image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +64,6 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
         setContentView(R.layout.activity_share);
 
         uid = getIntent().getStringExtra("user_id");
-        isCamera = getIntent().getBooleanExtra("isCamera",false);
 
         toolsManagement();
     }
@@ -72,53 +77,8 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
         SendMessage message = new SendMessage(new Image());
         Message messageObject = new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "Image", null, false, false, false);
         messageObject.setDownload(false);
-        messageObject.setPath(path);
+        messageObject.setBitmap(image);
         message.Send(messageObject, uid);
-
-        Intent chatIntent = new Intent(this, ChatActivity.class);
-        chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(chatIntent);
-
-        ImageController.getInstance().setCameraImage(null);
-        ImageController.getInstance().setImage(null);
-        ImageController.getInstance().setCameraCroppedImage(null);
-    }
-
-    private void sendCameraMessage(){
-        String cameraPath = ImageController.getInstance().getCameraPath();
-
-        if(cameraPath != null){
-            SendMessage message = new SendMessage(new Image());
-            Message messageObject = new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "Image", null, false, false, false);
-            messageObject.setDownload(false);
-            messageObject.setPath(cameraPath);
-            message.Send(messageObject, uid);
-
-            Intent chatIntent = new Intent(this, ChatActivity.class);
-            chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(chatIntent);
-
-            ImageController.getInstance().setCameraImage(null);
-            ImageController.getInstance().setImage(null);
-            ImageController.getInstance().setCameraCroppedImage(null);
-        }
-    }
-
-    private void shareProcess(){
-        /*if(ImageController.getInstance().getCameraCroppedImage() != null){
-            FileController.getInstance().insertImage(ImageController.getInstance().getCameraCroppedImage());
-        }
-        else if(ImageController.getInstance().getCameraImage() != null){
-            FileController.getInstance().insertImage(ImageController.getInstance().getCameraImage());
-        }
-        else if(ImageController.getInstance().getImage() != null) {
-            FileController.getInstance().insertImage(ImageController.getInstance().getImage());
-        }
-        else {
-            Drawable drawable = imageView.getDrawable();
-            FileController.getInstance().insertImage(((BitmapDrawable)drawable).getBitmap());
-        }
-        */
 
         Intent chatIntent = new Intent(this, ChatActivity.class);
         chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -132,7 +92,7 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
     private void imageRotate(){
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
-        Bitmap image;
+        image = null;
         if(ImageController.getInstance().getCameraCroppedImage() != null){
             Bitmap cropped = ImageController.getInstance().getCameraCroppedImage();
             image = Bitmap.createBitmap(cropped, 0,0, cropped.getWidth(), cropped.getHeight(), matrix,true);
@@ -159,15 +119,15 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
     private void imageProcess(){
 
         if(ImageController.getInstance().getCameraCroppedImage() != null){
-            imageView.setImageBitmap(ImageController.getInstance().getCameraCroppedImage());
+            image = ImageController.getInstance().getCameraCroppedImage();
         }
         else if(ImageController.getInstance().getCameraImage() != null)
         {
-            imageView.setImageBitmap(ImageController.getInstance().getCameraImage());
+            image = ImageController.getInstance().getCameraImage();
         }
         else {
             if(ImageController.getInstance().getImage() != null){
-                imageView.setImageBitmap(ImageController.getInstance().getImage());
+                image = ImageController.getInstance().getImage();
             }
             else {
                 if(path == null){
@@ -175,9 +135,18 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
                     path = ImageController.getInstance().getPath().get(position);
                 }
 
-                UniversalImageLoader.setImage(path, imageView, null, "file://");
+                java.io.File imgFile = new java.io.File(path);
+                if(imgFile.exists()){
+                    image = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                }
+                else{
+                    UniversalImageLoader.setImage(path, imageView, null, "file://");
+                }
             }
         }
+
+        imageView.setImageBitmap(image);
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -248,12 +217,7 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
                 imageRotate();
                 break;
             case R.id.share_button:
-                if(isCamera){
-                    sendCameraMessage();
-                }
-                else {
-                    sendMessage();
-                }
+                sendMessage();
                 break;
             case R.id.image_edit_item_view:
                 Intent editIntent = new Intent(getApplicationContext(), CropActivity.class);

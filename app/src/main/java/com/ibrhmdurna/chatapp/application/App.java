@@ -1,14 +1,11 @@
 package com.ibrhmdurna.chatapp.application;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.text.emoji.EmojiCompat;
 import android.support.text.emoji.bundled.BundledEmojiCompatConfig;
 import android.support.v7.app.AppCompatDelegate;
-import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.ibrhmdurna.chatapp.R;

@@ -25,6 +25,7 @@
     <color name="colorPink">#E91E63</color>
     <color name="colorLightBlack">#252525</color>
     <color name="colorTransparent">#80555555</color>
+    <color name="colorToolbarTransparent">#99000000</color>
     <color name="colorBackground">#080808</color>
     <color name="colorFail">#C22A45</color>
     <color name="colorWarning">#ecd343</color>

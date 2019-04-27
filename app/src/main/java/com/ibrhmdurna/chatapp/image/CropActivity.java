@@ -40,7 +40,7 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         position = getIntent().getIntExtra("position", 0);
 
         if(ImageController.getInstance().getCameraImage() != null){
-            UniversalImageLoader.setImage(ImageController.getInstance().getCameraPath(), cropImageView, null, "file://");
+            cropImageView.setImageBitmap(ImageController.getInstance().getCameraImage());
         }
         else {
             String path = ImageController.getInstance().getPath().get(position);

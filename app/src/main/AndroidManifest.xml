@@ -17,9 +17,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.LightTheme"
         tools:ignore="GoogleAppIndexingWarning,InnerclassSeparator">
-        <activity android:name=".local.ProfileFriendsActivity"
+        <activity android:name=".local.PhotoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".local.ProfileFriendsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".settings.DarkModeActivity"
             android:launchMode="singleTop"

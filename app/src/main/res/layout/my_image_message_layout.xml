@@ -96,7 +96,8 @@
                         android:paddingEnd="5dp"
                         android:scaleType="centerCrop"
                         app:riv_corner_radius="24dp"
-                        android:src="@drawable/ic_photo_default_background"/>
+                        android:src="@drawable/ic_photo_default_background"
+                        android:transitionName="messagePhoto"/>
 
                 </RelativeLayout>
 

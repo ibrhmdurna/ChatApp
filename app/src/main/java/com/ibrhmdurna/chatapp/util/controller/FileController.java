@@ -16,7 +16,6 @@ import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.github.mmin18.widget.RealtimeBlurView;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.ibrhmdurna.chatapp.settings.EditAccountActivity;
 import com.ibrhmdurna.chatapp.start.RegisterFinishActivity;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
+import com.ibrhmdurna.chatapp.util.adapter.MessageAdapter;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -250,20 +250,16 @@ public class FileController {
         new PhotoCompressAsyncTask(context, isRegister).execute(bitmap);
     }
 
-    public void compressToImageMessage(Bitmap bitmap, String path, String chatUid, String imageName){
-        new ImageMessageCompressAsyncTask(path, chatUid, imageName).execute(bitmap);
+    public void compressToImageMessage(Bitmap bitmap, String chatUid, String imageName){
+        new ImageMessageCompressAsyncTask(chatUid, imageName).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, bitmap);
     }
 
     public void compressToDownloadImage(String url, String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView){
-        new DownloadMyImageCompressAsyncTask(chatUid, imageName, loadingBar, imageView).execute(url);
+        new DownloadMyImageCompressAsyncTask(chatUid, imageName, loadingBar, imageView).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, url);
     }
 
-    public void compressToDownloadAndSaveImage(String url, String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView){
-        new DownloadImageCompressAsyncTask(chatUid, imageName, loadingBar, imageView).execute(url);
-    }
-
-    public void compressToCameraImageSave(Bitmap bitmap){
-        new CameraImageSaveCompressAsyncTask().execute(bitmap);
+    public void compressToDownloadAndSaveImage(String url, String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, MessageAdapter adapter){
+        new DownloadImageCompressAsyncTask(chatUid, imageName, loadingBar, imageView, adapter).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, url);
     }
 
     private static class PhotoCompressAsyncTask extends AsyncTask<Bitmap, byte[], byte[]>{
@@ -280,7 +276,7 @@ public class FileController {
 
 
         @Override
-        protected byte[] doInBackground(Bitmap... bitmaps) {
+        protected synchronized byte[] doInBackground(Bitmap... bitmaps) {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmaps[0].compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] bytes = stream.toByteArray();
@@ -290,7 +286,7 @@ public class FileController {
         }
 
         @Override
-        protected void onPreExecute() {
+        protected synchronized void onPreExecute() {
             loading = DialogController.getInstance().dialogLoading(context, "Compressing...");
             loading.show();
             super.onPreExecute();
@@ -319,18 +315,16 @@ public class FileController {
 
     private static class ImageMessageCompressAsyncTask extends AsyncTask<Bitmap, String, String>{
 
-        private String path;
         private String imageName;
         private String chatUid;
 
-        public ImageMessageCompressAsyncTask(String path, String chatUid, String imageName){
-            this.path = path;
+        public ImageMessageCompressAsyncTask(String chatUid, String imageName){
             this.imageName = imageName;
             this.chatUid = chatUid;
         }
 
         @Override
-        protected String doInBackground(Bitmap... bitmaps) {
+        protected synchronized String doInBackground(Bitmap... bitmaps) {
 
             Date d = new Date();
             CharSequence s  = DateFormat.format("yyyyMMdd", d.getTime());
@@ -362,11 +356,11 @@ public class FileController {
                 }
             }
 
-            return fileOutputStream != null ? file.getAbsolutePath() : path;
+            return file.getAbsolutePath();
         }
 
         @Override
-        protected void onPostExecute(String s) {
+        protected synchronized void onPostExecute(String s) {
 
             FirebaseDatabase.getInstance().getReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(s);
 
@@ -376,7 +370,6 @@ public class FileController {
 
     private static class ImageMessageSaveCompressAsyncTask extends AsyncTask<Bitmap, String, String>{
 
-        private String path;
         private String imageName;
         private String chatUid;
 
@@ -385,16 +378,18 @@ public class FileController {
         @SuppressLint("StaticFieldLeak")
         private ImageView imageView;
 
-        public ImageMessageSaveCompressAsyncTask(String path, String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView){
-            this.path = path;
+        private MessageAdapter adapter;
+
+        public ImageMessageSaveCompressAsyncTask(String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, MessageAdapter adapter){
             this.imageName = imageName;
             this.chatUid = chatUid;
             this.loadingBar = loadingBar;
             this.imageView = imageView;
+            this.adapter = adapter;
         }
 
         @Override
-        protected String doInBackground(Bitmap... bitmaps) {
+        protected synchronized String doInBackground(Bitmap... bitmaps) {
 
             Date d = new Date();
             CharSequence s  = DateFormat.format("yyyyMMdd", d.getTime());
@@ -408,6 +403,7 @@ public class FileController {
             File file = new File(ExternalStorageDirectory + File.separator, newImageName);
 
             FileOutputStream fileOutputStream = null;
+
             try {
                 if(fileInfo.isDirectory() || fileInfo.mkdirs()){
                     file.createNewFile();
@@ -426,38 +422,42 @@ public class FileController {
                 }
             }
 
-            return fileOutputStream != null ? file.getAbsolutePath() : path;
+            return fileOutputStream != null ? file.getAbsolutePath() : null;
         }
 
         @Override
-        protected void onPostExecute(final String s) {
+        protected synchronized void onPostExecute(final String s) {
 
             final String newPath = s;
 
-            final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.keepSynced(true);
+            if(newPath != null){
+                final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                databaseReference.keepSynced(true);
 
-            databaseReference.child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(newPath).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful()){
-                        databaseReference.child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("download").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()){
-                                    File imgFile = new File(newPath);
+                databaseReference.child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(newPath).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            databaseReference.child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("download").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        File imgFile = new File(newPath);
 
-                                    if(imgFile.exists()){
-                                        UniversalImageLoader.setImage(newPath, imageView, null, "file://");
-                                        loadingBar.setVisibility(View.GONE);
-                                        loadingBar.setIndeterminate(false);
+                                        if(imgFile.exists()){
+                                            UniversalImageLoader.setImage(newPath, imageView, null, "file://");
+                                            loadingBar.setVisibility(View.GONE);
+                                            loadingBar.setIndeterminate(false);
+                                            adapter.notifyDataSetChanged();
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
-                }
-            });
+                });
+            }
+
 
             super.onPostExecute(s);
         }
@@ -481,14 +481,14 @@ public class FileController {
         }
 
         @Override
-        protected void onPreExecute() {
+        protected synchronized void onPreExecute() {
             loadingBar.setVisibility(View.VISIBLE);
             loadingBar.setIndeterminate(true);
             super.onPreExecute();
         }
 
         @Override
-        protected Bitmap doInBackground(String... strings) {
+        protected synchronized Bitmap doInBackground(String... strings) {
             Bitmap bm = null;
             InputStream is = null;
             BufferedInputStream bis = null;
@@ -532,13 +532,13 @@ public class FileController {
         }
 
         @Override
-        protected void onPostExecute(Bitmap bitmap) {
+        protected synchronized void onPostExecute(Bitmap bitmap) {
 
             loadingBar.setVisibility(View.GONE);
             loadingBar.setIndeterminate(false);
             imageView.setImageBitmap(bitmap);
 
-            new ImageMessageCompressAsyncTask("", chatUid, imageName).execute(bitmap);
+            new ImageMessageCompressAsyncTask(chatUid, imageName).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, bitmap);
 
             super.onPostExecute(bitmap);
         }
@@ -553,23 +553,25 @@ public class FileController {
         private SpinKitView loadingBar;
         @SuppressLint("StaticFieldLeak")
         private ImageView imageView;
+        private MessageAdapter adapter;
 
-        public DownloadImageCompressAsyncTask(String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView){
+        public DownloadImageCompressAsyncTask(String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, MessageAdapter adapter){
             this.imageName = imageName;
             this.chatUid = chatUid;
             this.loadingBar = loadingBar;
             this.imageView = imageView;
+            this.adapter = adapter;
         }
 
         @Override
-        protected void onPreExecute() {
+        protected synchronized void onPreExecute() {
             loadingBar.setVisibility(View.VISIBLE);
             loadingBar.setIndeterminate(true);
             super.onPreExecute();
         }
 
         @Override
-        protected Bitmap doInBackground(String... strings) {
+        protected synchronized Bitmap doInBackground(String... strings) {
             Bitmap bm = null;
             InputStream is = null;
             BufferedInputStream bis = null;
@@ -613,56 +615,11 @@ public class FileController {
         }
 
         @Override
-        protected void onPostExecute(Bitmap bitmap) {
+        protected synchronized void onPostExecute(Bitmap bitmap) {
 
-            new ImageMessageSaveCompressAsyncTask("", chatUid, imageName, loadingBar, imageView).execute(bitmap);
+            new ImageMessageSaveCompressAsyncTask(chatUid, imageName, loadingBar, imageView, adapter).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, bitmap);
 
             super.onPostExecute(bitmap);
-        }
-    }
-
-    private static class CameraImageSaveCompressAsyncTask extends AsyncTask<Bitmap, String, String>{
-
-        @Override
-        protected String doInBackground(Bitmap... bitmaps) {
-
-            Date d = new Date();
-            CharSequence s  = DateFormat.format("yyyyMMdd", d.getTime());
-            String newImageName = "IMG_"+s+"_"+System.currentTimeMillis()+".jpg";
-
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            bitmaps[0].compress(Bitmap.CompressFormat.JPEG, 80, bytes);
-
-            String ExternalStorageDirectory = Environment.getExternalStorageDirectory().getPath()+"/DCIM/Camera";
-            File fileInfo = new File(ExternalStorageDirectory);
-            File file = new File(ExternalStorageDirectory + File.separator, newImageName);
-
-            FileOutputStream fileOutputStream = null;
-            try {
-                if(fileInfo.isDirectory() || fileInfo.mkdirs()){
-                    file.createNewFile();
-                    fileOutputStream = new FileOutputStream(file);
-                    fileOutputStream.write(bytes.toByteArray());
-                }
-            }catch (IOException e){
-                e.printStackTrace();
-            }finally {
-                if(fileOutputStream != null){
-                    try {
-                        fileOutputStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            return file.getAbsolutePath();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            ImageController.getInstance().setCameraPath(s);
-            super.onPostExecute(s);
         }
     }
 }

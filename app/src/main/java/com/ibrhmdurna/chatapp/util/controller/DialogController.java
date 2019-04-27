@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,8 @@ import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.local.ProfileActivity;
 import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.models.Message;
+
+import java.io.File;
 
 public class DialogController {
 
@@ -83,6 +86,84 @@ public class DialogController {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
+
+        return dialog;
+    }
+
+    public AlertDialog dialogImageMessage(final Activity context, final Message message, final String chatUid, final boolean myMessage){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = context.getLayoutInflater().inflate(R.layout.dialog_image_message, null);
+        App.Theme.getInstance().getTheme(view.getContext());
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+
+        final CheckBox removeDeviceCheck = view.findViewById(R.id.delete_device_check);
+
+        LinearLayout deleteItem = view.findViewById(R.id.delete_item);
+        deleteItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                if(myMessage){
+                    Delete.getInstance().myImageMessage(message, chatUid);
+                }
+                else{
+                    Delete.getInstance().myMessage(message, chatUid);
+                }
+
+                if(removeDeviceCheck.isChecked()){
+                    File file = new File(message.getPath());
+
+                    if(file.exists()){
+                        file.delete();
+                    }
+                }
+            }
+        });
+
+        LinearLayout unsendItem = view.findViewById(R.id.unSend_item);
+        if(myMessage){
+            unsendItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    Delete.getInstance().unSendImageMessage(message, chatUid);
+
+                    if(removeDeviceCheck.isChecked()){
+                        File file = new File(message.getPath());
+
+                        if(file.exists()){
+                            file.delete();
+                        }
+                    }
+                }
+            });
+        }
+        else{
+            unsendItem.setVisibility(View.GONE);
+        }
+
+        LinearLayout copyItem = view.findViewById(R.id.copy_item);
+
+        if(!message.getMessage().equals("")){
+            copyItem.setVisibility(View.VISIBLE);
+            copyItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("Copied Text", message.getMessage());
+                    clipboard.setPrimaryClip(clip);
+                }
+            });
+        }
+        else{
+            copyItem.setVisibility(View.GONE);
+        }
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCanceledOnTouchOutside(true);
 
         return dialog;
     }
@@ -155,24 +236,6 @@ public class DialogController {
                 Intent profileIntent = new Intent(context.getActivity(), ProfileActivity.class);
                 profileIntent.putExtra("user_id", chatUid);
                 context.startActivity(profileIntent);
-            }
-        });
-
-        LinearLayout clearItem = view.findViewById(R.id.clear_item);
-        clearItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                Delete.getInstance().clearChat(chatUid);
-            }
-        });
-
-        LinearLayout deleteItem = view.findViewById(R.id.delete_item);
-        deleteItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                Delete.getInstance().deleteChat(chatUid);
             }
         });
 

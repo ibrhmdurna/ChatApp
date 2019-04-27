@@ -26,6 +26,8 @@ import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.start.StartActivity;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
+import java.io.File;
+
 public class Delete {
 
     private static Delete instance;
@@ -206,10 +208,26 @@ public class Delete {
         message(message, chatUid);
     }
 
+    public void unSendImageMessage(Message message, String chatUid){
+        myImageMessage(message, chatUid);
+        imageMessage(message, chatUid);
+    }
+
     public void myMessage(Message message, String chatUid){
         String uid = FirebaseAuth.getInstance().getUid();
 
         FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).child(message.getMessage_id()).removeValue();
+    }
+
+    public void myImageMessage(Message message, String chatUid){
+        FirebaseStorage.getInstance().getReferenceFromUrl(message.getUrl()).delete();
+        myMessage(message, chatUid);
+    }
+
+    public void imageMessage(Message message, String chatUid){
+        String uid = FirebaseAuth.getInstance().getUid();
+        FirebaseStorage.getInstance().getReference().child("Chats").child(chatUid).child(uid).child(message.getMessage_id()).delete();
+        message(message, chatUid);
     }
 
     public void message(Message message, String chatUid){
@@ -218,16 +236,48 @@ public class Delete {
         FirebaseDatabase.getInstance().getReference().child("Messages").child(chatUid).child(uid).child(message.getMessage_id()).removeValue();
     }
 
-    public void clearChat(String chatUid){
-        String uid = FirebaseAuth.getInstance().getUid();
-
-        FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).removeValue();
+    public void clearChat(String chatUid, boolean deleteDevice){
+        allDeleteImage(chatUid, deleteDevice);
     }
 
-    public void deleteChat(String chatUid){
+    public void deleteChat(String chatUid, boolean deleteDevice){
         String uid = FirebaseAuth.getInstance().getUid();
 
+        clearChat(chatUid, deleteDevice);
         FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).removeValue();
-        FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).removeValue();
+    }
+
+    public void allDeleteImage(final String chatUid, final boolean deleteDevice){
+        final String uid = FirebaseAuth.getInstance().getUid();
+
+        FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        Message message = snapshot.getValue(Message.class);
+
+                        if(message.getType().equals("Image")){
+                            FirebaseStorage.getInstance().getReferenceFromUrl(message.getUrl()).delete();
+                        }
+
+                        if(deleteDevice){
+                            File file = new File(message.getPath());
+
+                            if(file.exists()){
+                                file.delete();
+                            }
+                        }
+                    }
+
+                    FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

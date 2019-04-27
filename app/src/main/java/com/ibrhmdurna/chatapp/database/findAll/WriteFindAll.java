@@ -152,6 +152,7 @@ public class WriteFindAll implements IFind {
                 Intent chatIntent = new Intent(context, ChatActivity.class);
                 chatIntent.putExtra("user_id", uid);
                 context.startActivity(chatIntent);
+                context.finish();
             }
         });
     }

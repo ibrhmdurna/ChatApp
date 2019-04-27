@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/transparent">
 
     <LinearLayout
@@ -25,32 +25,20 @@
                 android:orientation="vertical"
                 android:layout_gravity="center">
 
-                <LinearLayout
-                    android:id="@+id/view_item"
+                <CheckBox
+                    android:id="@+id/delete_device_check"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="20dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:paddingBottom="15dp"
-                    android:background="@drawable/top_item_view"
-                    android:backgroundTint="?attr/backgroundCardColor">
-
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_share_icon"
-                        android:visibility="gone"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="View Profile"
-                        android:textColor="?attr/primaryTextColor"
-                        android:textSize="16sp"/>
-                </LinearLayout>
+                    android:text="Delete media from my phone"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="15dp"
+                    android:paddingStart="10dp"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="16sp"
+                    tools:ignore="RtlSymmetry"
+                    android:checked="true"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -59,23 +47,8 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"/>
 
-                <CheckBox
-                    android:id="@+id/delete_device_check"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Delete media from my phone"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:paddingStart="10dp"
-                    android:textColor="?attr/primaryTextColor"
-                    android:textSize="16sp"
-                    tools:ignore="RtlSymmetry"
-                    android:checked="true"/>
-
                 <LinearLayout
-                    android:id="@+id/clear_item"
+                    android:id="@+id/delete_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -89,20 +62,45 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_clean_icon"
+                        android:src="@drawable/ic_share_icon"
                         android:visibility="gone"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Clear Chat"
+                        android:text="Delete Message"
                         android:textColor="?attr/primaryTextColor"
-                        android:textSize="16sp"
-                        android:layout_gravity="center"/>
+                        android:textSize="16sp"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/delete_item"
+                    android:id="@+id/unSend_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="15dp"
+                    android:foreground="?android:attr/selectableItemBackground">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_share_icon"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Unsend Message"
+                        android:textColor="?attr/primaryTextColor"
+                        android:textSize="16sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/copy_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -117,14 +115,14 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_remove_icon"
+                        android:src="@drawable/ic_block_icon"
                         android:visibility="gone"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Delete Chat"
-                        android:textColor="@android:color/holo_red_light"
+                        android:text="Copy Text"
+                        android:textColor="?attr/primaryTextColor"
                         android:textSize="16sp"/>
                 </LinearLayout>
             </LinearLayout>

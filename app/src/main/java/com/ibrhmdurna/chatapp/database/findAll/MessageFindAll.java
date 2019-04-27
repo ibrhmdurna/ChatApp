@@ -1,10 +1,12 @@
 package com.ibrhmdurna.chatapp.database.findAll;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
@@ -34,10 +37,12 @@ public class MessageFindAll implements IFind {
 
     private String chatUid;
 
-    private static int PAGE_COUNT = 30;
+    private static int PAGE_COUNT = 10;
     private static int PAGE = 1;
 
     private int TOTAL_MESSAGE;
+
+    private String LAST_MESSAGE;
 
     public MessageFindAll(Activity context, String chatUid){
         this.context = context;
@@ -63,9 +68,9 @@ public class MessageFindAll implements IFind {
         messageView.setLayoutManager(layoutManager);
         messageView.setAdapter(messageAdapter);
 
-        String uid = FirebaseAuth.getInstance().getUid();
+        final String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
 
         databaseReference.child("Messages").child(uid).child(chatUid).limitToLast(PAGE * PAGE_COUNT).addValueEventListener(new ValueEventListener() {
@@ -81,8 +86,16 @@ public class MessageFindAll implements IFind {
 
                     TOTAL_MESSAGE = messageList.size();
 
+                    if(LAST_MESSAGE == null){
+                        LAST_MESSAGE = messageList.get(messageList.size() - 1).getMessage_id();
+                    }
+
+                    if(!LAST_MESSAGE.equals(messageList.get(messageList.size() - 1).getMessage_id())){
+                        LAST_MESSAGE = messageList.get(messageList.size() - 1).getMessage_id();
+                        messageView.smoothScrollToPosition(messageList.size() - 1);
+                    }
+
                     messageAdapter.notifyDataSetChanged();
-                    messageView.smoothScrollToPosition(messageList.size() - 1);
             }
                 else{
                     messageAdapter.notifyDataSetChanged();
@@ -132,5 +145,15 @@ public class MessageFindAll implements IFind {
 
             }
         });
+    }
+
+    private int findPosition(long time){
+        for(int i = 0; i < messageList.size(); i++){
+            if(messageList.get(i).getTime().equals(time)){
+                return i;
+            }
+        }
+
+        return -1;
     }
 }

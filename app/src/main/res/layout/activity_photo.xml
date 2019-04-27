@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".local.PhotoActivity"
+    android:id="@+id/root_view"
+    android:background="@android:color/black"
+    android:fitsSystemWindows="true">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/photo_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentInsetStartWithNavigation="0dp"
+        android:translationZ="1dp"
+        android:fitsSystemWindows="true"
+        android:background="@color/colorToolbarTransparent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/photo_name_surname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="You"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-light"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"/>
+
+            <TextView
+                android:id="@+id/photo_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorGray"/>
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <com.liuguangqiang.swipeback.SwipeBackLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.github.chrisbanes.photoview.PhotoView
+            android:id="@+id/photo_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:transitionName="messagePhoto"/>
+    </com.liuguangqiang.swipeback.SwipeBackLayout>
+
+    <com.vanniktech.emoji.EmojiTextView
+        android:id="@+id/message_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:textSize="18sp"
+        android:maxLines="6"
+        android:ellipsize="end"
+        android:textColor="@android:color/white"
+        android:background="@color/colorToolbarTransparent"
+        android:padding="20dp"/>
+</RelativeLayout>

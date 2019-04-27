@@ -2,30 +2,28 @@ package com.ibrhmdurna.chatapp.util.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.github.mmin18.widget.RealtimeBlurView;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.local.PhotoActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.util.GetTimeAgo;
@@ -398,13 +396,52 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
 
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(context, imageView, "messagePhoto");
+                    Intent photoIntent = new Intent(context, PhotoActivity.class);
+                    photoIntent.putExtra("time", message.getTime());
+                    photoIntent.putExtra("path", message.getPath());
+                    photoIntent.putExtra("content", message.getMessage());
+                    context.startActivity(photoIntent, options.toBundle());
+                }
+            });
+
+            imageView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    AlertDialog dialog = DialogController.getInstance().dialogImageMessage(context, message, chatUid, true);
+                    dialog.show();
+                    return true;
+                }
+            });
+
+            messageContent.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    AlertDialog dialog = DialogController.getInstance().dialogImageMessage(context, message, chatUid, true);
+                    dialog.show();
+                    return true;
+                }
+            });
+
+            imageView.setImageDrawable(context.getDrawable(R.drawable.ic_photo_default_background));
+            loadingBar.setIndeterminate(false);
+            loadingBar.setVisibility(View.GONE);
+
             if(message.getPath().equals("")){
 
-                if(message.getSize() != null){
-                    imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
+                if(message.getBitmap() != null){
+                    imageView.setImageBitmap(message.getBitmap());
                 }
+                else{
+                    if(message.getSize() != null){
+                        imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
+                    }
 
-                downloadLayout.setVisibility(View.VISIBLE);
+                    downloadLayout.setVisibility(View.VISIBLE);
+                }
             }
             else{
                 File imgFile = new File(message.getPath());
@@ -427,6 +464,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if(message.isSend()){
                 if(message.isReceive()){
                     sendIcon.setVisibility(View.GONE);
+
                     if(position == messageList.size() - 1){
                         FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid).child("seen").addValueEventListener(seenEventListener);
                     }
@@ -543,15 +581,40 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 messageContent.setText(message.getMessage());
             }
 
-            /*
-            messageContent.setOnLongClickListener(new View.OnLongClickListener() {
+            imageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    AlertDialog dialog = DialogController.getInstance().dialogMessage(context, message, chatUid, false);
+                    AlertDialog dialog = DialogController.getInstance().dialogImageMessage(context, message, chatUid, false);
                     dialog.show();
                     return true;
                 }
-            });*/
+            });
+
+            messageContent.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    AlertDialog dialog = DialogController.getInstance().dialogImageMessage(context, message, chatUid, false);
+                    dialog.show();
+                    return true;
+                }
+            });
+
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(context, imageView, "messagePhoto");
+                    Intent photoIntent = new Intent(context, PhotoActivity.class);
+                    photoIntent.putExtra("time", message.getTime());
+                    photoIntent.putExtra("user_id", chatUid);
+                    photoIntent.putExtra("content", message.getMessage());
+                    photoIntent.putExtra("path", message.getPath());
+                    context.startActivity(photoIntent, options.toBundle());
+                }
+            });
+
+            imageView.setImageDrawable(context.getDrawable(R.drawable.ic_photo_default_background));
+            loadingBar.setIndeterminate(false);
+            loadingBar.setVisibility(View.GONE);
 
             if(message.getPath().equals("")){
 
@@ -560,7 +623,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
 
                 if(!message.isDownload()){
-                    FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView);
+                    FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, MessageAdapter.this);
                 }
                 else{
                     downloadLayout.setVisibility(View.VISIBLE);
@@ -586,7 +649,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 @Override
                 public void onClick(View v) {
                     downloadLayout.setVisibility(View.GONE);
-                    FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView);
+                    FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, MessageAdapter.this);
                 }
             });
 
@@ -612,16 +675,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 timeText.setText(time);
             }
 
-            profileLayout.setVisibility(View.VISIBLE);
-            profileImageProcess(profileImage, profileText);
-
-            /*
             if(message.isProfileVisibility()){
-
+                profileLayout.setVisibility(View.VISIBLE);
+                profileImageProcess(profileImage, profileText);
             }
             else{
                 profileLayout.setVisibility(View.INVISIBLE);
-            }*/
+            }
 
             if(position == messageList.size() - 1){
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);

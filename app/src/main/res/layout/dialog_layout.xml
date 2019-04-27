@@ -48,6 +48,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:fontFamily="sans-serif"
+                        android:textSize="16sp"
                         android:textColor="?attr/primaryTextColor"
                         android:textStyle="normal"
                         style="@style/CustomTransparentViewStyle"

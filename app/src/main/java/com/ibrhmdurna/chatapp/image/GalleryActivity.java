@@ -104,7 +104,7 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
         String downloadPath = root + "/Download";
         String whatsAppPath = root + "/WhatsApp/Media/WhatsApp Images";
         String screenShotsPath = root + "/DCIM/Screenshots";
-        String chatAppPath = root + "/DCIM/ChatApp/Sent";
+        String chatAppPath = root + "/DCIM/ChatApp";
         String twitterPath = root + "/Pictures/Twitter";
         String facebookPath = root + "/DCIM/Facebook";
         String instagramPath = root + "/Pictures/Instagram";

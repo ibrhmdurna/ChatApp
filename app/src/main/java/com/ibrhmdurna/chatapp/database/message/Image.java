@@ -45,12 +45,9 @@ public class Image extends MessageStrategy {
         chatsMap.put("Chats/" + message.getFrom() + "/" + chatUid, chatMap);
         chatsMap.put("Chats/" + chatUid + "/" + message.getFrom(), chatMap);
 
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        Bitmap bitmap = BitmapFactory.decodeFile(message.getPath(), bmOptions);
-
-        ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos2);
-        final byte[] data = baos2.toByteArray();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        message.getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        final byte[] data = stream.toByteArray();
 
         final StorageReference myFilepath = FirebaseStorage.getInstance().getReference().child("Chats").child(uid).child(chatUid).child(message_id);
         final StorageReference filepath = FirebaseStorage.getInstance().getReference().child("Chats").child(chatUid).child(uid).child(message_id);
@@ -63,11 +60,11 @@ public class Image extends MessageStrategy {
         myMessageMap.put("send", message.isSend());
         myMessageMap.put("seen", message.isSeen());
         myMessageMap.put("receive", message.isReceive());
+        myMessageMap.put("path", "");
         myMessageMap.put("time", ServerValue.TIMESTAMP);
-        myMessageMap.put("path", message.getPath());
         myMessageMap.put("download", true);
 
-        FileController.getInstance().compressToImageMessage(bitmap, message.getPath(), chatUid, message_id);
+        FileController.getInstance().compressToImageMessage(message.getBitmap(), chatUid, message_id);
 
         messageReference.child(message.getFrom()).child(chatUid).child(message_id).setValue(myMessageMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

@@ -84,7 +84,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    if(dataSnapshot.getChildrenCount() > 30){
+                    if(dataSnapshot.getChildrenCount() > 10){
                         swipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
                             @Override
                             public void onRefresh() {
@@ -177,7 +177,6 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     protected void onStart() {
         super.onStart();
         getContent();
-        loadMessage();
         Update.getInstance().messageSeen(uid, true);
         Update.getInstance().chatSeen(uid, true);
     }
@@ -219,6 +218,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         emojiProcess();
         backgroundProcess();
         inputProcess();
+        loadMessage();
     }
 
     @Override

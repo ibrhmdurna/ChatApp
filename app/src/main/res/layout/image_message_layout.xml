@@ -117,7 +117,8 @@
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         app:riv_corner_radius="24dp"
-                        android:src="@drawable/ic_photo_default_background"/>
+                        android:src="@drawable/ic_photo_default_background"
+                        android:saveEnabled="false"/>
                 </RelativeLayout>
 
             <com.vanniktech.emoji.EmojiTextView

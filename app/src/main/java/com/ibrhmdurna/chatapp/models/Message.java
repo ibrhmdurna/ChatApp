@@ -1,7 +1,10 @@
 package com.ibrhmdurna.chatapp.models;
 
+import android.graphics.Bitmap;
+
 public class Message {
 
+    private String message_id;
     private String from;
     private String message;
     private String type;
@@ -15,10 +18,11 @@ public class Message {
     private String path;
     private boolean download;
     private Long size;
+    private Bitmap bitmap;
+
+    private boolean sound;
 
     private boolean profileVisibility;
-
-    private String message_id;
 
     public Message() {
     }
@@ -135,5 +139,21 @@ public class Message {
 
     public void setSize(Long size) {
         this.size = size;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
+    public boolean isSound() {
+        return sound;
+    }
+
+    public void setSound(boolean sound) {
+        this.sound = sound;
     }
 }

@@ -11,7 +11,6 @@ public class ImageController {
     private Bitmap image, cameraImage, cameraCroppedImage, backgroundImage;
     private int backgroundColor = 0;
     private byte[] profileImageBytes;
-    private String cameraPath;
 
     private static ImageController instance;
 
@@ -65,14 +64,6 @@ public class ImageController {
 
     public void setCameraCroppedImage(Bitmap cameraCroppedImage) {
         this.cameraCroppedImage = cameraCroppedImage;
-    }
-
-    public String getCameraPath() {
-        return cameraPath;
-    }
-
-    public void setCameraPath(String cameraPath) {
-        this.cameraPath = cameraPath;
     }
 
     public Bitmap getBackgroundImage() {
