@@ -4,20 +4,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
+import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.image.GalleryActivity;
 import com.ibrhmdurna.chatapp.local.SolidColorActivity;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.util.controller.DialogController;
 import com.ibrhmdurna.chatapp.util.dialog.BackgroundBottomSheetDialog;
 import com.ibrhmdurna.chatapp.util.Environment;
 import com.ibrhmdurna.chatapp.util.controller.ImageController;
@@ -168,6 +173,35 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
                 break;
             case R.id.chat_background_save_view:
                 saveBackground();
+                break;
+            case R.id.clear_chat_view:
+                final AlertDialog dialog = DialogController.getInstance().dialogChatClear(this, "Are you sure you want to clear all chat?", "Clear");
+                final CheckBox checkBox = dialog.findViewById(R.id.checked_device_delete);
+
+                TextView positive = dialog.findViewById(R.id.dialog_positive_btn);
+                positive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        Delete.getInstance().messageAllDelete(FirebaseAuth.getInstance().getUid(), checkBox.isChecked());
+                        Toast.makeText(getApplicationContext(), "All chats cleared", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                break;
+            case R.id.delete_chat_view:
+                final AlertDialog dialog1 = DialogController.getInstance().dialogChatClear(this, "Are you sure you want to delete all chat?", "Delete");
+                final CheckBox checkBox1 = dialog1.findViewById(R.id.checked_device_delete);
+
+                TextView positive1 = dialog1.findViewById(R.id.dialog_positive_btn);
+                positive1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog1.dismiss();
+                        Delete.getInstance().messageAllDelete(FirebaseAuth.getInstance().getUid(), checkBox1.isChecked());
+                        Delete.getInstance().chatAllDelete(FirebaseAuth.getInstance().getUid());
+                        Toast.makeText(getApplicationContext(), "All chats deleted", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 break;
         }
     }

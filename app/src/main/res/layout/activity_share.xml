@@ -122,7 +122,7 @@
                 android:scrollbars="vertical"
                 android:maxLines="5"
                 android:minLines="1"
-                android:background="#59000000"/>
+                android:background="@color/colorToolbarTransparent"/>
 
             <ImageButton
                 android:id="@+id/share_button"

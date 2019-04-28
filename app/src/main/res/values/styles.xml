@@ -376,6 +376,11 @@
         <item name="android:windowExitAnimation">@anim/dialog_down_anim</item>
     </style>
 
+    <style name="dialogAnimation.Fade">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
+
     <style name="CustomButtonStyle">
         <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Widget.TextView.SpinnerItem</item>
         <item name="android:background">@drawable/custom_button</item>

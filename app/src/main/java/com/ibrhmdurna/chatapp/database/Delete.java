@@ -119,7 +119,7 @@ public class Delete {
                                 chatAllDelete(uid);
 
                                 // Messages Deleted
-                                messageAllDelete(uid);
+                                messageAllDelete(uid, true);
 
                                 dataSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
@@ -161,7 +161,7 @@ public class Delete {
         });
     }
 
-    private void messageAllDelete(final String uid){
+    public void messageAllDelete(final String uid, final boolean device){
         FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -175,10 +175,12 @@ public class Delete {
                                 myMessage(message, snapshot.getKey());
                             }
                             else if(message.getType().equals("Image")){
-                                File file = new File(message.getPath());
+                                if(device){
+                                    File file = new File(message.getPath());
 
-                                if(file.exists()){
-                                    file.delete();
+                                    if(file.exists()){
+                                        file.delete();
+                                    }
                                 }
 
                                 myImageMessage(message, snapshot.getKey());
@@ -195,7 +197,7 @@ public class Delete {
         });
     }
 
-    private void chatAllDelete(final String uid){
+    public void chatAllDelete(final String uid){
         FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).removeValue();
     }
 
@@ -302,7 +304,7 @@ public class Delete {
         myMessage(message, chatUid);
     }
 
-    public void imageMessage(Message message, String chatUid){
+    private void imageMessage(Message message, String chatUid){
         String uid = FirebaseAuth.getInstance().getUid();
         FirebaseStorage.getInstance().getReference().child("Chats").child(chatUid).child(uid).child(message.getMessage_id()).delete();
         message(message, chatUid);
@@ -325,7 +327,7 @@ public class Delete {
         FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).child(chatUid).removeValue();
     }
 
-    public void allDeleteImage(final String chatUid, final boolean deleteDevice){
+    private void allDeleteImage(final String chatUid, final boolean deleteDevice){
         final String uid = FirebaseAuth.getInstance().getUid();
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();

@@ -4,13 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,9 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -65,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     private DatabaseReference databaseReference;
 
     private View tooltipView;
-    private View accountToolTipView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -310,7 +307,6 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         friendsNotFoundView = findViewById(R.id.friend_not_found_view);
         requestNotFoundView = findViewById(R.id.request_not_found_view);
         tooltipView = findViewById(R.id.tooltip_view);
-        accountToolTipView = findViewById(R.id.account_tool_tip);
     }
 
     @Override
@@ -409,7 +405,6 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         final SharedPreferences.Editor editor = prefs.edit();
         boolean isDialog = prefs.getBoolean("DARK_MODE_DIALOG", true);
         boolean isSearch = prefs.getBoolean("SEARCH_TOOLTIP", true);
-        final boolean isAccount = prefs.getBoolean("ACCOUNT_TOOLTIP", true);
 
         AlertDialog dialog = DialogController.getInstance().dialogDarkMode(this);
 
@@ -426,18 +421,6 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
                     public void onDismiss() {
                         editor.putBoolean("SEARCH_TOOLTIP", false);
                         editor.apply();
-                        Tooltip accountToolTip = new Tooltip.Builder(accountToolTipView, R.style.CustomToolTip)
-                                .setText("Access your account and settings here!")
-                                .setGravity(Gravity.TOP)
-                                .show();
-
-                        accountToolTip.setOnDismissListener(new OnDismissListener() {
-                            @Override
-                            public void onDismiss() {
-                                editor.putBoolean("ACCOUNT_TOOLTIP", false);
-                                editor.apply();
-                            }
-                        });
                     }
                 });
             }
@@ -457,34 +440,6 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
                 @Override
                 public void onDismiss() {
                     editor.putBoolean("SEARCH_TOOLTIP", false);
-                    editor.apply();
-                    if(isAccount){
-                        Tooltip accountToolTip = new Tooltip.Builder(accountToolTipView, R.style.CustomToolTip)
-                                .setText("Access your account and settings here!")
-                                .setGravity(Gravity.TOP)
-                                .show();
-
-                        accountToolTip.setOnDismissListener(new OnDismissListener() {
-                            @Override
-                            public void onDismiss() {
-                                editor.putBoolean("ACCOUNT_TOOLTIP", false);
-                                editor.apply();
-                            }
-                        });
-                    }
-                }
-            });
-        }
-        else if(isAccount){
-            Tooltip accountToolTip = new Tooltip.Builder(accountToolTipView, R.style.CustomToolTip)
-                    .setText("Access your account and settings here!")
-                    .setGravity(Gravity.TOP)
-                    .show();
-
-            accountToolTip.setOnDismissListener(new OnDismissListener() {
-                @Override
-                public void onDismiss() {
-                    editor.putBoolean("ACCOUNT_TOOLTIP", false);
                     editor.apply();
                 }
             });

@@ -73,6 +73,34 @@ public class DialogController {
         return dialog;
     }
 
+    public AlertDialog dialogChatClear(Activity context, String content, String positive){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = context.getLayoutInflater().inflate(R.layout.dialog_delete_chat, null);
+        App.Theme.getInstance().getTheme(view.getContext());
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+
+        TextView contentText = view.findViewById(R.id.dialog_content_text);
+        contentText.setText(content);
+
+        TextView negativeBtn = view.findViewById(R.id.dialog_negative_btn);
+        negativeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        TextView positiveBtn = view.findViewById(R.id.dialog_positive_btn);
+        positiveBtn.setText(positive);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        return dialog;
+    }
+
     public AlertDialog dialogLoading(Activity context, String content){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = context.getLayoutInflater().inflate(R.layout.dialog_loading, null);
@@ -248,7 +276,7 @@ public class DialogController {
     }
 
     public AlertDialog dialogDarkMode(final Activity context){
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, android.R.style.Animation_Dialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = context.getLayoutInflater().inflate(R.layout.dialog_dark, null);
         App.Theme.getInstance().getTheme(view.getContext());
         builder.setView(view);
@@ -272,9 +300,8 @@ public class DialogController {
             }
         });
 
-        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation_Fade;
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
 
         return dialog;
