@@ -27,6 +27,8 @@ public class AccountEditFindInfo implements IFind {
     private CircleImageView profileImage;
     private TextView profileText;
 
+    private String uid;
+
     public AccountEditFindInfo(ActivityEditAccountBinding binding) {
         this.binding = binding;
         buildView();
@@ -40,58 +42,65 @@ public class AccountEditFindInfo implements IFind {
 
     @Override
     public void getContent() {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    final Account account = dataSnapshot.getValue(Account.class);
+        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addListenerForSingleValueEvent(contentEventListener);
+    }
 
-                    String image = account.getProfile_image();
+    private ValueEventListener contentEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                final Account account = dataSnapshot.getValue(Account.class);
 
-                    if(image.substring(0, 8).equals("default_")){
-                        String value = image.substring(8,9);
-                        int index = Integer.parseInt(value);
-                        setProfileImage(index, profileImage);
-                        String name = account.getName().substring(0,1);
-                        profileText.setText(name);
-                    }
-                    else {
-                        final Picasso picasso = Picasso.get();
-                        picasso.setIndicatorsEnabled(false);
-                        picasso.load(account.getThumb_image()).networkPolicy(NetworkPolicy.OFFLINE)
-                                .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
-                            @Override
-                            public void onSuccess() {
+                String image = account.getProfile_image();
 
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-                                picasso.load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
-                            }
-                        });
-                        profileText.setVisibility(View.GONE);
-                    }
-
-                    binding.setAccount(account);
+                if(image.substring(0, 8).equals("default_")){
+                    String value = image.substring(8,9);
+                    int index = Integer.parseInt(value);
+                    setProfileImage(index, profileImage);
+                    String name = account.getName().substring(0,1);
+                    profileText.setText(name);
                 }
                 else {
-                    Toast.makeText(binding.getRoot().getContext(), "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
-                }
-            }
+                    final Picasso picasso = Picasso.get();
+                    picasso.setIndicatorsEnabled(false);
+                    picasso.load(account.getThumb_image()).networkPolicy(NetworkPolicy.OFFLINE)
+                            .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(binding.getRoot().getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            picasso.load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+                        }
+                    });
+                    profileText.setVisibility(View.GONE);
+                }
+
+                binding.setAccount(account);
             }
-        });
-    }
+            else {
+                Toast.makeText(binding.getRoot().getContext(), "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+            Toast.makeText(binding.getRoot().getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     public void getMore() {
         // NOTHING...
+    }
+
+    @Override
+    public void onDestroy() {
+        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).removeEventListener(contentEventListener);
     }
 
     private void setProfileImage(int index, CircleImageView profileImage) {

@@ -43,6 +43,8 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
     private EditText searchInput;
     private ImageButton searchClearView;
 
+    private AbstractFindAll findAll;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTheme(this);
@@ -53,7 +55,7 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
     }
 
     private void getFriends(){
-        AbstractFindAll findAll = new FindAll(new WriteFindAll(this));
+        findAll = new FindAll(new WriteFindAll(this));
         findAll.getContent();
     }
 
@@ -157,5 +159,11 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
     protected void onPause() {
         super.onPause();
         Connection.getInstance().onDisconnect();
+    }
+
+    @Override
+    protected void onDestroy() {
+        findAll.onDestroy();
+        super.onDestroy();
     }
 }

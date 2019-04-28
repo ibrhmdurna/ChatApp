@@ -48,6 +48,8 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
 
     private SpinKitView loadingBar;
 
+    private AbstractFindAll findAll;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTheme(this);
@@ -58,8 +60,8 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
     }
 
     private void recentProcess(){
-        AbstractFindAll recentFindAll = new FindAll(new RecentFindAll(this));
-        recentFindAll.getContent();
+        findAll = new FindAll(new RecentFindAll(this));
+        findAll.getContent();
     }
 
     private void searchProcess(){
@@ -194,5 +196,11 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
     protected void onPause() {
         super.onPause();
         Connection.getInstance().onDisconnect();
+    }
+
+    @Override
+    protected void onDestroy() {
+        findAll.onDestroy();
+        super.onDestroy();
     }
 }

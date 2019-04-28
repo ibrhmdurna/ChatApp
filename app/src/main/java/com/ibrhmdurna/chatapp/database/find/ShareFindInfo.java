@@ -42,55 +42,61 @@ public class ShareFindInfo implements IFind {
 
     @Override
     public void getContent() {
-        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    final Account account = dataSnapshot.getValue(Account.class);
-
-                    String image = account.getProfile_image();
-
-                    if(image.substring(0, 8).equals("default_")){
-                        String value = image.substring(8,9);
-                        int index = Integer.parseInt(value);
-                        setProfileImage(index, profileImage);
-                        String name = account.getName().substring(0,1);
-                        profileText.setText(name);
-                        profileText.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        final Picasso picasso = Picasso.get();
-                        picasso.setIndicatorsEnabled(false);
-                        picasso.load(account.getThumb_image()).networkPolicy(NetworkPolicy.OFFLINE)
-                                .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
-                            @Override
-                            public void onSuccess() {
-
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-                                picasso.load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
-                            }
-                        });
-                        profileText.setText(null);
-                        profileText.setVisibility(View.GONE);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addListenerForSingleValueEvent(contentEventListener);
     }
 
     @Override
     public void getMore() {
 
     }
+
+    @Override
+    public void onDestroy() {
+        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).removeEventListener(contentEventListener);
+    }
+
+    private ValueEventListener contentEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                final Account account = dataSnapshot.getValue(Account.class);
+
+                String image = account.getProfile_image();
+
+                if(image.substring(0, 8).equals("default_")){
+                    String value = image.substring(8,9);
+                    int index = Integer.parseInt(value);
+                    setProfileImage(index, profileImage);
+                    String name = account.getName().substring(0,1);
+                    profileText.setText(name);
+                    profileText.setVisibility(View.VISIBLE);
+                }
+                else {
+                    final Picasso picasso = Picasso.get();
+                    picasso.setIndicatorsEnabled(false);
+                    picasso.load(account.getThumb_image()).networkPolicy(NetworkPolicy.OFFLINE)
+                            .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            picasso.load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+                        }
+                    });
+                    profileText.setText(null);
+                    profileText.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 
     private void setProfileImage(int index, CircleImageView profileImage) {
         switch (index){

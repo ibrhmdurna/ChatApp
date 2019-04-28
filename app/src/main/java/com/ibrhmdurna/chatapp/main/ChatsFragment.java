@@ -23,6 +23,8 @@ public class ChatsFragment extends Fragment implements ViewComponentFactory {
 
     private View view;
 
+    private AbstractFindAll findAll;
+
     public ChatsFragment() {
         // Required empty public constructor
     }
@@ -39,7 +41,7 @@ public class ChatsFragment extends Fragment implements ViewComponentFactory {
     }
 
     private void getChats(){
-        AbstractFindAll findAll = new FindAll(new ChatFindAll(this));
+        findAll = new FindAll(new ChatFindAll(this));
         findAll.getContent();
     }
 
@@ -59,5 +61,13 @@ public class ChatsFragment extends Fragment implements ViewComponentFactory {
     @Override
     public void buildView() {
         // ---- COMPONENT ----
+    }
+
+    @Override
+    public void onDestroy() {
+        if(findAll != null){
+            findAll.onDestroy();
+        }
+        super.onDestroy();
     }
 }

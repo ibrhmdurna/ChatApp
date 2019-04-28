@@ -15,4 +15,9 @@ public class Find extends AbstractFind {
     public void getContent() {
         IFind.getContent();
     }
+
+    @Override
+    public void onDestroy() {
+        IFind.onDestroy();
+    }
 }

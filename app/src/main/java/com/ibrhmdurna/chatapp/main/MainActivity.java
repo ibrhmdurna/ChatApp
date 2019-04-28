@@ -1,6 +1,12 @@
 package com.ibrhmdurna.chatapp.main;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -12,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.NestedScrollView;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -20,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,8 +40,20 @@ import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Connection;
+import com.ibrhmdurna.chatapp.image.GalleryActivity;
+import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.models.Request;
 import com.ibrhmdurna.chatapp.start.StartActivity;
+import com.ibrhmdurna.chatapp.util.controller.DialogController;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ViewComponentFactory {
 
@@ -47,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     private String page;
 
     private View notificationBadge;
+    private View chatBadge;
+
+    private String uid;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         setContentView(R.layout.activity_main);
 
         toolsManagement();
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
 
         page = getIntent().getStringExtra("page");
 
@@ -65,50 +92,111 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
             showFragment(new AccountFragment(), "AccountFragment");
             bottomNavigationView.setSelectedItemId(R.id.account_item);
         }
+    }
 
+    private void chatListener(){
+        uid = FirebaseAuth.getInstance().getUid();
+
+        databaseReference.child("Chats").child(uid).removeEventListener(chatEvenListener);
+        databaseReference.child("Chats").child(uid).addValueEventListener(chatEvenListener);
     }
 
     private void requestListener(){
-        String uid = FirebaseAuth.getInstance().getUid();
+        uid = FirebaseAuth.getInstance().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int count = 0;
-                if(dataSnapshot.exists()){
+        databaseReference.child("Request").child(uid).removeEventListener(requestEventListener);
+        databaseReference.child("Request").child(uid).addValueEventListener(requestEventListener);
+    }
 
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        Request request = snapshot.getValue(Request.class);
+    private ValueEventListener requestEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            int count = 0;
+            if(dataSnapshot.exists()){
+                removeBadgeView();
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Request request = snapshot.getValue(Request.class);
 
-                        if(!request.isSeen()){
-                            count++;
-                        }
+                    if(!request.isSeen()){
+                        count++;
                     }
+                }
 
-                    if(count > 0){
-                        addBadgeView(2);
-                    }
-                    else {
-                        removeBadgeView();
-                    }
+                if(count > 0){
+                    addBadgeView(count,2);
                 }
                 else {
                     removeBadgeView();
                 }
             }
+            else {
+                removeBadgeView();
+            }
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    private ValueEventListener chatEvenListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            int count = 0;
+            if(dataSnapshot.exists()){
+                removeChatBadgeView();
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chat chat = snapshot.getValue(Chat.class);
+
+                    if(!chat.isSeen()){
+                        count++;
+                    }
+                }
+
+                if(count > 0){
+                    addChatBadgeView(count, 0);
+                }
+                else{
+                    removeChatBadgeView();
+                }
 
             }
-        });
+            else {
+                removeChatBadgeView();
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    @SuppressLint("SetTextI18n")
+    private void addChatBadgeView(int count, int position){
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(position);
+
+        chatBadge = LayoutInflater.from(this).inflate(R.layout.view_notification_chat_badge, menuView, false);
+        TextView text = chatBadge.findViewById(R.id.badge);
+        text.setText(count + "");
+        itemView.addView(chatBadge);
     }
 
-    private void addBadgeView(int position){
+    private void removeChatBadgeView(){
+        if(chatBadge != null)
+            chatBadge.setVisibility(View.GONE);
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void addBadgeView(int count, int position){
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
         BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(position);
 
         notificationBadge = LayoutInflater.from(this).inflate(R.layout.view_notification_badge, menuView, false);
+        TextView text = notificationBadge.findViewById(R.id.badge);
+        text.setText(count + "");
         itemView.addView(notificationBadge);
     }
 
@@ -312,6 +400,18 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         }
         else{
             requestListener();
+            chatListener();
+
+            SharedPreferences prefs = getSharedPreferences("START", MODE_PRIVATE);
+            boolean isStart = prefs.getBoolean("DARK_MODE_DIALOG", true);
+
+            if(isStart){
+                AlertDialog dialog = DialogController.getInstance().dialogDarkMode(this);
+                dialog.show();
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("DARK_MODE_DIALOG", false);
+                editor.apply();
+            }
         }
     }
 
@@ -325,5 +425,14 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     protected void onPause() {
         super.onPause();
         Connection.getInstance().onDisconnect();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+            databaseReference.child("Request").child(uid).removeEventListener(requestEventListener);
+            databaseReference.child("Chats").child(uid).removeEventListener(chatEvenListener);
+        }
+        super.onDestroy();
     }
 }

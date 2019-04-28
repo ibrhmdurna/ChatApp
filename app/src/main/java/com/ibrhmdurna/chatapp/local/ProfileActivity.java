@@ -43,6 +43,8 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
     private RelativeLayout addFriendLayout, sendMessageView;
     private TextView cancelReqView, addFriendView, friendInfoText;
 
+    private AbstractFind find;
+
     private String uid;
 
     @Override
@@ -57,7 +59,7 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
     private void getProfileInformation(){
         uid = getIntent().getStringExtra("user_id");
 
-        AbstractFind find = new Find(new ProfileFindInfo(binding, uid));
+        find = new Find(new ProfileFindInfo(binding, uid));
         find.getContent();
     }
 
@@ -185,5 +187,11 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
     protected void onPause() {
         super.onPause();
         Connection.getInstance().onDisconnect();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        find.onDestroy();
     }
 }

@@ -36,6 +36,8 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
     private ImageButton settingsButton;
     private LinearLayout friendView;
 
+    private AbstractFind find;
+
     public AccountFragment() {
         // Required empty public constructor
     }
@@ -51,7 +53,7 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
     }
 
     private void getAccountInformation(){
-        AbstractFind find = new Find(new AccountFindInfo(binding));
+        find = new Find(new AccountFindInfo(binding));
         find.getContent();
     }
 
@@ -90,5 +92,11 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
                 startActivity(friends);
                 break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        find.onDestroy();
+        super.onDestroy();
     }
 }

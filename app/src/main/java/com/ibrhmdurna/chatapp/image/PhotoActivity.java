@@ -1,4 +1,4 @@
-package com.ibrhmdurna.chatapp.local;
+package com.ibrhmdurna.chatapp.image;
 
 import android.graphics.RectF;
 import android.support.annotation.NonNull;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.chrisbanes.photoview.OnMatrixChangedListener;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -60,6 +61,9 @@ public class PhotoActivity extends AppCompatActivity implements ViewComponentFac
                         Account account = dataSnapshot.getValue(Account.class);
 
                         nameSurnameText.setText(account.getNameSurname());
+                    }
+                    else{
+                        nameSurnameText.setText("ChatApp User");
                     }
                 }
 

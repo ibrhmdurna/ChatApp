@@ -34,6 +34,8 @@ public class RequestFindAll implements IFind {
     private TextView notFoundView;
     private BottomNavigationView bottomNavigationView;
 
+    private String uid;
+
     public RequestFindAll(View context) {
         this.context = context;
         buildView();
@@ -54,51 +56,58 @@ public class RequestFindAll implements IFind {
         requestView.setLayoutManager(layoutManager);
         requestView.setAdapter(requestAdapter);
 
-        String uid = FirebaseAuth.getInstance().getUid();
+        uid = FirebaseAuth.getInstance().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                requestList.clear();
-                if(dataSnapshot.exists()){
-                    if(bottomNavigationView.getSelectedItemId() == R.id.requests_item){
-                        requestView.setVisibility(View.VISIBLE);
-                        notFoundView.setVisibility(View.GONE);
-                    }
-
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        final String request_id = snapshot.getKey();
-
-                        final Request request = snapshot.getValue(Request.class);
-                        Account account = new Account();
-                        account.setUid(request_id);
-                        request.setAccount(account);
-                        requestList.add(request);
-                    }
-
-                    sortArrayList();
-
-                }
-                else {
-                    if(bottomNavigationView.getSelectedItemId() == R.id.requests_item){
-                        requestView.setVisibility(View.GONE);
-                        notFoundView.setVisibility(View.VISIBLE);
-                        notFoundView.setText("No Request");
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).addValueEventListener(contentEventListener);
     }
 
     @Override
     public void getMore() {
 
     }
+
+    @Override
+    public void onDestroy() {
+        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).removeEventListener(contentEventListener);
+    }
+
+    private ValueEventListener contentEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            requestList.clear();
+            if(dataSnapshot.exists()){
+                if(bottomNavigationView.getSelectedItemId() == R.id.requests_item){
+                    requestView.setVisibility(View.VISIBLE);
+                    notFoundView.setVisibility(View.GONE);
+                }
+
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    final String request_id = snapshot.getKey();
+
+                    final Request request = snapshot.getValue(Request.class);
+                    Account account = new Account();
+                    account.setUid(request_id);
+                    request.setAccount(account);
+                    requestList.add(request);
+                }
+
+                sortArrayList();
+
+            }
+            else {
+                if(bottomNavigationView.getSelectedItemId() == R.id.requests_item){
+                    requestView.setVisibility(View.GONE);
+                    notFoundView.setVisibility(View.VISIBLE);
+                    notFoundView.setText("No Request");
+                }
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 
     private void sortArrayList(){
         Collections.sort(requestList, new Comparator<Request>() {

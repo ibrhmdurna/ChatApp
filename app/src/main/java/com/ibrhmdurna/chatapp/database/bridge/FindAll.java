@@ -20,4 +20,9 @@ public class FindAll extends AbstractFindAll {
     public void getMore() {
         IFind.getMore();
     }
+
+    @Override
+    public void onDestroy() {
+        IFind.onDestroy();
+    }
 }

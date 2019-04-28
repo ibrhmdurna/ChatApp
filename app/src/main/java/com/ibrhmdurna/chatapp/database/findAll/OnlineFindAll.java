@@ -35,6 +35,8 @@ public class OnlineFindAll implements IFind {
     private RecyclerView friendView;
     private LinearLayout onlineLayout;
 
+    private String uid;
+
     public OnlineFindAll(Fragment context) {
         this.context = context;
         buildView();
@@ -54,84 +56,9 @@ public class OnlineFindAll implements IFind {
         friendView.setLayoutManager(layoutManager);
         friendView.setAdapter(friendAdapter);
 
-        String uid = FirebaseAuth.getInstance().getUid();
+        uid = FirebaseAuth.getInstance().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        final String friend_id = snapshot.getKey();
-
-                        final Friend friend = snapshot.getValue(Friend.class);
-
-                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(friend_id).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                friendList.clear();
-                                if(dataSnapshot.exists()){
-                                    final Account account = dataSnapshot.getValue(Account.class);
-                                    account.setUid(friend_id);
-                                    friend.setAccount(account);
-
-                                    dataSnapshot.child("online").getRef().addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            if(dataSnapshot.exists()){
-                                                account.setOnline((boolean) dataSnapshot.getValue());
-
-                                                if(account.isOnline()){
-                                                    friendList.add(friend);
-                                                }
-                                                else{
-                                                    friendList.remove(friend);
-                                                }
-
-                                                if(friendList.size() > 0){
-                                                    onlineLayout.setVisibility(View.VISIBLE);
-                                                }
-                                                else {
-                                                    onlineLayout.setVisibility(View.GONE);
-                                                }
-
-                                                friendAdapter.notifyDataSetChanged();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                        }
-                                    });
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                friendAdapter.setOnItemClickListener(new FriendAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(String uid) {
-                        friendAdapter.setOnItemClickListener(new FriendAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(String uid) {
-                                Intent profileIntent = new Intent(context.getActivity(), ProfileActivity.class);
-                                profileIntent.putExtra("user_id", uid);
-                                context.startActivity(profileIntent);
-                            }
-                        });
-                    }
-                });
-            }
-        });
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(contentEventListener);
 
         getMore();
     }
@@ -147,6 +74,76 @@ public class OnlineFindAll implements IFind {
             }
         });
     }
+
+    @Override
+    public void onDestroy() {
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).removeEventListener(contentEventListener);
+    }
+
+    private ValueEventListener contentEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    final String friend_id = snapshot.getKey();
+
+                    final Friend friend = snapshot.getValue(Friend.class);
+
+                    FirebaseDatabase.getInstance().getReference().child("Accounts").child(friend_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            friendList.clear();
+                            if(dataSnapshot.exists()){
+                                final Account account = dataSnapshot.getValue(Account.class);
+                                account.setUid(friend_id);
+                                friend.setAccount(account);
+
+                                dataSnapshot.child("online").getRef().addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.exists()){
+                                            account.setOnline((boolean) dataSnapshot.getValue());
+
+                                            if(account.isOnline()){
+                                                friendList.add(friend);
+                                            }
+                                            else{
+                                                friendList.remove(friend);
+                                            }
+
+                                            if(friendList.size() > 0){
+                                                onlineLayout.setVisibility(View.VISIBLE);
+                                            }
+                                            else {
+                                                onlineLayout.setVisibility(View.GONE);
+                                            }
+
+                                            friendAdapter.notifyDataSetChanged();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 
     private void sortArrayList(){
         Collections.sort(friendList, new Comparator<Friend>() {

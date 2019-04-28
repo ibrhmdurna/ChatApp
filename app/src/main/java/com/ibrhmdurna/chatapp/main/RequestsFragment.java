@@ -21,6 +21,8 @@ import com.ibrhmdurna.chatapp.database.findAll.RequestFindAll;
  */
 public class RequestsFragment extends Fragment implements ViewComponentFactory {
 
+    private AbstractFindAll findAll;
+
     public RequestsFragment() {
         // Required empty public constructor
     }
@@ -37,7 +39,7 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
     }
 
     private void getRequest(){
-        AbstractFindAll findAll = new FindAll(new RequestFindAll(getView()));
+        findAll = new FindAll(new RequestFindAll(getView()));
         findAll.getContent();
     }
 
@@ -56,5 +58,11 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
     @Override
     public void buildView() {
         // ------ COMPONENT -----
+    }
+
+    @Override
+    public void onDestroy() {
+        findAll.onDestroy();
+        super.onDestroy();
     }
 }

@@ -36,6 +36,8 @@ public class ChatFindAll implements IFind {
     private TextView notFoundView;
     private BottomNavigationView bottomNavigationView;
 
+    private String uid;
+
     public ChatFindAll(Fragment context){
         this.context = context;
         buildView();
@@ -56,50 +58,57 @@ public class ChatFindAll implements IFind {
         chatView.setLayoutManager(layoutManager);
         chatView.setAdapter(chatAdapter);
 
-        String uid = FirebaseAuth.getInstance().getUid();
+        uid = FirebaseAuth.getInstance().getUid();
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
 
-        databaseReference.child("Chats").child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                chatList.clear();
-                if(dataSnapshot.exists()){
-                    if(bottomNavigationView.getSelectedItemId() == R.id.messages_item){
-                        chatView.setVisibility(View.VISIBLE);
-                        notFoundView.setVisibility(View.GONE);
-                    }
-
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        Chat chat = snapshot.getValue(Chat.class);
-                        chat.setChatUid(snapshot.getKey());
-
-                        chatList.add(chat);
-                    }
-
-                    shortArrayList();
-                }
-                else {
-                    if(bottomNavigationView.getSelectedItemId() == R.id.messages_item){
-                        chatView.setVisibility(View.GONE);
-                        notFoundView.setVisibility(View.VISIBLE);
-                        notFoundView.setText("No Chat");
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        databaseReference.child("Chats").child(uid).addValueEventListener(contentEventListener);
     }
 
     @Override
     public void getMore() {
 
     }
+
+    @Override
+    public void onDestroy() {
+        FirebaseDatabase.getInstance().getReference().child("Chats").child(uid).removeEventListener(contentEventListener);
+    }
+
+    private ValueEventListener contentEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            chatList.clear();
+            if(dataSnapshot.exists()){
+                if(bottomNavigationView.getSelectedItemId() == R.id.messages_item){
+                    chatView.setVisibility(View.VISIBLE);
+                    notFoundView.setVisibility(View.GONE);
+                }
+
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chat chat = snapshot.getValue(Chat.class);
+                    chat.setChatUid(snapshot.getKey());
+
+                    chatList.add(chat);
+                }
+
+                shortArrayList();
+            }
+            else {
+                if(bottomNavigationView.getSelectedItemId() == R.id.messages_item){
+                    chatView.setVisibility(View.GONE);
+                    notFoundView.setVisibility(View.VISIBLE);
+                    notFoundView.setText("No Chat");
+                }
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 
     private void shortArrayList(){
         Collections.sort(chatList, new Comparator<Chat>() {

@@ -160,8 +160,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                                 public void onClick(View v) {
                                     confirmDialog.dismiss();
                                     Delete.getInstance().clearChat(chatUid, deviceCheck.isChecked());
-
-
                                 }
                             });
                         }
@@ -297,6 +295,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                     setProfileImage(account.getThumb_image(), account.getName());
                     nameSurname.setText(account.getNameSurname());
                 }
+                else{
+                    nameSurname.setText("ChatApp User");
+                    profileImage.setImageDrawable(context.getContext().getDrawable(R.drawable.default_avatar));
+                }
             }
 
             @Override
@@ -412,17 +414,32 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    boolean isTyping = (boolean) dataSnapshot.getValue();
+                    final boolean isTyping = (boolean) dataSnapshot.getValue();
 
-                    if(isTyping){
-                        typingLayout.setVisibility(View.VISIBLE);
-                        lastMessage.setVisibility(View.GONE);
-                        photoImage.setVisibility(View.GONE);
-                        youText.setVisibility(View.GONE);
-                    }
-                    else{
-                        typingLayout.setVisibility(View.GONE);
-                    }
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                    databaseReference.keepSynced(true);
+
+                    databaseReference.child("Friends").child(FirebaseAuth.getInstance().getUid()).child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                if(isTyping){
+                                    typingLayout.setVisibility(View.VISIBLE);
+                                    lastMessage.setVisibility(View.GONE);
+                                    photoImage.setVisibility(View.GONE);
+                                    youText.setVisibility(View.GONE);
+                                }
+                                else{
+                                    typingLayout.setVisibility(View.GONE);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             }
 

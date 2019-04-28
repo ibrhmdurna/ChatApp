@@ -4,4 +4,5 @@ public interface IFind {
     void buildView();
     void getContent();
     void getMore();
+    void onDestroy();
 }

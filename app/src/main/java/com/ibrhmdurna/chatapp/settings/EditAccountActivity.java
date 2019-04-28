@@ -57,6 +57,8 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
     private TextView genderError, locationError;
     private View genderLine, locationLine;
 
+    private AbstractFind find;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTheme(this);
@@ -270,8 +272,8 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
     }
 
     private void getAccountInformation(){
-        AbstractFind findAccount = new Find(new AccountEditFindInfo(binding));
-        findAccount.getContent();
+        find = new Find(new AccountEditFindInfo(binding));
+        find.getContent();
     }
 
     private void watcherProcess(){
@@ -557,6 +559,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
 
     @Override
     protected void onDestroy() {
+        find.onDestroy();
         super.onDestroy();
         ImageController.getInstance().setProfileImageBytes(null);
     }

@@ -376,13 +376,6 @@
         <item name="android:windowExitAnimation">@anim/dialog_down_anim</item>
     </style>
 
-    <style name="DialogStyle">
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-    </style>
-
     <style name="CustomButtonStyle">
         <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Widget.TextView.SpinnerItem</item>
         <item name="android:background">@drawable/custom_button</item>

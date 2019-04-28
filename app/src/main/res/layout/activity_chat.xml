@@ -19,8 +19,7 @@
         <RelativeLayout
             android:id="@+id/toolbar_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClick">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -33,7 +32,7 @@
                     android:id="@+id/chat_name_surname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name Surname"
+                    android:text="ChatApp User"
                     android:textColor="?attr/primaryTextColor"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-light"
@@ -79,7 +78,8 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     app:civ_border_color="?attr/searchColor"
-                    app:civ_border_width="1dp"/>
+                    app:civ_border_width="1dp"
+                    android:src="@drawable/default_avatar"/>
             </RelativeLayout>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
@@ -107,65 +107,85 @@
         android:scaleType="centerCrop"
         android:translationZ="-2dp"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/chat_bottom_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:background="?attr/backgroundBrushColor"
         android:layout_margin="5dp">
 
-        <ImageButton
-            android:id="@+id/chat_gallery_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:src="@drawable/ic_add_icon"
-            android:background="@android:color/transparent"
-            android:padding="15dp"
-            android:layout_weight="0"
-            android:onClick="onClick"/>
-
-        <com.vanniktech.emoji.EmojiEditText
-            android:id="@+id/message_input"
+        <LinearLayout
+            android:id="@+id/chat_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:hint="Type a message..."
-            android:padding="5dp"
-            android:inputType="textMultiLine|textCapSentences"
-            android:scrollbars="vertical"
-            android:maxLines="5"
-            android:minLines="1"
-            android:textSize="18sp"/>
+            android:orientation="horizontal"
+            android:visibility="visible">
 
-        <ImageButton
-            android:id="@+id/chat_emoji_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:layout_gravity="bottom"
-            android:src="@drawable/ic_emoji_icon"
-            android:background="@android:color/transparent"
-            android:padding="15dp"
-            android:onClick="onClick"/>
+            <ImageButton
+                android:id="@+id/chat_gallery_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:src="@drawable/ic_add_icon"
+                android:background="@android:color/transparent"
+                android:padding="15dp"
+                android:layout_weight="0"
+                android:onClick="onClick"/>
 
-        <ImageButton
-            android:id="@+id/send_btn"
-            android:layout_width="wrap_content"
+            <com.vanniktech.emoji.EmojiEditText
+                android:id="@+id/message_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="Type a message..."
+                android:padding="5dp"
+                android:inputType="textMultiLine|textCapSentences"
+                android:scrollbars="vertical"
+                android:maxLines="5"
+                android:minLines="1"
+                android:textSize="18sp"/>
+
+            <ImageButton
+                android:id="@+id/chat_emoji_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:layout_gravity="bottom"
+                android:src="@drawable/ic_emoji_icon"
+                android:background="@android:color/transparent"
+                android:padding="15dp"
+                android:onClick="onClick"/>
+
+            <ImageButton
+                android:id="@+id/send_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:src="@drawable/ic_send_icon"
+                android:background="@drawable/custom_button"
+                android:backgroundTint="@color/selector_send_button_color"
+                android:padding="11dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="0"
+                android:onClick="onClick"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/account_not_found_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:src="@drawable/ic_send_icon"
-            android:background="@drawable/custom_button"
-            android:backgroundTint="@color/selector_send_button_color"
-            android:padding="11dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="4dp"
-            android:layout_weight="0"
-            android:onClick="onClick"/>
-    </LinearLayout>
+            android:text="This account is no longer available. That's why you can't send messages anymore."
+            android:textColor="@android:color/white"
+            android:textStyle="normal"
+            android:padding="25dp"
+            android:textSize="17sp"
+            android:background="@drawable/rounded_background"
+            android:backgroundTint="?attr/colorAccent"
+            android:visibility="gone"/>
+    </RelativeLayout>
 
 </RelativeLayout>

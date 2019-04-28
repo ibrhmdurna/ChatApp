@@ -1,19 +1,24 @@
 package com.ibrhmdurna.chatapp.database.find;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
+import com.ibrhmdurna.chatapp.local.ProfileActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.util.GetTimeAgo;
@@ -33,6 +38,9 @@ public class ChatFindInfo implements IFind {
     private TextView nameSurname;
     private TextView lastSeen;
     private TextView typingView;
+    private RelativeLayout toolbarView;
+    private LinearLayout chatInputLayout;
+    private TextView accountNotFoundLayout;
 
     private String uid;
 
@@ -51,38 +59,14 @@ public class ChatFindInfo implements IFind {
         nameSurname = context.findViewById(R.id.chat_name_surname);
         lastSeen = context.findViewById(R.id.chat_last_seen);
         typingView = context.findViewById(R.id.chat_typing);
+        toolbarView = context.findViewById(R.id.toolbar_view);
+        chatInputLayout = context.findViewById(R.id.chat_input_layout);
+        accountNotFoundLayout = context.findViewById(R.id.account_not_found_layout);
     }
 
     @Override
     public void getContent() {
-        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    final Account account = dataSnapshot.getValue(Account.class);
-
-                    if(image == null){
-                        image = account.getProfile_image();
-                        imageProcess(account);
-                    }
-
-                    if(!image.equals(account.getProfile_image())){
-                        image = account.getProfile_image();
-                        imageProcess(account);
-                    }
-
-                    nameSurname.setText(account.getNameSurname());
-
-                    typingListener(account);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addValueEventListener(contentEventListener);
     }
 
     @Override
@@ -90,21 +74,87 @@ public class ChatFindInfo implements IFind {
         // NOTHING...
     }
 
-    private void typingListener(final Account account){
-        String currentUid = FirebaseAuth.getInstance().getUid();
+    @Override
+    public void onDestroy() {
+        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).removeEventListener(contentEventListener);
+    }
 
-        FirebaseDatabase.getInstance().getReference().child("Chats").child(currentUid).child(uid).addValueEventListener(new ValueEventListener() {
+    private ValueEventListener contentEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                final Account account = dataSnapshot.getValue(Account.class);
+
+                if(image == null){
+                    image = account.getProfile_image();
+                    imageProcess(account);
+                }
+
+                if(!image.equals(account.getProfile_image())){
+                    image = account.getProfile_image();
+                    imageProcess(account);
+                }
+
+                nameSurname.setText(account.getNameSurname());
+
+                typingListener(account);
+
+                toolbarView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent profileIntent = new Intent(context, ProfileActivity.class);
+                        profileIntent.putExtra("user_id", uid);
+                        context.startActivity(profileIntent);
+                    }
+                });
+            }
+            else{
+                accountNotFoundLayout.setVisibility(View.VISIBLE);
+                chatInputLayout.setVisibility(View.GONE);
+                lastSeen.setVisibility(View.GONE);
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    private void typingListener(final Account account){
+        final String currentUid = FirebaseAuth.getInstance().getUid();
+
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
+
+        databaseReference.child("Chats").child(currentUid).child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    Chat chat = dataSnapshot.getValue(Chat.class);
+                    final Chat chat = dataSnapshot.getValue(Chat.class);
 
-                    if(chat.isTyping()){
-                        typingView.setVisibility(View.VISIBLE);
-                        lastSeen.setVisibility(View.GONE);
-                    }
-                    else{
-                        onlineListener(account);
+                    databaseReference.child("Friends").child(currentUid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                if(chat.isTyping()){
+                                    typingView.setVisibility(View.VISIBLE);
+                                    lastSeen.setVisibility(View.GONE);
+                                }
+                                else{
+                                    onlineListener(account);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    if(lastSeen.getVisibility() == View.VISIBLE){
+
                     }
                 }
                 else{
@@ -120,10 +170,30 @@ public class ChatFindInfo implements IFind {
     }
 
     private void onlineListener(final Account account){
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
+
         if(account.isOnline()){
-            typingView.setVisibility(View.GONE);
             lastSeen.setVisibility(View.VISIBLE);
-            lastSeen.setText("Online");
+            typingView.setVisibility(View.GONE);
+            databaseReference.child("Friends").child(FirebaseAuth.getInstance().getUid()).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        lastSeen.setText("Online");
+                    }
+                    else {
+                        lastSeen.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+
         }
         else{
             Handler h = new Handler();
@@ -132,21 +202,36 @@ public class ChatFindInfo implements IFind {
                 public void run() {
                     if(account.getLast_seen() != null){
 
-                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).child("online").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                        databaseReference.child("Accounts").child(uid).child("online").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if(dataSnapshot.exists()){
-                                    boolean isOnline = (boolean) dataSnapshot.getValue();
+                                    final boolean isOnline = (boolean) dataSnapshot.getValue();
 
                                     if(typingView.getVisibility() != View.VISIBLE){
-                                        lastSeen.setVisibility(View.VISIBLE);
-                                        if(isOnline){
-                                            lastSeen.setText("Online");
-                                        }
-                                        else{
-                                            String lastSeenTime = GetTimeAgo.getInstance().getLastSeenAgo(account.getLast_seen());
-                                            lastSeen.setText(lastSeenTime);
-                                        }
+                                        databaseReference.child("Friends").child(FirebaseAuth.getInstance().getUid()).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if(dataSnapshot.exists()){
+                                                    lastSeen.setVisibility(View.VISIBLE);
+                                                    if(isOnline){
+                                                        lastSeen.setText("Online");
+                                                    }
+                                                    else{
+                                                        String lastSeenTime = GetTimeAgo.getInstance().getLastSeenAgo(account.getLast_seen());
+                                                        lastSeen.setText(lastSeenTime);
+                                                    }
+                                                }
+                                                else{
+                                                    lastSeen.setVisibility(View.GONE);
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
                                     }
 
                                 }

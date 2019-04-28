@@ -1,6 +1,5 @@
 package com.ibrhmdurna.chatapp.database.find;
 
-import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -91,6 +90,13 @@ public class ProfileFindInfo implements IFind {
     @Override
     public void getMore() {
         // NOTHING...
+    }
+
+    @Override
+    public void onDestroy() {
+        database.child("Accounts").child(uid).removeEventListener(accountEventListener);
+        database.child("Friends").child(current_uid).child(uid).removeEventListener(friendEventListener);
+        database.child("Friends").child(uid).removeEventListener(friendEventListener2);
     }
 
     private ValueEventListener accountEventListener = new ValueEventListener() {

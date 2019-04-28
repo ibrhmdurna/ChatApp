@@ -35,22 +35,22 @@ public class GetTimeAgo {
         String language = Locale.getDefault().getLanguage();
         if(language.equals("tr")) {
             timeFormatString = "HH:mm";
-            dateTimeFormatString = "MMMM d, HH:mm";
-            yearTimeFormatString = "dd/MM/yy, HH:mm";
+            dateTimeFormatString = "d MMMM HH:mm";
+            yearTimeFormatString = "dd/MM/yy HH:mm";
         }else{
             timeFormatString = "h:mm aa";
-            dateTimeFormatString = "MMMM d, h:mm aa";
-            yearTimeFormatString = "dd/MM/yy, h:mm aa";
+            dateTimeFormatString = "d MMMM h:mm aa";
+            yearTimeFormatString = "dd/MM/yy h:mm aa";
         }
 
         if(now.get(Calendar.YEAR) != mTime.get(Calendar.YEAR)){
             return DateFormat.format(yearTimeFormatString, mTime).toString();
         } else if (now.get(Calendar.DATE) == mTime.get(Calendar.DATE)
                 && now.get(Calendar.MONTH) == mTime.get(Calendar.MONTH)) {
-            return "Today, " + DateFormat.format(timeFormatString, mTime);
+            return "Today " + DateFormat.format(timeFormatString, mTime);
         } else if (now.get(Calendar.DATE) - mTime.get(Calendar.DATE) == 1
                 && now.get(Calendar.MONTH) == mTime.get(Calendar.MONTH)){
-            return "Yesterday, " + DateFormat.format(timeFormatString, mTime);
+            return "Yesterday " + DateFormat.format(timeFormatString, mTime);
         } else {
             return DateFormat.format(dateTimeFormatString, mTime).toString();
         }

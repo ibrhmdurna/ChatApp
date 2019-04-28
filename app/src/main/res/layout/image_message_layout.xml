@@ -46,6 +46,7 @@
                     app:civ_border_color="?attr/searchColor"
                     app:civ_border_width="1dp"
                     android:layout_centerInParent="true"
+                    android:src="@drawable/default_avatar"
                     android:saveEnabled="false"/>
 
                 <TextView

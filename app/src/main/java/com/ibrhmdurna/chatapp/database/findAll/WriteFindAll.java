@@ -44,6 +44,8 @@ public class WriteFindAll implements IFind {
     private LinearLayout newGroupLayout;
     private LinearLayout addFriendLayout;
 
+    private String uid;
+
     public WriteFindAll(Activity context){
         this.context = context;
         buildView();
@@ -67,53 +69,9 @@ public class WriteFindAll implements IFind {
         friendView.setLayoutManager(layoutManager);
         friendView.setAdapter(friendAdapter);
 
-        String uid = FirebaseAuth.getInstance().getUid();
+        uid = FirebaseAuth.getInstance().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                friendList.clear();
-                if(dataSnapshot.exists()){
-                    writeLayout.setVisibility(View.VISIBLE);
-                    notFoundView.setVisibility(View.GONE);
-
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-
-                        final String friend_id = snapshot.getKey();
-
-                        final Friend friend = snapshot.getValue(Friend.class);
-
-                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(friend_id).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()){
-                                    final Account account = dataSnapshot.getValue(Account.class);
-                                    account.setUid(dataSnapshot.getKey());
-                                    friend.setAccount(account);
-                                    friendList.add(friend);
-
-                                    friendAdapter.notifyDataSetChanged();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                }
-                else{
-                    writeLayout.setVisibility(View.GONE);
-                    notFoundView.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(contentEventListener);
 
         getMore();
     }
@@ -156,6 +114,57 @@ public class WriteFindAll implements IFind {
             }
         });
     }
+
+    @Override
+    public void onDestroy() {
+        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).removeEventListener(contentEventListener);
+    }
+
+    private ValueEventListener contentEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            friendList.clear();
+            if(dataSnapshot.exists()){
+                writeLayout.setVisibility(View.VISIBLE);
+                notFoundView.setVisibility(View.GONE);
+
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+
+                    final String friend_id = snapshot.getKey();
+
+                    final Friend friend = snapshot.getValue(Friend.class);
+
+                    FirebaseDatabase.getInstance().getReference().child("Accounts").child(friend_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                final Account account = dataSnapshot.getValue(Account.class);
+                                account.setUid(dataSnapshot.getKey());
+                                friend.setAccount(account);
+                                friendList.add(friend);
+
+                                friendAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+            else{
+                writeLayout.setVisibility(View.GONE);
+                notFoundView.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 
     private void filter(String text){
         List<Friend> filterList = new ArrayList<>();

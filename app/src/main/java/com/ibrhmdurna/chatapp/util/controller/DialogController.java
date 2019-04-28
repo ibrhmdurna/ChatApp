@@ -20,6 +20,7 @@ import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.local.ProfileActivity;
 import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.models.Message;
+import com.ibrhmdurna.chatapp.settings.DarkModeActivity;
 
 import java.io.File;
 
@@ -242,6 +243,40 @@ public class DialogController {
         dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(true);
+
+        return dialog;
+    }
+
+    public AlertDialog dialogDarkMode(final Activity context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, android.R.style.Animation_Dialog);
+        View view = context.getLayoutInflater().inflate(R.layout.dialog_dark, null);
+        App.Theme.getInstance().getTheme(view.getContext());
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+
+        TextView negativeBtn = view.findViewById(R.id.dialog_negative_btn);
+        negativeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        TextView positiveBtn = view.findViewById(R.id.dialog_positive_btn);
+        positiveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent darkIntent = new Intent(context, DarkModeActivity.class);
+                context.startActivity(darkIntent);
+            }
+        });
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
 
         return dialog;
     }

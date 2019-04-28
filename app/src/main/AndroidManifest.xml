@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.LightTheme"
         tools:ignore="GoogleAppIndexingWarning,InnerclassSeparator">
-        <activity android:name=".local.PhotoActivity"
+        <activity android:name=".image.PhotoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
         <activity

@@ -41,6 +41,8 @@ public class ProfileFriendsActivity extends AppCompatActivity implements ViewCom
 
     private String uid;
 
+    private AbstractFindAll findAll;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTheme(this);
@@ -53,12 +55,12 @@ public class ProfileFriendsActivity extends AppCompatActivity implements ViewCom
     }
 
     private void getFriends(){
-        AbstractFindAll findAll = new FindAll(new AccountFriendFindAll(this, uid));
+        findAll = new FindAll(new AccountFriendFindAll(this, uid));
         findAll.getContent();
     }
 
     private void getMutual(){
-        AbstractFindAll findAll = new FindAll(new MutualFriendFindAll(this, uid));
+        findAll = new FindAll(new MutualFriendFindAll(this, uid));
         findAll.getContent();
     }
 
@@ -186,5 +188,11 @@ public class ProfileFriendsActivity extends AppCompatActivity implements ViewCom
     protected void onPause() {
         super.onPause();
         Connection.getInstance().onDisconnect();
+    }
+
+    @Override
+    protected void onDestroy() {
+        findAll.onDestroy();
+        super.onDestroy();
     }
 }

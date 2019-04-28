@@ -37,6 +37,8 @@ public class RecentFindAll implements IFind {
 
     private NestedScrollView noRecentLayout, recentLayout;
 
+    private String uid;
+
     public RecentFindAll(Activity context){
         this.context = context;
         buildView();
@@ -57,64 +59,71 @@ public class RecentFindAll implements IFind {
         recentView.setLayoutManager(layoutManager);
         recentView.setAdapter(recentAdapter);
 
-        String uid = FirebaseAuth.getInstance().getUid();
+        uid = FirebaseAuth.getInstance().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Recent").child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                recentList.clear();
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        final String recent_uid = snapshot.getKey();
-
-                        final Recent recent = snapshot.getValue(Recent.class);
-
-                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(recent_uid).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()){
-                                    Account account = dataSnapshot.getValue(Account.class);
-                                    account.setUid(dataSnapshot.getKey());
-                                    recent.setAccount(account);
-                                    recentList.add(recent);
-
-                                    if(recentList.size() > 0){
-                                        noRecentLayout.setVisibility(View.GONE);
-                                        recentLayout.setVisibility(View.VISIBLE);
-                                    }
-                                    else {
-                                        noRecentLayout.setVisibility(View.VISIBLE);
-                                        recentLayout.setVisibility(View.GONE);
-                                    }
-
-                                    shortArrayList();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                }
-                else {
-                    noRecentLayout.setVisibility(View.VISIBLE);
-                    recentLayout.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        FirebaseDatabase.getInstance().getReference().child("Recent").child(uid).addValueEventListener(contentEventListener);
     }
 
     @Override
     public void getMore() {
 
     }
+
+    @Override
+    public void onDestroy() {
+        FirebaseDatabase.getInstance().getReference().child("Recent").child(uid).removeEventListener(contentEventListener);
+    }
+
+    private ValueEventListener contentEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            recentList.clear();
+            if(dataSnapshot.exists()){
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    final String recent_uid = snapshot.getKey();
+
+                    final Recent recent = snapshot.getValue(Recent.class);
+
+                    FirebaseDatabase.getInstance().getReference().child("Accounts").child(recent_uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                Account account = dataSnapshot.getValue(Account.class);
+                                account.setUid(dataSnapshot.getKey());
+                                recent.setAccount(account);
+                                recentList.add(recent);
+
+                                if(recentList.size() > 0){
+                                    noRecentLayout.setVisibility(View.GONE);
+                                    recentLayout.setVisibility(View.VISIBLE);
+                                }
+                                else {
+                                    noRecentLayout.setVisibility(View.VISIBLE);
+                                    recentLayout.setVisibility(View.GONE);
+                                }
+
+                                shortArrayList();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+            else {
+                noRecentLayout.setVisibility(View.VISIBLE);
+                recentLayout.setVisibility(View.GONE);
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 
     private void shortArrayList(){
         Collections.sort(recentList, new Comparator<Recent>() {

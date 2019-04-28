@@ -21,6 +21,8 @@ import com.ibrhmdurna.chatapp.database.findAll.OnlineFindAll;
  */
 public class FriendsFragment extends Fragment implements ViewComponentFactory {
 
+    private AbstractFindAll findAll;
+
     public FriendsFragment() {
         // Required empty public constructor
     }
@@ -37,12 +39,12 @@ public class FriendsFragment extends Fragment implements ViewComponentFactory {
     }
 
     private void getOnline(){
-        AbstractFindAll findAll = new FindAll(new OnlineFindAll(this));
+        findAll = new FindAll(new OnlineFindAll(this));
         findAll.getContent();
     }
 
     private void getFriends(){
-        AbstractFindAll findAll = new FindAll(new FriendFindAll(this));
+        findAll = new FindAll(new FriendFindAll(this));
         findAll.getContent();
     }
 
@@ -61,5 +63,11 @@ public class FriendsFragment extends Fragment implements ViewComponentFactory {
     @Override
     public void buildView() {
         // ---- COMPONENT ----
+    }
+
+    @Override
+    public void onDestroy() {
+        findAll.onDestroy();
+        super.onDestroy();
     }
 }

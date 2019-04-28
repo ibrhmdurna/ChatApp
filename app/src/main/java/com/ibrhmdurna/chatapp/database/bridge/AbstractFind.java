@@ -11,4 +11,6 @@ public abstract class AbstractFind {
     public abstract void buildView();
 
     public abstract void getContent();
+
+    public abstract void onDestroy();
 }
