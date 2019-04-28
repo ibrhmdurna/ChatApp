@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.start.StartActivity;
 import com.ibrhmdurna.chatapp.util.Environment;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
@@ -88,6 +89,7 @@ public class SettingsActivity extends AppCompatActivity implements ViewComponent
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
+                        Delete.getInstance().deviceToken(FirebaseAuth.getInstance().getUid());
                         FirebaseAuth.getInstance().signOut();
                         sendToStart();
                     }

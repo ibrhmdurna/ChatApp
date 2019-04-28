@@ -18,8 +18,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -111,6 +113,9 @@ public class Insert {
                                                                     public void onComplete(@NonNull Task<Void> task) {
                                                                         if(task.isSuccessful()){
                                                                             loadingBar.dismiss();
+
+                                                                            deviceToken(FirebaseAuth.getInstance().getUid());
+
                                                                             Intent mainIntent = new Intent(context, MainActivity.class);
                                                                             mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                                             mainIntent.putExtra("page", "Main");
@@ -224,5 +229,13 @@ public class Insert {
         friendMap.put("Request/" + id + "/" + uid + "/time", null);
 
         FirebaseDatabase.getInstance().getReference().updateChildren(friendMap);
+    }
+
+    public void deviceToken(String id){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
+
+        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+        databaseReference.child("Accounts").child(id).child("device_token").setValue(deviceToken);
     }
 }
