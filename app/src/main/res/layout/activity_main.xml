@@ -39,6 +39,14 @@
                 android:layout_width="match_parent"
                 app:layout_collapseMode="pin"
                 android:layout_gravity="bottom"/>
+
+            <View
+                android:id="@+id/tooltip_view"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="end|bottom"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="18dp"/>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
@@ -104,6 +112,15 @@
             app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_menu"
             android:visibility="visible"/>
+
+        <View
+            android:id="@+id/account_tool_tip"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="20dp"
+            android:layout_alignParentBottom="true"/>
     </RelativeLayout>
 
     <TextView

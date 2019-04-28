@@ -388,5 +388,13 @@
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="CustomToolTip">
+        <item name="backgroundColor">?attr/colorAccent</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="cancelable">true</item>
+        <item name="cornerRadius">14dp</item>
+    </style>
 </resources>
 

@@ -1,18 +1,16 @@
 package com.ibrhmdurna.chatapp.main;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -21,11 +19,13 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,20 +40,12 @@ import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Connection;
-import com.ibrhmdurna.chatapp.image.GalleryActivity;
 import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.models.Request;
 import com.ibrhmdurna.chatapp.start.StartActivity;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.DexterError;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.PermissionRequestErrorListener;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-
-import java.util.List;
+import com.tooltip.OnDismissListener;
+import com.tooltip.Tooltip;
 
 public class MainActivity extends AppCompatActivity implements ViewComponentFactory {
 
@@ -71,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
 
     private String uid;
     private DatabaseReference databaseReference;
+
+    private View tooltipView;
+    private View accountToolTipView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
             showFragment(new AccountFragment(), "AccountFragment");
             bottomNavigationView.setSelectedItemId(R.id.account_item);
         }
+
     }
 
     private void chatListener(){
@@ -313,6 +309,8 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         messageNotFoundView = findViewById(R.id.messages_not_found_view);
         friendsNotFoundView = findViewById(R.id.friend_not_found_view);
         requestNotFoundView = findViewById(R.id.request_not_found_view);
+        tooltipView = findViewById(R.id.tooltip_view);
+        accountToolTipView = findViewById(R.id.account_tool_tip);
     }
 
     @Override
@@ -402,16 +400,94 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
             requestListener();
             chatListener();
 
-            SharedPreferences prefs = getSharedPreferences("START", MODE_PRIVATE);
-            boolean isStart = prefs.getBoolean("DARK_MODE_DIALOG", true);
+            isBegin();
+        }
+    }
 
-            if(isStart){
-                AlertDialog dialog = DialogController.getInstance().dialogDarkMode(this);
-                dialog.show();
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean("DARK_MODE_DIALOG", false);
-                editor.apply();
+    private void isBegin(){
+        SharedPreferences prefs = getSharedPreferences("START", MODE_PRIVATE);
+        final SharedPreferences.Editor editor = prefs.edit();
+        boolean isDialog = prefs.getBoolean("DARK_MODE_DIALOG", true);
+        boolean isSearch = prefs.getBoolean("SEARCH_TOOLTIP", true);
+        final boolean isAccount = prefs.getBoolean("ACCOUNT_TOOLTIP", true);
+
+        AlertDialog dialog = DialogController.getInstance().dialogDarkMode(this);
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                Tooltip tooltip = new Tooltip.Builder(tooltipView, R.style.CustomToolTip)
+                        .setText("Find your friend in the world of ChatApp!")
+                        .setGravity(Gravity.BOTTOM)
+                        .show();
+
+                tooltip.setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        editor.putBoolean("SEARCH_TOOLTIP", false);
+                        editor.apply();
+                        Tooltip accountToolTip = new Tooltip.Builder(accountToolTipView, R.style.CustomToolTip)
+                                .setText("Access your account and settings here!")
+                                .setGravity(Gravity.TOP)
+                                .show();
+
+                        accountToolTip.setOnDismissListener(new OnDismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                editor.putBoolean("ACCOUNT_TOOLTIP", false);
+                                editor.apply();
+                            }
+                        });
+                    }
+                });
             }
+        });
+
+        if(isDialog){
+            dialog.show();
+            editor.putBoolean("DARK_MODE_DIALOG", false);
+            editor.apply();
+        }
+        else if(isSearch){
+            Tooltip tooltip = new Tooltip.Builder(tooltipView, R.style.CustomToolTip)
+                    .setText("Find your friend in the world of ChatApp!")
+                    .setGravity(Gravity.BOTTOM)
+                    .show();
+            tooltip.setOnDismissListener(new OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    editor.putBoolean("SEARCH_TOOLTIP", false);
+                    editor.apply();
+                    if(isAccount){
+                        Tooltip accountToolTip = new Tooltip.Builder(accountToolTipView, R.style.CustomToolTip)
+                                .setText("Access your account and settings here!")
+                                .setGravity(Gravity.TOP)
+                                .show();
+
+                        accountToolTip.setOnDismissListener(new OnDismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                editor.putBoolean("ACCOUNT_TOOLTIP", false);
+                                editor.apply();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        else if(isAccount){
+            Tooltip accountToolTip = new Tooltip.Builder(accountToolTipView, R.style.CustomToolTip)
+                    .setText("Access your account and settings here!")
+                    .setGravity(Gravity.TOP)
+                    .show();
+
+            accountToolTip.setOnDismissListener(new OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    editor.putBoolean("ACCOUNT_TOOLTIP", false);
+                    editor.apply();
+                }
+            });
         }
     }
 

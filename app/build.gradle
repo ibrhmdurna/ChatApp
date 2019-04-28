@@ -68,6 +68,7 @@ dependencies {
     implementation 'id.zelory:compressor:2.1.0'
     implementation 'com.github.mmin18:realtimeblurview:1.1.2'
     implementation 'com.makeramen:roundedimageview:2.3.0'
+    implementation 'com.github.vihtarb:tooltip:0.2.0'
 
     // Swipe Refresh Layout Library
     implementation 'com.baoyz.pullrefreshlayout:library:1.2.0'
