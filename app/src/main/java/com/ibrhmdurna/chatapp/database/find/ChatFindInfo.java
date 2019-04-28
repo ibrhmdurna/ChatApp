@@ -17,6 +17,7 @@ import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.util.GetTimeAgo;
+import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -34,6 +35,8 @@ public class ChatFindInfo implements IFind {
     private TextView typingView;
 
     private String uid;
+
+    private String image;
 
     public ChatFindInfo(Activity context, String uid) {
         this.context = context;
@@ -58,33 +61,14 @@ public class ChatFindInfo implements IFind {
                 if(dataSnapshot.exists()){
                     final Account account = dataSnapshot.getValue(Account.class);
 
-                    String image = account.getProfile_image();
-
-                    if(image.substring(0, 8).equals("default_")){
-                        String value = image.substring(8,9);
-                        int index = Integer.parseInt(value);
-                        setProfileImage(index, profileImage);
-                        String name = account.getName().substring(0,1);
-                        profileText.setText(name);
-                        profileText.setVisibility(View.VISIBLE);
+                    if(image == null){
+                        image = account.getProfile_image();
+                        imageProcess(account);
                     }
-                    else {
-                        final Picasso picasso = Picasso.get();
-                        picasso.setIndicatorsEnabled(false);
-                        picasso.load(account.getThumb_image()).networkPolicy(NetworkPolicy.OFFLINE)
-                                .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
-                            @Override
-                            public void onSuccess() {
 
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-                                picasso.load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
-                            }
-                        });
-                        profileText.setText(null);
-                        profileText.setVisibility(View.GONE);
+                    if(!image.equals(account.getProfile_image())){
+                        image = account.getProfile_image();
+                        imageProcess(account);
                     }
 
                     nameSurname.setText(account.getNameSurname());
@@ -220,6 +204,35 @@ public class ChatFindInfo implements IFind {
             case 9:
                 profileImage.setImageResource(R.drawable.ic_avatar_9);
                 break;
+        }
+    }
+
+    private void imageProcess(final Account account){
+        if(image.substring(0, 8).equals("default_")){
+            String value = image.substring(8,9);
+            int index = Integer.parseInt(value);
+            setProfileImage(index, profileImage);
+            String name = account.getName().substring(0,1);
+            profileText.setText(name);
+            profileText.setVisibility(View.VISIBLE);
+        }
+        else {
+            final Picasso picasso = Picasso.get();
+            picasso.setIndicatorsEnabled(false);
+            picasso.load(account.getThumb_image()).networkPolicy(NetworkPolicy.OFFLINE)
+                    .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    picasso.load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+                }
+            });
+            profileText.setText(null);
+            profileText.setVisibility(View.GONE);
         }
     }
 }

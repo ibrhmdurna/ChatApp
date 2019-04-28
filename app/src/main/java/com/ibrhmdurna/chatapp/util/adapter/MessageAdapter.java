@@ -4,10 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -429,11 +430,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             imageView.setImageDrawable(context.getDrawable(R.drawable.ic_photo_default_background));
             loadingBar.setIndeterminate(false);
             loadingBar.setVisibility(View.GONE);
+            imageView.setEnabled(false);
 
             if(message.getPath().equals("")){
 
                 if(message.getBitmap() != null){
                     imageView.setImageBitmap(message.getBitmap());
+                    imageView.setEnabled(true);
                 }
                 else{
                     if(message.getSize() != null){
@@ -449,6 +452,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if(imgFile.exists()){
                     UniversalImageLoader.setImage(message.getPath(), imageView, null, "file://");
                     downloadLayout.setVisibility(View.GONE);
+                    imageView.setEnabled(true);
                 }
                 else{
                     if(message.getSize() != null){
@@ -615,6 +619,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             imageView.setImageDrawable(context.getDrawable(R.drawable.ic_photo_default_background));
             loadingBar.setIndeterminate(false);
             loadingBar.setVisibility(View.GONE);
+            imageView.setEnabled(false);
 
             if(message.getPath().equals("")){
 
@@ -635,6 +640,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if(imgFile.exists()){
                     UniversalImageLoader.setImage(message.getPath(), imageView, null, "file://");
                     downloadLayout.setVisibility(View.GONE);
+                    imageView.setEnabled(true);
                 }
                 else{
                     if(message.getSize() != null){
@@ -724,31 +730,34 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if(dataSnapshot.exists()){
                     final Account account = dataSnapshot.getValue(Account.class);
 
-                    if(account.getThumb_image().substring(0,8).equals("default_")){
-                        String text = account.getThumb_image().substring(8,9);
-                        int index = Integer.parseInt(text);
-                        setProfileImage(index, profileImage);
-                        String name = account.getName().substring(0,1);
-                        profileText.setText(name);
-                        profileText.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        final Picasso picasso = Picasso.get();
-                        picasso.setIndicatorsEnabled(false);
-                        picasso.load(account.getThumb_image()).networkPolicy(NetworkPolicy.OFFLINE)
-                                .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
-                            @Override
-                            public void onSuccess() {
+                    if(!profileImage.isSaveEnabled()){
+                        if(account.getThumb_image().substring(0,8).equals("default_")){
+                            String text = account.getThumb_image().substring(8,9);
+                            int index = Integer.parseInt(text);
+                            setProfileImage(index, profileImage);
+                            String name = account.getName().substring(0,1);
+                            profileText.setText(name);
+                            profileText.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            final Picasso picasso = Picasso.get();
+                            picasso.setIndicatorsEnabled(false);
+                            picasso.load(account.getThumb_image()).networkPolicy(NetworkPolicy.OFFLINE)
+                                    .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
+                                @Override
+                                public void onSuccess() {
 
-                            }
+                                }
 
-                            @Override
-                            public void onError(Exception e) {
-                                picasso.load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
-                            }
-                        });
-                        profileText.setText(null);
-                        profileText.setVisibility(View.GONE);
+                                @Override
+                                public void onError(Exception e) {
+                                    picasso.load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+                                }
+                            });
+                            profileText.setText(null);
+                            profileText.setVisibility(View.GONE);
+                            profileImage.setSaveEnabled(true);
+                        }
                     }
                 }
             }

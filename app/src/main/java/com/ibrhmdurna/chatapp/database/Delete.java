@@ -250,7 +250,10 @@ public class Delete {
     public void allDeleteImage(final String chatUid, final boolean deleteDevice){
         final String uid = FirebaseAuth.getInstance().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Messages").child(uid).child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
+
+        databaseReference.child("Messages").child(uid).child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -259,13 +262,13 @@ public class Delete {
 
                         if(message.getType().equals("Image")){
                             FirebaseStorage.getInstance().getReferenceFromUrl(message.getUrl()).delete();
-                        }
 
-                        if(deleteDevice){
-                            File file = new File(message.getPath());
+                            if(deleteDevice && !message.getPath().equals("")){
+                                File file = new File(message.getPath());
 
-                            if(file.exists()){
-                                file.delete();
+                                if(file.exists()){
+                                    file.delete();
+                                }
                             }
                         }
                     }

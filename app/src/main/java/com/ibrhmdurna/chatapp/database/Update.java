@@ -79,7 +79,7 @@ public class Update{
             Bitmap thumb_bitmap = bitmap;
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+            thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 30, baos);
             final byte[] thumb_byte = baos.toByteArray();
 
             ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
@@ -118,7 +118,6 @@ public class Update{
                                                                 accountIntent.putExtra("page","Account");
                                                                 accountIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                                                 context.startActivity(accountIntent);
-                                                                Toast.makeText(context, "Information was successfully update.", Toast.LENGTH_SHORT).show();
                                                             }
                                                             else {
                                                                 Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();

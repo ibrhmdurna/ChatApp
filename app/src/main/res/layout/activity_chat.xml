@@ -16,35 +16,11 @@
         app:contentInsetStartWithNavigation="0dp"
         android:background="?attr/backgroundBrushColor">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/toolbar_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onClick">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="15dp">
-
-                <TextView
-                    android:id="@+id/chat_profile_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:translationZ="1dp"
-                    android:textColor="@android:color/white"
-                    android:layout_centerInParent="true"/>
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/chat_profile_image"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    app:civ_border_color="?attr/searchColor"
-                    app:civ_border_width="1dp"
-                    android:src="@drawable/ic_avatar_0"/>
-            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -81,7 +57,31 @@
                     android:visibility="gone"
                     android:textSize="13sp"/>
             </LinearLayout>
-        </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp">
+
+                <TextView
+                    android:id="@+id/chat_profile_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:translationZ="1dp"
+                    android:textColor="@android:color/white"
+                    android:layout_centerInParent="true"/>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/chat_profile_image"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    app:civ_border_color="?attr/searchColor"
+                    app:civ_border_width="1dp"/>
+            </RelativeLayout>
+        </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
     <com.baoyz.widget.PullRefreshLayout

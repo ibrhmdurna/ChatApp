@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +54,8 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ChatActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, OnEmojiPopupShownListener, OnEmojiPopupDismissListener, GalleryBottomSheetDialog.BottomSheetListener {
 
     private ViewGroup rootView;
@@ -60,6 +64,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     private ImageButton emojiBtn;
     private ImageView backgroundView;
     private ImageButton sendBtn;
+    private CircleImageView chatProfileImage;
 
     private PullRefreshLayout swipeRefreshLayout;
 
@@ -209,6 +214,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         backgroundView = findViewById(R.id.chat_background_view);
         sendBtn = findViewById(R.id.send_btn);
         swipeRefreshLayout = findViewById(R.id.chat_swipe_container);
+        chatProfileImage = findViewById(R.id.chat_profile_image);
     }
 
     @Override

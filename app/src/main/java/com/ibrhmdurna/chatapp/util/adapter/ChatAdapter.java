@@ -84,6 +84,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         private TextView timeAccentText;
 
         private String chatUid;
+        private String image;
 
         public ChatViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -113,7 +114,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             databaseReference.child("Messages").child(chatUid).child(uid).removeEventListener(messageEventListener);
             databaseReference.child("Chats").child(uid).child(chatUid).child("typing").removeEventListener(chatEventListener);
 
-            databaseReference.child("Accounts").child(chatUid).addListenerForSingleValueEvent(accountEventListener);
+            databaseReference.child("Accounts").child(chatUid).addValueEventListener(accountEventListener);
             databaseReference.child("Messages").child(uid).child(chatUid).limitToLast(1).addValueEventListener(lastMessageEventListener);
             databaseReference.child("Messages").child(uid).child(chatUid).addValueEventListener(messageEventListener);
             databaseReference.child("Chats").child(uid).child(chatUid).child("typing").addValueEventListener(chatEventListener);
@@ -191,33 +192,65 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
         private void setProfileImage(final String value, String nameValue){
 
-            if(value.substring(0,8).equals("default_")){
-                String text = value.substring(8,9);
-                int index = Integer.parseInt(text);
-                setProfileImage(index, profileImage);
-                String name = nameValue.substring(0,1);
-                profileText.setText(name);
-                profileText.setVisibility(View.VISIBLE);
+            if(image == null){
+                image = value;
+                if(value.substring(0,8).equals("default_")){
+                    String text = value.substring(8,9);
+                    int index = Integer.parseInt(text);
+                    setProfileImage(index, profileImage);
+                    String name = nameValue.substring(0,1);
+                    profileText.setText(name);
+                    profileText.setVisibility(View.VISIBLE);
+                }
+                else {
+                    final Picasso picasso = Picasso.get();
+                    picasso.setIndicatorsEnabled(false);
+                    picasso.load(value).networkPolicy(NetworkPolicy.OFFLINE)
+                            .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            picasso.load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                        }
+                    });
+                    profileText.setText(null);
+                    profileText.setVisibility(View.GONE);
+                }
             }
-            else {
-                final Picasso picasso = Picasso.get();
-                picasso.setIndicatorsEnabled(false);
-                picasso.load(value).networkPolicy(NetworkPolicy.OFFLINE)
-                        .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
-                    @Override
-                    public void onSuccess() {
 
-                    }
+            if(!image.equals(value)){
+                image = value;
+                if(value.substring(0,8).equals("default_")){
+                    String text = value.substring(8,9);
+                    int index = Integer.parseInt(text);
+                    setProfileImage(index, profileImage);
+                    String name = nameValue.substring(0,1);
+                    profileText.setText(name);
+                    profileText.setVisibility(View.VISIBLE);
+                }
+                else {
+                    final Picasso picasso = Picasso.get();
+                    picasso.setIndicatorsEnabled(false);
+                    picasso.load(value).networkPolicy(NetworkPolicy.OFFLINE)
+                            .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
 
-                    @Override
-                    public void onError(Exception e) {
-                        picasso.load(value).placeholder(R.drawable.default_avatar).into(profileImage);
-                    }
-                });
-                profileText.setText(null);
-                profileText.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            picasso.load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                        }
+                    });
+                    profileText.setText(null);
+                    profileText.setVisibility(View.GONE);
+                }
             }
-
         }
 
         private void setProfileImage(int index, CircleImageView profileImage) {
@@ -386,6 +419,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                         lastMessage.setVisibility(View.GONE);
                         photoImage.setVisibility(View.GONE);
                         youText.setVisibility(View.GONE);
+                    }
+                    else{
+                        typingLayout.setVisibility(View.GONE);
                     }
                 }
             }
