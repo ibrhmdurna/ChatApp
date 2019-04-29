@@ -49,7 +49,14 @@
         <activity
             android:name=".local.ProfileActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".main.MainActivity"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="com.ibrhmdurna.chatapp.PROFILE_NOTIFICATION"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".start.RegisterInfoActivity"
             android:launchMode="singleTop"
@@ -165,6 +172,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".util.NotificationService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".util.NotificationReceiver" />
     </application>
 
 </manifest>

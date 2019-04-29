@@ -75,16 +75,20 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
 
-        page = getIntent().getStringExtra("page");
+        if(getIntent().getExtras() != null){
+            page = getIntent().getStringExtra("page");
 
-        if(page.equals("Main")){
+            if(page.equals("Main")){
+                showFragment(new ChatsFragment(), "ChatsFragment");
+            }
+            else {
+                showFragment(new AccountFragment(), "AccountFragment");
+                bottomNavigationView.setSelectedItemId(R.id.account_item);
+            }
+        }
+        else{
             showFragment(new ChatsFragment(), "ChatsFragment");
         }
-        else {
-            showFragment(new AccountFragment(), "AccountFragment");
-            bottomNavigationView.setSelectedItemId(R.id.account_item);
-        }
-
     }
 
     private void chatListener(){

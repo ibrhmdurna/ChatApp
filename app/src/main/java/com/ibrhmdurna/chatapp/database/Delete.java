@@ -41,21 +41,21 @@ public class Delete {
         return instance;
     }
 
-    public void friend(String id){
-        String uid = FirebaseAuth.getInstance().getUid();
+    public void friend(final String id){
+        final String uid = FirebaseAuth.getInstance().getUid();
 
         FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).child(id).removeValue();
         FirebaseDatabase.getInstance().getReference().child("Friends").child(id).child(uid).removeValue();
     }
 
-    public void myRequest(String id){
+    public void myRequest(final String id){
         String uid = FirebaseAuth.getInstance().getUid();
 
         FirebaseDatabase.getInstance().getReference().child("Request").child(id).child(uid).removeValue();
     }
 
-    public void request(String id){
-        String uid = FirebaseAuth.getInstance().getUid();
+    public void request(final String id){
+        final String uid = FirebaseAuth.getInstance().getUid();
 
         FirebaseDatabase.getInstance().getReference().child("Request").child(uid).child(id).removeValue();
     }
@@ -122,11 +122,23 @@ public class Delete {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful()){
-                                            loadingBar.dismiss();
 
-                                            Intent startIntent = new Intent(context, StartActivity.class);
-                                            context.startActivity(startIntent);
-                                            context.finish();
+                                            currentUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if(task.isSuccessful()){
+                                                        loadingBar.dismiss();
+
+                                                        Intent startIntent = new Intent(context, StartActivity.class);
+                                                        context.startActivity(startIntent);
+                                                        context.finish();
+                                                    }
+                                                    else{
+                                                        Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                                                        loadingBar.dismiss();
+                                                    }
+                                                }
+                                            });
                                         }
                                         else{
                                             Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();

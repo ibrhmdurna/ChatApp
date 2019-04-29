@@ -16,6 +16,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.ibrhmdurna.chatapp.database.Insert;
 import com.ibrhmdurna.chatapp.database.strategy.MessageStrategy;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.util.controller.FileController;
@@ -101,12 +102,12 @@ public class Image extends MessageStrategy {
                                                                         filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                                             @Override
                                                                             public void onSuccess(Uri uri) {
-                                                                                String downloadUrl2 = uri.toString();
+                                                                                final String downloadUrl = uri.toString();
 
                                                                                 final Map messageMap = new HashMap();
                                                                                 messageMap.put("from", message.getFrom());
                                                                                 messageMap.put("message", message.getMessage());
-                                                                                messageMap.put("url", downloadUrl2);
+                                                                                messageMap.put("url", downloadUrl);
                                                                                 messageMap.put("type", message.getType());
                                                                                 messageMap.put("send", message.isSend());
                                                                                 messageMap.put("seen", message.isSeen());
@@ -122,6 +123,7 @@ public class Image extends MessageStrategy {
                                                                                         if(task.isSuccessful()){
                                                                                             FirebaseDatabase.getInstance().getReference().updateChildren(chatsMap);
                                                                                             messageReference.child(message.getFrom()).child(chatUid).child(message_id).child("receive").setValue(true);
+                                                                                            Insert.getInstance().notification(chatUid, "image", message.getMessage(), downloadUrl);
                                                                                         }
                                                                                     }
                                                                                 });

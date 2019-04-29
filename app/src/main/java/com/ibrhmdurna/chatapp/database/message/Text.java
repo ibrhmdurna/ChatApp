@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.ibrhmdurna.chatapp.database.Insert;
 import com.ibrhmdurna.chatapp.database.strategy.MessageStrategy;
 import com.ibrhmdurna.chatapp.models.Message;
 
@@ -57,6 +58,7 @@ public class Text extends MessageStrategy {
                                     if(task.isSuccessful()){
                                         FirebaseDatabase.getInstance().getReference().updateChildren(chatsMap);
                                         messageReference.child(message.getFrom()).child(chatUid).child(message_id).child("receive").setValue(true);
+                                        Insert.getInstance().notification(chatUid, "message", message.getMessage());
                                     }
                                 }
                             });

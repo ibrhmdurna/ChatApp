@@ -1,5 +1,7 @@
 package com.ibrhmdurna.chatapp.local;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
@@ -30,6 +32,7 @@ import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
 import com.ibrhmdurna.chatapp.database.bridge.Find;
 import com.ibrhmdurna.chatapp.database.find.ProfileFindInfo;
 import com.ibrhmdurna.chatapp.databinding.ActivityProfileBinding;
+import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 import com.ibrhmdurna.chatapp.util.dialog.MoreBottomSheetDialog;
 
@@ -63,10 +66,10 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
         find.getContent();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        getProfileInformation();
+    private void clearNotification(){
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.cancel(uid, 0);
+        manager.cancel(uid, 1);
     }
 
     @Override
@@ -181,6 +184,8 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
     protected void onResume() {
         super.onResume();
         Connection.getInstance().onConnect();
+        getProfileInformation();
+        clearNotification();
     }
 
     @Override

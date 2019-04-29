@@ -96,7 +96,9 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
 
     @Override
     public void onDestroy() {
-        find.onDestroy();
+        if(find != null){
+            find.onDestroy();
+        }
         super.onDestroy();
     }
 }

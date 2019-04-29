@@ -201,7 +201,7 @@ public class Insert {
 
     }
 
-    public void request(String id){
+    public void request(final String id){
 
         String uid = FirebaseAuth.getInstance().getUid();
 
@@ -209,10 +209,17 @@ public class Insert {
         requestMap.put("Request/" + id + "/" + uid + "/seen", false);
         requestMap.put("Request/" + id + "/" + uid + "/time", ServerValue.TIMESTAMP);
 
-        FirebaseDatabase.getInstance().getReference().updateChildren(requestMap);
+        FirebaseDatabase.getInstance().getReference().updateChildren(requestMap).addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                if(task.isSuccessful()){
+                    notification(id, "request");
+                }
+            }
+        });
     }
 
-    public void friend(String id){
+    public void friend(final String id){
         String uid = FirebaseAuth.getInstance().getUid();
 
         String currentDate = java.text.DateFormat.getDateInstance().format(new Date());
@@ -228,7 +235,12 @@ public class Insert {
         friendMap.put("Request/" + id + "/" + uid + "/seen", null);
         friendMap.put("Request/" + id + "/" + uid + "/time", null);
 
-        FirebaseDatabase.getInstance().getReference().updateChildren(friendMap);
+        FirebaseDatabase.getInstance().getReference().updateChildren(friendMap).addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                notification(id, "confirm");
+            }
+        });
     }
 
     public void deviceToken(String id){
@@ -237,5 +249,47 @@ public class Insert {
 
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
         databaseReference.child("Accounts").child(id).child("device_token").setValue(deviceToken);
+    }
+
+    public void notification(String id, String type){
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Notifications").child(id);
+        String notification_id = databaseReference.push().getKey();
+
+        Map notificationMap = new HashMap();
+        notificationMap.put("from", uid);
+        notificationMap.put("type", type);
+
+        databaseReference.child(notification_id).setValue(notificationMap);
+    }
+
+    public void notification(String id, String type, String message){
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Notifications").child(id);
+        String notification_id = databaseReference.push().getKey();
+
+        Map notificationMap = new HashMap();
+        notificationMap.put("from", uid);
+        notificationMap.put("type", type);
+        notificationMap.put("message", message);
+
+        databaseReference.child(notification_id).setValue(notificationMap);
+    }
+
+    public void notification(String id, String type, String message, String image){
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Notifications").child(id);
+        String notification_id = databaseReference.push().getKey();
+
+        Map notificationMap = new HashMap();
+        notificationMap.put("from", uid);
+        notificationMap.put("type", type);
+        notificationMap.put("message", message);
+        notificationMap.put("image", image);
+
+        databaseReference.child(notification_id).setValue(notificationMap);
     }
 }

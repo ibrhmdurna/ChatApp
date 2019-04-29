@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -14,6 +15,11 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Delete;
@@ -257,14 +263,34 @@ public class DialogController {
         builder.setView(view);
         final AlertDialog dialog = builder.create();
 
-        LinearLayout viewItem = view.findViewById(R.id.view_item);
-        viewItem.setOnClickListener(new View.OnClickListener() {
+        final LinearLayout viewItem = view.findViewById(R.id.view_item);
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
+
+        databaseReference.child("Accounts").child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                Intent profileIntent = new Intent(context.getActivity(), ProfileActivity.class);
-                profileIntent.putExtra("user_id", chatUid);
-                context.startActivity(profileIntent);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    viewItem.setVisibility(View.VISIBLE);
+                    viewItem.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            Intent profileIntent = new Intent(context.getActivity(), ProfileActivity.class);
+                            profileIntent.putExtra("user_id", chatUid);
+                            context.startActivity(profileIntent);
+                        }
+                    });
+                }
+                else{
+                    viewItem.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
 
