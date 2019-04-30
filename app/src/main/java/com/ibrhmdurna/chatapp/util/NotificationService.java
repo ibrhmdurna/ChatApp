@@ -19,7 +19,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.Person;
 import android.support.v4.app.RemoteInput;
 import android.text.Html;
@@ -27,11 +26,16 @@ import android.text.Html;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.models.MessageNotification;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class NotificationService extends FirebaseMessagingService {
+
+    public static List<MessageNotification> messageList = new ArrayList<>();
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -51,13 +55,15 @@ public class NotificationService extends FirebaseMessagingService {
             showConfirmNotification(name_surname, profile_image, from_user_id, email, click_action);
         }
         else if(notification_type.equals("message")){
-            String message = remoteMessage.getData().get("message");
-            showMessageNotification(name_surname, profile_image, from_user_id, email, click_action, message);
+            String content = remoteMessage.getData().get("message");
+            MessageNotification message = new MessageNotification(content, System.currentTimeMillis(), name_surname);
+            messageList.add(message);
+            showMessageNotification(this, name_surname, profile_image, from_user_id, email, click_action, content);
         }
     }
 
-    private void showMessageNotification(String nameSurname, String profileImage, String fromUid, String email, String clickAction, String message) {
-        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+    public static void showMessageNotification(Context context, String nameSurname, String profileImage, String fromUid, String email, String clickAction, String message) {
+        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         final String CHANNEL_ID = "com.ibrhmdurna.chatapp.messages";
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
@@ -74,59 +80,63 @@ public class NotificationService extends FirebaseMessagingService {
         Intent resultIntent = new Intent(clickAction);
         resultIntent.putExtra("user_id", fromUid);
 
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntentWithParentStack(resultIntent);
 
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
                 generateRandom(),
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
-
         RemoteInput remoteInput = new RemoteInput.Builder("key_text_reply")
                 .setLabel("Reply")
                 .build();
 
-        Intent actionIntent = new Intent(this, NotificationReceiver.class);
+        Intent actionIntent = new Intent(context, NotificationReceiver.class);
         actionIntent.putExtra("user_id", fromUid);
-        PendingIntent replyPendingIntent = PendingIntent.getBroadcast(this,
-                generateRandom(),actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        actionIntent.putExtra("action", "reply");
+        PendingIntent replyPendingIntent = PendingIntent.getBroadcast(context,
+                generateRandom(), actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Action replyAction = new NotificationCompat.Action.Builder(
                 R.drawable.ic_send_white_icon,
-                "reply",
+                "Reply",
                 replyPendingIntent
         ).addRemoteInput(remoteInput).build();
 
 
         Person person = new Person.Builder().setUri(profileImage).setName(nameSurname).build();
-        /*
+
         NotificationCompat.MessagingStyle messagingStyle = new NotificationCompat.MessagingStyle(person);
-        messagingStyle.setConversationTitle(nameSurname);*/
 
-        NotificationCompat.MessagingStyle messagingStyle =
-                new NotificationCompat.MessagingStyle(person)
-                .addMessage(message, System.currentTimeMillis(), person);
+        for(MessageNotification item : messageList){
+            NotificationCompat.MessagingStyle.Message notificationMessage =
+                    new NotificationCompat.MessagingStyle.Message(
+                            item.getMessage(),
+                            item.getCurrent_time(),
+                            item.getSender()
+                    );
+            messagingStyle.addMessage(notificationMessage);
+        }
 
-        notificationBuilder
+        Notification notification = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_notification_icon)
-                .setColor(getColor(R.color.colorAccent))
+                .setColor(context.getColor(R.color.colorAccent))
                 .setStyle(messagingStyle)
                 .setSubText(email)
                 .addAction(replyAction)
-                .setLargeIcon(setProfileImage(profileImage))
+                .setLargeIcon(setProfileImage(context, profileImage))
                 .setContentTitle(nameSurname)
                 .setContentText(message)
                 .setContentIntent(resultPendingIntent)
                 .setOnlyAlertOnce(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_SOCIAL);
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
 
-        notificationManager.notify(fromUid, generateRandom() , notificationBuilder.build());
+        notificationManager.notify(fromUid, 2,notification);
     }
 
     private void showConfirmNotification(String nameSurname, String profileImage, String fromUid, String email, String clickAction) {
@@ -172,7 +182,7 @@ public class NotificationService extends FirebaseMessagingService {
                 .setSubText(email)
                 .setContentIntent(resultPendingIntent)
                 .setOnlyAlertOnce(true)
-                .setLargeIcon(setProfileImage(profileImage))
+                .setLargeIcon(setProfileImage(this, profileImage))
                 .addAction(R.color.colorAccent, "View Profile", resultPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_SOCIAL);
@@ -242,7 +252,7 @@ public class NotificationService extends FirebaseMessagingService {
                         actionIntent.putExtra("action", "confirm").putExtra("user_id", fromUid),
                         PendingIntent.FLAG_UPDATE_CURRENT
                 ))
-                .setLargeIcon(setProfileImage(profileImage))
+                .setLargeIcon(setProfileImage(this, profileImage))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_SOCIAL);
 
@@ -251,24 +261,24 @@ public class NotificationService extends FirebaseMessagingService {
         notificationManager.notify(fromUid, 0, notificationBuilder.build());
     }
 
-    private Bitmap setProfileImage(String profileImage){
+    private static Bitmap setProfileImage(Context context, String profileImage){
         if(profileImage.substring(0,8).equals("default_")){
             String text = profileImage.substring(8,9);
             int index = Integer.parseInt(text);
             int image = getProfileImage(index);
-            return getCircleBitmap(BitmapFactory.decodeResource(getResources(), image));
+            return getCircleBitmap(BitmapFactory.decodeResource(context.getResources(), image));
         }
         else{
             return getCircleBitmap(ImageLoader.getInstance().loadImageSync(profileImage));
         }
     }
 
-    public int generateRandom(){
+    private static int generateRandom(){
         Random random = new Random();
         return random.nextInt(9999 - 1000) + 1000;
     }
 
-    private int getProfileImage(int index) {
+    private static int getProfileImage(int index) {
         switch (index){
             case 0:
                 return R.drawable.ic_avatar_0;
@@ -300,7 +310,7 @@ public class NotificationService extends FirebaseMessagingService {
         super.onNewToken(s);
     }
 
-    private Bitmap getCircleBitmap(Bitmap bitmap) {
+    private static Bitmap getCircleBitmap(Bitmap bitmap) {
         final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
                 bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(output);

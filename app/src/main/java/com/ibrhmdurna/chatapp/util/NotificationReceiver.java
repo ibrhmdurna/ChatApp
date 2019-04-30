@@ -6,21 +6,28 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Insert;
 import com.ibrhmdurna.chatapp.database.message.Text;
 import com.ibrhmdurna.chatapp.database.strategy.SendMessage;
 import com.ibrhmdurna.chatapp.local.ProfileActivity;
+import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Message;
+import com.ibrhmdurna.chatapp.models.MessageNotification;
 
 public class NotificationReceiver extends BroadcastReceiver {
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, Intent intent) {
         String action = intent.getStringExtra("action");
-        String user_id = intent.getStringExtra("user_id");
+        final String user_id = intent.getStringExtra("user_id");
 
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -43,12 +50,29 @@ public class NotificationReceiver extends BroadcastReceiver {
                 Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
 
                 if (remoteInput != null) {
-                    CharSequence replyText = remoteInput.getCharSequence("key_text_reply");
+                    final CharSequence replyText = remoteInput.getCharSequence("key_text_reply");
                     Message message = new Message(FirebaseAuth.getInstance().getUid(), replyText.toString(), "Text", System.currentTimeMillis(), false, false, false);
                     SendMessage sendMessage = new SendMessage(new Text());
                     sendMessage.Send(message, user_id);
 
-                    Toast.makeText(context, "Sending...", Toast.LENGTH_SHORT).show();
+                    MessageNotification messageNotification = new MessageNotification(replyText.toString(), System.currentTimeMillis(), "You");
+                    NotificationService.messageList.add(messageNotification);
+
+                    FirebaseDatabase.getInstance().getReference().child("Accounts").child(user_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                Account account = dataSnapshot.getValue(Account.class);
+
+                                NotificationService.showMessageNotification(context, account.getNameSurname(), account.getThumb_image(), user_id, account.getEmail(), "com.ibrhmdurna.chatapp.CHAT_NOTIFICATION", replyText.toString());
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
 
                 break;

@@ -113,7 +113,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="?attr/backgroundBrushColor"
-        android:layout_margin="5dp">
+        android:padding="5dp">
 
         <LinearLayout
             android:id="@+id/chat_input_layout"
