@@ -89,7 +89,14 @@
         <activity
             android:name=".local.ChatActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".main.MainActivity"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="com.ibrhmdurna.chatapp.CHAT_NOTIFICATION"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".start.RegisterFinishActivity"
             android:launchMode="singleTop"

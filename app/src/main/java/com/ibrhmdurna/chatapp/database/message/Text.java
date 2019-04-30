@@ -33,8 +33,6 @@ public class Text extends MessageStrategy {
         chatsMap.put("Chats/" + message.getFrom() + "/" + chatUid, chatMap);
         chatsMap.put("Chats/" + chatUid + "/" + message.getFrom(), chatMap);
 
-
-
         final Map messageMap = new HashMap();
         messageMap.put("from", message.getFrom());
         messageMap.put("message", message.getMessage());
