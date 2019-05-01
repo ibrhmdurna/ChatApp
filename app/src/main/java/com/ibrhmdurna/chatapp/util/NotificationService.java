@@ -2,7 +2,6 @@ package com.ibrhmdurna.chatapp.util;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
-import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -59,17 +58,20 @@ public class NotificationService extends FirebaseMessagingService {
         String email = remoteMessage.getData().get("email");
         String click_action = remoteMessage.getData().get("click_action");
 
-        if(notification_type.equals("request")){
-            showRequestNotification(name_surname, profile_image, from_user_id, email, click_action);
-        }
-        else if(notification_type.equals("confirm")){
-            showConfirmNotification(name_surname, profile_image, from_user_id, email, click_action);
-        }
-        else if(notification_type.equals("message")){
-            String content = remoteMessage.getData().get("message");
-            MessageNotification message = new MessageNotification(content, System.currentTimeMillis(), name_surname);
-            messageList.add(message);
-            showMessageNotification(this, name_surname, profile_image, from_user_id, email, click_action, content);
+        assert notification_type != null;
+        switch (notification_type) {
+            case "request":
+                showRequestNotification(name_surname, profile_image, from_user_id, email, click_action);
+                break;
+            case "confirm":
+                showConfirmNotification(name_surname, profile_image, from_user_id, email, click_action);
+                break;
+            case "message":
+                String content = remoteMessage.getData().get("message");
+                MessageNotification message = new MessageNotification(content, System.currentTimeMillis(), name_surname);
+                messageList.add(message);
+                showMessageNotification(this, name_surname, profile_image, from_user_id, email, click_action, content);
+                break;
         }
     }
 
@@ -114,7 +116,6 @@ public class NotificationService extends FirebaseMessagingService {
                 replyPendingIntent
         ).addRemoteInput(remoteInput).build();
 
-
         Person person = new Person.Builder().setUri(profileImage).setName(nameSurname).build();
 
         NotificationCompat.MessagingStyle messagingStyle = new NotificationCompat.MessagingStyle(person);
@@ -138,7 +139,13 @@ public class NotificationService extends FirebaseMessagingService {
                 .setStyle(messagingStyle)
                 .setSubText(email)
                 .addAction(replyAction)
-                .setLargeIcon(setProfileImage(context, profileImage))
+                .addAction(R.color.colorAccent, "Mark as read", PendingIntent.getBroadcast(
+                        context,
+                        generateRandom(),
+                        actionIntent.putExtra("action", "read").putExtra("user_id", fromUid),
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                ))
+                .setLargeIcon(setProfileImage(profileImage))
                 .setContentTitle(nameSurname)
                 .setContentText(message)
                 .setContentIntent(resultPendingIntent)
@@ -193,7 +200,7 @@ public class NotificationService extends FirebaseMessagingService {
                 .setSubText(email)
                 .setContentIntent(resultPendingIntent)
                 .setOnlyAlertOnce(true)
-                .setLargeIcon(setProfileImage(this, profileImage))
+                .setLargeIcon(setProfileImage(profileImage))
                 .addAction(R.color.colorAccent, "View Profile", resultPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_SOCIAL);
@@ -203,14 +210,8 @@ public class NotificationService extends FirebaseMessagingService {
     private void showRequestNotification(String nameSurname, String profileImage, String fromUid, String email, String clickAction) {
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         final String CHANNEL_ID = "com.ibrhmdurna.chatapp.request";
-        final String GROUP_ID = "com.ibrhmdurna.chatapp.req.group";
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-
-            NotificationChannelGroup channelGroup = new NotificationChannelGroup(
-                    GROUP_ID,
-                    "Request group"
-            );
 
             NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, "Friendship Requests",
                     NotificationManager.IMPORTANCE_HIGH);
@@ -263,7 +264,7 @@ public class NotificationService extends FirebaseMessagingService {
                         actionIntent.putExtra("action", "confirm").putExtra("user_id", fromUid),
                         PendingIntent.FLAG_UPDATE_CURRENT
                 ))
-                .setLargeIcon(setProfileImage(this, profileImage))
+                .setLargeIcon(setProfileImage(profileImage))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_SOCIAL);
 
@@ -272,12 +273,12 @@ public class NotificationService extends FirebaseMessagingService {
         notificationManager.notify(fromUid, 0, notificationBuilder.build());
     }
 
-    private Bitmap setProfileImage(Context context, String profileImage){
+    private Bitmap setProfileImage(String profileImage){
         if(profileImage.substring(0,8).equals("default_")){
             String text = profileImage.substring(8,9);
             int index = Integer.parseInt(text);
             int image = getProfileImage(index);
-            return getCircleBitmap(BitmapFactory.decodeResource(context.getResources(), image));
+            return getCircleBitmap(BitmapFactory.decodeResource(getResources(), image));
         }
         else{
             return getCircleBitmap(ImageLoader.getInstance().loadImageSync(profileImage));

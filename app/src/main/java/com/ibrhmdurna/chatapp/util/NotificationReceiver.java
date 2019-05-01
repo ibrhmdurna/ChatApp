@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -16,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Insert;
+import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.database.message.Text;
 import com.ibrhmdurna.chatapp.database.strategy.SendMessage;
 import com.ibrhmdurna.chatapp.local.ProfileActivity;
@@ -73,8 +73,15 @@ public class NotificationReceiver extends BroadcastReceiver {
 
                         }
                     });
-                }
 
+                    Update.getInstance().messageSeen(user_id, true);
+                    Update.getInstance().chatSeen(user_id, true);
+                }
+                break;
+            case "read":
+                Update.getInstance().messageSeen(user_id, true);
+                Update.getInstance().chatSeen(user_id, true);
+                notificationManager.cancel(user_id, 2);
                 break;
         }
     }
