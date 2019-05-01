@@ -271,8 +271,6 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     protected void onStart() {
         super.onStart();
         getContent();
-        Update.getInstance().messageSeen(uid, true);
-        Update.getInstance().chatSeen(uid, true);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -376,6 +374,8 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     protected void onResume() {
         super.onResume();
         Connection.getInstance().onConnect();
+        Update.getInstance().messageSeen(uid, true);
+        Update.getInstance().chatSeen(uid, true);
     }
 
     @Override

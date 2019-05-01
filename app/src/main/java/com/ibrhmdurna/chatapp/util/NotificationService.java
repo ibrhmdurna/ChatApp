@@ -20,6 +20,7 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.Person;
 import android.support.v4.app.RemoteInput;
+import android.support.v4.graphics.drawable.IconCompat;
 import android.text.Html;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -68,11 +69,60 @@ public class NotificationService extends FirebaseMessagingService {
                 break;
             case "message":
                 String content = remoteMessage.getData().get("message");
-                MessageNotification message = new MessageNotification(content, System.currentTimeMillis(), name_surname);
-                messageList.add(message);
+                MessageNotification messageNotification = new MessageNotification(content, System.currentTimeMillis(), name_surname);
+                messageList.add(messageNotification);
                 showMessageNotification(this, name_surname, profile_image, from_user_id, email, click_action, content);
+                //showMessageNotification(name_surname, profile_image, from_user_id, email, click_action, content);
                 break;
         }
+    }
+
+    private void showMessageNotification(String nameSurname, String profileImage, String fromUid, String email, String clickAction, String message){
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        final String CHANNEL_ID = "com.ibrhmdurna.chatapp.message";
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, "Messages",
+                    NotificationManager.IMPORTANCE_HIGH);
+
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.WHITE);
+            notificationChannel.enableVibration(true);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+        Intent resultIntent = new Intent(clickAction);
+        resultIntent.putExtra("user_id", fromUid);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(resultIntent);
+
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
+                generateRandom(),
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
+
+        notificationBuilder
+                .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setColor(getColor(R.color.colorAccent))
+                .setStyle(new NotificationCompat.InboxStyle()
+                        .setBigContentTitle(nameSurname)
+                        .addLine(message))
+                .setContentTitle(nameSurname)
+                .setContentText(message)
+                .setSubText(email)
+                .setContentIntent(resultPendingIntent)
+                .setOnlyAlertOnce(true)
+                .setLargeIcon(setProfileImage(profileImage))
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE);
+        notificationManager.notify(fromUid, generateRandom(), notificationBuilder.build());
     }
 
     public void showMessageNotification(Context context, String nameSurname, String profileImage, String fromUid, String email, String clickAction, String message) {
@@ -116,7 +166,7 @@ public class NotificationService extends FirebaseMessagingService {
                 replyPendingIntent
         ).addRemoteInput(remoteInput).build();
 
-        Person person = new Person.Builder().setUri(profileImage).setName(nameSurname).build();
+        Person person = new Person.Builder().setIcon(IconCompat.createWithContentUri(profileImage)).setName(nameSurname).build();
 
         NotificationCompat.MessagingStyle messagingStyle = new NotificationCompat.MessagingStyle(person);
 
@@ -154,7 +204,7 @@ public class NotificationService extends FirebaseMessagingService {
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .build();
 
-        notificationManager.notify(fromUid, 2,notification);
+        notificationManager.notify(fromUid, 2, notification);
     }
 
     private void showConfirmNotification(String nameSurname, String profileImage, String fromUid, String email, String clickAction) {

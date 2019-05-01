@@ -448,7 +448,6 @@ public class FileController {
                                             UniversalImageLoader.setImage(newPath, imageView, null, "file://");
                                             loadingBar.setVisibility(View.GONE);
                                             loadingBar.setIndeterminate(false);
-                                            adapter.notifyDataSetChanged();
                                         }
                                     }
                                 }
