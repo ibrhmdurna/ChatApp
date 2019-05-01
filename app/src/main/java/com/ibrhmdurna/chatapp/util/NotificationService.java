@@ -35,6 +35,17 @@ import java.util.Random;
 
 public class NotificationService extends FirebaseMessagingService {
 
+    private static NotificationService instance;
+
+    public static synchronized NotificationService getInstance(){
+        if(instance == null){
+            synchronized (NotificationService.class){
+                instance = new NotificationService();
+            }
+        }
+        return instance;
+    }
+
     public static List<MessageNotification> messageList = new ArrayList<>();
 
     @Override
@@ -62,7 +73,7 @@ public class NotificationService extends FirebaseMessagingService {
         }
     }
 
-    public static void showMessageNotification(Context context, String nameSurname, String profileImage, String fromUid, String email, String clickAction, String message) {
+    public void showMessageNotification(Context context, String nameSurname, String profileImage, String fromUid, String email, String clickAction, String message) {
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         final String CHANNEL_ID = "com.ibrhmdurna.chatapp.messages";
 
@@ -261,7 +272,7 @@ public class NotificationService extends FirebaseMessagingService {
         notificationManager.notify(fromUid, 0, notificationBuilder.build());
     }
 
-    private static Bitmap setProfileImage(Context context, String profileImage){
+    private Bitmap setProfileImage(Context context, String profileImage){
         if(profileImage.substring(0,8).equals("default_")){
             String text = profileImage.substring(8,9);
             int index = Integer.parseInt(text);
@@ -273,12 +284,12 @@ public class NotificationService extends FirebaseMessagingService {
         }
     }
 
-    private static int generateRandom(){
+    private int generateRandom(){
         Random random = new Random();
         return random.nextInt(9999 - 1000) + 1000;
     }
 
-    private static int getProfileImage(int index) {
+    private int getProfileImage(int index) {
         switch (index){
             case 0:
                 return R.drawable.ic_avatar_0;
@@ -310,7 +321,7 @@ public class NotificationService extends FirebaseMessagingService {
         super.onNewToken(s);
     }
 
-    private static Bitmap getCircleBitmap(Bitmap bitmap) {
+    private Bitmap getCircleBitmap(Bitmap bitmap) {
         final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
                 bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(output);

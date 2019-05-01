@@ -64,7 +64,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                             if(dataSnapshot.exists()){
                                 Account account = dataSnapshot.getValue(Account.class);
 
-                                NotificationService.showMessageNotification(context, account.getNameSurname(), account.getThumb_image(), user_id, account.getEmail(), "com.ibrhmdurna.chatapp.CHAT_NOTIFICATION", replyText.toString());
+                                NotificationService.getInstance().showMessageNotification(context, account.getNameSurname(), account.getThumb_image(), user_id, account.getEmail(), "com.ibrhmdurna.chatapp.CHAT_NOTIFICATION", replyText.toString());
                             }
                         }
 

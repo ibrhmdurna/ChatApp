@@ -1,6 +1,5 @@
 package com.ibrhmdurna.chatapp.util;
 
-import android.content.Context;
 import android.text.format.DateFormat;
 
 import java.util.Calendar;
