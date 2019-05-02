@@ -46,7 +46,6 @@ public class WriteFindAll implements IFind {
 
     public WriteFindAll(Activity context){
         this.context = context;
-        buildView();
     }
 
     @Override

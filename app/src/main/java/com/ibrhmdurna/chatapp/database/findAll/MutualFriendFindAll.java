@@ -45,7 +45,6 @@ public class MutualFriendFindAll implements IFind {
     public MutualFriendFindAll(Activity context, String uid){
         this.context = context;
         this.uid = uid;
-        buildView();
     }
 
     @Override

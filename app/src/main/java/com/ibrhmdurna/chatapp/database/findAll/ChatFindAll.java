@@ -39,7 +39,6 @@ public class ChatFindAll implements IFind {
 
     public ChatFindAll(Fragment context){
         this.context = context;
-        buildView();
     }
 
     @Override

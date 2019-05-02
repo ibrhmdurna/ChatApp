@@ -4,6 +4,7 @@ public class Find extends AbstractFind {
 
     public Find(IFind IFind) {
         super(IFind);
+        buildView();
     }
 
     @Override
@@ -13,6 +14,11 @@ public class Find extends AbstractFind {
 
     @Override
     public void getContent() {
+        IFind.getContent();
+    }
+
+    @Override
+    public void getMore() {
         IFind.getContent();
     }
 

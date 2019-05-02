@@ -42,7 +42,6 @@ public class FriendFindAll implements IFind {
 
     public FriendFindAll(Fragment context) {
         this.context = context;
-        buildView();
     }
 
     @Override

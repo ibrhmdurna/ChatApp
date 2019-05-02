@@ -24,8 +24,8 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Status;
 import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Search;
-import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
-import com.ibrhmdurna.chatapp.database.bridge.FindAll;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
+import com.ibrhmdurna.chatapp.database.bridge.Find;
 import com.ibrhmdurna.chatapp.database.findAll.RecentFindAll;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.util.adapter.SearchAdapter;
@@ -47,7 +47,7 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
 
     private SpinKitView loadingBar;
 
-    private AbstractFindAll findAll;
+    private AbstractFind find;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +59,8 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
     }
 
     private void recentProcess(){
-        findAll = new FindAll(new RecentFindAll(this));
-        findAll.getContent();
+        find = new Find(new RecentFindAll(this));
+        find.getContent();
     }
 
     private void searchProcess(){
@@ -199,7 +199,7 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
 
     @Override
     protected void onDestroy() {
-        findAll.onDestroy();
+        find.onDestroy();
         super.onDestroy();
     }
 }

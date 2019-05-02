@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
-import com.ibrhmdurna.chatapp.database.bridge.FindAll;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
+import com.ibrhmdurna.chatapp.database.bridge.Find;
 import com.ibrhmdurna.chatapp.database.findAll.FriendFindAll;
 import com.ibrhmdurna.chatapp.database.findAll.OnlineFindAll;
 
@@ -21,7 +21,7 @@ import com.ibrhmdurna.chatapp.database.findAll.OnlineFindAll;
  */
 public class FriendsFragment extends Fragment implements ViewComponentFactory {
 
-    private AbstractFindAll findAll;
+    private AbstractFind find;
 
     public FriendsFragment() {
         // Required empty public constructor
@@ -39,13 +39,13 @@ public class FriendsFragment extends Fragment implements ViewComponentFactory {
     }
 
     private void getOnline(){
-        findAll = new FindAll(new OnlineFindAll(this));
-        findAll.getContent();
+        find = new Find(new OnlineFindAll(this));
+        find.getContent();
     }
 
     private void getFriends(){
-        findAll = new FindAll(new FriendFindAll(this));
-        findAll.getContent();
+        find = new Find(new FriendFindAll(this));
+        find.getContent();
     }
 
     @Override
@@ -67,7 +67,7 @@ public class FriendsFragment extends Fragment implements ViewComponentFactory {
 
     @Override
     public void onDestroy() {
-        findAll.onDestroy();
+        find.onDestroy();
         super.onDestroy();
     }
 }

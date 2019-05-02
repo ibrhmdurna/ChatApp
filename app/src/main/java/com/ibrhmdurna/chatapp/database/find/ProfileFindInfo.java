@@ -47,7 +47,6 @@ public class ProfileFindInfo implements IFind {
     public ProfileFindInfo(ActivityProfileBinding binding,String uid) {
         this.binding = binding;
         this.uid = uid;
-        buildView();
     }
 
     @Override

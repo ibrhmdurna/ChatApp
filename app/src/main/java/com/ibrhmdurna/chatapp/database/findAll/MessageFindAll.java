@@ -50,7 +50,6 @@ public class MessageFindAll implements IFind {
     public MessageFindAll(Activity context, String chatUid){
         this.context = context;
         this.chatUid = chatUid;
-        buildView();
     }
 
     @Override

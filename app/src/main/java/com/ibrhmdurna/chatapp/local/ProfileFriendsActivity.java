@@ -23,8 +23,8 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.database.Status;
-import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
-import com.ibrhmdurna.chatapp.database.bridge.FindAll;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
+import com.ibrhmdurna.chatapp.database.bridge.Find;
 import com.ibrhmdurna.chatapp.database.findAll.AccountFriendFindAll;
 import com.ibrhmdurna.chatapp.database.findAll.MutualFriendFindAll;
 import com.ibrhmdurna.chatapp.util.Environment;
@@ -40,7 +40,7 @@ public class ProfileFriendsActivity extends AppCompatActivity implements ViewCom
 
     private String uid;
 
-    private AbstractFindAll findAll;
+    private AbstractFind find;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +54,13 @@ public class ProfileFriendsActivity extends AppCompatActivity implements ViewCom
     }
 
     private void getFriends(){
-        findAll = new FindAll(new AccountFriendFindAll(this, uid));
-        findAll.getContent();
+        find = new Find(new AccountFriendFindAll(this, uid));
+        find.getContent();
     }
 
     private void getMutual(){
-        findAll = new FindAll(new MutualFriendFindAll(this, uid));
-        findAll.getContent();
+        find = new Find(new MutualFriendFindAll(this, uid));
+        find.getContent();
     }
 
     private void tabProcess(){
@@ -191,7 +191,7 @@ public class ProfileFriendsActivity extends AppCompatActivity implements ViewCom
 
     @Override
     protected void onDestroy() {
-        findAll.onDestroy();
+        find.onDestroy();
         super.onDestroy();
     }
 }

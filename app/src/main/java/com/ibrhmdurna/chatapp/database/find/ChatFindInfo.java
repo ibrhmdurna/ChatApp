@@ -46,7 +46,6 @@ public class ChatFindInfo implements IFind {
     public ChatFindInfo(Activity context, String uid) {
         this.context = context;
         this.uid = uid;
-        buildView();
     }
 
     @Override

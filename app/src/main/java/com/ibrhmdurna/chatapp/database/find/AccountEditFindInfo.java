@@ -30,7 +30,6 @@ public class AccountEditFindInfo implements IFind {
 
     public AccountEditFindInfo(ActivityEditAccountBinding binding) {
         this.binding = binding;
-        buildView();
     }
 
     @Override

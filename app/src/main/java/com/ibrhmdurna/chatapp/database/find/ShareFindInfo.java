@@ -30,7 +30,6 @@ public class ShareFindInfo implements IFind {
     public ShareFindInfo(Activity context, String uid) {
         this.context = context;
         this.uid = uid;
-        buildView();
     }
 
     @Override

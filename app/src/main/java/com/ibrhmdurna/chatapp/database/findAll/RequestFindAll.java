@@ -37,7 +37,6 @@ public class RequestFindAll implements IFind {
 
     public RequestFindAll(View context) {
         this.context = context;
-        buildView();
     }
 
     @Override

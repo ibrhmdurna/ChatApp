@@ -13,8 +13,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
-import com.ibrhmdurna.chatapp.database.bridge.FindAll;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
+import com.ibrhmdurna.chatapp.database.bridge.Find;
 import com.ibrhmdurna.chatapp.database.findAll.ChatFindAll;
 
 
@@ -25,7 +25,7 @@ public class ChatsFragment extends Fragment implements ViewComponentFactory {
 
     private View view;
 
-    private AbstractFindAll findAll;
+    private AbstractFind find;
 
     public static boolean isChat = false;
 
@@ -45,8 +45,8 @@ public class ChatsFragment extends Fragment implements ViewComponentFactory {
     }
 
     private void getChats(){
-        findAll = new FindAll(new ChatFindAll(this));
-        findAll.getContent();
+        find = new Find(new ChatFindAll(this));
+        find.getContent();
     }
 
     @Override
@@ -85,8 +85,8 @@ public class ChatsFragment extends Fragment implements ViewComponentFactory {
 
     @Override
     public void onDestroy() {
-        if(findAll != null){
-            findAll.onDestroy();
+        if(find != null){
+            find.onDestroy();
         }
         isChat = false;
         super.onDestroy();

@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,9 +39,7 @@ import com.ibrhmdurna.chatapp.database.Status;
 import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
-import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
 import com.ibrhmdurna.chatapp.database.bridge.Find;
-import com.ibrhmdurna.chatapp.database.bridge.FindAll;
 import com.ibrhmdurna.chatapp.database.find.ChatFindInfo;
 import com.ibrhmdurna.chatapp.database.findAll.MessageFindAll;
 import com.ibrhmdurna.chatapp.database.message.Text;
@@ -81,7 +78,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
 
     private String uid;
 
-    private AbstractFindAll findAll;
+    private AbstractFind findMessage;
     private AbstractFind find;
 
     public static String NOTIF_ID;
@@ -169,8 +166,8 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     }
 
     private void loadMessage(){
-        findAll = new FindAll(new MessageFindAll(this, uid));
-        findAll.getContent();
+        findMessage = new Find(new MessageFindAll(this, uid));
+        findMessage.getContent();
 
         Firebase.getInstance().getDatabaseReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(uid).addListenerForSingleValueEvent(valueEventListener);
     }
@@ -187,7 +184,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
                             h.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    findAll.getMore();
+                                    findMessage.getMore();
                                     swipeRefreshLayout.setRefreshing(false);
                                 }
                             },500);
@@ -395,8 +392,8 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
 
     @Override
     protected void onDestroy() {
-        if(find != null && findAll != null){
-            findAll.onDestroy();
+        if(find != null && findMessage != null){
+            findMessage.onDestroy();
             find.onDestroy();
         }
         NOTIF_ID = null;

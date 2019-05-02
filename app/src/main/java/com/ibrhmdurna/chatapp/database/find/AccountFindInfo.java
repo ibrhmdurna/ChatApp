@@ -38,7 +38,6 @@ public class AccountFindInfo implements IFind {
 
     public AccountFindInfo(FragmentAccountBinding binding) {
         this.binding = binding;
-        buildView();
     }
 
     @Override

@@ -39,7 +39,6 @@ public class RecentFindAll implements IFind {
 
     public RecentFindAll(Activity context){
         this.context = context;
-        buildView();
     }
 
     @Override

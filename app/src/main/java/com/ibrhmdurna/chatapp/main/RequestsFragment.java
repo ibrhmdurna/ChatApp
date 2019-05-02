@@ -11,8 +11,8 @@ import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Update;
-import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
-import com.ibrhmdurna.chatapp.database.bridge.FindAll;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
+import com.ibrhmdurna.chatapp.database.bridge.Find;
 import com.ibrhmdurna.chatapp.database.findAll.RequestFindAll;
 
 
@@ -21,7 +21,7 @@ import com.ibrhmdurna.chatapp.database.findAll.RequestFindAll;
  */
 public class RequestsFragment extends Fragment implements ViewComponentFactory {
 
-    private AbstractFindAll findAll;
+    private AbstractFind find;
 
     public RequestsFragment() {
         // Required empty public constructor
@@ -39,8 +39,8 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
     }
 
     private void getRequest(){
-        findAll = new FindAll(new RequestFindAll(getView()));
-        findAll.getContent();
+        find = new Find(new RequestFindAll(getView()));
+        find.getContent();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
 
     @Override
     public void onDestroy() {
-        findAll.onDestroy();
+        find.onDestroy();
         super.onDestroy();
     }
 }

@@ -12,5 +12,7 @@ public abstract class AbstractFind {
 
     public abstract void getContent();
 
+    public abstract void getMore();
+
     public abstract void onDestroy();
 }

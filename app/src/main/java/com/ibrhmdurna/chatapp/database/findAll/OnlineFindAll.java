@@ -38,7 +38,6 @@ public class OnlineFindAll implements IFind {
 
     public OnlineFindAll(Fragment context) {
         this.context = context;
-        buildView();
     }
 
     @Override

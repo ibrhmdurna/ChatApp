@@ -23,8 +23,8 @@ import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Status;
-import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
-import com.ibrhmdurna.chatapp.database.bridge.FindAll;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
+import com.ibrhmdurna.chatapp.database.bridge.Find;
 import com.ibrhmdurna.chatapp.database.findAll.WriteFindAll;
 import com.ibrhmdurna.chatapp.util.Environment;
 
@@ -36,7 +36,7 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
     private EditText searchInput;
     private ImageButton searchClearView;
 
-    private AbstractFindAll findAll;
+    private AbstractFind find;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +48,8 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
     }
 
     private void getFriends(){
-        findAll = new FindAll(new WriteFindAll(this));
-        findAll.getContent();
+        find = new Find(new WriteFindAll(this));
+        find.getContent();
     }
 
     private void inputProcess(){
@@ -156,7 +156,7 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
 
     @Override
     protected void onDestroy() {
-        findAll.onDestroy();
+        find.onDestroy();
         super.onDestroy();
     }
 }
