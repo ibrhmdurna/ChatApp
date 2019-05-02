@@ -87,57 +87,79 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
-        <RelativeLayout
-            android:id="@+id/content_view"
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/ic_left_circle_view_top"
+            android:translationZ="2dp"/>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/ic_right_circle_view_top"
+            android:translationZ="2dp"
+            android:layout_alignParentEnd="true"/>
+
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/ic_left_circle_view_top"
-                android:translationZ="2dp"/>
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/ic_right_circle_view_top"
-                android:translationZ="2dp"
-                android:layout_alignParentEnd="true"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/friends_container"
+            <RelativeLayout
+                android:id="@+id/content_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
-                android:background="@drawable/rounded_background"
-                android:backgroundTint="?attr/backgroundCardColor"
-                android:visibility="gone"
-                android:nestedScrollingEnabled="false">
-            </android.support.v7.widget.RecyclerView>
+                android:layout_height="match_parent">
 
-            <android.support.v4.widget.NestedScrollView
-                android:id="@+id/no_friends_view"
-                android:layout_width="match_parent"
-                android:layout_height="450dp"
-                app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/friends_container"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No Friends"
-                    android:textSize="18sp"
-                    android:gravity="center"
-                    android:textColor="@color/colorDarkGray"
-                    android:layout_gravity="center" />
-            </android.support.v4.widget.NestedScrollView>
+                    app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
+                    android:background="@drawable/rounded_background"
+                    android:backgroundTint="?attr/backgroundCardColor"
+                    android:visibility="gone"
+                    android:nestedScrollingEnabled="false">
+                </android.support.v7.widget.RecyclerView>
 
-        </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
+                <android.support.v4.widget.NestedScrollView
+                    android:id="@+id/no_friends_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="450dp"
+                    app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No Friends"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textColor="@color/colorDarkGray"
+                        android:layout_gravity="center" />
+                </android.support.v4.widget.NestedScrollView>
+
+            </RelativeLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/ic_left_circle_view"
+        android:layout_alignParentBottom="true"
+        android:translationZ="2dp"
+        android:layout_gravity="bottom"/>
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/ic_right_circle_view"
+        android:layout_alignParentBottom="true"
+        android:translationZ="2dp"
+        android:layout_gravity="end|bottom"/>
 
 </android.support.design.widget.CoordinatorLayout>

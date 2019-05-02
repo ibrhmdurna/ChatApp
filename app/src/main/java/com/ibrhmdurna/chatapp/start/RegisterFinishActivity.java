@@ -204,4 +204,10 @@ public class RegisterFinishActivity extends AppCompatActivity implements ViewCom
                 break;
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImageController.getInstance().setProfileImageBytes(null);
+    }
 }
