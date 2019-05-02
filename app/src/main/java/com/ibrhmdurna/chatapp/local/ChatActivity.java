@@ -8,9 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.Settings;
@@ -18,11 +16,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,7 +35,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
-import com.ibrhmdurna.chatapp.database.Connection;
+import com.ibrhmdurna.chatapp.database.Status;
 import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
@@ -63,7 +59,6 @@ import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
@@ -71,8 +66,6 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, OnEmojiPopupShownListener, OnEmojiPopupDismissListener, GalleryBottomSheetDialog.BottomSheetListener {
 
@@ -379,7 +372,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     @Override
     protected void onResume() {
         super.onResume();
-        Connection.getInstance().onConnect();
+        Status.getInstance().onConnect();
         Update.getInstance().messageSeen(uid, true);
         Update.getInstance().chatSeen(uid, true);
 
@@ -392,7 +385,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     @Override
     protected void onPause() {
         super.onPause();
-        Connection.getInstance().onDisconnect();
+        Status.getInstance().onDisconnect();
         Update.getInstance().typing(uid, false);
         Update.getInstance().messageSeen(uid, false);
         Update.getInstance().chatSeen(uid, false);

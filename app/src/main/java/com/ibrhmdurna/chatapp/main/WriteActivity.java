@@ -2,11 +2,8 @@ package com.ibrhmdurna.chatapp.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,15 +22,11 @@ import android.widget.TextView;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.database.Connection;
+import com.ibrhmdurna.chatapp.database.Status;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
 import com.ibrhmdurna.chatapp.database.bridge.FindAll;
 import com.ibrhmdurna.chatapp.database.findAll.WriteFindAll;
 import com.ibrhmdurna.chatapp.util.Environment;
-import com.ibrhmdurna.chatapp.util.adapter.MessageAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class WriteActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
@@ -151,14 +144,14 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
     @Override
     protected void onResume() {
         super.onResume();
-        Connection.getInstance().onConnect();
+        Status.getInstance().onConnect();
         getFriends();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Connection.getInstance().onDisconnect();
+        Status.getInstance().onDisconnect();
     }
 
     @Override

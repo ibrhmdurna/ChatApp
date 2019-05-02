@@ -8,16 +8,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ServerValue;
 
-public class Connection {
+public class Status {
 
-    private static Connection instance;
+    private static Status instance;
 
-    private Connection (){}
+    private Status(){}
 
-    public static synchronized Connection getInstance(){
+    public static synchronized Status getInstance(){
         if(instance == null){
-            synchronized (Connection.class){
-                instance = new Connection();
+            synchronized (Status.class){
+                instance = new Status();
             }
         }
         return instance;

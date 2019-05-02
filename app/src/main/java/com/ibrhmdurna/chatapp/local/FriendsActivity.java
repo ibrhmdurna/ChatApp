@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.database.Connection;
+import com.ibrhmdurna.chatapp.database.Status;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
 import com.ibrhmdurna.chatapp.database.bridge.FindAll;
 import com.ibrhmdurna.chatapp.database.findAll.AccountFriendFindAll;
@@ -140,14 +140,14 @@ public class FriendsActivity extends AppCompatActivity implements ViewComponentF
     @Override
     protected void onResume() {
         super.onResume();
-        Connection.getInstance().onConnect();
+        Status.getInstance().onConnect();
         getFriends();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Connection.getInstance().onDisconnect();
+        Status.getInstance().onDisconnect();
     }
 
     @Override

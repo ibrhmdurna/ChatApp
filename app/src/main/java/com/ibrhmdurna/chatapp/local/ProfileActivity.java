@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -19,24 +17,19 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.github.ybq.android.spinkit.SpinKitView;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.database.Connection;
+import com.ibrhmdurna.chatapp.database.Status;
 import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Insert;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
 import com.ibrhmdurna.chatapp.database.bridge.Find;
 import com.ibrhmdurna.chatapp.database.find.ProfileFindInfo;
 import com.ibrhmdurna.chatapp.databinding.ActivityProfileBinding;
-import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 import com.ibrhmdurna.chatapp.util.dialog.MoreBottomSheetDialog;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, MoreBottomSheetDialog.BottomSheetListener {
 
@@ -183,7 +176,7 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
     @Override
     protected void onResume() {
         super.onResume();
-        Connection.getInstance().onConnect();
+        Status.getInstance().onConnect();
         getProfileInformation();
         clearNotification();
     }
@@ -191,7 +184,7 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
     @Override
     protected void onPause() {
         super.onPause();
-        Connection.getInstance().onDisconnect();
+        Status.getInstance().onDisconnect();
     }
 
     @Override

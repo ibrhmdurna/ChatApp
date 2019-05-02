@@ -1,7 +1,6 @@
 package com.ibrhmdurna.chatapp.main;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +21,7 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.database.Connection;
+import com.ibrhmdurna.chatapp.database.Status;
 import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Search;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
@@ -189,13 +188,13 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
     @Override
     protected void onResume() {
         super.onResume();
-        Connection.getInstance().onConnect();
+        Status.getInstance().onConnect();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Connection.getInstance().onDisconnect();
+        Status.getInstance().onDisconnect();
     }
 
     @Override
