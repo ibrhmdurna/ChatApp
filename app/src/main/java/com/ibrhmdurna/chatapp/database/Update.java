@@ -277,7 +277,7 @@ public class Update{
                 else{
                     loadingBar.dismiss();
                     emailInput.setError("Email is incorrect. Please enter a valid email address.");
-                }
+            }
             }
         });
     }

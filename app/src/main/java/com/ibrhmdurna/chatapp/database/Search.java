@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,6 +67,7 @@ public class Search {
             @Override
             public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
                 if(task.isSuccessful()){
+                    loading.dismiss();
                     if(task.getResult().getSignInMethods().size() > 0){
                         emailInput.setError("This email is used");
                     }
@@ -80,17 +82,23 @@ public class Search {
                 }
                 else {
                     loading.dismiss();
-                    final AlertDialog dialog = DialogController.getInstance().dialogCustom(context, "Cannot Sign in. Please check the from and try again.", null, "Dismiss");
-                    TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
-                    positiveBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    });
+                    emailInput.setError("Email is incorrect. Please enter a valid email address.");
                 }
 
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
                 loading.dismiss();
+                /*final AlertDialog dialog = DialogController.getInstance().dialogCustom(context, "Cannot Sign in. Please check the from and try again.", null, "Dismiss");
+                TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
+                positiveBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });*/
             }
         });
 
