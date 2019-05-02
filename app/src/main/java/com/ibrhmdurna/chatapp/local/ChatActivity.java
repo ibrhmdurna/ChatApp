@@ -401,8 +401,10 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
 
     @Override
     protected void onDestroy() {
-        findAll.onDestroy();
-        find.onDestroy();
+        if(find != null && findAll != null){
+            findAll.onDestroy();
+            find.onDestroy();
+        }
         NOTIF_ID = null;
         Firebase.getInstance().getDatabaseReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(uid).removeEventListener(valueEventListener);
         super.onDestroy();

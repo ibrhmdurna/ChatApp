@@ -29,18 +29,10 @@ public class Firebase {
         return databaseReference;
     }
 
-    public void setDatabaseReference(DatabaseReference databaseReference) {
-        this.databaseReference = databaseReference;
-    }
-
     public StorageReference getStorageReference() {
         if(storageReference == null){
             storageReference = FirebaseStorage.getInstance().getReference();
         }
         return storageReference;
-    }
-
-    public static void setInstance(Firebase instance) {
-        Firebase.instance = instance;
     }
 }
