@@ -8,10 +8,9 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.databinding.ActivityEditAccountBinding;
 import com.ibrhmdurna.chatapp.models.Account;
@@ -44,7 +43,7 @@ public class AccountEditFindInfo implements IFind {
     public void getContent() {
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addListenerForSingleValueEvent(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).addListenerForSingleValueEvent(contentEventListener);
     }
 
     private ValueEventListener contentEventListener = new ValueEventListener() {
@@ -100,7 +99,7 @@ public class AccountEditFindInfo implements IFind {
 
     @Override
     public void onDestroy() {
-        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).removeEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).removeEventListener(contentEventListener);
     }
 
     private void setProfileImage(int index, CircleImageView profileImage) {

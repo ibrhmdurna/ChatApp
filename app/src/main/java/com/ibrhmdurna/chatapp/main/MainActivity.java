@@ -32,12 +32,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Connection;
+import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.models.Request;
 import com.ibrhmdurna.chatapp.start.StartActivity;
@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     private View chatBadge;
 
     private String uid;
-    private DatabaseReference databaseReference;
 
     private View tooltipView;
 
@@ -71,9 +70,6 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         setContentView(R.layout.activity_main);
 
         toolsManagement();
-
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
 
         if(getIntent().getExtras() != null){
             page = getIntent().getStringExtra("page");
@@ -94,15 +90,15 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     private void chatListener(){
         uid = FirebaseAuth.getInstance().getUid();
 
-        databaseReference.child("Chats").child(uid).removeEventListener(chatEvenListener);
-        databaseReference.child("Chats").child(uid).addValueEventListener(chatEvenListener);
+        Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).removeEventListener(chatEvenListener);
+        Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).addValueEventListener(chatEvenListener);
     }
 
     private void requestListener(){
         uid = FirebaseAuth.getInstance().getUid();
 
-        databaseReference.child("Request").child(uid).removeEventListener(requestEventListener);
-        databaseReference.child("Request").child(uid).addValueEventListener(requestEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Request").child(uid).removeEventListener(requestEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Request").child(uid).addValueEventListener(requestEventListener);
     }
 
     private ValueEventListener requestEventListener = new ValueEventListener() {
@@ -465,8 +461,8 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     @Override
     protected void onDestroy() {
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
-            databaseReference.child("Request").child(uid).removeEventListener(requestEventListener);
-            databaseReference.child("Chats").child(uid).removeEventListener(chatEvenListener);
+            Firebase.getInstance().getDatabaseReference().child("Request").child(uid).removeEventListener(requestEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).removeEventListener(chatEvenListener);
         }
         super.onDestroy();
     }

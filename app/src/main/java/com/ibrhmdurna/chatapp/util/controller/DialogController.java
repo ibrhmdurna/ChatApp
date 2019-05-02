@@ -18,13 +18,12 @@ import android.widget.TextView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Delete;
+import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.local.ProfileActivity;
-import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.settings.DarkModeActivity;
 
@@ -265,10 +264,7 @@ public class DialogController {
 
         final LinearLayout viewItem = view.findViewById(R.id.view_item);
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Accounts").child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
+        Firebase.getInstance().getDatabaseReference().child("Accounts").child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){

@@ -18,10 +18,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Delete;
+import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.local.ChatActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Chat;
@@ -33,7 +33,6 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.vanniktech.emoji.EmojiTextView;
 
-import java.io.File;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -106,18 +105,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
             chatUid = chat.getChatUid();
 
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.keepSynced(true);
+            Firebase.getInstance().getDatabaseReference().child("Accounts").child(chatUid).removeEventListener(accountEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).limitToLast(1).removeEventListener(lastMessageEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Messages").child(chatUid).child(uid).removeEventListener(messageEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).child(chatUid).child("typing").removeEventListener(chatEventListener);
 
-            databaseReference.child("Accounts").child(chatUid).removeEventListener(accountEventListener);
-            databaseReference.child("Messages").child(uid).child(chatUid).limitToLast(1).removeEventListener(lastMessageEventListener);
-            databaseReference.child("Messages").child(chatUid).child(uid).removeEventListener(messageEventListener);
-            databaseReference.child("Chats").child(uid).child(chatUid).child("typing").removeEventListener(chatEventListener);
-
-            databaseReference.child("Accounts").child(chatUid).addValueEventListener(accountEventListener);
-            databaseReference.child("Messages").child(uid).child(chatUid).limitToLast(1).addValueEventListener(lastMessageEventListener);
-            databaseReference.child("Messages").child(uid).child(chatUid).addValueEventListener(messageEventListener);
-            databaseReference.child("Chats").child(uid).child(chatUid).child("typing").addValueEventListener(chatEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Accounts").child(chatUid).addValueEventListener(accountEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).limitToLast(1).addValueEventListener(lastMessageEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).addValueEventListener(messageEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).child(chatUid).child("typing").addValueEventListener(chatEventListener);
 
             String chatTime = GetTimeAgo.getInstance().getChatTimeAgo(chat.getTime());
             time.setText(chatTime);
@@ -416,10 +412,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                 if(dataSnapshot.exists()){
                     final boolean isTyping = (boolean) dataSnapshot.getValue();
 
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                    databaseReference.keepSynced(true);
-
-                    databaseReference.child("Friends").child(FirebaseAuth.getInstance().getUid()).child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    Firebase.getInstance().getDatabaseReference().child("Friends").child(FirebaseAuth.getInstance().getUid()).child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if(dataSnapshot.exists()){

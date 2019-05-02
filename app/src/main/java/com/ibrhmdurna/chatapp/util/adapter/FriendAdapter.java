@@ -16,16 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Delete;
+import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.database.Insert;
 import com.ibrhmdurna.chatapp.models.Friend;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
@@ -195,11 +193,11 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             friendUid = friend.getAccount().getUid();
 
-            FirebaseDatabase.getInstance().getReference().child("Request").child(friend.getAccount().getUid()).removeEventListener(requestEventListener);
-            FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).child(friendUid).removeEventListener(friendEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Request").child(friend.getAccount().getUid()).removeEventListener(requestEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).child(friendUid).removeEventListener(friendEventListener);
 
             if(!friendUid.equals(uid)){
-                FirebaseDatabase.getInstance().getReference().child("Request").child(friend.getAccount().getUid()).addListenerForSingleValueEvent(requestEventListener);
+                Firebase.getInstance().getDatabaseReference().child("Request").child(friend.getAccount().getUid()).addListenerForSingleValueEvent(requestEventListener);
             }
             else{
                 addItem.setVisibility(View.GONE);
@@ -286,7 +284,7 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     addItem.setVisibility(View.GONE);
                     deleteItem.setVisibility(View.GONE);
 
-                    FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).child(friendUid).addListenerForSingleValueEvent(friendEventListener);
+                    Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).child(friendUid).addListenerForSingleValueEvent(friendEventListener);
                 }
             }
 

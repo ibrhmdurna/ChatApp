@@ -13,10 +13,9 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.databinding.ActivityProfileBinding;
 import com.ibrhmdurna.chatapp.models.Account;
@@ -44,8 +43,6 @@ public class ProfileFindInfo implements IFind {
 
     private final String uid;
     private String current_uid;
-
-    private DatabaseReference database;
 
     public ProfileFindInfo(ActivityProfileBinding binding,String uid) {
         this.binding = binding;
@@ -75,16 +72,13 @@ public class ProfileFindInfo implements IFind {
     public void getContent() {
         current_uid = FirebaseAuth.getInstance().getUid();
 
-        database = FirebaseDatabase.getInstance().getReference();
-        database.keepSynced(true);
+        Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).removeEventListener(accountEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Friends").child(current_uid).child(uid).removeEventListener(friendEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).removeEventListener(friendEventListener2);
 
-        database.child("Accounts").child(uid).removeEventListener(accountEventListener);
-        database.child("Friends").child(current_uid).child(uid).removeEventListener(friendEventListener);
-        database.child("Friends").child(uid).removeEventListener(friendEventListener2);
-
-        database.child("Accounts").child(uid).addValueEventListener(accountEventListener);
-        database.child("Friends").child(current_uid).child(uid).addValueEventListener(friendEventListener);
-        database.child("Friends").child(uid).addValueEventListener(friendEventListener2);
+        Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).addValueEventListener(accountEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Friends").child(current_uid).child(uid).addValueEventListener(friendEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).addValueEventListener(friendEventListener2);
     }
 
     @Override
@@ -94,9 +88,9 @@ public class ProfileFindInfo implements IFind {
 
     @Override
     public void onDestroy() {
-        database.child("Accounts").child(uid).removeEventListener(accountEventListener);
-        database.child("Friends").child(current_uid).child(uid).removeEventListener(friendEventListener);
-        database.child("Friends").child(uid).removeEventListener(friendEventListener2);
+        Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).removeEventListener(accountEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Friends").child(current_uid).child(uid).removeEventListener(friendEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).removeEventListener(friendEventListener2);
     }
 
     private ValueEventListener accountEventListener = new ValueEventListener() {
@@ -211,7 +205,7 @@ public class ProfileFindInfo implements IFind {
                 confirmLayout.setVisibility(View.GONE);
             }
             else {
-                database.child("Request").child(uid).child(current_uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                Firebase.getInstance().getDatabaseReference().child("Request").child(uid).child(current_uid).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
@@ -230,7 +224,7 @@ public class ProfileFindInfo implements IFind {
                     }
                 });
 
-                database.child("Request").child(current_uid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                Firebase.getInstance().getDatabaseReference().child("Request").child(current_uid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
@@ -264,7 +258,7 @@ public class ProfileFindInfo implements IFind {
                 final int[] count = {0};
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     if(!current_uid.equals(snapshot.getKey())){
-                        database.child("Friends").child(current_uid).child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        Firebase.getInstance().getDatabaseReference().child("Friends").child(current_uid).child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if(dataSnapshot.exists()){

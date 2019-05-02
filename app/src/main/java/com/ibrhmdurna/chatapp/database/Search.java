@@ -25,7 +25,6 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
@@ -168,7 +167,7 @@ public class Search {
         loadingBar.setVisibility(View.VISIBLE);
         searchLayout.setVisibility(View.GONE);
 
-        Query query = FirebaseDatabase.getInstance().getReference().child("Accounts")
+        Query query = Firebase.getInstance().getDatabaseReference().child("Accounts")
                 .orderByChild("search_name")
                 .startAt(search.toLowerCase())
                 .endAt(search.toLowerCase() + "\uf8ff");

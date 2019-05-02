@@ -6,22 +6,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.os.Handler;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Insert;
 import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.database.message.Text;
 import com.ibrhmdurna.chatapp.database.strategy.SendMessage;
 import com.ibrhmdurna.chatapp.local.ProfileActivity;
-import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Message;
-import com.ibrhmdurna.chatapp.models.MessageNotification;
 
 public class NotificationReceiver extends BroadcastReceiver {
     @Override
@@ -55,32 +49,34 @@ public class NotificationReceiver extends BroadcastReceiver {
                     SendMessage sendMessage = new SendMessage(new Text());
                     sendMessage.Send(message, user_id);
 
-                    MessageNotification messageNotification = new MessageNotification(replyText.toString(), System.currentTimeMillis(), "You");
-                    NotificationService.messageList.add(messageNotification);
-
-                    FirebaseDatabase.getInstance().getReference().child("Accounts").child(user_id).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()){
-                                Account account = dataSnapshot.getValue(Account.class);
-
-                                NotificationService.getInstance().showMessageNotification(context, account.getNameSurname(), account.getThumb_image(), user_id, account.getEmail(), "com.ibrhmdurna.chatapp.CHAT_NOTIFICATION", replyText.toString());
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
                     Update.getInstance().messageSeen(user_id, true);
                     Update.getInstance().chatSeen(user_id, true);
+
+                    Handler h = new Handler();
+                    h.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Update.getInstance().messageSeen(user_id, false);
+                            Update.getInstance().chatSeen(user_id, false);
+                        }
+                    },2000);
+
+                    notificationManager.cancel(user_id, 2);
                 }
                 break;
             case "read":
                 Update.getInstance().messageSeen(user_id, true);
                 Update.getInstance().chatSeen(user_id, true);
+
+                Handler h = new Handler();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Update.getInstance().messageSeen(user_id, false);
+                        Update.getInstance().chatSeen(user_id, false);
+                    }
+                },2000);
+
                 notificationManager.cancel(user_id, 2);
                 break;
         }

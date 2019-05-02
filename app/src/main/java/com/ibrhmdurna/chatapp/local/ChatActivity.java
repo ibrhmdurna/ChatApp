@@ -1,6 +1,8 @@
 package com.ibrhmdurna.chatapp.local;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -20,6 +22,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,12 +36,11 @@ import com.baoyz.widget.PullRefreshLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.database.Connection;
+import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFindAll;
@@ -86,6 +88,9 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     private String uid;
 
     private AbstractFindAll findAll;
+    private AbstractFind find;
+
+    public static String NOTIF_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +99,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         setContentView(R.layout.activity_chat);
 
         uid = getIntent().getStringExtra("user_id");
+        NOTIF_ID = uid;
 
         permissionProcess();
     }
@@ -172,14 +178,14 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         findAll = new FindAll(new MessageFindAll(this, uid));
         findAll.getContent();
 
-        FirebaseDatabase.getInstance().getReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(uid).addListenerForSingleValueEvent(valueEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(uid).addListenerForSingleValueEvent(valueEventListener);
     }
 
     private ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             if(dataSnapshot.exists()){
-                if(dataSnapshot.getChildrenCount() > 50){
+                if(dataSnapshot.getChildrenCount() > 30){
                     swipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
                         @Override
                         public void onRefresh() {
@@ -217,7 +223,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     }
 
     private void getContent(){
-        AbstractFind find = new Find(new ChatFindInfo(this, uid));
+        find = new Find(new ChatFindInfo(this, uid));
         find.getContent();
     }
 
@@ -376,6 +382,11 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         Connection.getInstance().onConnect();
         Update.getInstance().messageSeen(uid, true);
         Update.getInstance().chatSeen(uid, true);
+
+        NOTIF_ID = uid;
+
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.cancel(uid, 2);
     }
 
     @Override
@@ -385,14 +396,15 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         Update.getInstance().typing(uid, false);
         Update.getInstance().messageSeen(uid, false);
         Update.getInstance().chatSeen(uid, false);
+        NOTIF_ID = null;
     }
 
     @Override
     protected void onDestroy() {
-        ImageLoader.getInstance().clearMemoryCache();
-        ImageLoader.getInstance().clearDiskCache();
         findAll.onDestroy();
-        FirebaseDatabase.getInstance().getReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(uid).removeEventListener(valueEventListener);
+        find.onDestroy();
+        NOTIF_ID = null;
+        Firebase.getInstance().getDatabaseReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(uid).removeEventListener(valueEventListener);
         super.onDestroy();
     }
 }

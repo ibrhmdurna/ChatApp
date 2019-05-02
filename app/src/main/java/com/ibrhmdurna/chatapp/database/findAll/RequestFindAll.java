@@ -10,10 +10,9 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Request;
@@ -58,7 +57,7 @@ public class RequestFindAll implements IFind {
 
         uid = FirebaseAuth.getInstance().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).addValueEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Request").child(uid).addValueEventListener(contentEventListener);
     }
 
     @Override
@@ -68,7 +67,7 @@ public class RequestFindAll implements IFind {
 
     @Override
     public void onDestroy() {
-        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).removeEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Request").child(uid).removeEventListener(contentEventListener);
     }
 
     private ValueEventListener contentEventListener = new ValueEventListener() {

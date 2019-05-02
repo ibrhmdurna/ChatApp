@@ -12,10 +12,9 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.databinding.FragmentAccountBinding;
 import com.ibrhmdurna.chatapp.models.Account;
@@ -56,18 +55,18 @@ public class AccountFindInfo implements IFind {
     public void getContent() {
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addListenerForSingleValueEvent(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).addListenerForSingleValueEvent(contentEventListener);
     }
 
     @Override
     public void getMore() {
-        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).addListenerForSingleValueEvent(moreEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).addListenerForSingleValueEvent(moreEventListener);
     }
 
     @Override
     public void onDestroy() {
-        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).removeEventListener(contentEventListener);
-        FirebaseDatabase.getInstance().getReference().child("Friends").child(uid).removeEventListener(moreEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).removeEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).removeEventListener(moreEventListener);
     }
 
     private ValueEventListener contentEventListener = new ValueEventListener() {

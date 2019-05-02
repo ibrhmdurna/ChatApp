@@ -31,14 +31,12 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.models.Account;
-import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.util.controller.AppController;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
@@ -110,7 +108,7 @@ public class Update{
                                                     String thumbDownloadUrl = uri.toString();
                                                     account.setThumb_image(thumbDownloadUrl);
 
-                                                    FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).setValue(account).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).setValue(account).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
                                                             if(task.isSuccessful()){
@@ -161,7 +159,7 @@ public class Update{
             });
         }
         else {
-            FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).setValue(account).addOnCompleteListener(new OnCompleteListener<Void>() {
+            Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).setValue(account).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
@@ -320,7 +318,7 @@ public class Update{
 
                                                 String uid = FirebaseAuth.getInstance().getUid();
 
-                                                FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).child("email").setValue(newEmailInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).child("email").setValue(newEmailInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
 
@@ -370,10 +368,7 @@ public class Update{
     public void seenAllRequest(){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        FirebaseDatabase.getInstance().getReference().child("Request").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        Firebase.getInstance().getDatabaseReference().child("Request").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -394,8 +389,7 @@ public class Update{
 
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Chats").child(chatUid).child(uid);
-        databaseReference.keepSynced(true);
+        DatabaseReference databaseReference = Firebase.getInstance().getDatabaseReference().child("Chats").child(chatUid).child(uid);
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -415,28 +409,22 @@ public class Update{
     public void messageSeen(String chatUid, boolean listener){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
         if(listener){
-            databaseReference.child("Messages").child(uid).child(chatUid).addValueEventListener(messageEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).addValueEventListener(messageEventListener);
         }
         else{
-            databaseReference.child("Messages").child(uid).child(chatUid).removeEventListener(messageEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).removeEventListener(messageEventListener);
         }
     }
 
     public void chatSeen(String chatUid, boolean listener){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
         if(listener){
-            databaseReference.child("Chats").child(uid).child(chatUid).addValueEventListener(chatEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).child(chatUid).addValueEventListener(chatEventListener);
         }
         else{
-            databaseReference.child("Chats").child(uid).child(chatUid).removeEventListener(chatEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).child(chatUid).removeEventListener(chatEventListener);
         }
     }
 
@@ -447,6 +435,8 @@ public class Update{
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     snapshot.child("seen").getRef().setValue(true);
                 }
+
+
             }
         }
 

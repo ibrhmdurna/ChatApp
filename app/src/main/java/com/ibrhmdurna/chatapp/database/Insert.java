@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
@@ -28,7 +27,6 @@ import com.google.firebase.storage.UploadTask;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.models.Account;
-import com.ibrhmdurna.chatapp.models.Request;
 import com.ibrhmdurna.chatapp.util.controller.AppController;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
@@ -108,7 +106,7 @@ public class Insert {
                                                                 String thumbDownloadUrl = uri.toString();
                                                                 account.setThumb_image(thumbDownloadUrl);
 
-                                                                FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).setValue(account).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).setValue(account).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                     @Override
                                                                     public void onComplete(@NonNull Task<Void> task) {
                                                                         if(task.isSuccessful()){
@@ -160,7 +158,7 @@ public class Insert {
                         });
                     }
                     else {
-                        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).setValue(account).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).setValue(account).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
@@ -197,7 +195,7 @@ public class Insert {
         Map recentMap = new HashMap();
         recentMap.put("time", ServerValue.TIMESTAMP);
 
-        FirebaseDatabase.getInstance().getReference().child("Recent").child(uid).child(id).setValue(recentMap);
+        Firebase.getInstance().getDatabaseReference().child("Recent").child(uid).child(id).setValue(recentMap);
 
     }
 
@@ -209,7 +207,7 @@ public class Insert {
         requestMap.put("Request/" + id + "/" + uid + "/seen", false);
         requestMap.put("Request/" + id + "/" + uid + "/time", ServerValue.TIMESTAMP);
 
-        FirebaseDatabase.getInstance().getReference().updateChildren(requestMap).addOnCompleteListener(new OnCompleteListener() {
+        Firebase.getInstance().getDatabaseReference().updateChildren(requestMap).addOnCompleteListener(new OnCompleteListener() {
             @Override
             public void onComplete(@NonNull Task task) {
                 if(task.isSuccessful()){
@@ -235,7 +233,7 @@ public class Insert {
         friendMap.put("Request/" + id + "/" + uid + "/seen", null);
         friendMap.put("Request/" + id + "/" + uid + "/time", null);
 
-        FirebaseDatabase.getInstance().getReference().updateChildren(friendMap).addOnCompleteListener(new OnCompleteListener() {
+        Firebase.getInstance().getDatabaseReference().updateChildren(friendMap).addOnCompleteListener(new OnCompleteListener() {
             @Override
             public void onComplete(@NonNull Task task) {
                 notification(id, "confirm");
@@ -244,17 +242,14 @@ public class Insert {
     }
 
     public void deviceToken(String id){
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
-        databaseReference.child("Accounts").child(id).child("device_token").setValue(deviceToken);
+        Firebase.getInstance().getDatabaseReference().child("Accounts").child(id).child("device_token").setValue(deviceToken);
     }
 
     public void notification(String id, String type){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Notifications").child(id);
+        DatabaseReference databaseReference = Firebase.getInstance().getDatabaseReference().child("Notifications").child(id);
         String notification_id = databaseReference.push().getKey();
 
         Map notificationMap = new HashMap();
@@ -267,7 +262,7 @@ public class Insert {
     public void notification(String id, String type, String message){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Notifications").child(id);
+        DatabaseReference databaseReference = Firebase.getInstance().getDatabaseReference().child("Notifications").child(id);
         String notification_id = databaseReference.push().getKey();
 
         Map notificationMap = new HashMap();
@@ -281,7 +276,7 @@ public class Insert {
     public void notification(String id, String type, String message, String image){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Notifications").child(id);
+        DatabaseReference databaseReference = Firebase.getInstance().getDatabaseReference().child("Notifications").child(id);
         String notification_id = databaseReference.push().getKey();
 
         Map notificationMap = new HashMap();

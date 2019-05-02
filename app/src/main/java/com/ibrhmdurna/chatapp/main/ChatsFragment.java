@@ -1,6 +1,8 @@
 package com.ibrhmdurna.chatapp.main;
 
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -24,6 +26,8 @@ public class ChatsFragment extends Fragment implements ViewComponentFactory {
     private View view;
 
     private AbstractFindAll findAll;
+
+    public static boolean isChat = false;
 
     public ChatsFragment() {
         // Required empty public constructor
@@ -64,10 +68,27 @@ public class ChatsFragment extends Fragment implements ViewComponentFactory {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        isChat = true;
+
+        NotificationManager manager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.cancel(2);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isChat = false;
+    }
+
+    @Override
     public void onDestroy() {
         if(findAll != null){
             findAll.onDestroy();
         }
+        isChat = false;
         super.onDestroy();
     }
 }

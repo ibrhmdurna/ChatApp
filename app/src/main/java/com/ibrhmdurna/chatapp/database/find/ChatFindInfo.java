@@ -8,21 +8,18 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.local.ProfileActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.util.GetTimeAgo;
-import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -66,7 +63,7 @@ public class ChatFindInfo implements IFind {
 
     @Override
     public void getContent() {
-        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).addValueEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).addValueEventListener(contentEventListener);
     }
 
     @Override
@@ -76,7 +73,7 @@ public class ChatFindInfo implements IFind {
 
     @Override
     public void onDestroy() {
-        FirebaseDatabase.getInstance().getReference().child("Accounts").child(uid).removeEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).removeEventListener(contentEventListener);
     }
 
     private ValueEventListener contentEventListener = new ValueEventListener() {
@@ -124,16 +121,13 @@ public class ChatFindInfo implements IFind {
     private void typingListener(final Account account){
         final String currentUid = FirebaseAuth.getInstance().getUid();
 
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
-        databaseReference.child("Chats").child(currentUid).child(uid).addValueEventListener(new ValueEventListener() {
+        Firebase.getInstance().getDatabaseReference().child("Chats").child(currentUid).child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     final Chat chat = dataSnapshot.getValue(Chat.class);
 
-                    databaseReference.child("Friends").child(currentUid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    Firebase.getInstance().getDatabaseReference().child("Friends").child(currentUid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if(dataSnapshot.exists()){
@@ -170,13 +164,10 @@ public class ChatFindInfo implements IFind {
     }
 
     private void onlineListener(final Account account){
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
-
         if(account.isOnline()){
             lastSeen.setVisibility(View.VISIBLE);
             typingView.setVisibility(View.GONE);
-            databaseReference.child("Friends").child(FirebaseAuth.getInstance().getUid()).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            Firebase.getInstance().getDatabaseReference().child("Friends").child(FirebaseAuth.getInstance().getUid()).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(dataSnapshot.exists()){
@@ -202,14 +193,14 @@ public class ChatFindInfo implements IFind {
                 public void run() {
                     if(account.getLast_seen() != null){
 
-                        databaseReference.child("Accounts").child(uid).child("online").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                        Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).child("online").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if(dataSnapshot.exists()){
                                     final boolean isOnline = (boolean) dataSnapshot.getValue();
 
                                     if(typingView.getVisibility() != View.VISIBLE){
-                                        databaseReference.child("Friends").child(FirebaseAuth.getInstance().getUid()).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        Firebase.getInstance().getDatabaseReference().child("Friends").child(FirebaseAuth.getInstance().getUid()).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 if(dataSnapshot.exists()){

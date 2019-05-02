@@ -26,6 +26,8 @@ import android.text.Html;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.local.ChatActivity;
+import com.ibrhmdurna.chatapp.main.ChatsFragment;
 import com.ibrhmdurna.chatapp.models.MessageNotification;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -45,8 +47,6 @@ public class NotificationService extends FirebaseMessagingService {
         }
         return instance;
     }
-
-    public static List<MessageNotification> messageList = new ArrayList<>();
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -69,11 +69,99 @@ public class NotificationService extends FirebaseMessagingService {
                 break;
             case "message":
                 String content = remoteMessage.getData().get("message");
+                /*
                 MessageNotification messageNotification = new MessageNotification(content, System.currentTimeMillis(), name_surname);
                 messageList.add(messageNotification);
-                showMessageNotification(this, name_surname, profile_image, from_user_id, email, click_action, content);
-                //showMessageNotification(name_surname, profile_image, from_user_id, email, click_action, content);
+                showMessageNotification(this, name_surname, profile_image, from_user_id, email, click_action, content);*/
+                showMessageNotification(name_surname, profile_image, from_user_id, email, click_action, content);
                 break;
+            case "image":
+                String contentI = remoteMessage.getData().get("message");
+                String image = remoteMessage.getData().get("image");
+                showMessageNotification(name_surname, profile_image, from_user_id, email, click_action, contentI, image);
+                break;
+        }
+    }
+
+    private void showMessageNotification(String nameSurname, String profileImage, String fromUid, String email, String clickAction, String message, String image){
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        final String CHANNEL_ID = "com.ibrhmdurna.chatapp.message";
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, "Messages",
+                    NotificationManager.IMPORTANCE_HIGH);
+
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.WHITE);
+            notificationChannel.enableVibration(true);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+        Intent resultIntent = new Intent(clickAction);
+        resultIntent.putExtra("user_id", fromUid);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(resultIntent);
+
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
+                generateRandom(),
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        RemoteInput remoteInput = new RemoteInput.Builder("key_text_reply")
+                .setLabel("Reply")
+                .build();
+
+        Intent actionIntent = new Intent(this, NotificationReceiver.class);
+        actionIntent.putExtra("user_id", fromUid);
+        actionIntent.putExtra("action", "reply");
+        PendingIntent replyPendingIntent = PendingIntent.getBroadcast(this,
+                generateRandom(), actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Action replyAction = new NotificationCompat.Action.Builder(
+                R.drawable.ic_send_white_icon,
+                "Reply",
+                replyPendingIntent
+        ).addRemoteInput(remoteInput).build();
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
+
+        notificationBuilder
+                .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setColor(getColor(R.color.colorAccent))
+                .setStyle(new NotificationCompat.BigPictureStyle()
+                            .bigLargeIcon(setProfileImage(profileImage))
+                            .bigPicture(ImageLoader.getInstance().loadImageSync(image))
+                            .setBigContentTitle(nameSurname))
+                .setContentTitle(nameSurname)
+                .setContentText(!message.equals("") ? message : "Photo")
+                .setSubText(email)
+                .addAction(replyAction)
+                .addAction(R.color.colorAccent, "Mark as read", PendingIntent.getBroadcast(
+                        this,
+                        generateRandom(),
+                        actionIntent.putExtra("action", "read").putExtra("user_id", fromUid),
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                ))
+                .setContentIntent(resultPendingIntent)
+                .setOnlyAlertOnce(true)
+                .setLargeIcon(ImageLoader.getInstance().loadImageSync(image))
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE);
+
+        if(!ChatsFragment.isChat){
+            if(ChatActivity.NOTIF_ID != null){
+                if(!ChatActivity.NOTIF_ID.equals(fromUid)){
+                    notificationManager.notify(fromUid, 2, notificationBuilder.build());
+                }
+            }
+            else{
+                notificationManager.notify(fromUid, 2, notificationBuilder.build());
+            }
         }
     }
 
@@ -103,6 +191,22 @@ public class NotificationService extends FirebaseMessagingService {
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
 
+        RemoteInput remoteInput = new RemoteInput.Builder("key_text_reply")
+                .setLabel("Reply")
+                .build();
+
+        Intent actionIntent = new Intent(this, NotificationReceiver.class);
+        actionIntent.putExtra("user_id", fromUid);
+        actionIntent.putExtra("action", "reply");
+        PendingIntent replyPendingIntent = PendingIntent.getBroadcast(this,
+                generateRandom(), actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Action replyAction = new NotificationCompat.Action.Builder(
+                R.drawable.ic_send_white_icon,
+                "Reply",
+                replyPendingIntent
+        ).addRemoteInput(remoteInput).build();
+
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
 
         notificationBuilder
@@ -117,14 +221,32 @@ public class NotificationService extends FirebaseMessagingService {
                 .setContentTitle(nameSurname)
                 .setContentText(message)
                 .setSubText(email)
+                .addAction(replyAction)
+                .addAction(R.color.colorAccent, "Mark as read", PendingIntent.getBroadcast(
+                        this,
+                        generateRandom(),
+                        actionIntent.putExtra("action", "read").putExtra("user_id", fromUid),
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                ))
                 .setContentIntent(resultPendingIntent)
                 .setOnlyAlertOnce(true)
                 .setLargeIcon(setProfileImage(profileImage))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE);
-        notificationManager.notify(fromUid, generateRandom(), notificationBuilder.build());
+
+        if(!ChatsFragment.isChat){
+            if(ChatActivity.NOTIF_ID != null){
+                if(!ChatActivity.NOTIF_ID.equals(fromUid)){
+                    notificationManager.notify(fromUid, 2, notificationBuilder.build());
+                }
+            }
+            else{
+                notificationManager.notify(fromUid, 2, notificationBuilder.build());
+            }
+        }
     }
 
+    /*
     public void showMessageNotification(Context context, String nameSurname, String profileImage, String fromUid, String email, String clickAction, String message) {
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         final String CHANNEL_ID = "com.ibrhmdurna.chatapp.messages";
@@ -206,6 +328,7 @@ public class NotificationService extends FirebaseMessagingService {
 
         notificationManager.notify(fromUid, 2, notification);
     }
+    */
 
     private void showConfirmNotification(String nameSurname, String profileImage, String fromUid, String email, String clickAction) {
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);

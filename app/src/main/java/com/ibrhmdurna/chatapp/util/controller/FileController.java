@@ -21,7 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.settings.EditAccountActivity;
 import com.ibrhmdurna.chatapp.start.RegisterFinishActivity;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
@@ -362,7 +362,7 @@ public class FileController {
         @Override
         protected synchronized void onPostExecute(String s) {
 
-            FirebaseDatabase.getInstance().getReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(s);
+            Firebase.getInstance().getDatabaseReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(s);
 
             super.onPostExecute(s);
         }
@@ -431,7 +431,7 @@ public class FileController {
             final String newPath = s;
 
             if(newPath != null){
-                final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                final DatabaseReference databaseReference = Firebase.getInstance().getDatabaseReference();
                 databaseReference.keepSynced(true);
 
                 databaseReference.child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(newPath).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -448,6 +448,7 @@ public class FileController {
                                             UniversalImageLoader.setImage(newPath, imageView, null, "file://");
                                             loadingBar.setVisibility(View.GONE);
                                             loadingBar.setIndeterminate(false);
+                                            adapter.notifyDataSetChanged();
                                         }
                                     }
                                 }
