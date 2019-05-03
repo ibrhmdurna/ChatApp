@@ -55,7 +55,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@id/bottom_view"
                 android:layout_marginTop="25dp"
                 android:orientation="vertical">
 
@@ -121,7 +120,7 @@
                         android:id="@+id/friendInfoText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You are friends"
+                        android:text="@string/you_are_friends"
                         android:layout_gravity="center"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
@@ -184,7 +183,7 @@
                         android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:maxLines="1"
-                        android:text="0 Friends"
+                        android:text="@string/_0_friends"
                         android:textSize="16sp"
                         android:textStyle="normal" />
 
@@ -206,7 +205,7 @@
                         android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:maxLines="1"
-                        android:text="0 Mutual F."
+                        android:text="@string/_0_mutual_f"
                         android:textSize="16sp"
                         android:textStyle="normal" />
                 </LinearLayout>
@@ -237,7 +236,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Wants to be your friend?"
+                                android:text="@string/wants_to_be_your_friend"
                                 android:textSize="16sp"
                                 android:textColor="?attr/primaryTextColor"/>
 
@@ -253,7 +252,7 @@
                                     android:layout_width="120dp"
                                     android:layout_height="35dp"
                                     style="@style/CustomButtonStyle"
-                                    android:text="Cancel"
+                                    android:text="@string/cancel"
                                     android:backgroundTint="?attr/backgroundBrushColor"
                                     android:gravity="center"
                                     android:layout_marginEnd="15dp"
@@ -264,7 +263,7 @@
                                     android:layout_width="120dp"
                                     android:layout_height="35dp"
                                     style="@style/CustomButtonStyle"
-                                    android:text="Confirm"
+                                    android:text="@string/confirm"
                                     android:textColor="@android:color/white"
                                     android:gravity="center"
                                     android:layout_marginStart="15dp"
@@ -289,7 +288,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Email"
+                                android:text="@string/email"
                                 android:textColor="?attr/colorAccent"
                                 android:textSize="18sp" />
 
@@ -319,7 +318,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Phone"
+                                android:text="@string/phone"
                                 android:textColor="?attr/colorAccent"
                                 android:textSize="18sp" />
 
@@ -348,7 +347,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Location"
+                                android:text="@string/location"
                                 android:textColor="?attr/colorAccent"
                                 android:textSize="18sp" />
 
@@ -377,7 +376,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Gender"
+                                android:text="@string/gender"
                                 android:textColor="?attr/colorAccent"
                                 android:textSize="18sp" />
 
@@ -406,7 +405,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Birthday"
+                                android:text="@string/birthday"
                                 android:textColor="?attr/colorAccent"
                                 android:textSize="18sp" />
 
@@ -459,7 +458,7 @@
                         android:layout_height="45dp"
                         android:gravity="center"
                         android:layout_centerInParent="true"
-                        android:text="Cancel request"
+                        android:text="@string/cancel_request"
                         android:textColor="@android:color/holo_red_light"
                         android:visibility="gone"
                         android:onClick="onClick"/>
@@ -471,7 +470,7 @@
                         android:layout_height="45dp"
                         android:gravity="center"
                         android:layout_centerInParent="true"
-                        android:text="Add to friends"
+                        android:text="@string/add_to_friends"
                         android:textColor="?attr/colorAccent"
                         android:onClick="onClick"/>
                 </RelativeLayout>

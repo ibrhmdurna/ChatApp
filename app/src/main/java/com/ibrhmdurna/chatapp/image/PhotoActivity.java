@@ -94,7 +94,7 @@ public class PhotoActivity extends AppCompatActivity implements ViewComponentFac
 
         UniversalImageLoader.setImage(path, photoView, null, "file://");
 
-        timeText.setText(GetTimeAgo.getInstance().getMessageAgo(time));
+        timeText.setText(GetTimeAgo.getInstance().getMessageAgo(this, time));
     }
 
     private void toolbarProcess(){

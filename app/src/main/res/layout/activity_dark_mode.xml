@@ -22,7 +22,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleGravity="top|center_horizontal"
-            app:title="Dark Mode"
+            app:title="@string/dark_mode"
             app:expandedTitleTextAppearance="@style/ExpandedTitleTextAppearance"
             app:collapsedTitleTextAppearance="@style/CollapsedTitleTextAppearance"
             app:expandedTitleMarginTop="-100dp">
@@ -74,7 +74,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Use a darker theme to keep your eyes comfortable at night. Dark theme is recommended for your eyes."
+                    android:text="@string/A8S0"
                     android:layout_marginStart="25dp"
                     android:layout_marginEnd="25dp"
                     android:layout_marginTop="15dp"
@@ -96,7 +96,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="Enable"
+                        android:text="@string/enable"
                         android:layout_gravity="center"
                         android:textSize="18sp"
                         android:textColor="?attr/primaryTextColor"/>

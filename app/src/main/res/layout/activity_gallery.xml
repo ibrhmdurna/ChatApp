@@ -24,7 +24,7 @@
             app:expandedTitleMarginTop="-100dp"
             app:expandedTitleTextAppearance="@style/ExpandedTitleTextAppearance"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:title="Gallery"
+            app:title="@string/gallery"
             app:toolbarId="@+id/gallery_toolbar">
 
             <TextView
@@ -75,7 +75,7 @@
             android:id="@+id/no_photos_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No Photos"
+            android:text="@string/no_photos"
             android:textSize="18sp"
             android:gravity="center"
             android:layout_centerInParent="true"

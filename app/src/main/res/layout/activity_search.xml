@@ -24,7 +24,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Search"
+                android:text="@string/search"
                 android:textColor="?attr/primaryTextColor"
                 android:textSize="34sp"
                 android:fontFamily="sans-serif-light"
@@ -53,7 +53,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:textSize="18sp"
-                        android:hint="Search"
+                        android:hint="@string/search"
                         android:background="@android:color/transparent"
                         android:inputType="text"
                         android:imeOptions="actionSearch"/>
@@ -104,7 +104,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No recent searches"
+                android:text="@string/no_recent_searches"
                 android:textSize="18sp"
                 android:textColor="@color/colorDarkGray"
                 android:layout_gravity="center"/>
@@ -126,7 +126,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Recent searches"
+                    android:text="@string/recent_searches"
                     android:fontFamily="sans-serif-light"
                     android:textStyle="bold"
                     android:textSize="15sp"
@@ -163,7 +163,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:backgroundTint="?attr/backgroundCardColor"
-                            android:text="Clear search history"
+                            android:text="@string/clear_search_history"
                             android:fontFamily="sans-serif-light"
                             android:gravity="center"
                             android:textColor="?attr/colorAccent"
@@ -195,7 +195,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Searches"
+                    android:text="@string/searches"
                     android:fontFamily="sans-serif-light"
                     android:textStyle="bold"
                     android:textSize="15sp"
@@ -242,18 +242,18 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_above="@id/mainBottomNavigationView"
             android:background="@drawable/ic_left_circle_view"
             android:translationZ="2dp"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="55dp"/>
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_above="@id/mainBottomNavigationView"
             android:layout_alignParentEnd="true"
             android:background="@drawable/ic_right_circle_view"
             android:translationZ="2dp"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="55dp"/>
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

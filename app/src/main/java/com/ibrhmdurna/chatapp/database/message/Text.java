@@ -24,7 +24,6 @@ public class Text extends MessageStrategy {
         final DatabaseReference messageReference = Firebase.getInstance().getDatabaseReference().child("Messages");
 
         Map chatMap = new HashMap();
-        chatMap.put("last_message_id", message_id);
         chatMap.put("time", ServerValue.TIMESTAMP);
         chatMap.put("seen", false);
         chatMap.put("typing", false);

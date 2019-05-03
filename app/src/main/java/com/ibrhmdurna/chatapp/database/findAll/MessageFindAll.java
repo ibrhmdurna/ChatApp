@@ -72,11 +72,11 @@ public class MessageFindAll implements IFind {
 
         uid = FirebaseAuth.getInstance().getUid();
 
-        Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).limitToLast(PAGE* PAGE_COUNT).addValueEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).limitToLast(PAGE * PAGE_COUNT).addValueEventListener(contentEventListener);
     }
 
     @Override
-    public void getMore(){
+    public void getMore() {
         uid = FirebaseAuth.getInstance().getUid();
 
         Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).limitToLast((PAGE + 1) * PAGE_COUNT).addListenerForSingleValueEvent(moreEventListener);
@@ -98,7 +98,6 @@ public class MessageFindAll implements IFind {
                     message.setMessage_id(snapshot.getKey());
                     messageList.add(message);
                 }
-
 
                 TOTAL_MESSAGE = messageList.size();
 

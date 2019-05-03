@@ -47,7 +47,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="View Profile"
+                        android:text="@string/view_profile"
                         android:textColor="?attr/primaryTextColor"
                         android:textSize="16sp"/>
                 </LinearLayout>
@@ -63,7 +63,7 @@
                     android:id="@+id/delete_device_check"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Delete media from my phone"
+                    android:text="@string/delete_media_from_my_phone"
                     android:layout_marginTop="10dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="20dp"
@@ -95,7 +95,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Clear Chat"
+                        android:text="@string/clear_chat"
                         android:textColor="?attr/primaryTextColor"
                         android:textSize="16sp"
                         android:layout_gravity="center"/>
@@ -123,7 +123,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Delete Chat"
+                        android:text="@string/delete_chat"
                         android:textColor="@android:color/holo_red_light"
                         android:textSize="16sp"/>
                 </LinearLayout>

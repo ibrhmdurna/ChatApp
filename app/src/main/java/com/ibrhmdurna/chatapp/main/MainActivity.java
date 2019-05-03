@@ -34,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Insert;
 import com.ibrhmdurna.chatapp.database.Status;
 import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.models.Chat;
@@ -88,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     private void chatListener(){
         uid = FirebaseAuth.getInstance().getUid();
 
-        Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).removeEventListener(chatEvenListener);
-        Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).addValueEventListener(chatEvenListener);
+        Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).removeEventListener(chatEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).addValueEventListener(chatEventListener);
     }
 
     private void requestListener(){
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         }
     };
 
-    private ValueEventListener chatEvenListener = new ValueEventListener() {
+    private ValueEventListener chatEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             int count = 0;
@@ -448,6 +449,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     protected void onResume() {
         super.onResume();
         Status.getInstance().onConnect();
+        Insert.getInstance().deviceToken(uid);
     }
 
     @Override
@@ -460,7 +462,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     protected void onDestroy() {
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
             Firebase.getInstance().getDatabaseReference().child("Request").child(uid).removeEventListener(requestEventListener);
-            Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).removeEventListener(chatEvenListener);
+            Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).removeEventListener(chatEventListener);
         }
         super.onDestroy();
     }

@@ -21,7 +21,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleGravity="top|center_horizontal"
-            app:title="Friends"
+            app:title="@string/friends"
             app:expandedTitleTextAppearance="@style/ExpandedTitleTextAppearance"
             app:collapsedTitleTextAppearance="@style/CollapsedTitleTextAppearance"
             app:expandedTitleMarginTop="-100dp">
@@ -30,7 +30,7 @@
                 android:id="@+id/friends_title_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Friends"
+                android:text="@string/friends"
                 android:textColor="?attr/primaryTextColor"
                 android:textSize="34sp"
                 android:fontFamily="sans-serif-light"
@@ -63,7 +63,7 @@
                         android:padding="10dp"
                         android:paddingStart="20dp"
                         android:textSize="18sp"
-                        android:hint="Search"
+                        android:hint="@string/search"
                         android:background="@android:color/transparent"
                         android:inputType="text"
                         android:imeOptions="actionSearch"
@@ -135,7 +135,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No Friends"
+                        android:text="@string/no_friends"
                         android:textSize="18sp"
                         android:gravity="center"
                         android:textColor="@color/colorDarkGray"
@@ -183,13 +183,13 @@
                 android:id="@+id/friends_item"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Friends"/>
+                android:text="@string/friends"/>
 
             <android.support.design.widget.TabItem
                 android:id="@+id/mutual_item"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Mutual"/>
+                android:text="@string/mutual"/>
         </android.support.design.widget.TabLayout>
     </RelativeLayout>
 

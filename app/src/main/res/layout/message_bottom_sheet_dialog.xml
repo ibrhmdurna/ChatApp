@@ -13,7 +13,7 @@
            android:id="@+id/sheet_title"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:text="Options"
+           android:text="@string/options"
            android:layout_marginStart="25dp"
            android:layout_marginTop="10dp"
            android:layout_marginBottom="10dp"
@@ -49,7 +49,7 @@
                <TextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="Delete Message"
+                   android:text="@string/delete_message"
                    android:textColor="?attr/primaryTextColor"
                    android:textSize="16sp"
                    android:layout_marginStart="20dp"/>
@@ -73,7 +73,7 @@
                <TextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="Copy Text"
+                   android:text="@string/copy_text"
                    android:textColor="?attr/primaryTextColor"
                    android:textSize="16sp"
                    android:layout_marginStart="20dp"/>

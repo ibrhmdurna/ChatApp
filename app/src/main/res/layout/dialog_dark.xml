@@ -26,7 +26,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dark Mode"
+                    android:text="@string/dark_mode"
                     android:textColor="@android:color/white"
                     android:textSize="20sp"
                     android:paddingStart="25dp"
@@ -57,8 +57,7 @@
                             android:textColor="@android:color/white"
                             android:textSize="16sp"
                             android:layout_marginEnd="15dp"
-                            android:text="Use a darker theme to keep your eyes comfortable at night. Dark theme is recommended for your eyes."/>
-
+                            android:text="@string/A8S0"/>
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -82,7 +81,7 @@
                             android:fontFamily="sans-serif"
                             android:textSize="16sp"
                             android:textColor="@android:color/white"
-                            android:text="Close"
+                            android:text="@string/close"
                             android:textStyle="normal"
                             style="@style/CustomTransparentViewStyle"
                             android:backgroundTint="?attr/colorAccent"
@@ -105,7 +104,7 @@
                             android:gravity="center"
                             android:fontFamily="sans-serif"
                             android:textColor="@android:color/white"
-                            android:text="Dark Mode"
+                            android:text="@string/dark_mode"
                             style="@style/CustomTransparentViewStyle"
                             android:backgroundTint="@color/colorTransparent"
                             android:layout_marginStart="10dp"

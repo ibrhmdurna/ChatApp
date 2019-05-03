@@ -27,7 +27,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_weight="0"
-                android:src="@drawable/ic_avatar_0"/>
+                android:src="@drawable/default_avatar"/>
 
             <TextView
                 android:id="@+id/search_profile_text"
@@ -52,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Name Surname"
+                android:text="@string/chatapp_user"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textSize="18sp"
@@ -62,7 +62,6 @@
                 android:id="@+id/search_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="email"
                 android:maxLines="1"
                 android:ellipsize="end"/>
         </LinearLayout>

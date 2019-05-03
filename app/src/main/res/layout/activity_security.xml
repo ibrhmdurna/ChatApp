@@ -22,7 +22,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleGravity="top|center_horizontal"
-            app:title="Security"
+            app:title="@string/security"
             app:expandedTitleTextAppearance="@style/ExpandedTitleTextAppearance"
             app:collapsedTitleTextAppearance="@style/CollapsedTitleTextAppearance"
             app:expandedTitleMarginTop="-100dp">
@@ -100,7 +100,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:textSize="18sp"
-                            android:hint="Current Password"
+                            android:hint="@string/current_password"
                             android:inputType="textPassword"
                             android:backgroundTint="@color/colorGray"/>
                     </android.support.design.widget.TextInputLayout>
@@ -145,7 +145,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:textSize="18sp"
-                                android:hint="New Password"
+                                android:hint="@string/new_password"
                                 android:inputType="textPassword"
                                 android:backgroundTint="@color/colorGray"/>
                         </android.support.design.widget.TextInputLayout>
@@ -179,7 +179,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:textSize="18sp"
-                                android:hint="Confirm Password"
+                                android:hint="@string/confirm_password"
                                 android:inputType="textPassword"
                                 android:backgroundTint="@color/colorGray"/>
                         </android.support.design.widget.TextInputLayout>
@@ -188,13 +188,13 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="*Must be different with old password"
+                        android:text="@string/must_be_different_with_old_password"
                         android:layout_marginStart="45dp"
                         android:layout_marginTop="10dp"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="*Password must be at least 6 characters"
+                        android:text="@string/password_must_be_at_least_6_characters"
                         android:layout_marginStart="45dp"
                         android:layout_marginTop="10dp"/>
                 </LinearLayout>
@@ -203,7 +203,7 @@
                     android:id="@+id/forgot_password_btn"
                     android:layout_width="200dp"
                     android:layout_height="40dp"
-                    android:text="Forgot My Password"
+                    android:text="@string/forgot_my_password"
                     android:gravity="center"
                     android:textColor="?attr/primaryTextColor"
                     android:layout_gravity="center"
@@ -226,7 +226,6 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_above="@id/mainBottomNavigationView"
             android:background="@drawable/ic_left_circle_view"
             android:translationZ="2dp"
             android:backgroundTint="?attr/backgroundBrushColor"/>
@@ -234,7 +233,6 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_above="@id/mainBottomNavigationView"
             android:layout_alignParentEnd="true"
             android:background="@drawable/ic_right_circle_view"
             android:translationZ="2dp"
@@ -253,7 +251,7 @@
                 android:layout_height="45dp"
                 android:layout_weight="1"
                 android:layout_gravity="center"
-                android:text="Cancel"
+                android:text="@string/cancel"
                 android:gravity="center"
                 android:textColor="@color/selector_transparent_view_text_color"
                 android:layout_marginStart="20dp"
@@ -267,7 +265,7 @@
                 android:layout_height="45dp"
                 android:layout_weight="1"
                 android:layout_gravity="center"
-                android:text="Change"
+                android:text="@string/change"
                 android:gravity="center"
                 android:textColor="@color/selector_transparent_view_text_color"
                 android:layout_marginStart="20dp"

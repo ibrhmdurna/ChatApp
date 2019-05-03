@@ -13,7 +13,7 @@
            android:id="@+id/sheet_title"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:text="Profile picture"
+           android:text="@string/profile_picture"
            android:layout_marginStart="25dp"
            android:layout_marginTop="10dp"
            android:layout_marginBottom="10dp"
@@ -50,7 +50,7 @@
                <TextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="Gallery"
+                   android:text="@string/gallery"
                    android:layout_gravity="center"
                    android:layout_marginTop="10dp"/>
            </LinearLayout>
@@ -74,7 +74,7 @@
                <TextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="Camera"
+                   android:text="@string/camera"
                    android:layout_gravity="center"
                    android:layout_marginTop="10dp"/>
            </LinearLayout>
@@ -99,7 +99,7 @@
                <TextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="Delete Photo"
+                   android:text="@string/delete_photo"
                    android:layout_gravity="center"
                    android:layout_marginTop="10dp"/>
            </LinearLayout>

@@ -22,7 +22,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleGravity="top|center_horizontal"
-            app:title="Login"
+            app:title="@string/login"
             app:expandedTitleTextAppearance="@style/ExpandedTitleTextAppearance"
             app:collapsedTitleTextAppearance="@style/CollapsedTitleTextAppearance"
             app:expandedTitleMarginTop="-100dp">
@@ -98,7 +98,7 @@
                             <android.support.design.widget.TextInputEditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Email"
+                                android:hint="@string/email"
                                 android:inputType="textEmailAddress"
                                 android:backgroundTint="@color/colorLightGray"/>
                         </android.support.design.widget.TextInputLayout>
@@ -128,7 +128,7 @@
                             <android.support.design.widget.TextInputEditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Password"
+                                android:hint="@string/password"
                                 android:inputType="textPassword"
                                 android:backgroundTint="@color/colorLightGray"/>
                         </android.support.design.widget.TextInputLayout>
@@ -138,7 +138,7 @@
                         android:id="@+id/login_remember_check"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Remember me"
+                        android:text="@string/remember_me"
                         android:layout_marginStart="32dp"
                         android:layout_marginTop="5dp"/>
                 </LinearLayout>
@@ -150,7 +150,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="25dp"
                     android:layout_marginBottom="10dp"
-                    android:text="Login"
+                    android:text="@string/login"
                     android:textColor="@color/selector_button_text_color"
                     style="@style/CustomButtonStyle"
                     android:onClick="onClick"
@@ -164,7 +164,7 @@
         android:id="@+id/login_forgot_password_btn"
         android:layout_width="200dp"
         android:layout_height="40dp"
-        android:text="Forgot My Password"
+        android:text="@string/forgot_my_password"
         android:gravity="center"
         android:textColor="?attr/primaryTextColor"
         android:layout_gravity="bottom|center"

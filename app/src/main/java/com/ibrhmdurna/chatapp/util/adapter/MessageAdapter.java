@@ -80,29 +80,30 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+        for(int x = 0; x < messageList.size() - 1; x++){
+
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
+            String currentTime = simpleDateFormat.format(new Date(messageList.get(x).getTime()));
+            String oldTime = simpleDateFormat.format(new Date(messageList.get(x + 1).getTime()));
+
+            if(currentTime.equals(oldTime) && messageList.get(x).getFrom().equals(messageList.get(x + 1).getFrom())){
+                messageList.get(x).setProfileVisibility(false);
+                messageList.get(x + 1).setProfileVisibility(true);
+            }
+            else{
+                messageList.get(x).setProfileVisibility(true);
+            }
+        }
+
+        messageList.get(messageList.size() - 1).setProfileVisibility(true);
+
         switch (viewHolder.getItemViewType()){
             case 0:
                 TextMyMessageViewHolder viewHolder1 = (TextMyMessageViewHolder)viewHolder;
                 viewHolder1.setData(messageList.get(i), i);
                 break;
             case 1:
-                for(int x = 0; x < messageList.size() - 1; x++){
-
-                    @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
-                    String currentTime = simpleDateFormat.format(new Date(messageList.get(x).getTime()));
-                    String oldTime = simpleDateFormat.format(new Date(messageList.get(x + 1).getTime()));
-
-                    if(currentTime.equals(oldTime) && messageList.get(x).getFrom().equals(messageList.get(x + 1).getFrom())){
-                        messageList.get(x).setProfileVisibility(false);
-                        messageList.get(x + 1).setProfileVisibility(true);
-                    }
-                    else{
-                        messageList.get(x).setProfileVisibility(true);
-                    }
-                }
-
-                messageList.get(messageList.size() - 1).setProfileVisibility(true);
-
                 TextMessageViewHolder viewHolder2 = (TextMessageViewHolder)viewHolder;
                 viewHolder2.setData(messageList.get(i), i);
                 break;
@@ -111,23 +112,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 viewHolder3.setData(messageList.get(i), i);
                 break;
             case 3:
-                for(int x = 0; x < messageList.size() - 1; x++){
-
-                    @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
-                    String currentTime = simpleDateFormat.format(new Date(messageList.get(x).getTime()));
-                    String oldTime = simpleDateFormat.format(new Date(messageList.get(x + 1).getTime()));
-
-                    if(currentTime.equals(oldTime) && messageList.get(x).getFrom().equals(messageList.get(x + 1).getFrom())){
-                        messageList.get(x).setProfileVisibility(false);
-                        messageList.get(x + 1).setProfileVisibility(true);
-                    }
-                    else{
-                        messageList.get(x).setProfileVisibility(true);
-                    }
-                }
-
-                messageList.get(messageList.size() - 1).setProfileVisibility(true);
-
                 ImageMessageViewHolder viewHolder4 = (ImageMessageViewHolder)viewHolder;
                 viewHolder4.setData(messageList.get(i), i);
                 break;
@@ -168,6 +152,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private CircleImageView profileImage;
         private RelativeLayout profileLayout;
         private TextView profileText;
+        private TextView messageTimeText;
         private RelativeLayout rootView;
 
         public TextMessageViewHolder(@NonNull View itemView) {
@@ -179,6 +164,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             messageContent = itemView.findViewById(R.id.message_content);
             timeText = itemView.findViewById(R.id.message_time_view);
             rootView = itemView.findViewById(R.id.root_view);
+            messageTimeText = itemView.findViewById(R.id.message_time_text);
         }
 
         public void setData(final Message message, int position){
@@ -197,7 +183,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if(position > 0){
                 Message topMessage = messageList.get(position - 1);
 
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 String messageTime = simpleDateFormat.format(new Date(message.getTime()));
                 String topMessageTime = simpleDateFormat.format(new Date(topMessage.getTime()));
 
@@ -206,27 +192,34 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 else{
                     timeText.setVisibility(View.VISIBLE);
-                    String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
+                    String time = GetTimeAgo.getInstance().getMessageAgo(context, message.getTime());
                     timeText.setText(time);
                 }
             }
             else{
                 timeText.setVisibility(View.VISIBLE);
-                String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
+                String time = GetTimeAgo.getInstance().getMessageAgo(context, message.getTime());
                 timeText.setText(time);
             }
 
             if(message.isProfileVisibility()){
                 profileLayout.setVisibility(View.VISIBLE);
                 profileImageProcess(profileImage, profileText);
+
+                messageTimeText.setVisibility(View.VISIBLE);
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("HH:mm");
+                String nTime = mSimpleDateFormat.format(new Date(message.getTime()));
+                messageTimeText.setText(nTime);
             }
             else{
                 profileLayout.setVisibility(View.INVISIBLE);
+
+                messageTimeText.setVisibility(View.GONE);
             }
 
             if(position == messageList.size() - 1){
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                lp.setMargins(0, 0, 0, 40);
+                lp.setMargins(0, 0, 0, 30);
                 rootView.setLayoutParams(lp);
             }
             else {
@@ -243,6 +236,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private TextView timeText;
         private ImageView sendIcon;
         private LinearLayout seenLayout;
+        private TextView messageTimeText;
         private RelativeLayout rootView;
 
         public TextMyMessageViewHolder(@NonNull View itemView) {
@@ -253,6 +247,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             seenLayout = itemView.findViewById(R.id.message_seen_layout);
             sendIcon = itemView.findViewById(R.id.message_send_icon);
             rootView = itemView.findViewById(R.id.root_view);
+            messageTimeText = itemView.findViewById(R.id.message_time_text);
         }
 
         public void setData(final Message message, int position){
@@ -288,10 +283,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 seenLayout.setVisibility(View.GONE);
             }
 
+
             if(position > 0){
                 Message topMessage = messageList.get(position - 1);
 
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 String messageTime = simpleDateFormat.format(new Date(message.getTime()));
                 String topMessageTime = simpleDateFormat.format(new Date(topMessage.getTime()));
 
@@ -300,14 +296,24 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 else{
                     timeText.setVisibility(View.VISIBLE);
-                    String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
+                    String time = GetTimeAgo.getInstance().getMessageAgo(context, message.getTime());
                     timeText.setText(time);
                 }
             }
             else{
                 timeText.setVisibility(View.VISIBLE);
-                String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
+                String time = GetTimeAgo.getInstance().getMessageAgo(context, message.getTime());
                 timeText.setText(time);
+            }
+
+            if(message.isProfileVisibility()){
+                messageTimeText.setVisibility(View.VISIBLE);
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("HH:mm");
+                String nTime = mSimpleDateFormat.format(new Date(message.getTime()));
+                messageTimeText.setText(nTime);
+            }
+            else{
+                messageTimeText.setVisibility(View.GONE);
             }
 
             if(position == messageList.size() - 1){
@@ -318,7 +324,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 else{
                     RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                    lp.setMargins(0, 0, 0, 40);
+                    lp.setMargins(0, 0, 0, 30);
                     rootView.setLayoutParams(lp);
                 }
             }
@@ -361,6 +367,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private RelativeLayout rootView;
         private TextView imageSizeText;
         private LinearLayout downloadLayout;
+        private TextView messageTimeText;
         private SpinKitView loadingBar;
 
         public ImageMyMessageViewHolder(@NonNull View itemView) {
@@ -375,6 +382,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             imageSizeText = itemView.findViewById(R.id.image_size_text);
             downloadLayout = itemView.findViewById(R.id.image_download_layout);
             loadingBar = itemView.findViewById(R.id.downloading_progress);
+            messageTimeText = itemView.findViewById(R.id.message_time_text);
         }
 
         public void setData(final Message message, int position){
@@ -484,7 +492,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if(position > 0){
                 Message topMessage = messageList.get(position - 1);
 
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 String messageTime = simpleDateFormat.format(new Date(message.getTime()));
                 String topMessageTime = simpleDateFormat.format(new Date(topMessage.getTime()));
 
@@ -493,14 +501,24 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 else{
                     timeText.setVisibility(View.VISIBLE);
-                    String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
+                    String time = GetTimeAgo.getInstance().getMessageAgo(context, message.getTime());
                     timeText.setText(time);
                 }
             }
             else{
                 timeText.setVisibility(View.VISIBLE);
-                String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
+                String time = GetTimeAgo.getInstance().getMessageAgo(context, message.getTime());
                 timeText.setText(time);
+            }
+
+            if(message.isProfileVisibility()){
+                messageTimeText.setVisibility(View.VISIBLE);
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("HH:mm");
+                String nTime = mSimpleDateFormat.format(new Date(message.getTime()));
+                messageTimeText.setText(nTime);
+            }
+            else{
+                messageTimeText.setVisibility(View.GONE);
             }
 
             if(position == messageList.size() - 1){
@@ -511,7 +529,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 else{
                     RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                    lp.setMargins(0, 0, 0, 40);
+                    lp.setMargins(0, 0, 0, 30);
                     rootView.setLayoutParams(lp);
                 }
             }
@@ -557,6 +575,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private TextView imageSizeText;
         private LinearLayout downloadLayout;
         private SpinKitView loadingBar;
+        private TextView messageTimeText;
 
         public ImageMessageViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -571,6 +590,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             imageSizeText = itemView.findViewById(R.id.image_size_text);
             downloadLayout = itemView.findViewById(R.id.image_download_layout);
             loadingBar = itemView.findViewById(R.id.downloading_progress);
+            messageTimeText = itemView.findViewById(R.id.message_time_text);
         }
 
         public void setData(final Message message, int position){
@@ -614,7 +634,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
 
-            imageView.setImageDrawable(context.getDrawable(R.drawable.ic_photo_default_background));
+            imageView.setImageDrawable(context.getDrawable(R.drawable.ic_photo_accent_default_background));
             loadingBar.setIndeterminate(false);
             loadingBar.setVisibility(View.GONE);
             imageView.setEnabled(false);
@@ -660,7 +680,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if(position > 0){
                 Message topMessage = messageList.get(position - 1);
 
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 String messageTime = simpleDateFormat.format(new Date(message.getTime()));
                 String topMessageTime = simpleDateFormat.format(new Date(topMessage.getTime()));
 
@@ -669,27 +689,33 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 else{
                     timeText.setVisibility(View.VISIBLE);
-                    String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
+                    String time = GetTimeAgo.getInstance().getMessageAgo(context, message.getTime());
                     timeText.setText(time);
                 }
             }
             else{
                 timeText.setVisibility(View.VISIBLE);
-                String time = GetTimeAgo.getInstance().getMessageAgo(message.getTime());
+                String time = GetTimeAgo.getInstance().getMessageAgo(context, message.getTime());
                 timeText.setText(time);
             }
 
             if(message.isProfileVisibility()){
                 profileLayout.setVisibility(View.VISIBLE);
                 profileImageProcess(profileImage, profileText);
+
+                messageTimeText.setVisibility(View.VISIBLE);
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("HH:mm");
+                String nTime = mSimpleDateFormat.format(new Date(message.getTime()));
+                messageTimeText.setText(nTime);
             }
             else{
                 profileLayout.setVisibility(View.INVISIBLE);
+                messageTimeText.setVisibility(View.GONE);
             }
 
             if(position == messageList.size() - 1){
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                lp.setMargins(0, 0, 0, 40);
+                lp.setMargins(0, 0, 0, 30);
                 rootView.setLayoutParams(lp);
             }
             else {

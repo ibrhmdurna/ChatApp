@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/write_item"
-        android:title="Write Message"
+        android:title="@string/write_message"
         android:icon="@drawable/ic_write_icon"
         app:showAsAction="always"/>
     <item android:id="@+id/search_item"
-        android:title="Search"
+        android:title="@string/search"
         android:icon="@drawable/ic_search_icon"
         app:showAsAction="ifRoom"/>
 </menu>

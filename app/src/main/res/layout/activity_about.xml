@@ -16,7 +16,7 @@
         app:contentInsetStartWithNavigation="0dp"
         android:layout_gravity="bottom"
         app:titleTextAppearance="@style/CollapsedTitleTextAppearance"
-        app:title="About"
+        app:title="@string/about"
         app:titleTextColor="?attr/primaryTextColor"/>
 
     <RelativeLayout

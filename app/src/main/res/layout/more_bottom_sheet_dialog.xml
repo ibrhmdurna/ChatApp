@@ -13,7 +13,7 @@
            android:id="@+id/sheet_title"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:text="More Options"
+           android:text="@string/more_options"
            android:layout_marginStart="25dp"
            android:layout_marginTop="10dp"
            android:layout_marginBottom="10dp"
@@ -48,7 +48,7 @@
                <TextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="Share"
+                   android:text="@string/share"
                    android:textColor="?attr/primaryTextColor"
                    android:textSize="16sp"
                    android:layout_marginStart="20dp"/>
@@ -60,7 +60,8 @@
                android:layout_height="wrap_content"
                android:orientation="horizontal"
                android:padding="20dp"
-               android:foreground="?attr/selectableItemBackground">
+               android:foreground="?attr/selectableItemBackground"
+               android:visibility="gone">
 
                <ImageView
                    android:layout_width="18dp"
@@ -83,7 +84,8 @@
                android:layout_height="wrap_content"
                android:orientation="horizontal"
                android:padding="20dp"
-               android:foreground="?attr/selectableItemBackground">
+               android:foreground="?attr/selectableItemBackground"
+               android:visibility="gone">
 
                <ImageView
                    android:layout_width="18dp"
@@ -119,7 +121,7 @@
                <TextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="Delete Friend"
+                   android:text="@string/delete_friend"
                    android:textColor="?attr/primaryTextColor"
                    android:textSize="16sp"
                    android:layout_marginStart="20dp"/>

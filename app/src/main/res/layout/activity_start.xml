@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Are you ready to join us! Register now and find your friends."
+            android:text="@string/start_helper_text"
             android:textSize="18sp"
             android:textColor="?attr/primaryTextColor"/>
 
@@ -39,7 +39,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:onClick="onClick"
-            android:text="Create Account"
+            android:text="@string/create_account"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
@@ -53,7 +53,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Do you already have an account?"/>
+            android:text="@string/do_you_already_have_an_account"/>
 
         <TextView
             android:id="@+id/have_account_btn"
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="5dp"
-            android:text="Login"
+            android:text="@string/login"
             android:textColor="@color/selector_item_accent_color"
             android:onClick="onClick"/>
     </LinearLayout>

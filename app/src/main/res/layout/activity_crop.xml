@@ -8,7 +8,8 @@
     android:fitsSystemWindows="true"
     tools:context=".image.CropActivity">
 
-    <com.isseiaoki.simplecropview.CropImageView xmlns:custom="http://schemas.android.com/apk/res-auto"
+    <com.isseiaoki.simplecropview.CropImageView
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
         android:id="@+id/crop_image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,7 +36,7 @@
             android:backgroundTint="@android:color/black"
             android:gravity="center"
             android:onClick="onClick"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textColor="?attr/colorAccent" />
 
         <TextView
@@ -50,7 +51,7 @@
             android:backgroundTint="@android:color/black"
             android:gravity="center"
             android:onClick="onClick"
-            android:text="Crop"
+            android:text="@string/crop"
             android:textColor="?attr/colorAccent" />
     </LinearLayout>
 </RelativeLayout>

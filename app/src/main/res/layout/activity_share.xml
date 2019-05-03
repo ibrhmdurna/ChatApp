@@ -116,7 +116,7 @@
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:paddingEnd="85dp"
-                android:hint="Add title..."
+                android:hint="@string/add_title"
                 android:layout_alignParentBottom="true"
                 android:inputType="textMultiLine|textCapSentences"
                 android:scrollbars="vertical"

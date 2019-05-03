@@ -16,10 +16,12 @@
             android:id="@+id/message_time_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Time"
             android:textSize="13sp"
             android:gravity="center"
-            android:padding="6dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
             android:layout_margin="10dp"
             android:layout_gravity="center"
             android:background="@drawable/gray_rounded_background"
@@ -32,7 +34,18 @@
             android:layout_gravity="end"
             android:orientation="horizontal"
             android:paddingEnd="15dp"
-            tools:ignore="RtlSymmetry">
+            tools:ignore="RtlSymmetry"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp">
+
+            <TextView
+                android:id="@+id/message_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_gravity="bottom"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="1dp"/>
 
             <LinearLayout
                 android:layout_width="240dp"
@@ -40,8 +53,6 @@
                 android:orientation="vertical"
                 android:background="@drawable/my_ripple_message_background"
                 android:padding="5dp"
-                android:layout_marginTop="1dp"
-                android:layout_marginBottom="1dp"
                 android:layout_gravity="end">
 
                 <RelativeLayout
@@ -98,14 +109,12 @@
                         app:riv_corner_radius="24dp"
                         android:src="@drawable/ic_photo_default_background"
                         android:transitionName="messagePhoto"/>
-
                 </RelativeLayout>
 
                 <com.vanniktech.emoji.EmojiTextView
                     android:id="@+id/message_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Content"
                     android:maxWidth="240dp"
                     android:textSize="15sp"
                     android:layout_marginStart="10dp"
@@ -123,8 +132,7 @@
                 android:background="@drawable/ic_send_icon"
                 android:backgroundTint="?attr/colorAccent"
                 android:layout_gravity="bottom"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="4dp"/>
+                android:layout_marginStart="5dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -133,11 +141,15 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="end"
-            android:layout_marginEnd="20dp"
-            android:padding="5dp"
+            android:layout_marginEnd="15dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:background="@drawable/gray_rounded_background"
             android:backgroundTint="?attr/backgroundBrushColor"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:layout_marginTop="5dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -149,8 +161,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Seen"
-                android:textSize="13sp"/>
+                android:textSize="13sp"
+                android:text="@string/seen"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

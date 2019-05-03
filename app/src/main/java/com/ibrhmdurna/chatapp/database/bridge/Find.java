@@ -19,7 +19,7 @@ public class Find extends AbstractFind {
 
     @Override
     public void getMore() {
-        IFind.getContent();
+        IFind.getMore();
     }
 
     @Override

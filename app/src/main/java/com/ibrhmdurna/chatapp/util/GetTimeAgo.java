@@ -1,6 +1,9 @@
 package com.ibrhmdurna.chatapp.util;
 
+import android.content.Context;
 import android.text.format.DateFormat;
+
+import com.ibrhmdurna.chatapp.R;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -20,42 +23,34 @@ public class GetTimeAgo {
         return instance;
     }
 
-    public String getMessageAgo(Long time){
+    public String getMessageAgo(Context context, Long time){
 
         Calendar mTime = Calendar.getInstance();
         mTime.setTimeInMillis(time);
 
         Calendar now = Calendar.getInstance();
 
-        String timeFormatString;
         String dateTimeFormatString;
-        String yearTimeFormatString;
 
         String language = Locale.getDefault().getLanguage();
         if(language.equals("tr")) {
-            timeFormatString = "HH:mm";
-            dateTimeFormatString = "d MMMM HH:mm";
-            yearTimeFormatString = "dd/MM/yy HH:mm";
+            dateTimeFormatString = "d MMMM yyyy";
         }else{
-            timeFormatString = "h:mm aa";
-            dateTimeFormatString = "d MMMM h:mm aa";
-            yearTimeFormatString = "dd/MM/yy h:mm aa";
+            dateTimeFormatString = "MMMM d, yyyy";
         }
 
-        if(now.get(Calendar.YEAR) != mTime.get(Calendar.YEAR)){
-            return DateFormat.format(yearTimeFormatString, mTime).toString();
-        } else if (now.get(Calendar.DATE) == mTime.get(Calendar.DATE)
+        if (now.get(Calendar.DATE) == mTime.get(Calendar.DATE)
                 && now.get(Calendar.MONTH) == mTime.get(Calendar.MONTH)) {
-            return "Today " + DateFormat.format(timeFormatString, mTime);
+            return context.getString(R.string.today);
         } else if (now.get(Calendar.DATE) - mTime.get(Calendar.DATE) == 1
                 && now.get(Calendar.MONTH) == mTime.get(Calendar.MONTH)){
-            return "Yesterday " + DateFormat.format(timeFormatString, mTime);
+            return context.getString(R.string.yesterday);
         } else {
             return DateFormat.format(dateTimeFormatString, mTime).toString();
         }
     }
 
-    public String getLastSeenAgo(Long time){
+    public String getLastSeenAgo(Context context, Long time){
 
         Calendar mTime = Calendar.getInstance();
         mTime.setTimeInMillis(time);
@@ -68,24 +63,24 @@ public class GetTimeAgo {
         String language = Locale.getDefault().getLanguage();
         if(language.equals("tr")) {
             timeFormatString = "HH:mm";
-            dateTimeFormatString = "dd/MM/yy HH:mm";
+            dateTimeFormatString = "dd/MM/yy, HH:mm";
         }else{
             timeFormatString = "h:mm aa";
-            dateTimeFormatString = "MM/dd/YY HH:mm aa";
+            dateTimeFormatString = "MM/dd/YY, HH:mm aa";
         }
 
         if(now.get(Calendar.DATE) == mTime.get(Calendar.DATE)
                 && now.get(Calendar.MONTH) == mTime.get(Calendar.MONTH))
-            return "Last seen today " + DateFormat.format(timeFormatString, mTime);
+            return context.getString(R.string.last_seen_today) + " " + DateFormat.format(timeFormatString, mTime);
         else if (now.get(Calendar.DATE) - mTime.get(Calendar.DATE) == 1
                 && now.get(Calendar.MONTH) == mTime.get(Calendar.MONTH)){
-            return "Last seen yesterday " + DateFormat.format(timeFormatString, mTime);
+            return context.getString(R.string.last_seen_yesterday) + " " + DateFormat.format(timeFormatString, mTime);
         } else {
-            return "Last seen " + DateFormat.format(dateTimeFormatString, mTime).toString();
+            return context.getString(R.string.last_seen) + " " + DateFormat.format(dateTimeFormatString, mTime).toString();
         }
     }
 
-    public String getChatTimeAgo(Long time){
+    public String getChatTimeAgo(Context context, Long time){
         Calendar mTime = Calendar.getInstance();
         mTime.setTimeInMillis(time);
 
@@ -97,17 +92,17 @@ public class GetTimeAgo {
         String language = Locale.getDefault().getLanguage();
         if(language.equals("tr")) {
             timeFormatString = "HH:mm";
-            dateTimeFormatString = "dd/MM/yy";
+            dateTimeFormatString = "dd.MM.yy";
         }else{
             timeFormatString = "h:mm aa";
-            dateTimeFormatString = "dd/MM/yy";
+            dateTimeFormatString = "MM/dd/yy";
         }
         if (now.get(Calendar.DATE) == mTime.get(Calendar.DATE)
                 && now.get(Calendar.MONTH) == mTime.get(Calendar.MONTH)) {
             return DateFormat.format(timeFormatString, mTime).toString();
         } else if (now.get(Calendar.DATE) - mTime.get(Calendar.DATE) == 1
                 && now.get(Calendar.MONTH) == mTime.get(Calendar.MONTH)){
-            return "Yesterday";
+            return context.getString(R.string.yesterday);
         } else {
             return DateFormat.format(dateTimeFormatString, mTime).toString();
         }

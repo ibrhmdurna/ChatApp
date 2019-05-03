@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/messages_item"
-        android:title="Chats"
+        android:title="@string/chats"
         android:icon="@drawable/ic_messages_icon"
         />
     <item android:id="@+id/friends_item"
-        android:title="Friends"
+        android:title="@string/friends"
         android:icon="@drawable/ic_friends_icon"/>
 
     <item android:id="@+id/requests_item"
-        android:title="Requests"
+        android:title="@string/requests"
         android:icon="@drawable/ic_request_icon"/>
 
     <item android:id="@+id/account_item"
-        android:title="Account"
+        android:title="@string/account"
         android:icon="@drawable/ic_account_icon"/>
 </menu>

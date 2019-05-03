@@ -145,10 +145,6 @@ public class ChatFindInfo implements IFind {
 
                         }
                     });
-
-                    if(lastSeen.getVisibility() == View.VISIBLE){
-
-                    }
                 }
                 else{
                     onlineListener(account);
@@ -182,8 +178,6 @@ public class ChatFindInfo implements IFind {
 
                 }
             });
-
-
         }
         else{
             Handler h = new Handler();
@@ -208,7 +202,7 @@ public class ChatFindInfo implements IFind {
                                                         lastSeen.setText("Online");
                                                     }
                                                     else{
-                                                        String lastSeenTime = GetTimeAgo.getInstance().getLastSeenAgo(account.getLast_seen());
+                                                        String lastSeenTime = GetTimeAgo.getInstance().getLastSeenAgo(context, account.getLast_seen());
                                                         lastSeen.setText(lastSeenTime);
                                                     }
                                                 }

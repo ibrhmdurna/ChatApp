@@ -115,7 +115,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).addValueEventListener(messageEventListener);
             Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).child(chatUid).child("typing").addValueEventListener(chatEventListener);
 
-            String chatTime = GetTimeAgo.getInstance().getChatTimeAgo(chat.getTime());
+            String chatTime = GetTimeAgo.getInstance().getChatTimeAgo(context.getContext(), chat.getTime());
             time.setText(chatTime);
             timeAccentText.setText(chatTime);
 

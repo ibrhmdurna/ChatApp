@@ -17,7 +17,10 @@
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:gravity="center"
-            android:padding="6dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
             android:layout_margin="10dp"
             android:layout_gravity="center"
             android:background="@drawable/gray_rounded_background"
@@ -29,20 +32,22 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingStart="15sp"
-            tools:ignore="RtlSymmetry">
+            tools:ignore="RtlSymmetry"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp">
 
             <RelativeLayout
                 android:id="@+id/message_profile_layout"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_marginEnd="10dp"
                 android:layout_gravity="bottom"
                 android:visibility="invisible">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/message_profile_image"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     app:civ_border_color="?attr/searchColor"
                     app:civ_border_width="1dp"
                     android:layout_centerInParent="true"
@@ -63,9 +68,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@drawable/ripple_message_background"
-                android:padding="5dp"
-                android:layout_marginTop="1dp"
-                android:layout_marginBottom="1dp">
+                android:padding="5dp">
 
                 <RelativeLayout
                     android:layout_width="240dp"
@@ -108,7 +111,7 @@
                         android:indeterminate="true"
                         android:visibility="gone"
                         style="@style/SpinKitView.Circle"
-                        app:SpinKit_Color="?attr/colorAccent"
+                        app:SpinKit_Color="@android:color/white"
                         android:translationZ="2dp"/>
 
                     <com.makeramen.roundedimageview.RoundedImageView
@@ -119,7 +122,7 @@
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         app:riv_corner_radius="24dp"
-                        android:src="@drawable/ic_photo_default_background"
+                        android:src="@drawable/ic_photo_accent_default_background"
                         android:saveEnabled="false"/>
                 </RelativeLayout>
 
@@ -128,7 +131,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxWidth="240dp"
-                android:text="Content"
                 android:textSize="15sp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
@@ -136,6 +138,15 @@
                 android:layout_marginBottom="5dp"
                 android:textColor="@android:color/white"/>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/message_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="1dp"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

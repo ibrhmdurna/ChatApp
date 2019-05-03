@@ -29,7 +29,7 @@
                     android:id="@+id/delete_device_check"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Delete media from my phone"
+                    android:text="@string/delete_media_from_my_phone"
                     android:layout_marginTop="20dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="20dp"
@@ -68,7 +68,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Delete Message"
+                        android:text="@string/delete_message"
                         android:textColor="?attr/primaryTextColor"
                         android:textSize="16sp"/>
                 </LinearLayout>
@@ -94,7 +94,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Unsend Message"
+                        android:text="@string/unsend_message"
                         android:textColor="?attr/primaryTextColor"
                         android:textSize="16sp"/>
                 </LinearLayout>
@@ -121,7 +121,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Copy Text"
+                        android:text="@string/copy_text"
                         android:textColor="?attr/primaryTextColor"
                         android:textSize="16sp"/>
                 </LinearLayout>

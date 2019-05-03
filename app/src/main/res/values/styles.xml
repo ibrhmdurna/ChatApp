@@ -16,7 +16,8 @@
         <item name="searchColor">@color/colorLightGray</item>
         <item name="extColor">@color/colorLightGray</item>
         <item name="colorControlNormal">@color/colorDarkGray</item>
-        <item name="photoBackgroundColor">#A5A5A5</item>
+        <item name="photoBackgroundColor">#B4B4B4</item>
+        <item name="colorAccentHighLight">@color/colorAccentHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme" parent="Theme.AppCompat.NoActionBar">
@@ -38,6 +39,7 @@
         <item name="extColor">@color/colorLightBlack</item>
         <item name="colorControlNormal">@color/colorGray</item>
         <item name="photoBackgroundColor">#2D2D2D</item>
+        <item name="colorAccentHighLight">@color/colorAccentHighLight</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
@@ -63,71 +65,88 @@
     <!--Light THEME-->
     <style name="AppTheme.LightTheme.OfficialBlue" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorOfficialBlue</item>
+        <item name="colorAccentHighLight">@color/colorOfficialBlueHighLight</item>
     </style>
 
     <style name="AppTheme.LightTheme.Blue" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorBlue</item>
+        <item name="colorAccentHighLight">@color/colorBlueHighLight</item>
     </style>
 
     <style name="AppTheme.LightTheme.Indigo" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorIndigo</item>
+        <item name="colorAccentHighLight">@color/colorIndigoHighLight</item>
     </style>
 
     <style name="AppTheme.LightTheme.DeepPurple" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorDeepPurple</item>
+        <item name="colorAccentHighLight">@color/colorDeepPurpleHighLight</item>
     </style>
 
     <style name="AppTheme.LightTheme.Purple" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorPurple</item>
+        <item name="colorAccentHighLight">@color/colorPurpleHighLight</item>
     </style>
 
     <style name="AppTheme.LightTheme.LightPurple" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorLightPurple</item>
+        <item name="colorAccentHighLight">@color/colorLightPurpleHighLight</item>
     </style>
 
     <style name="AppTheme.LightTheme.Pink" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorPink</item>
+        <item name="colorAccentHighLight">@color/colorPinkHighLight</item>
     </style>
 
     <style name="AppTheme.LightTheme.Red" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorRed</item>
+        <item name="colorAccentHighLight">@color/colorRedHighLight</item>
     </style>
 
     <style name="AppTheme.LightTheme.DeepOrange" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorDeepOrange</item>
+        <item name="colorAccentHighLight">@color/colorDeepOrangeHighLight</item>
     </style>
 
     <style name="AppTheme.LightTheme.ExtraOrange" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorExtraOrange</item>
+        <item name="colorAccentHighLight">@color/colorExtraOrangeHighLight</item>
     </style>
 
     <style name="AppTheme.LightTheme.Orange" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorOrange</item>
+        <item name="colorAccentHighLight">@color/colorOrangeHighLight</item>
     </style>
 
     <style name="AppTheme.LightTheme.Teal" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorTeal</item>
+        <item name="colorAccentHighLight">@color/colorTealHighLight</item>
     </style>
 
     <style name="AppTheme.LightTheme.Cyan" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorCyan</item>
+        <item name="colorAccentHighLight">@color/colorCyanHighLight</item>
     </style>
 
     <style name="AppTheme.LightTheme.LightGreen" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorLightGreen</item>
+        <item name="colorAccentHighLight">@color/colorLightGreenHighLight</item>
     </style>
 
     <style name="AppTheme.LightTheme.OfficialGreen" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorOfficialGreen</item>
+        <item name="colorAccentHighLight">@color/colorOfficialGreenHighLight</item>
     </style>
 
     <style name="AppTheme.LightTheme.Green" parent="AppTheme.LightTheme">
         <item name="colorAccent">@color/colorGreen</item>
+        <item name="colorAccentHighLight">@color/colorGreenHighLight</item>
     </style>
 
     <!--Dark THEME-->
     <style name="AppTheme.DarkTheme.OfficialBlue" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorOfficialBlue</item>
+        <item name="colorAccentHighLight">@color/colorOfficialBlueHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.OfficialBlue.Transparent" parent="AppTheme.DarkTheme">
@@ -137,10 +156,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorOfficialBlue</item>
+        <item name="colorAccentHighLight">@color/colorOfficialBlueHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Blue" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorBlue</item>
+        <item name="colorAccentHighLight">@color/colorBlueHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Blue.Transparent" parent="AppTheme.DarkTheme">
@@ -150,10 +171,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorBlue</item>
+        <item name="colorAccentHighLight">@color/colorBlueHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Indigo" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorIndigo</item>
+        <item name="colorAccentHighLight">@color/colorIndigoHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Indigo.Transparent" parent="AppTheme.DarkTheme">
@@ -163,10 +186,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorIndigo</item>
+        <item name="colorAccentHighLight">@color/colorIndigoHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.DeepPurple" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorDeepPurple</item>
+        <item name="colorAccentHighLight">@color/colorDeepPurpleHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.DeepPurple.Transparent" parent="AppTheme.DarkTheme">
@@ -176,10 +201,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorDeepPurple</item>
+        <item name="colorAccentHighLight">@color/colorDeepPurpleHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Purple" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorPurple</item>
+        <item name="colorAccentHighLight">@color/colorPurpleHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Purple.Transparent" parent="AppTheme.DarkTheme">
@@ -189,10 +216,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorPurple</item>
+        <item name="colorAccentHighLight">@color/colorPurpleHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.LightPurple" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorLightPurple</item>
+        <item name="colorAccentHighLight">@color/colorLightPurpleHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.LightPurple.Transparent" parent="AppTheme.DarkTheme">
@@ -202,10 +231,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorLightPurple</item>
+        <item name="colorAccentHighLight">@color/colorLightPurpleHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Pink" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorPink</item>
+        <item name="colorAccentHighLight">@color/colorPinkHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Pink.Transparent" parent="AppTheme.DarkTheme">
@@ -215,10 +246,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorPink</item>
+        <item name="colorAccentHighLight">@color/colorPinkHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Red" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorRed</item>
+        <item name="colorAccentHighLight">@color/colorRedHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Red.Transparent" parent="AppTheme.DarkTheme">
@@ -228,10 +261,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorRed</item>
+        <item name="colorAccentHighLight">@color/colorRedHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.DeepOrange" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorDeepOrange</item>
+        <item name="colorAccentHighLight">@color/colorDeepOrangeHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.DeepOrange.Transparent" parent="AppTheme.DarkTheme">
@@ -241,10 +276,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorDeepOrange</item>
+        <item name="colorAccentHighLight">@color/colorDeepOrangeHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.ExtraOrange" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorExtraOrange</item>
+        <item name="colorAccentHighLight">@color/colorExtraOrangeHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.ExtraOrange.Transparent" parent="AppTheme.DarkTheme">
@@ -254,10 +291,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorExtraOrange</item>
+        <item name="colorAccentHighLight">@color/colorExtraOrangeHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Orange" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorOrange</item>
+        <item name="colorAccentHighLight">@color/colorOrangeHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Orange.Transparent" parent="AppTheme.DarkTheme">
@@ -267,10 +306,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorOrange</item>
+        <item name="colorAccentHighLight">@color/colorOrangeHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Teal" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorTeal</item>
+        <item name="colorAccentHighLight">@color/colorTealHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Teal.Transparent" parent="AppTheme.DarkTheme">
@@ -280,10 +321,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorTeal</item>
+        <item name="colorAccentHighLight">@color/colorTealHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Cyan" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorCyan</item>
+        <item name="colorAccentHighLight">@color/colorCyanHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Cyan.Transparent" parent="AppTheme.DarkTheme">
@@ -293,10 +336,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorCyan</item>
+        <item name="colorAccentHighLight">@color/colorCyanHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.LightGreen" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorLightGreen</item>
+        <item name="colorAccentHighLight">@color/colorLightGreenHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.LightGreen.Transparent" parent="AppTheme.DarkTheme">
@@ -306,10 +351,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorLightGreen</item>
+        <item name="colorAccentHighLight">@color/colorLightGreenHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.OfficialGreen" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorOfficialGreen</item>
+        <item name="colorAccentHighLight">@color/colorOfficialGreenHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.OfficialGreen.Transparent" parent="AppTheme.DarkTheme">
@@ -319,10 +366,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorOfficialGreen</item>
+        <item name="colorAccentHighLight">@color/colorOfficialGreenHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Green" parent="AppTheme.DarkTheme">
         <item name="colorAccent">@color/colorGreen</item>
+        <item name="colorAccentHighLight">@color/colorGreenHighLight</item>
     </style>
 
     <style name="AppTheme.DarkTheme.Green.Transparent" parent="AppTheme.DarkTheme">
@@ -332,6 +381,7 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="colorAccent">@color/colorGreen</item>
+        <item name="colorAccentHighLight">@color/colorGreenHighLight</item>
     </style>
 
     <!--

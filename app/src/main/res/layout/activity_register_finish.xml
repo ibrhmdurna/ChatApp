@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Almost Done!"
+            android:text="@string/almost_done"
             android:textSize="24sp"
             android:textColor="?attr/primaryTextColor"/>
 
@@ -39,7 +39,6 @@
                 android:id="@+id/profile_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="A"
                 android:textSize="40sp"
                 android:translationZ="1dp"
                 android:textColor="@android:color/white"
@@ -57,7 +56,7 @@
             android:id="@+id/change_profile_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Change Photo"
+            android:text="@string/change_photo"
             android:layout_gravity="center"
             android:textSize="18sp"
             android:padding="10dp"
@@ -90,7 +89,7 @@
             android:layout_height="45dp"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:text="Back"
+            android:text="@string/back"
             android:gravity="center"
             android:textColor="?attr/colorAccent"
             android:layout_marginStart="20dp"
@@ -104,7 +103,7 @@
             android:layout_height="45dp"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:text="Finish!"
+            android:text="@string/_finish"
             android:gravity="center"
             android:textColor="?attr/colorAccent"
             android:layout_marginStart="20dp"
@@ -112,26 +111,4 @@
             style="@style/CustomTransparentViewStyle"
             android:onClick="onClick"/>
     </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="79dp"
-        android:layout_alignParentBottom="true">
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_above="@id/mainBottomNavigationView"
-            android:background="@drawable/ic_left_circle_view"
-            android:translationZ="2dp"/>
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_above="@id/mainBottomNavigationView"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/ic_right_circle_view"
-            android:translationZ="2dp"/>
-
-    </RelativeLayout>
 </RelativeLayout>

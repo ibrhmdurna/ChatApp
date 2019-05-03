@@ -16,10 +16,13 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.Person;
 import android.support.v4.app.RemoteInput;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.IconCompat;
 import android.text.Html;
 
@@ -246,90 +249,6 @@ public class NotificationService extends FirebaseMessagingService {
         }
     }
 
-    /*
-    public void showMessageNotification(Context context, String nameSurname, String profileImage, String fromUid, String email, String clickAction, String message) {
-        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        final String CHANNEL_ID = "com.ibrhmdurna.chatapp.messages";
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, "Messages",
-                    NotificationManager.IMPORTANCE_HIGH);
-
-            notificationChannel.setDescription("Messages Notification");
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.WHITE);
-            notificationChannel.enableVibration(true);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
-        Intent resultIntent = new Intent(clickAction);
-        resultIntent.putExtra("user_id", fromUid);
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addNextIntentWithParentStack(resultIntent);
-
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
-                generateRandom(),
-                PendingIntent.FLAG_UPDATE_CURRENT
-        );
-        RemoteInput remoteInput = new RemoteInput.Builder("key_text_reply")
-                .setLabel("Reply")
-                .build();
-
-        Intent actionIntent = new Intent(context, NotificationReceiver.class);
-        actionIntent.putExtra("user_id", fromUid);
-        actionIntent.putExtra("action", "reply");
-        PendingIntent replyPendingIntent = PendingIntent.getBroadcast(context,
-                generateRandom(), actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Action replyAction = new NotificationCompat.Action.Builder(
-                R.drawable.ic_send_white_icon,
-                "Reply",
-                replyPendingIntent
-        ).addRemoteInput(remoteInput).build();
-
-        Person person = new Person.Builder().setIcon(IconCompat.createWithContentUri(profileImage)).setName(nameSurname).build();
-
-        NotificationCompat.MessagingStyle messagingStyle = new NotificationCompat.MessagingStyle(person);
-
-        for(MessageNotification item : messageList){
-            NotificationCompat.MessagingStyle.Message notificationMessage =
-                    new NotificationCompat.MessagingStyle.Message(
-                            item.getMessage(),
-                            item.getCurrent_time(),
-                            item.getSender()
-                    );
-            messagingStyle.addMessage(notificationMessage);
-        }
-
-        Notification notification = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_notification_icon)
-                .setColor(context.getColor(R.color.colorAccent))
-                .setStyle(messagingStyle)
-                .setSubText(email)
-                .addAction(replyAction)
-                .addAction(R.color.colorAccent, "Mark as read", PendingIntent.getBroadcast(
-                        context,
-                        generateRandom(),
-                        actionIntent.putExtra("action", "read").putExtra("user_id", fromUid),
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                ))
-                .setLargeIcon(setProfileImage(profileImage))
-                .setContentTitle(nameSurname)
-                .setContentText(message)
-                .setContentIntent(resultPendingIntent)
-                .setOnlyAlertOnce(true)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                .build();
-
-        notificationManager.notify(fromUid, 2, notification);
-    }
-    */
-
     private void showConfirmNotification(String nameSurname, String profileImage, String fromUid, String email, String clickAction) {
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         final String CHANNEL_ID = "com.ibrhmdurna.chatapp.confirm";
@@ -466,25 +385,25 @@ public class NotificationService extends FirebaseMessagingService {
     private int getProfileImage(int index) {
         switch (index){
             case 0:
-                return R.drawable.ic_avatar_0;
+                return R.mipmap.avatar_0;
             case 1:
-                return R.drawable.ic_avatar_1;
+                return R.mipmap.avatar_1;
             case 2:
-                return R.drawable.ic_avatar_2;
+                return R.mipmap.avatar_2;
             case 3:
-                return R.drawable.ic_avatar_3;
+                return R.mipmap.avatar_3;
             case 4:
-                return R.drawable.ic_avatar_4;
+                return R.mipmap.avatar_4;
             case 5:
-                return R.drawable.ic_avatar_5;
+                return R.mipmap.avatar_5;
             case 6:
-                return R.drawable.ic_avatar_6;
+                return R.mipmap.avatar_6;
             case 7:
-                return R.drawable.ic_avatar_7;
+                return R.mipmap.avatar_7;
             case 8:
-                return R.drawable.ic_avatar_8;
+                return R.mipmap.avatar_8;
             case 9:
-                return R.drawable.ic_avatar_9;
+                return R.mipmap.avatar_9;
         }
 
         return 0;

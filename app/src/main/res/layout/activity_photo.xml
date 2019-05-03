@@ -27,7 +27,7 @@
                 android:id="@+id/photo_name_surname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="You"
+                android:text="@string/you"
                 android:textSize="18sp"
                 android:fontFamily="sans-serif-light"
                 android:textStyle="bold"

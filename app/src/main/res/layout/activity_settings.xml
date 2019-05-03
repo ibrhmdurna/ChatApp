@@ -21,7 +21,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleGravity="top|center_horizontal"
-            app:title="Settings"
+            app:title="@string/settings"
             app:expandedTitleTextAppearance="@style/ExpandedTitleTextAppearance"
             app:collapsedTitleTextAppearance="@style/CollapsedTitleTextAppearance"
             app:expandedTitleMarginTop="-100dp">
@@ -94,14 +94,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Edit Account"
+                            android:text="@string/edit_account"
                             android:textColor="?attr/primaryTextColor"
                             android:textSize="18sp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Profile Image, Email, Gender, Birthday, Location"
+                            android:text="@string/edit_settings_helper"
                             android:maxLines="1"
                             android:ellipsize="end"/>
                     </LinearLayout>
@@ -145,14 +145,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Security"
+                                android:text="@string/security"
                                 android:textColor="?attr/primaryTextColor"
                                 android:textSize="18sp"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Change Password"/>
+                                android:text="@string/change_password"/>
                         </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
@@ -246,14 +246,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Chat Settings"
+                                android:text="@string/chat_settings"
                                 android:textColor="?attr/primaryTextColor"
                                 android:textSize="18sp"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Background, Chat History"/>
+                                android:text="@string/chat_settings_helper"/>
                         </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
@@ -296,14 +296,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Themes"
+                                android:text="@string/themes"
                                 android:textColor="?attr/primaryTextColor"
                                 android:textSize="18sp"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Dark Mode, Theme Color"/>
+                                android:text="@string/theme_settings_helper"/>
                         </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
@@ -347,14 +347,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Delete Account"
+                                android:text="@string/delete_account"
                                 android:textColor="?attr/primaryTextColor"
                                 android:textSize="18sp"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Delete Account Permanently"/>
+                                android:text="@string/delete_account_permanently"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -398,14 +398,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="About"
+                                android:text="@string/about"
                                 android:textColor="?attr/primaryTextColor"
                                 android:textSize="18sp"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Application, Developer"/>
+                                android:text="@string/application_developer"/>
                         </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
@@ -449,14 +449,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Logout"
+                                android:text="@string/logout"
                                 android:textColor="?attr/primaryTextColor"
                                 android:textSize="18sp"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Close Account"/>
+                                android:text="@string/close_account"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -468,7 +468,6 @@
     <ImageView
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_above="@id/mainBottomNavigationView"
         android:background="@drawable/ic_left_circle_view"
         android:translationZ="2dp"
         android:layout_gravity="bottom"
@@ -477,7 +476,6 @@
     <ImageView
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_above="@id/mainBottomNavigationView"
         android:layout_gravity="bottom|end"
         android:background="@drawable/ic_right_circle_view"
         android:translationZ="2dp"

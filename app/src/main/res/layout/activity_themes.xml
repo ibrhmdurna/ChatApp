@@ -22,7 +22,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleGravity="top|center_horizontal"
-            app:title="Themes"
+            app:title="@string/themes"
             app:expandedTitleTextAppearance="@style/ExpandedTitleTextAppearance"
             app:collapsedTitleTextAppearance="@style/CollapsedTitleTextAppearance"
             app:expandedTitleMarginTop="-100dp">
@@ -95,14 +95,14 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Dark Mode"
+                                    android:text="@string/dark_mode"
                                     android:textSize="18sp"
                                     android:textColor="?attr/primaryTextColor"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Use a darker theme to keep your eyes comfortable at night"/>
+                                    android:text="@string/dark_mode_helper"/>
                             </LinearLayout>
 
                             <View
@@ -128,7 +128,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Theme Color"
+                            android:text="@string/theme_color"
                             android:fontFamily="sans-serif-light"
                             android:textStyle="bold"
                             android:textSize="15sp"
@@ -778,7 +778,7 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="20dp"
                             style="@style/CustomButtonStyle"
-                            android:text="Apply"
+                            android:text="@string/apply"
                             android:textColor="@android:color/white"
                             android:backgroundTint="?attr/colorAccent"
                             android:layout_marginBottom="10dp"

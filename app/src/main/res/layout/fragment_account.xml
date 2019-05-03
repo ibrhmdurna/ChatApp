@@ -99,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
-                        android:text="0 Friends"
+                        android:text="@string/_0_friends"
                         android:textSize="16sp"/>
                 </LinearLayout>
 
@@ -128,7 +128,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Email"
+                                android:text="@string/email"
                                 android:textColor="?attr/colorAccent"
                                 android:textSize="18sp" />
 
@@ -159,7 +159,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Phone"
+                                android:text="@string/phone"
                                 android:textColor="?attr/colorAccent"
                                 android:textSize="18sp" />
 
@@ -188,7 +188,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Location"
+                                android:text="@string/location"
                                 android:textColor="?attr/colorAccent"
                                 android:textSize="18sp" />
 
@@ -217,7 +217,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Gender"
+                                android:text="@string/gender"
                                 android:textColor="?attr/colorAccent"
                                 android:textSize="18sp" />
 
@@ -246,7 +246,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Birthday"
+                                android:text="@string/birthday"
                                 android:textColor="?attr/colorAccent"
                                 android:textSize="18sp" />
 

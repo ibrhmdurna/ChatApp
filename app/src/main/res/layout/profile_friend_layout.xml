@@ -22,7 +22,7 @@
                 android:id="@+id/friend_profile_image"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:src="@drawable/ic_avatar_3"/>
+                android:src="@drawable/default_avatar"/>
 
             <TextView
                 android:id="@+id/friend_profile_image_text"
@@ -50,7 +50,7 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textSize="18sp"
-                android:text="Name Surname"
+                android:text="@string/chatapp_user"
                 android:textColor="?attr/primaryTextColor"
                 android:layout_marginEnd="5dp"/>
 
@@ -61,7 +61,6 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textSize="14sp"
-                android:text="email"
                 android:gravity="center_vertical"
                 android:layout_marginEnd="10dp"/>
         </LinearLayout>
@@ -70,7 +69,7 @@
             android:id="@+id/friend_add_item"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
-            android:text="Add"
+            android:text="@string/add"
             android:textAlignment="center"
             android:maxLines="1"
             android:ellipsize="end"
@@ -87,7 +86,7 @@
             android:id="@+id/friend_cancel_item"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textAlignment="center"
             android:maxLines="1"
             android:ellipsize="end"
@@ -105,7 +104,7 @@
             android:id="@+id/friend_delete_item"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
-            android:text="Delete"
+            android:text="@string/delete"
             android:textAlignment="center"
             android:maxLines="1"
             android:ellipsize="end"
