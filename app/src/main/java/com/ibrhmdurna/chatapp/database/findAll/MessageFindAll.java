@@ -156,7 +156,7 @@ public class MessageFindAll implements IFind {
             message.setMessage_id(dataSnapshot.getKey());
             int position = findPosition(message.getTime());
             messageList.remove(position);
-            messageList.add(message);
+            messageList.add(position, message);
             messageAdapter.notifyDataSetChanged();
         }
 
@@ -216,7 +216,7 @@ public class MessageFindAll implements IFind {
             message.setMessage_id(dataSnapshot.getKey());
             int position = findPosition(message.getTime());
             messageList.remove(position);
-            messageList.add(message);
+            messageList.add(position, message);
             messageAdapter.notifyDataSetChanged();
         }
 
