@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#F2F2F2</color>
     <color name="colorPrimaryDark">#F2F2F2</color>
-    <color name="colorMessageBackground">#C8C8C8</color>
+    <color name="colorMessageBackground">#DCDCDC</color>
     <color name="colorAccent">#0073D6</color>
     <color name="colorGray">#C8C8C8</color>
     <color name="colorDarkGray">#646464</color>
@@ -48,6 +48,7 @@
     <color name="colorLightGreenHighLight">#6E998F</color>
     <color name="colorOfficialGreenHighLight">#6EAC71</color>
     <color name="colorGreenHighLight">#8C9C5D</color>
+    <color name="colorNotification">#4B2E7C</color>
 
     <!--Solid Colors-->
     <color name="solidColor0">#1E2327</color>

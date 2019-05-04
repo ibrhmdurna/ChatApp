@@ -290,16 +290,6 @@ public class Delete {
         });
     }
 
-    public void unSendMessage(Message message, String chatUid){
-        myMessage(message, chatUid);
-        message(message, chatUid);
-    }
-
-    public void unSendImageMessage(Message message, String chatUid){
-        myImageMessage(message, chatUid);
-        imageMessage(message, chatUid);
-    }
-
     public void myMessage(Message message, String chatUid){
         String uid = FirebaseAuth.getInstance().getUid();
 
@@ -307,14 +297,10 @@ public class Delete {
     }
 
     public void myImageMessage(Message message, String chatUid){
-        FirebaseStorage.getInstance().getReferenceFromUrl(message.getUrl()).delete();
-        myMessage(message, chatUid);
-    }
+        if(!message.getUrl().equals(""))
+            FirebaseStorage.getInstance().getReferenceFromUrl(message.getUrl()).delete();
 
-    private void imageMessage(Message message, String chatUid){
-        String uid = FirebaseAuth.getInstance().getUid();
-        FirebaseStorage.getInstance().getReference().child("Chats").child(chatUid).child(uid).child(message.getMessage_id()).delete();
-        message(message, chatUid);
+        myMessage(message, chatUid);
     }
 
     public void message(Message message, String chatUid){

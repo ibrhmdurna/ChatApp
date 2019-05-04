@@ -40,13 +40,18 @@ public class Text extends MessageStrategy {
         messageMap.put("send", message.isSend());
         messageMap.put("seen", message.isSeen());
         messageMap.put("receive", message.isReceive());
+        messageMap.put("unsend", message.isUnsend());
         messageMap.put("time", ServerValue.TIMESTAMP);
+
+        final Map myUpdate = new HashMap();
+        myUpdate.put("send", true);
+        myUpdate.put("seen", true);
 
         messageReference.child(message.getFrom()).child(chatUid).child(message_id).setValue(messageMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    messageReference.child(message.getFrom()).child(chatUid).child(message_id).child("send").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    messageReference.child(message.getFrom()).child(chatUid).child(message_id).updateChildren(myUpdate).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             messageReference.child(chatUid).child(message.getFrom()).child(message_id).setValue(messageMap).addOnCompleteListener(new OnCompleteListener<Void>() {

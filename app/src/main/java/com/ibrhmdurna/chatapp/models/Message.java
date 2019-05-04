@@ -12,6 +12,7 @@ public class Message {
     private boolean send;
     private boolean seen;
     private boolean receive;
+    private boolean unsend;
 
     // For image message
     private String url;
@@ -20,14 +21,12 @@ public class Message {
     private Long size;
     private Bitmap bitmap;
 
-    private boolean sound;
-
     private boolean profileVisibility;
 
     public Message() {
     }
 
-    public Message(String from, String message, String type, Long time, boolean send, boolean seen, boolean receive) {
+    public Message(String from, String message, String type, Long time, boolean send, boolean seen, boolean receive, boolean unsend) {
         this.from = from;
         this.message = message;
         this.type = type;
@@ -35,6 +34,7 @@ public class Message {
         this.send = send;
         this.seen = seen;
         this.receive = receive;
+        this.unsend = unsend;
     }
 
     public String getFrom() {
@@ -149,11 +149,11 @@ public class Message {
         this.bitmap = bitmap;
     }
 
-    public boolean isSound() {
-        return sound;
+    public boolean isUnsend() {
+        return unsend;
     }
 
-    public void setSound(boolean sound) {
-        this.sound = sound;
+    public void setUnsend(boolean unsend) {
+        this.unsend = unsend;
     }
 }

@@ -406,8 +406,15 @@ public class Update{
         });
     }
 
-    public void messageSeen(String chatUid, boolean listener){
+    public void unSendMessage(String chatUid, String messageId){
         String uid = FirebaseAuth.getInstance().getUid();
+
+        Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).child(messageId).child("unsend").setValue(true);
+        Firebase.getInstance().getDatabaseReference().child("Messages").child(chatUid).child(uid).child(messageId).child("unsend").setValue(true);
+    }
+
+    public void messageSeen(final String chatUid, boolean listener){
+        final String uid = FirebaseAuth.getInstance().getUid();
 
         if(listener){
             Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).addValueEventListener(messageEventListener);
@@ -433,10 +440,10 @@ public class Update{
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             if(dataSnapshot.exists()){
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    snapshot.child("seen").getRef().setValue(true);
+                    if(snapshot.hasChild("seen")){
+                        snapshot.child("seen").getRef().setValue(true);
+                    }
                 }
-
-
             }
         }
 
@@ -448,7 +455,7 @@ public class Update{
 
     private ValueEventListener chatEventListener = new ValueEventListener() {
         @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
             if(dataSnapshot.exists()){
                 dataSnapshot.getRef().child("seen").setValue(true);
             }

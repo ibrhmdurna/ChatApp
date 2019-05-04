@@ -45,7 +45,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
                 if (remoteInput != null) {
                     final CharSequence replyText = remoteInput.getCharSequence("key_text_reply");
-                    Message message = new Message(FirebaseAuth.getInstance().getUid(), replyText.toString(), "Text", System.currentTimeMillis(), false, false, false);
+                    Message message = new Message(FirebaseAuth.getInstance().getUid(), replyText.toString(), "Text", System.currentTimeMillis(), false, false, false, false);
                     SendMessage sendMessage = new SendMessage(new Text());
                     sendMessage.Send(message, user_id);
 

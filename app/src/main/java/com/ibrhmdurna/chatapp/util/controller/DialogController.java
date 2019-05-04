@@ -23,6 +23,7 @@ import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Firebase;
+import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.local.ProfileActivity;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.settings.DarkModeActivity;
@@ -156,26 +157,33 @@ public class DialogController {
         });
 
         LinearLayout unsendItem = view.findViewById(R.id.unSend_item);
-        if(myMessage){
-            unsendItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                    Delete.getInstance().unSendImageMessage(message, chatUid);
+        if(!message.isUnsend()){
+            unsendItem.setVisibility(View.VISIBLE);
+            if(myMessage){
+                unsendItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        Update.getInstance().unSendMessage(chatUid, message.getMessage_id());
 
-                    if(removeDeviceCheck.isChecked()){
-                        File file = new File(message.getPath());
+                        if(removeDeviceCheck.isChecked()){
+                            File file = new File(message.getPath());
 
-                        if(file.exists()){
-                            file.delete();
+                            if(file.exists()){
+                                file.delete();
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
+            else{
+                unsendItem.setVisibility(View.GONE);
+            }
         }
         else{
             unsendItem.setVisibility(View.GONE);
         }
+
 
         LinearLayout copyItem = view.findViewById(R.id.copy_item);
 
@@ -224,18 +232,25 @@ public class DialogController {
         });
 
         LinearLayout unsendItem = view.findViewById(R.id.unSend_item);
-        if(myMessage){
-            unsendItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                    Delete.getInstance().unSendMessage(message, chatUid);
-                }
-            });
+        if(!message.isUnsend()){
+            unsendItem.setVisibility(View.VISIBLE);
+            if(myMessage){
+                unsendItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        Update.getInstance().unSendMessage(chatUid, message.getMessage_id());
+                    }
+                });
+            }
+            else{
+                unsendItem.setVisibility(View.GONE);
+            }
         }
         else{
             unsendItem.setVisibility(View.GONE);
         }
+
 
         LinearLayout copyItem = view.findViewById(R.id.copy_item);
         copyItem.setOnClickListener(new View.OnClickListener() {

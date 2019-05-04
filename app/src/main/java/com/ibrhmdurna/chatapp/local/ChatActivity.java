@@ -74,8 +74,6 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     private ImageView backgroundView;
     private ImageButton sendBtn;
 
-    private PullRefreshLayout swipeRefreshLayout;
-
     private String uid;
 
     private AbstractFind findMessage;
@@ -168,47 +166,11 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     private void loadMessage(){
         findMessage = new Find(new MessageFindAll(this, uid));
         findMessage.getContent();
-
-        Firebase.getInstance().getDatabaseReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(uid).addListenerForSingleValueEvent(valueEventListener);
     }
-
-    private ValueEventListener valueEventListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            if(dataSnapshot.exists()){
-                if(dataSnapshot.getChildrenCount() > 30){
-                    swipeRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-                        @Override
-                        public void onRefresh() {
-                            Handler h = new Handler();
-                            h.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    findMessage.getMore();
-                                    swipeRefreshLayout.setRefreshing(false);
-                                }
-                            },500);
-                        }
-                    });
-                }
-                else{
-                    swipeRefreshLayout.setEnabled(false);
-                }
-            }
-            else{
-                swipeRefreshLayout.setEnabled(false);
-            }
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        }
-    };
 
     private void sendMessage(){
         SendMessage message = new SendMessage(new Text());
-        Message messageObject = new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "Text", null, false, false, false);
+        Message messageObject = new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "Text", null, false, false, false, false);
         message.Send(messageObject, uid);
         messageInput.getText().clear();
     }
@@ -297,7 +259,6 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         messageInput = findViewById(R.id.message_input);
         backgroundView = findViewById(R.id.chat_background_view);
         sendBtn = findViewById(R.id.send_btn);
-        swipeRefreshLayout = findViewById(R.id.chat_swipe_container);
     }
 
     @Override
@@ -397,7 +358,6 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
             find.onDestroy();
         }
         NOTIF_ID = null;
-        Firebase.getInstance().getDatabaseReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(uid).removeEventListener(valueEventListener);
         super.onDestroy();
     }
 }

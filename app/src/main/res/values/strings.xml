@@ -135,5 +135,6 @@
     <string name="last_seen_today">Last seen today</string>
     <string name="last_seen_yesterday">Last seen yesterday</string>
     <string name="last_seen">Last seen</string>
+    <string name="this_message_was_deleted">This message was deleted</string>
 
 </resources>

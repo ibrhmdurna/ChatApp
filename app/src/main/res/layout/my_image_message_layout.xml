@@ -48,17 +48,18 @@
                 android:layout_marginBottom="1dp"/>
 
             <LinearLayout
-                android:layout_width="240dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@drawable/my_ripple_message_background"
-                android:padding="5dp"
                 android:layout_gravity="end">
 
                 <RelativeLayout
+                    android:id="@+id/image_layout"
                     android:layout_width="240dp"
                     android:layout_height="240dp"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:id="@+id/image_download_layout"
@@ -103,8 +104,7 @@
                         android:id="@+id/message_image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingStart="5dp"
-                        android:paddingEnd="5dp"
+                        android:padding="5dp"
                         android:scaleType="centerCrop"
                         app:riv_corner_radius="24dp"
                         android:src="@drawable/ic_photo_default_background"
@@ -117,10 +117,10 @@
                     android:layout_height="wrap_content"
                     android:maxWidth="240dp"
                     android:textSize="15sp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
+                    android:paddingStart="12dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="12dp"
                     android:gravity="bottom"
                     android:textColor="?attr/primaryTextColor"/>
             </LinearLayout>

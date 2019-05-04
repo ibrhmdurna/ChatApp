@@ -75,7 +75,7 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
 
     private void sendMessage(){
         SendMessage message = new SendMessage(new Image());
-        Message messageObject = new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "Image", null, false, false, false);
+        Message messageObject = new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "Image", null, false, false, false, false);
         messageObject.setDownload(false);
         messageObject.setBitmap(image);
         message.Send(messageObject, uid);

@@ -135,4 +135,5 @@
     <string name="last_seen_yesterday">Son görülme dün</string>
     <string name="today">Bugün</string>
     <string name="yesterday">Dün</string>
+    <string name="this_message_was_deleted">Bu mesaj silindi</string>
 </resources>

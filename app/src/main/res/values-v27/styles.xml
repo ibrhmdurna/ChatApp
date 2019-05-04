@@ -19,7 +19,7 @@
         <item name="searchColor">@color/colorLightGray</item>
         <item name="extColor">@color/colorLightGray</item>
         <item name="colorControlNormal">@color/colorDarkGray</item>
-        <item name="photoBackgroundColor">#B4B4B4</item>
+        <item name="photoBackgroundColor">#C8C8C8</item>
         <item name="colorAccentHighLight">@color/colorAccentHighLight</item>
     </style>
 

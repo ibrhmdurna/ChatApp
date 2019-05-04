@@ -2,6 +2,7 @@ package com.ibrhmdurna.chatapp.util.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -319,7 +320,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
                         if(message.getType().equals("Text")){
                             photoImage.setVisibility(View.GONE);
-                            lastMessage.setText(message.getMessage());
+
+                            if(message.isUnsend()){
+                                lastMessage.setText("This message was deleted");
+                                lastMessage.setTypeface(null, Typeface.ITALIC);
+                            }
+                            else{
+                                lastMessage.setText(message.getMessage());
+                                lastMessage.setTypeface(Typeface.DEFAULT);
+                            }
 
                             if(message.getFrom().equals(uid)){
                                 youText.setVisibility(View.VISIBLE);
@@ -329,7 +338,22 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                             }
                         }
                         else if (message.getType().equals("Image")){
-                            photoImage.setVisibility(View.VISIBLE);
+
+                            if(message.isUnsend()){
+                                lastMessage.setText("This message was deleted");
+                                lastMessage.setTypeface(null, Typeface.ITALIC);
+                            }
+                            else{
+                                photoImage.setVisibility(View.VISIBLE);
+
+                                lastMessage.setTypeface(Typeface.DEFAULT);
+                                if(message.getMessage().equals("")){
+                                    lastMessage.setText("Photo");
+                                }
+                                else{
+                                    lastMessage.setText(message.getMessage());
+                                }
+                            }
 
                             if(message.getFrom().equals(uid)){
                                 youText.setVisibility(View.VISIBLE);
@@ -338,12 +362,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                                 youText.setVisibility(View.GONE);
                             }
 
-                            if(message.getMessage().equals("")){
-                                lastMessage.setText("Photo");
-                            }
-                            else{
-                                lastMessage.setText(message.getMessage());
-                            }
+
                         }
                     }
                     else {

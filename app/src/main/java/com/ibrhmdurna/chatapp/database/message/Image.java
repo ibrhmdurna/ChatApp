@@ -58,8 +58,9 @@ public class Image extends MessageStrategy {
         myMessageMap.put("url", "");
         myMessageMap.put("type", message.getType());
         myMessageMap.put("send", message.isSend());
-        myMessageMap.put("seen", message.isSeen());
+        myMessageMap.put("seen", true);
         myMessageMap.put("receive", message.isReceive());
+        myMessageMap.put("unsend", message.isUnsend());
         myMessageMap.put("path", "");
         myMessageMap.put("time", ServerValue.TIMESTAMP);
         myMessageMap.put("download", true);
@@ -111,6 +112,7 @@ public class Image extends MessageStrategy {
                                                                                 messageMap.put("send", message.isSend());
                                                                                 messageMap.put("seen", message.isSeen());
                                                                                 messageMap.put("receive", message.isReceive());
+                                                                                messageMap.put("unsend", message.isUnsend());
                                                                                 messageMap.put("time", ServerValue.TIMESTAMP);
                                                                                 messageMap.put("path", "");
                                                                                 messageMap.put("download", message.isDownload());

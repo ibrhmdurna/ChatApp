@@ -19,6 +19,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.Person;
 import android.support.v4.app.RemoteInput;
@@ -26,11 +27,17 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.IconCompat;
 import android.text.Html;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.local.ChatActivity;
 import com.ibrhmdurna.chatapp.main.ChatsFragment;
+import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.models.MessageNotification;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -71,22 +78,18 @@ public class NotificationService extends FirebaseMessagingService {
                 showConfirmNotification(name_surname, profile_image, from_user_id, email, click_action);
                 break;
             case "message":
-                String content = remoteMessage.getData().get("message");
-                /*
-                MessageNotification messageNotification = new MessageNotification(content, System.currentTimeMillis(), name_surname);
-                messageList.add(messageNotification);
-                showMessageNotification(this, name_surname, profile_image, from_user_id, email, click_action, content);*/
-                showMessageNotification(name_surname, profile_image, from_user_id, email, click_action, content);
+                String message = remoteMessage.getData().get("message");
+                showMessageNotification(name_surname, profile_image, from_user_id, email, click_action, message);
                 break;
             case "image":
-                String contentI = remoteMessage.getData().get("message");
+                String message1 = remoteMessage.getData().get("message");
                 String image = remoteMessage.getData().get("image");
-                showMessageNotification(name_surname, profile_image, from_user_id, email, click_action, contentI, image);
+                showImageMessageNotification(name_surname, profile_image, from_user_id, email, click_action, message1, image);
                 break;
         }
     }
 
-    private void showMessageNotification(String nameSurname, String profileImage, String fromUid, String email, String clickAction, String message, String image){
+    private void showImageMessageNotification(String nameSurname, String profileImage, String fromUid, String email, String clickAction, String message, String image){
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         final String CHANNEL_ID = "com.ibrhmdurna.chatapp.message";
 
@@ -135,16 +138,17 @@ public class NotificationService extends FirebaseMessagingService {
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_notification_icon)
-                .setColor(getColor(R.color.colorAccent))
+                .setColor(getColor(R.color.colorNotification))
                 .setStyle(new NotificationCompat.BigPictureStyle()
                             .bigLargeIcon(setProfileImage(profileImage))
                             .bigPicture(ImageLoader.getInstance().loadImageSync(image))
                             .setBigContentTitle(nameSurname))
                 .setContentTitle(nameSurname)
-                .setContentText(!message.equals("") ? message : "Photo")
+                .setLargeIcon(ImageLoader.getInstance().loadImageSync(image))
+                .setContentText(message.equals("") ? message : "Photo")
                 .setSubText(email)
                 .addAction(replyAction)
-                .addAction(R.color.colorAccent, "Mark as read", PendingIntent.getBroadcast(
+                .addAction(R.color.colorNotification, "Mark as read", PendingIntent.getBroadcast(
                         this,
                         generateRandom(),
                         actionIntent.putExtra("action", "read").putExtra("user_id", fromUid),
@@ -152,7 +156,6 @@ public class NotificationService extends FirebaseMessagingService {
                 ))
                 .setContentIntent(resultPendingIntent)
                 .setOnlyAlertOnce(true)
-                .setLargeIcon(ImageLoader.getInstance().loadImageSync(image))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE);
 
@@ -217,7 +220,7 @@ public class NotificationService extends FirebaseMessagingService {
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_notification_icon)
-                .setColor(getColor(R.color.colorAccent))
+                .setColor(getColor(R.color.colorNotification))
                 .setStyle(new NotificationCompat.InboxStyle()
                         .setBigContentTitle(nameSurname)
                         .addLine(message))
@@ -225,7 +228,7 @@ public class NotificationService extends FirebaseMessagingService {
                 .setContentText(message)
                 .setSubText(email)
                 .addAction(replyAction)
-                .addAction(R.color.colorAccent, "Mark as read", PendingIntent.getBroadcast(
+                .addAction(R.color.colorNotification, "Mark as read", PendingIntent.getBroadcast(
                         this,
                         generateRandom(),
                         actionIntent.putExtra("action", "read").putExtra("user_id", fromUid),
@@ -283,7 +286,7 @@ public class NotificationService extends FirebaseMessagingService {
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_notification_icon)
-                .setColor(getColor(R.color.colorAccent))
+                .setColor(getColor(R.color.colorNotification))
                 .setStyle(new NotificationCompat.InboxStyle()
                             .setBigContentTitle("Accepted friendship request")
                             .addLine(Html.fromHtml("<b>"+nameSurname+"</b> accepted the request for friendship!")))
@@ -293,7 +296,7 @@ public class NotificationService extends FirebaseMessagingService {
                 .setContentIntent(resultPendingIntent)
                 .setOnlyAlertOnce(true)
                 .setLargeIcon(setProfileImage(profileImage))
-                .addAction(R.color.colorAccent, "View Profile", resultPendingIntent)
+                .addAction(R.color.colorNotification, "View Profile", resultPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_SOCIAL);
         notificationManager.notify(fromUid, 1, notificationBuilder.build());
@@ -335,7 +338,7 @@ public class NotificationService extends FirebaseMessagingService {
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_notification_icon)
-                .setColor(getColor(R.color.colorAccent))
+                .setColor(getColor(R.color.colorNotification))
                 .setStyle(new NotificationCompat.InboxStyle()
                             .setBigContentTitle("Friendship request")
                             .addLine(Html.fromHtml("<b>"+nameSurname+"</b> has sent you request")))
@@ -344,13 +347,13 @@ public class NotificationService extends FirebaseMessagingService {
                 .setContentText(Html.fromHtml("<b>"+nameSurname+"</b> has sent you request"))
                 .setContentIntent(resultPendingIntent)
                 .setOnlyAlertOnce(true)
-                .addAction(R.color.colorAccent, "Cancel", PendingIntent.getBroadcast(
+                .addAction(R.color.colorNotification, "Cancel", PendingIntent.getBroadcast(
                         this,
                         generateRandom(),
                         actionIntent.putExtra("action", "cancel").putExtra("user_id", fromUid),
                         PendingIntent.FLAG_UPDATE_CURRENT
                 ))
-                .addAction(R.color.colorAccent, "Confirm", PendingIntent.getBroadcast(
+                .addAction(R.color.colorNotification, "Confirm", PendingIntent.getBroadcast(
                         this,
                         generateRandom(),
                         actionIntent.putExtra("action", "confirm").putExtra("user_id", fromUid),

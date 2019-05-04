@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+    <resources>
     <string-array name="countries_array">
+        <item>Almanya</item>
         <item>Afganistan</item>
         <item>Arnavutluk</item>
-        <item>Cezayir</item>
+        <item>Amerika Birleşik Devletleri</item>
+        <item>Amerika Birleşik Devletleri Küçük Dış Adaları</item>
         <item>Amerikan Samoası</item>
         <item>Andorra</item>
         <item>Angora</item>
@@ -16,232 +18,230 @@
         <item>Avustralya</item>
         <item>Avusturya</item>
         <item>Azerbaycan</item>
+        <item>Bahamalar</item>
         <item>Bahreyn</item>
         <item>Bangladeş</item>
         <item>Barbados</item>
+        <item>Batı Sahraa</item>
         <item>Belarus</item>
         <item>Belçika</item>
         <item>Belize</item>
         <item>Benin</item>
         <item>Bermuda</item>
-        <item>Butan</item>
+        <item>Birleşik Arap Emirlikleri</item>
+        <item>Birleşik Krallık</item>
         <item>Bolivya</item>
         <item>Bosna Hersek</item>
         <item>Botsvana</item>
         <item>Bouvet Adası</item>
         <item>Brezilya</item>
-        <item>İngiliz Hint Okyanusu Bölgesi</item>
-        <item>İngiliz Virgin Adaları</item>
         <item>Brunei</item>
         <item>Bulgaristan</item>
         <item>Burkina Faso</item>
         <item>Burundi</item>
-        <item>Kamboçya</item>
-        <item>Kamerun</item>
-        <item>Kanada</item>
+        <item>Butan</item>
         <item>Cape Verde</item>
         <item>Cayman Adaları</item>
-        <item>Orta Afrika Cumhuriyeti</item>
-        <item>Çad</item>
-        <item>Şili</item>
-        <item>Çin</item>
-        <item>Noel Adası</item>
-        <item>Cocos (Keeling) Adaları</item>
-        <item>Kolombiya</item>
-        <item>Komorlar</item>
-        <item>Kongo</item>
-        <item>Cook Adaları</item>
-        <item>Kosta Rika</item>
-        <item>Fildişi Sahili</item>
-        <item>Hırvatistan</item>
-        <item>Küba</item>
-        <item>Kıbrıs</item>
-        <item>Çek Cumhuriyeti</item>
-        <item>Kongo Demokratik Cumhuriyeti</item>
-        <item>Danimarka</item>
+        <item>Cebelitarık</item>
+        <item>Cezayir</item>
         <item>Cibuti</item>
+        <item>Cocos (Keeling) Adaları</item>
+        <item>Cook Adaları</item>
+        <item>Çad</item>
+        <item>Çek Cumhuriyeti</item>
+        <item>Çin</item>
+        <item>Danimarka</item>
         <item>Dominika</item>
         <item>Dominik Cumhuriyeti</item>
-        <item>Doğu Timor</item>
+        <item>East Timor</item>
         <item>Ekvador</item>
-        <item>Mısır</item>
-        <item>El Salvador</item>
         <item>Ekvator Ginesi</item>
+        <item>El Salvador</item>
+        <item>Endonezya</item>
         <item>Eritre</item>
+        <item>Eski Yugoslav Makedonya Cumhuriyeti</item>
         <item>Estonya</item>
         <item>Etiyopya</item>
-        <item>Faroe Adaları</item>
         <item>Falkland Adaları</item>
+        <item>Faroe Adaları</item>
+        <item>Fas</item>
         <item>Fiji</item>
+        <item>Fildişi Sahili</item>
+        <item>Filipinler</item>
         <item>Finlandiya</item>
-        <item>Eski Yugoslav Makedonya Cumhuriyeti</item>
         <item>Fransa</item>
-        <item>Fransız Guyanası</item>
         <item>Fransız Polinezyası</item>
+        <item>Fransız Guyanası</item>
         <item>Fransız Güney Toprakları</item>
         <item>Gabon</item>
-        <item>Gürcistan</item>
-        <item>Almanya</item>
+        <item>Gambiya</item>
         <item>Gana</item>
-        <item>Cebelitarık</item>
-        <item>Yunanistan</item>
-        <item>Grönland</item>
+        <item>Gine</item>
+        <item>Gine-Bissau</item>
         <item>Grenada</item>
+        <item>Grönland</item>
         <item>Guadeloupe</item>
         <item>Guam</item>
         <item>Guatemala</item>
-        <item>Gine</item>
-        <item>Gine-Bissau</item>
         <item>Guyana</item>
+        <item>Güney Afrika</item>
+        <item>Güney Georgia ve Güney Sandwich Adaları</item>
+        <item>Güney Kore</item>
+        <item>Güney Sudan</item>
+        <item>Gürcistan</item>
         <item>Haiti</item>
         <item>Heard ve McDonald Adaları</item>
+        <item>Hindistan</item>
+        <item>Hırvatistan</item>
+        <item>Hollanda</item>
+        <item>Hollanda Antilleri</item>
         <item>Honduras</item>
         <item>Hong Kong</item>
-        <item>Macaristan</item>
-        <item>İzlanda</item>
-        <item>Hindistan</item>
-        <item>Endonezya</item>
-        <item>İran</item>
+        <item>İngiliz Hint Okyanusu Bölgesi</item>
+        <item>İngiliz Virgin Adaları</item>
         <item>Irak</item>
+        <item>İran</item>
         <item>İrlanda</item>
         <item>İsrail</item>
+        <item>İspanya</item>
+        <item>İsveç</item>
+        <item>İsviçre</item>
+        <item>İzlanda</item>
         <item>Italya</item>
         <item>Jamaika</item>
         <item>Japonya</item>
-        <item>Ürdün</item>
+        <item>Kamboçya</item>
+        <item>Kamerun</item>
+        <item>Kanada</item>
+        <item>Karadağ</item>
+        <item>Katar</item>
         <item>Kazakistan</item>
         <item>Kenya</item>
         <item>Kiribati</item>
-        <item>Kuveyt</item>
+        <item>Kıbrıs</item>
         <item>Kırgızistan</item>
+        <item>Kolombiya</item>
+        <item>Komorlar</item>
+        <item>Kongo</item>
+        <item>Kongo Demokratik Cumhuriyeti</item>
+        <item>Kosta Rika</item>
+        <item>Kuveyt</item>
+        <item>Kuzey Kore</item>
+        <item>Kuzey Marianas</item>
+        <item>Küba</item>
         <item>Laos</item>
-        <item>Letonya</item>
-        <item>Lübnan</item>
         <item>Lesotho</item>
+        <item>Letonya</item>
         <item>Liberya</item>
         <item>Libya</item>
         <item>Lihtenştayn</item>
         <item>Litvanya</item>
+        <item>Lübnan</item>
         <item>Lüksemburg</item>
-        <item>Makao</item>
+        <item>Macaristan</item>
         <item>Madagaskar</item>
+        <item>Makao</item>
         <item>Malawi</item>
         <item>Malezya</item>
         <item>Maldivler</item>
         <item>Mali</item>
         <item>Malta</item>
-        <item>Marshall Islands</item>
-        <item>Martinique</item>
-        <item>Mauritania</item>
+        <item>Moritanya</item>
+        <item>Marşal Adaları</item>
+        <item>Martinik</item>
         <item>Mauritius</item>
         <item>Mayotte</item>
-        <item>Mexico</item>
-        <item>Micronesia</item>
+        <item>Meksika</item>
+        <item>Mikronezya</item>
+        <item>Mısır</item>
+        <item>Moğolistan</item>
         <item>Moldova</item>
-        <item>Monaco</item>
-        <item>Mongolia</item>
-        <item>Montenegro</item>
+        <item>Monako</item>
         <item>Montserrat</item>
-        <item>Morocco</item>
-        <item>Mozambique</item>
+        <item>Mozambik</item>
         <item>Myanmar</item>
-        <item>Namibia</item>
+        <item>Namibya</item>
         <item>Nauru</item>
         <item>Nepal</item>
-        <item>Netherlands</item>
-        <item>Netherlands Antilles</item>
-        <item>New Caledonia</item>
-        <item>New Zealand</item>
-        <item>Nicaragua</item>
-        <item>Niger</item>
-        <item>Nigeria</item>
+        <item>Nijer</item>
+        <item>Nijerya</item>
+        <item>Nikaragua</item>
         <item>Niue</item>
-        <item>Norfolk Island</item>
-        <item>North Korea</item>
-        <item>Northern Marianas</item>
-        <item>Norway</item>
-        <item>Oman</item>
+        <item>Noel Adası</item>
+        <item>Norfolk Adası</item>
+        <item>Norveç</item>
+        <item>Orta Afrika Cumhuriyeti</item>
+        <item>Özbekistan</item>
         <item>Pakistan</item>
         <item>Palau</item>
         <item>Panama</item>
-        <item>Papua New Guinea</item>
+        <item>Papua Yeni Gine</item>
         <item>Paraguay</item>
         <item>Peru</item>
-        <item>Philippines</item>
-        <item>Pitcairn Islands</item>
-        <item>Poland</item>
-        <item>Portugal</item>
-        <item>Puerto Rico</item>
-        <item>Qatar</item>
         <item>Reunion</item>
-        <item>Romania</item>
-        <item>Russia</item>
-        <item>Rwanda</item>
-        <item>Sqo Tome and Principe</item>
+        <item>Pitcairn Adaları</item>
+        <item>Polonya</item>
+        <item>Portekiz</item>
+        <item>Porto Riko</item>
+        <item>Romanya</item>
+        <item>Ruanda</item>
+        <item>Rusya</item>
         <item>Saint Helena</item>
-        <item>Saint Kitts and Nevis</item>
+        <item>Saint Kitts ve Nevis</item>
         <item>Saint Lucia</item>
-        <item>Saint Pierre and Miquelon</item>
-        <item>Saint Vincent and the Grenadines</item>
+        <item>Saint Pierre ve Miquelon</item>
+        <item>Saint Vincent ve the Grenadinler</item>
         <item>Samoa</item>
         <item>San Marino</item>
-        <item>Saudi Arabia</item>
+        <item>Sao Tome ve Principe</item>
         <item>Senegal</item>
-        <item>Serbia</item>
-        <item>Seychelles</item>
+        <item>Seyşeller</item>
         <item>Sierra Leone</item>
-        <item>Singapore</item>
-        <item>Slovakia</item>
-        <item>Slovenia</item>
-        <item>Solomon Islands</item>
-        <item>Somalia</item>
-        <item>South Africa</item>
-        <item>South Georgia and the South Sandwich Islands</item>
-        <item>South Korea</item>
-        <item>South Sudan</item>
-        <item>Spain</item>
+        <item>Singapur</item>
+        <item>Sırbistan</item>
+        <item>Slovakya</item>
+        <item>Slovenya</item>
+        <item>Solomon Adaları</item>
+        <item>Somali</item>
         <item>Sri Lanka</item>
         <item>Sudan</item>
-        <item>Suriname</item>
-        <item>Svalbard and Jan Mayen</item>
-        <item>Swaziland</item>
-        <item>Sweden</item>
-        <item>Switzerland</item>
-        <item>Syria</item>
-        <item>Taiwan</item>
-        <item>Tajikistan</item>
-        <item>Tanzania</item>
-        <item>Thailand</item>
-        <item>The Bahamas</item>
-        <item>The Gambia</item>
+        <item>Surinam</item>
+        <item>Suudi Arabistan</item>
+        <item>Suriye</item>
+        <item>Svalbard ve Jan Mayen</item>
+        <item>Svaziland</item>
+        <item>Şili</item>
+        <item>Tacikistan</item>
+        <item>Tanzanya</item>
+        <item>Tayland</item>
+        <item>Tayvan</item>
         <item>Togo</item>
         <item>Tokelau</item>
         <item>Tonga</item>
-        <item>Trinidad and Tobago</item>
-        <item>Tunisia</item>
-        <item>Turkey</item>
-        <item>Turkmenistan</item>
-        <item>Turks and Caicos Islands</item>
+        <item>Trinidad ve Tobago</item>
+        <item>Tunus</item>
+        <item>Turks ve Caicos Adaları</item>
         <item>Tuvalu</item>
-        <item>Virgin Islands</item>
+        <item>Türkiye</item>
+        <item>Türkmenistan</item>
         <item>Uganda</item>
-        <item>Ukraine</item>
-        <item>United Arab Emirates</item>
-        <item>United Kingdom</item>
-        <item>United States</item>
-        <item>United States Minor Outlying Islands</item>
+        <item>Ukrayna</item>
+        <item>Umman</item>
         <item>Uruguay</item>
-        <item>Uzbekistan</item>
+        <item>Ürdün</item>
         <item>Vanuatu</item>
-        <item>Vatican City</item>
+        <item>Vatikan Şehri</item>
         <item>Venezuela</item>
         <item>Vietnam</item>
-        <item>Wallis and Futuna</item>
-        <item>Western Sahara</item>
+        <item>Virgin Adaları</item>
+        <item>Wallis ve Futuna</item>
         <item>Yemen</item>
-        <item>Yugoslavia</item>
-        <item>Zambia</item>
-        <item>Zimbabwe</item>
+        <item>Yeni Kaledonya</item>
+        <item>Yeni Zelanda</item>
+        <item>Yugoslavya</item>
+        <item>Yunanistan</item>
+        <item>Zambiya</item>
+        <item>Zimbabve</item>
     </string-array>
 
     <string-array name="gender">
