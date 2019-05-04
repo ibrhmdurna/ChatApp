@@ -83,7 +83,7 @@ public class SettingsActivity extends AppCompatActivity implements ViewComponent
                 startActivity(aboutIntent);
                 break;
             case R.id.logout_item:
-                final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, "Log out of ChatApp?", "Cancel", "Logout");
+                final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, getString(R.string.log_out_of_chatapp), getString(R.string.cancel), getString(R.string.logout));
                 TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
                 positiveBtn.setOnClickListener(new View.OnClickListener() {
                     @Override

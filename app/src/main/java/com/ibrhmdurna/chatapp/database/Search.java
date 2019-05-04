@@ -60,7 +60,7 @@ public class Search {
 
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loading = DialogController.getInstance().dialogLoading(context, "Please wait...");
+        final AlertDialog loading = DialogController.getInstance().dialogLoading(context, context.getString(R.string.please_wait));
         loading.show();
 
         FirebaseAuth.getInstance().fetchSignInMethodsForEmail(emailInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
@@ -69,7 +69,7 @@ public class Search {
                 if(task.isSuccessful()){
                     loading.dismiss();
                     if(task.getResult().getSignInMethods().size() > 0){
-                        emailInput.setError("This email is used");
+                        emailInput.setError(context.getString(R.string.email_is_used));
                     }
                     else {
                         Intent infoIntent = new Intent(context, RegisterInfoActivity.class);
@@ -82,7 +82,7 @@ public class Search {
                 }
                 else {
                     loading.dismiss();
-                    emailInput.setError("Email is incorrect. Please enter a valid email address.");
+                    emailInput.setError(context.getString(R.string.email_incorrect));
                 }
 
 
@@ -91,14 +91,7 @@ public class Search {
             @Override
             public void onFailure(@NonNull Exception e) {
                 loading.dismiss();
-                /*final AlertDialog dialog = DialogController.getInstance().dialogCustom(context, "Cannot Sign in. Please check the from and try again.", null, "Dismiss");
-                TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
-                positiveBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });*/
+                Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -107,7 +100,7 @@ public class Search {
     public void login(final Activity context, final TextInputLayout emailInput, final TextInputLayout passwordInput, final CheckBox remember){
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loading = DialogController.getInstance().dialogLoading(context, "Please wait...");
+        final AlertDialog loading = DialogController.getInstance().dialogLoading(context, context.getString(R.string.please_wait));
         loading.show();
 
         emailInput.setError(null);
@@ -152,13 +145,13 @@ public class Search {
 
                     switch (errorCode){
                         case "ERROR_INVALID_EMAIL":
-                            emailInput.setError("Please enter a valid email address.");
+                            emailInput.setError(context.getString(R.string.enter_a_vaild_email));
                             break;
                         case "ERROR_WRONG_PASSWORD":
-                            passwordInput.setError("Password is incorrect.");
+                            passwordInput.setError(context.getString(R.string.password_incorrect));
                             break;
                         case "ERROR_USER_NOT_FOUND":
-                            emailInput.setError("No account for this email address was found.");
+                            emailInput.setError(context.getString(R.string.no_account_for_this_email));
                             break;
                     }
 

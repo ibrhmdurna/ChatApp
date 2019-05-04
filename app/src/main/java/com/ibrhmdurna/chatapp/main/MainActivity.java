@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
                         showFragment(new ChatsFragment(), "ChatsFragment");
                         App.Background.getInstance().clearThisPage("ChatsFragment");
                         App.Background.getInstance().addPage("ChatsFragment");
-                        collapsingToolbarLayout.setTitle("Chats");
+                        collapsingToolbarLayout.setTitle(getString(R.string.chats));
                         toolbar.getMenu().clear();
                         toolbar.inflateMenu(R.menu.messages_main_menu);
                         break;
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
                         showFragment(new FriendsFragment(), "FriendsFragment");
                         App.Background.getInstance().clearThisPage("FriendsFragment");
                         App.Background.getInstance().addPage("FriendsFragment");
-                        collapsingToolbarLayout.setTitle("Friends");
+                        collapsingToolbarLayout.setTitle(getString(R.string.friends));
                         toolbar.getMenu().clear();
                         toolbar.inflateMenu(R.menu.main_menu);
                         break;
@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
                         showFragment(new RequestsFragment(), "RequestsFragment");
                         App.Background.getInstance().clearThisPage("RequestsFragment");
                         App.Background.getInstance().addPage("RequestsFragment");
-                        collapsingToolbarLayout.setTitle("Requests");
+                        collapsingToolbarLayout.setTitle(getString(R.string.requests));
                         toolbar.getMenu().clear();
                         toolbar.inflateMenu(R.menu.main_menu);
                         removeBadgeView();
@@ -411,7 +411,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
             @Override
             public void onDismiss(DialogInterface dialog) {
                 Tooltip tooltip = new Tooltip.Builder(tooltipView, R.style.CustomToolTip)
-                        .setText("Find your friend in the world of ChatApp!")
+                        .setText(R.string.find_your_friend)
                         .setGravity(Gravity.BOTTOM)
                         .show();
 

@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.start.StartActivity;
@@ -72,7 +73,7 @@ public class Delete {
 
     public void deleteAccount(final Activity context, final TextInputLayout passwordInput){
 
-        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "Deleting account. Please wait...");
+        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, context.getString(R.string.deleting_account));
         loadingBar.show();
 
         final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -132,14 +133,14 @@ public class Delete {
                                                         context.finish();
                                                     }
                                                     else{
-                                                        Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
                                                         loadingBar.dismiss();
                                                     }
                                                 }
                                             });
                                         }
                                         else{
-                                            Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
                                             loadingBar.dismiss();
                                         }
                                     }
@@ -147,7 +148,7 @@ public class Delete {
 
                             }
                             else{
-                                Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
                             }
                         }
@@ -161,7 +162,7 @@ public class Delete {
 
                 }
                 else{
-                    passwordInput.setError("Password is incorrect.");
+                    passwordInput.setError(context.getString(R.string.password_incorrect));
                     loadingBar.dismiss();
                 }
             }

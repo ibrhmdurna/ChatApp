@@ -166,7 +166,7 @@ public class ChatFindInfo implements IFind {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(dataSnapshot.exists()){
-                        lastSeen.setText("Online");
+                        lastSeen.setText(context.getString(R.string.online));
                     }
                     else {
                         lastSeen.setVisibility(View.GONE);
@@ -199,7 +199,7 @@ public class ChatFindInfo implements IFind {
                                                 if(dataSnapshot.exists()){
                                                     lastSeen.setVisibility(View.VISIBLE);
                                                     if(isOnline){
-                                                        lastSeen.setText("Online");
+                                                        lastSeen.setText(context.getString(R.string.online));
                                                     }
                                                     else{
                                                         String lastSeenTime = GetTimeAgo.getInstance().getLastSeenAgo(context, account.getLast_seen());

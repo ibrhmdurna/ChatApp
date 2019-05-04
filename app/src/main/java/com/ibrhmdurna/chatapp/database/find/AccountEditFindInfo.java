@@ -81,7 +81,7 @@ public class AccountEditFindInfo implements IFind {
                 binding.setAccount(account);
             }
             else {
-                Toast.makeText(binding.getRoot().getContext(), "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(binding.getRoot().getContext(), binding.getRoot().getContext().getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
             }
         }
 

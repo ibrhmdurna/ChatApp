@@ -58,7 +58,7 @@ public class PhotoActivity extends AppCompatActivity implements ViewComponentFac
                         nameSurnameText.setText(account.getNameSurname());
                     }
                     else{
-                        nameSurnameText.setText("ChatApp User");
+                        nameSurnameText.setText(getString(R.string.chatapp_user));
                     }
                 }
 

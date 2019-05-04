@@ -207,10 +207,10 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         final AlertDialog dialog = builder.create();
 
         TextView content = view.findViewById(R.id.dialog_content_text);
-        content.setText("You need to provide the necessary permissions to reach this section, please go to the settings and give the necessary permissions.");
+        content.setText(getString(R.string.permission_content));
 
         TextView negativeBtn = view.findViewById(R.id.dialog_negative_btn);
-        negativeBtn.setText("Cancel");
+        negativeBtn.setText(getString(R.string.cancel));
         negativeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,7 +220,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         });
 
         TextView positiveBtn = view.findViewById(R.id.dialog_positive_btn);
-        positiveBtn.setText("Settings!");
+        positiveBtn.setText(getString(R.string._settings));
         positiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

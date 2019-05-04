@@ -242,7 +242,7 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 public void onClick(View v) {
                     final AlertDialog dialog = DialogController.getInstance().dialogCustom((Activity) context, null, "Cancel", "Delete");
 
-                    String text = "Are you sure you want to make " + friend.getAccount().getNameSurname() + " out of friendship?";
+                    String text = context.getString(R.string.are_you_sure_you_want) + " " + friend.getAccount().getNameSurname() + " " + context.getString(R.string.out_of_friendship);
                     TextView content = dialog.findViewById(R.id.dialog_content_text);
 
                     TypedValue typedValue = new TypedValue();

@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.settings.EditAccountActivity;
 import com.ibrhmdurna.chatapp.start.RegisterFinishActivity;
@@ -67,7 +68,7 @@ public class FileController {
                 Arrays.sort(folderAllFiles, new Comparator<File>() {
                     @Override
                     public int compare(File o1, File o2) {
-                        return o1.lastModified() > o2.lastModified() ? -1 : 1;
+                        return o1.lastModified() > o2.lastModified() ? - 1 : 1;
                     }
                 });
             }
@@ -287,7 +288,7 @@ public class FileController {
 
         @Override
         protected synchronized void onPreExecute() {
-            loading = DialogController.getInstance().dialogLoading(context, "Compressing...");
+            loading = DialogController.getInstance().dialogLoading(context, context.getString(R.string.compressing));
             loading.show();
             super.onPreExecute();
         }

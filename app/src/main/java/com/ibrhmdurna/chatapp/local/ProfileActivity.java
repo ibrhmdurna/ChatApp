@@ -130,8 +130,8 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
             case "share":
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
-                String shareBody = "Hello, I am "+ binding.getAccount().getNameSurname() +" (" + binding.getAccount().getEmail() + ") would you like to join us? ChatApp Inc.";
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                String shareBody = getString(R.string.hello_i_am) + " " + binding.getAccount().getNameSurname() +" (" + binding.getAccount().getEmail() + ") "+ getString(R.string.would_join_chatapp);
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, R.string.subject_here);
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                 startActivity(Intent.createChooser(sharingIntent, "Share"));
                 break;
@@ -140,9 +140,9 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
             case "report":
                 break;
             case "delete":
-                final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, null, "Cancel", "Delete");
+                final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, null, getString(R.string.cancel), getString(R.string.delete));
 
-                String text = "Are you sure you want to make " + binding.getAccount().getNameSurname() + " out of friendship?";
+                String text = getString(R.string.are_you_sure_you_want) + " " + binding.getAccount().getNameSurname() + " " + getString(R.string.out_of_friendship);
                 TextView content = dialog.findViewById(R.id.dialog_content_text);
 
                 TypedValue typedValue = new TypedValue();

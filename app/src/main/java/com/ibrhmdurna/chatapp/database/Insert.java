@@ -55,7 +55,7 @@ public class Insert {
 
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "Creating an account may take some time.\nPlease wait... ");
+        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, context.getString(R.string.creating_account));
         loadingBar.show();
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(account.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -175,7 +175,7 @@ public class Insert {
                 }
                 else {
                     loadingBar.dismiss();
-                    final AlertDialog dialog = DialogController.getInstance().dialogCustom(context, "Cannot Sign in. Please check the from and try again.", null, "Dismiss");
+                    final AlertDialog dialog = DialogController.getInstance().dialogCustom(context, context.getString(R.string.cannot_sign_in), null, context.getString(R.string.dismiss));
                     TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
                     positiveBtn.setOnClickListener(new View.OnClickListener() {
                         @Override

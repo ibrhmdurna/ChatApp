@@ -113,16 +113,16 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
         String zedgePath = root + "/zedge/wallpaper";
 
         if(FileController.getInstance().isEmptyFile(root)){
-            files.add(new File("All Photos", root, FileController.getInstance().getAllGallery(this), FileController.getInstance().getAllGalleryImageCount(this)));
+            files.add(new File(getString(R.string.all_photos), root, FileController.getInstance().getAllGallery(this), FileController.getInstance().getAllGalleryImageCount(this)));
         }
         if(FileController.getInstance().isEmptyFile(cameraPath)){
-            files.add(new File("Camera", cameraPath, FileController.getInstance().getAlbumLastPhoto(cameraPath), FileController.getInstance().getAlbumPhotoCount(cameraPath)));
+            files.add(new File(getString(R.string.camera), cameraPath, FileController.getInstance().getAlbumLastPhoto(cameraPath), FileController.getInstance().getAlbumPhotoCount(cameraPath)));
         }
         if(FileController.getInstance().isEmptyFile(downloadPath)){
-            files.add(new File("Download", downloadPath, FileController.getInstance().getAlbumLastPhoto(downloadPath), FileController.getInstance().getAlbumPhotoCount(downloadPath)));
+            files.add(new File(getString(R.string.download), downloadPath, FileController.getInstance().getAlbumLastPhoto(downloadPath), FileController.getInstance().getAlbumPhotoCount(downloadPath)));
         }
         if(FileController.getInstance().isEmptyFile(screenShotsPath)){
-            files.add(new File("ScreenShots", screenShotsPath, FileController.getInstance().getAlbumLastPhoto(screenShotsPath), FileController.getInstance().getAlbumPhotoCount(screenShotsPath)));
+            files.add(new File(getString(R.string.screen_shots), screenShotsPath, FileController.getInstance().getAlbumLastPhoto(screenShotsPath), FileController.getInstance().getAlbumPhotoCount(screenShotsPath)));
         }
         if(FileController.getInstance().isEmptyFile(chatAppPath)){
             files.add(new File("ChatApp", chatAppPath, FileController.getInstance().getAlbumLastPhoto(chatAppPath), FileController.getInstance().getAlbumPhotoCount(chatAppPath)));
@@ -155,7 +155,7 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
     private void getGallery(){
         isBack = true;
         subTitle.setText(null);
-        collapsingToolbarLayout.setTitle("Gallery");
+        collapsingToolbarLayout.setTitle(getString(R.string.gallery));
         GalleryAdapter galleryAdapter = new GalleryAdapter(this, files);
         galleryContainer = findViewById(R.id.gallery_container);
 
@@ -173,7 +173,7 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
             @SuppressLint("SetTextI18n")
             @Override
             public void onItemClick(int position) {
-                if(files.get(position).getTitle().equals("All Photos")){
+                if(files.get(position).getTitle().equals(getString(R.string.all_photos))){
                     getAlbumPhoto(FileController.getInstance().getAllGalleryPhoto(getApplicationContext()));
                 }
                 else {
@@ -181,10 +181,10 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
                 }
                 collapsingToolbarLayout.setTitle(files.get(position).getTitle());
                 if(files.get(position).getCount() > 1){
-                    subTitle.setText(files.get(position).getCount() + " photos");
+                    subTitle.setText(files.get(position).getCount() + " " + getString(R.string.photos));
                 }
                 else {
-                    subTitle.setText(files.get(position).getCount() + " photo");
+                    subTitle.setText(files.get(position).getCount() + " " + getString(R.string.photo));
                 }
                 isBack = false;
             }
@@ -213,10 +213,10 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
         final AlertDialog dialog = builder.create();
 
         TextView content = view.findViewById(R.id.dialog_content_text);
-        content.setText("You need to provide the necessary permissions to reach this section, please go to the settings and give the necessary permissions.");
+        content.setText(getString(R.string.permission_content));
 
         TextView negativeBtn = view.findViewById(R.id.dialog_negative_btn);
-        negativeBtn.setText("Cancel");
+        negativeBtn.setText(getString(R.string.cancel));
         negativeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -226,7 +226,7 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
         });
 
         TextView positiveBtn = view.findViewById(R.id.dialog_positive_btn);
-        positiveBtn.setText("Settings!");
+        positiveBtn.setText(getString(R.string._settings));
         positiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

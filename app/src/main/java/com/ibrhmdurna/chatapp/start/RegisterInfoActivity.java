@@ -150,21 +150,21 @@ public class RegisterInfoActivity extends AppCompatActivity implements ViewCompo
         }
         else {
             if(!(name.trim().length() > 0)){
-                nameInput.setError("* Enter a name");
+                nameInput.setError(getString(R.string.enter_a_name));
             }
             else {
                 nameInput.setError(null);
                 nameInput.setErrorEnabled(false);
             }
             if(!(surname.trim().length() > 0)){
-                surnameInput.setError("* Enter a surname");
+                surnameInput.setError(getString(R.string.enter_a_surname));
             }
             else {
                 surnameInput.setError(null);
                 surnameInput.setErrorEnabled(false);
             }
             if((phone.trim().length() > 0 && phone.trim().length() < 18)){
-                phoneInput.setError("Enter a valid phone number");
+                phoneInput.setError(getString(R.string.enter_a_valid_phone_number));
             }
             else {
                 phoneInput.setError(null);

@@ -293,7 +293,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                     nameSurname.setText(account.getNameSurname());
                 }
                 else{
-                    nameSurname.setText("ChatApp User");
+                    nameSurname.setText(context.getString(R.string.chatapp_user));
                     profileImage.setImageDrawable(context.getContext().getDrawable(R.drawable.default_avatar));
                 }
             }
@@ -305,7 +305,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         };
 
         private ValueEventListener lastMessageEventListener = new ValueEventListener() {
-            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -322,7 +321,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                             photoImage.setVisibility(View.GONE);
 
                             if(message.isUnsend()){
-                                lastMessage.setText("This message was deleted");
+                                lastMessage.setText(context.getString(R.string.this_message_was_deleted));
                                 lastMessage.setTypeface(null, Typeface.ITALIC);
                             }
                             else{
@@ -340,7 +339,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                         else if (message.getType().equals("Image")){
 
                             if(message.isUnsend()){
-                                lastMessage.setText("This message was deleted");
+                                lastMessage.setText(context.getString(R.string.this_message_was_deleted));
                                 lastMessage.setTypeface(null, Typeface.ITALIC);
                             }
                             else{
@@ -348,7 +347,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
                                 lastMessage.setTypeface(Typeface.DEFAULT);
                                 if(message.getMessage().equals("")){
-                                    lastMessage.setText("Photo");
+                                    lastMessage.setText(context.getString(R.string._photo));
                                 }
                                 else{
                                     lastMessage.setText(message.getMessage());

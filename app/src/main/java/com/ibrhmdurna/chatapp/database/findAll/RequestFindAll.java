@@ -96,7 +96,7 @@ public class RequestFindAll implements IFind {
                 if(bottomNavigationView.getSelectedItemId() == R.id.requests_item){
                     requestView.setVisibility(View.GONE);
                     notFoundView.setVisibility(View.VISIBLE);
-                    notFoundView.setText("No Request");
+                    notFoundView.setText(context.getContext().getString(R.string.no_request));
                 }
             }
         }

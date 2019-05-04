@@ -34,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity implements ViewComponent
     private void checkInput(){
         String email = emailInput.getEditText().getText().toString();
 
-        if(email.trim().length() > 0 && confirmInput.getHelperText().toString().equals("* Password are the same")){
+        if(email.trim().length() > 0 && confirmInput.getHelperText().toString().equals(getString(R.string.password_are_the_same))){
             nextView.setEnabled(true);
         }
         else {
@@ -66,28 +66,28 @@ public class RegisterActivity extends AppCompatActivity implements ViewComponent
                     if(confirmInput.getEditText().getText().toString().equals(passwordInput.getEditText().getText().toString())){
                         confirmImage.setImageDrawable(getDrawable(R.drawable.ic_password_done_icon));
                         passwordImage.setImageDrawable(getDrawable(R.drawable.ic_password_done_icon));
-                        confirmInput.setHelperText("* Password are the same");
+                        confirmInput.setHelperText(getString(R.string.password_are_the_same));
                         confirmInput.setHelperTextColor(getColorStateList(android.R.color.holo_green_light));
                     }else {
                         confirmImage.setImageDrawable(getDrawable(R.drawable.ic_password_fail_icon));
-                        confirmInput.setHelperText("* Password are different");
+                        confirmInput.setHelperText(getString(R.string.password_are_different));
                         confirmInput.setHelperTextColor(getColorStateList(R.color.colorFail));
                     }
                 }else {
                     //passwordImage.setImageDrawable(getDrawable(R.drawable.ic_password_icon));
                     confirmImage.setImageDrawable(getDrawable(R.drawable.ic_password_icon));
-                    confirmInput.setHelperText("* Password must be at least 6 characters");
+                    confirmInput.setHelperText(getString(R.string.password_must_be_at_least_6_characters));
                     confirmInput.setHelperTextColor(getColorStateList(android.R.color.tab_indicator_text));
                 }
 
                 if(passwordInput.getEditText().getText().length() > 10){
                     passwordImage.setImageDrawable(getDrawable(R.drawable.ic_password_done_icon));
-                    passwordInput.setHelperText("* Password is good");
+                    passwordInput.setHelperText(getString(R.string.password_is_good));
                     passwordInput.setHelperTextColor(getColorStateList(android.R.color.holo_green_light));
                 }
                 else if(passwordInput.getEditText().getText().length() > 5){
                     passwordImage.setImageDrawable(getDrawable(R.drawable.ic_password_warning_icon));
-                    passwordInput.setHelperText("* Password is medium");
+                    passwordInput.setHelperText(getString(R.string.password_is_medium));
                     passwordInput.setHelperTextColor(getColorStateList(R.color.colorWarning));
                 }
                 else {
@@ -97,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity implements ViewComponent
                 passwordImage.setImageDrawable(getDrawable(R.drawable.ic_password_icon));
                 passwordInput.setHelperText(null);
                 confirmImage.setImageDrawable(getDrawable(R.drawable.ic_password_icon));
-                confirmInput.setHelperText("* Password must be at least 6 characters");
+                confirmInput.setHelperText(getString(R.string.password_must_be_at_least_6_characters));
                 confirmInput.setHelperTextColor(getColorStateList(android.R.color.tab_indicator_text));
             }
             checkInput();

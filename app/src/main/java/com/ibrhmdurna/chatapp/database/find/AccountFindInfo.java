@@ -113,7 +113,7 @@ public class AccountFindInfo implements IFind {
                 getMore();
             }
             else {
-                Toast.makeText(binding.getRoot().getContext(), "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(binding.getRoot().getContext(), binding.getRoot().getContext().getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
                 rootView.setVisibility(View.VISIBLE);
                 loadingBar.setIndeterminate(false);
                 loadingBar.setVisibility(View.GONE);
@@ -130,10 +130,11 @@ public class AccountFindInfo implements IFind {
     };
 
     private ValueEventListener moreEventListener = new ValueEventListener() {
+        @SuppressLint("SetTextI18n")
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             if(dataSnapshot.exists()){
-                friendCount.setText(dataSnapshot.getChildrenCount() + " Friends");
+                friendCount.setText(dataSnapshot.getChildrenCount() + " " + binding.getRoot().getContext().getString(R.string._friends));
                 rootView.setVisibility(View.VISIBLE);
                 loadingBar.setIndeterminate(false);
                 loadingBar.setVisibility(View.GONE);

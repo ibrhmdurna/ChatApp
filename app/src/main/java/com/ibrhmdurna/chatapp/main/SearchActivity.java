@@ -172,7 +172,7 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
                 searchInput.getText().clear();
                 break;
             case R.id.clear_recent_btn:
-                final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, "Clear search history?", "Cancel", "Clear");
+                final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, getString(R.string._clear_search_history), getString(R.string.cancel), getString(R.string.clear));
                 TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
                 positiveBtn.setOnClickListener(new View.OnClickListener() {
                     @Override

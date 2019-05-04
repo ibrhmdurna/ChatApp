@@ -95,7 +95,7 @@ public class NotificationService extends FirebaseMessagingService {
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
 
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, "Messages",
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, getString(R.string.messages),
                     NotificationManager.IMPORTANCE_HIGH);
 
             notificationChannel.enableLights(true);
@@ -116,7 +116,7 @@ public class NotificationService extends FirebaseMessagingService {
         );
 
         RemoteInput remoteInput = new RemoteInput.Builder("key_text_reply")
-                .setLabel("Reply")
+                .setLabel(getString(R.string.reply))
                 .build();
 
         Intent actionIntent = new Intent(this, NotificationReceiver.class);
@@ -127,7 +127,7 @@ public class NotificationService extends FirebaseMessagingService {
 
         NotificationCompat.Action replyAction = new NotificationCompat.Action.Builder(
                 R.drawable.ic_send_white_icon,
-                "Reply",
+                getString(R.string.reply),
                 replyPendingIntent
         ).addRemoteInput(remoteInput).build();
 
@@ -145,10 +145,10 @@ public class NotificationService extends FirebaseMessagingService {
                             .setBigContentTitle(nameSurname))
                 .setContentTitle(nameSurname)
                 .setLargeIcon(ImageLoader.getInstance().loadImageSync(image))
-                .setContentText(message.equals("") ? message : "Photo")
+                .setContentText(message.equals("") ? message : getString(R.string._photo))
                 .setSubText(email)
                 .addAction(replyAction)
-                .addAction(R.color.colorNotification, "Mark as read", PendingIntent.getBroadcast(
+                .addAction(R.color.colorNotification, getString(R.string.mark_as_read), PendingIntent.getBroadcast(
                         this,
                         generateRandom(),
                         actionIntent.putExtra("action", "read").putExtra("user_id", fromUid),
@@ -177,7 +177,7 @@ public class NotificationService extends FirebaseMessagingService {
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
 
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, "Messages",
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, getString(R.string.messages),
                     NotificationManager.IMPORTANCE_HIGH);
 
             notificationChannel.enableLights(true);
@@ -198,7 +198,7 @@ public class NotificationService extends FirebaseMessagingService {
         );
 
         RemoteInput remoteInput = new RemoteInput.Builder("key_text_reply")
-                .setLabel("Reply")
+                .setLabel(getString(R.string.reply))
                 .build();
 
         Intent actionIntent = new Intent(this, NotificationReceiver.class);
@@ -209,7 +209,7 @@ public class NotificationService extends FirebaseMessagingService {
 
         NotificationCompat.Action replyAction = new NotificationCompat.Action.Builder(
                 R.drawable.ic_send_white_icon,
-                "Reply",
+                getString(R.string.reply),
                 replyPendingIntent
         ).addRemoteInput(remoteInput).build();
 
@@ -228,7 +228,7 @@ public class NotificationService extends FirebaseMessagingService {
                 .setContentText(message)
                 .setSubText(email)
                 .addAction(replyAction)
-                .addAction(R.color.colorNotification, "Mark as read", PendingIntent.getBroadcast(
+                .addAction(R.color.colorNotification, getString(R.string.mark_as_read), PendingIntent.getBroadcast(
                         this,
                         generateRandom(),
                         actionIntent.putExtra("action", "read").putExtra("user_id", fromUid),
@@ -258,10 +258,9 @@ public class NotificationService extends FirebaseMessagingService {
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
 
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, "Friendship Confirm",
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, getString(R.string.friendship_confirm),
                     NotificationManager.IMPORTANCE_HIGH);
 
-            notificationChannel.setDescription("Confirm Notification");
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.WHITE);
             notificationChannel.enableVibration(true);
@@ -288,15 +287,15 @@ public class NotificationService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setColor(getColor(R.color.colorNotification))
                 .setStyle(new NotificationCompat.InboxStyle()
-                            .setBigContentTitle("Accepted friendship request")
-                            .addLine(Html.fromHtml("<b>"+nameSurname+"</b> accepted the request for friendship!")))
-                .setContentTitle("Accepted friendship request")
-                .setContentText(Html.fromHtml("<b>"+nameSurname+"</b> accepted the request for friendship!"))
+                            .setBigContentTitle(getString(R.string.accepted_friendship_request))
+                            .addLine(Html.fromHtml("<b>"+nameSurname+ "</b> "+getString(R.string.accepted_the_req_friendship))))
+                .setContentTitle(getString(R.string.accepted_friendship_request))
+                .setContentText(Html.fromHtml("<b>"+nameSurname+ "</b> "+getString(R.string.accepted_the_req_friendship)))
                 .setSubText(email)
                 .setContentIntent(resultPendingIntent)
                 .setOnlyAlertOnce(true)
                 .setLargeIcon(setProfileImage(profileImage))
-                .addAction(R.color.colorNotification, "View Profile", resultPendingIntent)
+                .addAction(R.color.colorNotification, getString(R.string.view_profile), resultPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_SOCIAL);
         notificationManager.notify(fromUid, 1, notificationBuilder.build());
@@ -308,10 +307,9 @@ public class NotificationService extends FirebaseMessagingService {
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
 
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, "Friendship Requests",
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, getString(R.string.friendship_requests),
                     NotificationManager.IMPORTANCE_HIGH);
 
-            notificationChannel.setDescription("Requests Notification");
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.WHITE);
             notificationChannel.enableVibration(true);
@@ -340,20 +338,20 @@ public class NotificationService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setColor(getColor(R.color.colorNotification))
                 .setStyle(new NotificationCompat.InboxStyle()
-                            .setBigContentTitle("Friendship request")
-                            .addLine(Html.fromHtml("<b>"+nameSurname+"</b> has sent you request")))
-                .setContentTitle("Friendship request")
+                            .setBigContentTitle(getString(R.string.friendship_req))
+                            .addLine(Html.fromHtml("<b>"+nameSurname+ "</b>" + getString(R.string.has_sent_you_req))))
+                .setContentTitle(getString(R.string.friendship_req))
                 .setSubText(email)
-                .setContentText(Html.fromHtml("<b>"+nameSurname+"</b> has sent you request"))
+                .setContentText(Html.fromHtml("<b>"+nameSurname+ "</b>" + getString(R.string.has_sent_you_req)))
                 .setContentIntent(resultPendingIntent)
                 .setOnlyAlertOnce(true)
-                .addAction(R.color.colorNotification, "Cancel", PendingIntent.getBroadcast(
+                .addAction(R.color.colorNotification, getString(R.string.cancel), PendingIntent.getBroadcast(
                         this,
                         generateRandom(),
                         actionIntent.putExtra("action", "cancel").putExtra("user_id", fromUid),
                         PendingIntent.FLAG_UPDATE_CURRENT
                 ))
-                .addAction(R.color.colorNotification, "Confirm", PendingIntent.getBroadcast(
+                .addAction(R.color.colorNotification, getString(R.string.confirm), PendingIntent.getBroadcast(
                         this,
                         generateRandom(),
                         actionIntent.putExtra("action", "confirm").putExtra("user_id", fromUid),

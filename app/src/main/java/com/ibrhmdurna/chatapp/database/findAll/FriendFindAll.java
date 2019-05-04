@@ -151,7 +151,7 @@ public class FriendFindAll implements IFind {
                 if(bottomNavigationView.getSelectedItemId() == R.id.friends_item){
                     friendLayout.setVisibility(View.GONE);
                     notFoundView.setVisibility(View.VISIBLE);
-                    notFoundView.setText("No Friends");
+                    notFoundView.setText(context.getString(R.string.no_friends));
                 }
             }
         }
@@ -161,15 +161,4 @@ public class FriendFindAll implements IFind {
 
         }
     };
-
-    private void sortArrayList(){
-        Collections.sort(friendList, new Comparator<Friend>() {
-            @Override
-            public int compare(Friend o1, Friend o2) {
-                return o2.getAccount().getName().compareTo(o1.getAccount().getName());
-            }
-        });
-
-        friendAdapter.notifyDataSetChanged();
-    }
 }

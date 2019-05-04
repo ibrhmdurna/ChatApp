@@ -1,5 +1,6 @@
 package com.ibrhmdurna.chatapp.database.find;
 
+import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -178,7 +179,7 @@ public class ProfileFindInfo implements IFind {
                 loadingBar.setVisibility(View.GONE);
             }
             else {
-                Toast.makeText(binding.getRoot().getContext(), "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(binding.getRoot().getContext(), binding.getRoot().getContext().getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
                 rootView.setVisibility(View.VISIBLE);
                 loadingBar.setIndeterminate(false);
                 loadingBar.setVisibility(View.GONE);
@@ -249,20 +250,22 @@ public class ProfileFindInfo implements IFind {
     };
 
     private ValueEventListener friendEventListener2 = new ValueEventListener() {
+        @SuppressLint("SetTextI18n")
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             if(dataSnapshot.exists()){
-                friendsItem.setText(dataSnapshot.getChildrenCount() + " Friends");
+                friendsItem.setText(dataSnapshot.getChildrenCount() + " " +binding.getRoot().getContext().getString(R.string._friends));
 
                 final int[] count = {0};
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     if(!current_uid.equals(snapshot.getKey())){
                         Firebase.getInstance().getDatabaseReference().child("Friends").child(current_uid).child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @SuppressLint("SetTextI18n")
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if(dataSnapshot.exists()){
                                     count[0]++;
-                                    mutualItem.setText(count[0] + " Mutual F.");
+                                    mutualItem.setText(count[0] + " " + binding.getRoot().getContext().getString(R.string.mutual_f));
                                 }
                             }
 

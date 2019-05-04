@@ -94,7 +94,7 @@ public class ChatFindAll implements IFind {
                 if(bottomNavigationView.getSelectedItemId() == R.id.messages_item){
                     chatView.setVisibility(View.GONE);
                     notFoundView.setVisibility(View.VISIBLE);
-                    notFoundView.setText("No Chat");
+                    notFoundView.setText(context.getString(R.string.no_chat));
                 }
             }
         }

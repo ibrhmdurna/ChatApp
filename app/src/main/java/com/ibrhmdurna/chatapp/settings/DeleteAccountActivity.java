@@ -33,7 +33,7 @@ public class DeleteAccountActivity extends AppCompatActivity implements ViewComp
     }
 
     private void deleteProcess(){
-        final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, "Are you sure you want to delete the account? We will miss you.", "Cancel", "Delete!");
+        final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, getString(R.string.delete_dialog_content), getString(R.string.cancel), getString(R.string._delete));
         TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
         positiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override

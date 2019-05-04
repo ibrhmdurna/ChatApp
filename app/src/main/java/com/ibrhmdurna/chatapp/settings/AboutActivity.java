@@ -43,7 +43,7 @@ public class AboutActivity extends AppCompatActivity implements ViewComponentFac
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        versionView.setText(version + " version");
+        versionView.setText(version + " " + getString(R.string.version));
     }
 
     @Override

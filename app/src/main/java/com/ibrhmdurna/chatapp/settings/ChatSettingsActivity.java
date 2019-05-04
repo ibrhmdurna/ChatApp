@@ -53,7 +53,7 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
         int backgroundColor = prefs.getInt("BACKGROUND_COLOR", 0);
 
         if(backgroundImage == null && backgroundColor == 0){
-            Toast.makeText(getApplicationContext(), "Background does not already exist!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.background_does_not_already_exist), Toast.LENGTH_SHORT).show();
         }
         else {
             ImageController.getInstance().setBackgroundColor(0);
@@ -67,7 +67,7 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
             editor.apply();
 
             backgroundView.setImageDrawable(getDrawable(R.drawable.splash_background));
-            Toast.makeText(getApplicationContext(), "Deleted background!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.deleted_background), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -106,7 +106,7 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
         ImageController.getInstance().setBackgroundImage(null);
         saveView.setEnabled(false);
         saveView.setSaveEnabled(false);
-        Toast.makeText(getApplicationContext(), "Background successfully changed.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.background_success_changed), Toast.LENGTH_SHORT).show();
     }
 
     private void backgroundProcess(){
@@ -175,7 +175,7 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
                 saveBackground();
                 break;
             case R.id.clear_chat_view:
-                final AlertDialog dialog = DialogController.getInstance().dialogChatClear(this, "Are you sure you want to clear all chat?", "Clear");
+                final AlertDialog dialog = DialogController.getInstance().dialogChatClear(this, getString(R.string.are_you_sure_clear_all_chat), getString(R.string.clear));
                 final CheckBox checkBox = dialog.findViewById(R.id.checked_device_delete);
 
                 TextView positive = dialog.findViewById(R.id.dialog_positive_btn);
@@ -184,12 +184,12 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
                     public void onClick(View v) {
                         dialog.dismiss();
                         Delete.getInstance().messageAllDelete(FirebaseAuth.getInstance().getUid(), checkBox.isChecked());
-                        Toast.makeText(getApplicationContext(), "All chats cleared", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.all_chats_cleared), Toast.LENGTH_SHORT).show();
                     }
                 });
                 break;
             case R.id.delete_chat_view:
-                final AlertDialog dialog1 = DialogController.getInstance().dialogChatClear(this, "Are you sure you want to delete all chat?", "Delete");
+                final AlertDialog dialog1 = DialogController.getInstance().dialogChatClear(this, getString(R.string.are_you_sure_delete_all_chat), getString(R.string.delete));
                 final CheckBox checkBox1 = dialog1.findViewById(R.id.checked_device_delete);
 
                 TextView positive1 = dialog1.findViewById(R.id.dialog_positive_btn);
@@ -199,7 +199,7 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
                         dialog1.dismiss();
                         Delete.getInstance().messageAllDelete(FirebaseAuth.getInstance().getUid(), checkBox1.isChecked());
                         Delete.getInstance().chatAllDelete(FirebaseAuth.getInstance().getUid());
-                        Toast.makeText(getApplicationContext(), "All chats deleted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.all_chats_deleted), Toast.LENGTH_SHORT).show();
                     }
                 });
                 break;

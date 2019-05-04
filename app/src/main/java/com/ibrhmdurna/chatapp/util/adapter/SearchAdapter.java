@@ -58,7 +58,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             searchViewHolder.itemView.setEnabled(true);
         }
         else {
-            searchViewHolder.setNameSurname("\""+ account.getName() + "\" cloud not be found.");
+            searchViewHolder.setNameSurname("\""+ account.getName() + "\" " +  context.getString(R.string.could_not_be_found));
             searchViewHolder.getProfileLayout().setVisibility(View.GONE);
             searchViewHolder.getEmail().setVisibility(View.GONE);
             searchViewHolder.itemView.setEnabled(false);

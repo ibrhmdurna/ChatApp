@@ -106,7 +106,7 @@
                             android:textColor="@android:color/white"
                             android:text="@string/dark_mode"
                             style="@style/CustomTransparentViewStyle"
-                            android:backgroundTint="@color/colorTransparent"
+                            android:backgroundTint="?attr/colorAccentHighLight"
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp"/>
                     </LinearLayout>

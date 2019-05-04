@@ -1,5 +1,6 @@
 package com.ibrhmdurna.chatapp.database;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -35,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.util.controller.AppController;
@@ -61,7 +63,7 @@ public class Update{
 
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "This may take some time.\nPlease wait... ");
+        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, context.getString(R.string.this_may_take_some_time));
         loadingBar.show();
 
         final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -118,7 +120,7 @@ public class Update{
                                                                 context.startActivity(accountIntent);
                                                             }
                                                             else {
-                                                                Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
                                                             }
                                                             loadingBar.dismiss();
                                                         }
@@ -167,17 +169,16 @@ public class Update{
                         accountIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         accountIntent.putExtra("page","Account");
                         context.startActivity(accountIntent);
-                        Toast.makeText(context, "Information was successfully update.", Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
                     }
                     loadingBar.dismiss();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
                     loadingBar.dismiss();
                 }
             });
@@ -190,7 +191,7 @@ public class Update{
 
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "Please wait...");
+        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, context.getString(R.string.please_wait));
         loadingBar.show();
 
         final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -211,11 +212,11 @@ public class Update{
                                     newPasswordInput.getEditText().getText().clear();
                                     currentPasswordInput.getEditText().getText().clear();
                                     confirmPasswordInput.getEditText().clearFocus();
-                                    Toast.makeText(context, "Password changed successfully.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, context.getString(R.string.password_changed_success), Toast.LENGTH_SHORT).show();
                                 }
                                 else {
                                     loadingBar.dismiss();
-                                    Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -223,18 +224,18 @@ public class Update{
                     }
                     else {
                         loadingBar.dismiss();
-                        newPasswordInput.setError("The new password can not be the same as the old password.");
+                        newPasswordInput.setError(context.getString(R.string.the_new_password_can_not_be));
                     }
                 }
                 else {
                     loadingBar.dismiss();
-                    currentPasswordInput.setError("Current password is incorrect.");
+                    currentPasswordInput.setError(context.getString(R.string.current_password_incorrect));
                 }
             }
         });
     }
 
-    public void resetPassword(Activity context, final TextInputLayout emailInput, final LinearLayout sendLayout, final LottieAnimationView doneAnim, final TextView successText){
+    public void resetPassword(final Activity context, final TextInputLayout emailInput, final LinearLayout sendLayout, final LottieAnimationView doneAnim, final TextView successText){
 
         AppController.getInstance().closeKeyboard(context);
 
@@ -246,6 +247,7 @@ public class Update{
         FirebaseAuth.getInstance().useAppLanguage();
 
         FirebaseAuth.getInstance().sendPasswordResetEmail(emailInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
@@ -255,7 +257,7 @@ public class Update{
                     fadeIn.setDuration(1000);
                     sendLayout.setAnimation(fadeIn);
                     sendLayout.setVisibility(View.VISIBLE);
-                    successText.setText("We sent mail to " + emailInput.getEditText().getText().toString());
+                    successText.setText(context.getString(R.string.we_sent_mail_to) + " " + emailInput.getEditText().getText().toString());
                     doneAnim.playAnimation();
                     emailInput.getEditText().getText().clear();
                     emailInput.getEditText().clearFocus();
@@ -276,7 +278,7 @@ public class Update{
                 }
                 else{
                     loadingBar.dismiss();
-                    emailInput.setError("Email is incorrect. Please enter a valid email address.");
+                    emailInput.setError(context.getString(R.string.email_incorrect));
             }
             }
         });
@@ -286,7 +288,7 @@ public class Update{
 
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "Please wait...");
+        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, context.getString(R.string.please_wait));
         loadingBar.show();
 
         newEmailInput.setError(null);
@@ -306,7 +308,7 @@ public class Update{
                             if(task.isSuccessful()){
                                 if(task.getResult().getSignInMethods().size() > 0){
                                     loadingBar.dismiss();
-                                    newEmailInput.setError("This email is used");
+                                    newEmailInput.setError(context.getString(R.string.email_is_used));
                                 }
                                 else {
 
@@ -327,11 +329,11 @@ public class Update{
                                                             newEmailInput.getEditText().getText().clear();
                                                             passwordInput.getEditText().getText().clear();
                                                             passwordInput.getEditText().clearFocus();
-                                                            Toast.makeText(context, "Email updated successfully.", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(context, context.getString(R.string.email_updated_success), Toast.LENGTH_SHORT).show();
                                                         }
                                                         else {
                                                             loadingBar.dismiss();
-                                                            Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
                                                         }
 
                                                     }
@@ -340,7 +342,7 @@ public class Update{
                                             }
                                             else {
                                                 loadingBar.dismiss();
-                                                Toast.makeText(context, "Couldn't refresh feed.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
                                             }
 
                                         }
@@ -351,7 +353,7 @@ public class Update{
                             }
                             else {
                                 loadingBar.dismiss();
-                                newEmailInput.setError("Please enter a valid email address.");
+                                newEmailInput.setError(context.getString(R.string.enter_a_vaild_email));
                             }
                         }
                     });
@@ -359,7 +361,7 @@ public class Update{
                 }
                 else {
                     loadingBar.dismiss();
-                    passwordInput.setError("Current password is incorrect.");
+                    passwordInput.setError(context.getString(R.string.current_password_incorrect));
                 }
             }
         });

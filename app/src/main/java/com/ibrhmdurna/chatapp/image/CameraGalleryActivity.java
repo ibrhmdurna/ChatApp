@@ -62,10 +62,10 @@ public class CameraGalleryActivity extends AppCompatActivity implements ViewComp
         getAlbumPhoto(FileController.getInstance().getAllGalleryPhoto(this));
 
         if(FileController.getInstance().getAllGalleryPhoto(this).size() > 1){
-            subTitle.setText(FileController.getInstance().getAllGalleryPhoto(this).size() + " photos");
+            subTitle.setText(FileController.getInstance().getAllGalleryPhoto(this).size() + " " + getString(R.string.photos));
         }
         else {
-            subTitle.setText(FileController.getInstance().getAllGalleryPhoto(this).size() + " photo");
+            subTitle.setText(FileController.getInstance().getAllGalleryPhoto(this).size() + " " + getString(R.string.photo));
         }
     }
 
