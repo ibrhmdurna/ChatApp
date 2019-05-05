@@ -76,7 +76,7 @@ public class RegisterFinishActivity extends AppCompatActivity implements ViewCom
     private void infoProcess(){
         String name = getIntent().getStringExtra("name");
         String surname = getIntent().getStringExtra("surname");
-        bodyText.setText(getString(R.string.nice_to_see_you_among_us) + name+" "+surname+"!");
+        bodyText.setText(getString(R.string.nice_to_see_you_among_us) + "\n" +name+" "+surname+"!");
         profileText.setText(name.substring(0,1));
     }
 

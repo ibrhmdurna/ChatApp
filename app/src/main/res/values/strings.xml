@@ -165,7 +165,7 @@
     <string name="hello_i_am">Hello, I am</string>
     <string name="would_join_chatapp">would you like to join us? ChatApp Inc.</string>
     <string name="subject_here">Subject Here</string>
-    <string name="are_you_sure_you_want">Are you sure you want to make</string>
+    <string name="are_you_sure_you_want">"Are you sure you want to make "</string>
     <string name="out_of_friendship">out of friendship?</string>
     <string name="_clear_search_history">Clear search history?</string>
     <string name="clear">Clear</string>
@@ -190,7 +190,7 @@
     <string name="password_is_good">* Password is good</string>
     <string name="password_is_medium">* Password is medium</string>
     <string name="log_out_of_chatapp">Log out of ChatApp?</string>
-    <string name="nice_to_see_you_among_us">Nice to see you among us. Welcome\\n</string>
+    <string name="nice_to_see_you_among_us">Nice to see you among us. Welcome</string>
     <string name="_photo">Photo</string>
     <string name="could_not_be_found">cloud not be found.</string>
     <string name="compressing">Compressing…</string>
@@ -205,5 +205,10 @@
     <string name="has_sent_you_req">has sent you request</string>
     <string name="find_your_friend">Find your friend in the world of ChatApp!</string>
     <string name="_friends">Friends</string>
+    <string name="clear_chat_with">Clear chat with \"</string>
+    <string name="clear_chat_with_2">\"?</string>
+    <string name="delete_chat_with">Delete chat with \"</string>
+    <string name="delete_chat_with_2">\"?</string>
+    <string name="sending">Sending...</string>
 
 </resources>

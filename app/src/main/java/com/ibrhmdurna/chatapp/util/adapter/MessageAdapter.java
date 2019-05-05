@@ -1,15 +1,22 @@
 package com.ibrhmdurna.chatapp.util.adapter;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,14 +33,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.image.PhotoActivity;
+import com.ibrhmdurna.chatapp.local.ChatActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.util.GetTimeAgo;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 import com.ibrhmdurna.chatapp.util.controller.FileController;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -55,6 +72,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private List<Message> messageList;
     private String uid;
     private String chatUid;
+
+    private boolean isDownloaded = false;
 
     public MessageAdapter(Activity context, List<Message> messageList, String chatUid){
         this.context = context;
@@ -432,7 +451,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     @Override
                     public void onClick(View v) {
                         downloadLayout.setVisibility(View.GONE);
-                        FileController.getInstance().compressToDownloadImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView);
+                        myPermissionProcess(message, loadingBar, imageView, downloadLayout, imageSizeText);
                     }
                 });
 
@@ -479,19 +498,29 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 }
                 else{
-                    File imgFile = new File(message.getPath());
+                    if(ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                        File imgFile = new File(message.getPath());
 
-                    if(imgFile.exists()){
-                        UniversalImageLoader.setImage(message.getPath(), imageView, null, "file://");
-                        downloadLayout.setVisibility(View.GONE);
-                        imageView.setEnabled(true);
+                        if(imgFile.exists()){
+                            UniversalImageLoader.setImage(message.getPath(), imageView, null, "file://");
+                            downloadLayout.setVisibility(View.GONE);
+                            imageView.setEnabled(true);
+                        }
+                        else{
+                            if(message.getSize() != null){
+                                imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
+                            }
+
+                            downloadLayout.setVisibility(View.VISIBLE);
+                        }
                     }
                     else{
+                        downloadLayout.setVisibility(View.VISIBLE);
+
                         if(message.getSize() != null){
                             imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
                         }
-
-                        downloadLayout.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -685,37 +714,51 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
 
                     if(!message.isDownload()){
-                        FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, MessageAdapter.this);
+                        downloadLayout.setVisibility(View.GONE);
+                        loadingBar.setIndeterminate(true);
+                        loadingBar.setVisibility(View.VISIBLE);
+                        permissionProcess(message, loadingBar, imageView, downloadLayout, imageSizeText);
                     }
                     else{
                         downloadLayout.setVisibility(View.VISIBLE);
                     }
                 }
                 else{
-                    File imgFile = new File(message.getPath());
+                    if(ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                        File imgFile = new File(message.getPath());
 
-                    if(imgFile.exists()){
-                        UniversalImageLoader.setImage(message.getPath(), imageView, null, "file://");
-                        downloadLayout.setVisibility(View.GONE);
-                        imageView.setEnabled(true);
+                        if(imgFile.exists()){
+                            UniversalImageLoader.setImage(message.getPath(), imageView, null, "file://");
+                            downloadLayout.setVisibility(View.GONE);
+                            imageView.setEnabled(true);
+                        }
+                        else{
+                            if(message.getSize() != null){
+                                imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
+                            }
+
+                            downloadLayout.setVisibility(View.VISIBLE);
+                        }
                     }
                     else{
+                        downloadLayout.setVisibility(View.VISIBLE);
+
                         if(message.getSize() != null){
                             imageSizeText.setText(getStringSizeLengthFile(message.getSize()));
                         }
-
-                        downloadLayout.setVisibility(View.VISIBLE);
                     }
                 }
-
-                downloadLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        downloadLayout.setVisibility(View.GONE);
-                        FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, MessageAdapter.this);
-                    }
-                });
             }
+
+            downloadLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    downloadLayout.setVisibility(View.GONE);
+                    permissionProcess(message, loadingBar, imageView, downloadLayout, imageSizeText);
+
+                }
+            });
 
             messageContent.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -876,5 +919,140 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 profileImage.setImageResource(R.drawable.ic_avatar_9);
                 break;
         }
+    }
+
+    private void myPermissionProcess(final Message message, final SpinKitView loadingBar, final RoundedImageView imageView, final LinearLayout downloadLayout, final TextView imageSizeText){
+        Dexter.withActivity(context)
+                .withPermissions(
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ).withListener(new MultiplePermissionsListener() {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                if(report.areAllPermissionsGranted()){
+                    if(message.getPath().equals("")){
+                        FileController.getInstance().compressToDownloadImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView);
+                    }
+                    else{
+                        File imgFile = new File(message.getPath());
+
+                        if(imgFile.exists()){
+                            UniversalImageLoader.setImage(message.getPath(), imageView, null, "file://");
+                            downloadLayout.setVisibility(View.GONE);
+                            imageView.setEnabled(true);
+                        }
+                        else{
+                            FileController.getInstance().compressToDownloadImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView);
+                        }
+                    }
+                }
+                else if(report.isAnyPermissionPermanentlyDenied()){
+                    permissionDialog(downloadLayout);
+                }
+                else{
+                    downloadLayout.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                token.continuePermissionRequest();
+            }
+        }).withErrorListener(new PermissionRequestErrorListener() {
+            @Override
+            public void onError(DexterError error) {
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+        }).check();
+    }
+
+    private void permissionProcess(final Message message, final SpinKitView loadingBar, final RoundedImageView imageView, final LinearLayout downloadLayout, final TextView imageSizeText){
+        Dexter.withActivity(context)
+                .withPermissions(
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ).withListener(new MultiplePermissionsListener() {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                if(report.areAllPermissionsGranted()){
+                    if(!isDownloaded && message.getPath().equals("")){
+                        Log.e("Info ", "Image Downloaded");
+                        FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, MessageAdapter.this);
+                        isDownloaded = true;
+                    }
+                    else{
+                        File imgFile = new File(message.getPath());
+
+                        if(imgFile.exists()){
+                            UniversalImageLoader.setImage(message.getPath(), imageView, null, "file://");
+                            downloadLayout.setVisibility(View.GONE);
+                            imageView.setEnabled(true);
+                        }
+                        else{
+                            if(isDownloaded){
+                                isDownloaded = false;
+                            }
+                            else{
+                                FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, MessageAdapter.this);
+                            }
+                        }
+                    }
+                }
+                else if(report.isAnyPermissionPermanentlyDenied()){
+                    permissionDialog(downloadLayout);
+                }
+                else{
+                    downloadLayout.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                token.continuePermissionRequest();
+            }
+        }).withErrorListener(new PermissionRequestErrorListener() {
+            @Override
+            public void onError(DexterError error) {
+                Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+            }
+        }).check();
+    }
+
+    private void permissionDialog(final LinearLayout downloadLayout){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = context.getLayoutInflater().inflate(R.layout.dialog_layout, null);
+        App.Theme.getInstance().getTheme(view.getContext());
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+
+        TextView content = view.findViewById(R.id.dialog_content_text);
+        content.setText(context.getString(R.string.permission_content));
+
+        TextView negativeBtn = view.findViewById(R.id.dialog_negative_btn);
+        negativeBtn.setText(context.getString(R.string.cancel));
+        negativeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                downloadLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+        TextView positiveBtn = view.findViewById(R.id.dialog_positive_btn);
+        positiveBtn.setText(context.getString(R.string._settings));
+        positiveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent settingsIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+                settingsIntent.setData(uri);
+                context.startActivity(settingsIntent);
+            }
+        });
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
     }
 }

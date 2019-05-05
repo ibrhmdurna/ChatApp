@@ -32,6 +32,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -240,9 +241,9 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             deleteItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final AlertDialog dialog = DialogController.getInstance().dialogCustom((Activity) context, null, "Cancel", "Delete");
+                    final AlertDialog dialog = DialogController.getInstance().dialogCustom((Activity) context, null, context.getString(R.string.cancel), context.getString(R.string.delete));
 
-                    String text = context.getString(R.string.are_you_sure_you_want) + " " + friend.getAccount().getNameSurname() + " " + context.getString(R.string.out_of_friendship);
+                    String text = context.getString(R.string.are_you_sure_you_want) +  friend.getAccount().getNameSurname() + " " + context.getString(R.string.out_of_friendship);
                     TextView content = dialog.findViewById(R.id.dialog_content_text);
 
                     TypedValue typedValue = new TypedValue();
@@ -253,8 +254,15 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     SpannableString ss = new SpannableString(text);
                     ForegroundColorSpan fcsColor = new ForegroundColorSpan(color);
 
-                    ss.setSpan(fcsColor, 30, 30 + friend.getAccount().getNameSurname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    content.setText(ss);
+                    String language = Locale.getDefault().getLanguage();
+                    if(language.equals("tr")){
+                        ss.setSpan(fcsColor, 1, 1 + friend.getAccount().getNameSurname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        content.setText(ss);
+                    }
+                    else{
+                        ss.setSpan(fcsColor, 30, 30 + friend.getAccount().getNameSurname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        content.setText(ss);
+                    }
 
                     TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
                     positiveBtn.setOnClickListener(new View.OnClickListener() {

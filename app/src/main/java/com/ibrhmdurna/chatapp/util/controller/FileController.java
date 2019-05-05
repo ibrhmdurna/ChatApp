@@ -279,7 +279,7 @@ public class FileController {
         @Override
         protected synchronized byte[] doInBackground(Bitmap... bitmaps) {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmaps[0].compress(Bitmap.CompressFormat.PNG, 100, stream);
+            bitmaps[0].compress(Bitmap.CompressFormat.PNG, 75, stream);
             byte[] bytes = stream.toByteArray();
             bitmaps[0].recycle();
 
@@ -332,7 +332,7 @@ public class FileController {
             String newImageName = "IMG_"+s+"_"+System.currentTimeMillis()+".jpg";
 
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            bitmaps[0].compress(Bitmap.CompressFormat.JPEG, 80, bytes);
+            bitmaps[0].compress(Bitmap.CompressFormat.JPEG, 75, bytes);
 
             String ExternalStorageDirectory = Environment.getExternalStorageDirectory().getPath()+"/DCIM/ChatApp/Sent";
             File fileInfo = new File(ExternalStorageDirectory);
@@ -397,7 +397,7 @@ public class FileController {
             String newImageName = "IMG_"+s+"_"+System.currentTimeMillis()+".jpg";
 
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            bitmaps[0].compress(Bitmap.CompressFormat.JPEG, 80, bytes);
+            bitmaps[0].compress(Bitmap.CompressFormat.JPEG, 75, bytes);
 
             String ExternalStorageDirectory = Environment.getExternalStorageDirectory().getPath()+"/DCIM/ChatApp";
             File fileInfo = new File(ExternalStorageDirectory);
@@ -432,14 +432,12 @@ public class FileController {
             final String newPath = s;
 
             if(newPath != null){
-                final DatabaseReference databaseReference = Firebase.getInstance().getDatabaseReference();
-                databaseReference.keepSynced(true);
 
-                databaseReference.child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(newPath).addOnCompleteListener(new OnCompleteListener<Void>() {
+                Firebase.getInstance().getDatabaseReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(newPath).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            databaseReference.child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("download").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            Firebase.getInstance().getDatabaseReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("download").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){

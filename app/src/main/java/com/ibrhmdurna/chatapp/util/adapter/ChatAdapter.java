@@ -149,7 +149,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                         @Override
                         public void onClick(View v) {
                             dialog.dismiss();
-                            final AlertDialog confirmDialog = DialogController.getInstance().dialogCustom(context.getActivity(), "Clear chat with \"" + nameSurname.getText() + "\"?", "Cancel", "Clear");
+                            final AlertDialog confirmDialog = DialogController.getInstance().dialogCustom(context.getActivity(), context.getString(R.string.clear_chat_with) + nameSurname.getText() + context.getString(R.string.clear_chat_with_2), context.getString(R.string.cancel), context.getString(R.string.clear));
                             confirmDialog.show();
                             TextView positiveView = confirmDialog.findViewById(R.id.dialog_positive_btn);
                             positiveView.setOnClickListener(new View.OnClickListener() {
@@ -167,7 +167,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                         @Override
                         public void onClick(View v) {
                             dialog.dismiss();
-                            final AlertDialog confirmDialog = DialogController.getInstance().dialogCustom(context.getActivity(), "Delete chat with \"" + nameSurname.getText() + "\"?", "Cancel", "Delete");
+                            final AlertDialog confirmDialog = DialogController.getInstance().dialogCustom(context.getActivity(), context.getString(R.string.delete_chat_with) + nameSurname.getText() + context.getString(R.string.delete_chat_with_2), context.getString(R.string.cancel), context.getString(R.string.delete));
                             confirmDialog.show();
                             TextView positiveView = confirmDialog.findViewById(R.id.dialog_positive_btn);
                             positiveView.setOnClickListener(new View.OnClickListener() {

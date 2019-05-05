@@ -86,6 +86,90 @@ public class NotificationService extends FirebaseMessagingService {
                 String image = remoteMessage.getData().get("image");
                 showImageMessageNotification(name_surname, profile_image, from_user_id, email, click_action, message1, image);
                 break;
+            case "deleted":
+                showDeletedNotification(name_surname, profile_image, from_user_id, email, click_action);
+                break;
+        }
+    }
+
+    private void showDeletedNotification(String nameSurname, String profileImage, String fromUid, String email, String clickAction){
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        final String CHANNEL_ID = "com.ibrhmdurna.chatapp.message";
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, getString(R.string.messages),
+                    NotificationManager.IMPORTANCE_HIGH);
+
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.WHITE);
+            notificationChannel.enableVibration(true);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+        Intent resultIntent = new Intent(clickAction);
+        resultIntent.putExtra("user_id", fromUid);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(resultIntent);
+
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
+                generateRandom(),
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        RemoteInput remoteInput = new RemoteInput.Builder("key_text_reply")
+                .setLabel(getString(R.string.reply))
+                .build();
+
+        Intent actionIntent = new Intent(this, NotificationReceiver.class);
+        actionIntent.putExtra("user_id", fromUid);
+        actionIntent.putExtra("action", "reply");
+        PendingIntent replyPendingIntent = PendingIntent.getBroadcast(this,
+                generateRandom(), actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Action replyAction = new NotificationCompat.Action.Builder(
+                R.drawable.ic_send_white_icon,
+                getString(R.string.reply),
+                replyPendingIntent
+        ).addRemoteInput(remoteInput).build();
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
+
+        notificationBuilder
+                .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setColor(getColor(R.color.colorNotification))
+                .setStyle(new NotificationCompat.InboxStyle()
+                        .setBigContentTitle(nameSurname)
+                        .addLine(getString(R.string.this_message_was_deleted)))
+                .setContentTitle(nameSurname)
+                .setContentText(getString(R.string.this_message_was_deleted))
+                .setSubText(email)
+                .addAction(replyAction)
+                .addAction(R.color.colorNotification, getString(R.string.mark_as_read), PendingIntent.getBroadcast(
+                        this,
+                        generateRandom(),
+                        actionIntent.putExtra("action", "read").putExtra("user_id", fromUid),
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                ))
+                .setContentIntent(resultPendingIntent)
+                .setOnlyAlertOnce(true)
+                .setLargeIcon(setProfileImage(profileImage))
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE);
+
+        if(!ChatsFragment.isChat){
+            if(ChatActivity.NOTIF_ID != null){
+                if(!ChatActivity.NOTIF_ID.equals(fromUid)){
+                    notificationManager.notify(fromUid, 2, notificationBuilder.build());
+                }
+            }
+            else{
+                notificationManager.notify(fromUid, 2, notificationBuilder.build());
+            }
         }
     }
 
@@ -339,10 +423,10 @@ public class NotificationService extends FirebaseMessagingService {
                 .setColor(getColor(R.color.colorNotification))
                 .setStyle(new NotificationCompat.InboxStyle()
                             .setBigContentTitle(getString(R.string.friendship_req))
-                            .addLine(Html.fromHtml("<b>"+nameSurname+ "</b>" + getString(R.string.has_sent_you_req))))
+                            .addLine(Html.fromHtml("<b>"+nameSurname+ "</b> " + getString(R.string.has_sent_you_req))))
                 .setContentTitle(getString(R.string.friendship_req))
                 .setSubText(email)
-                .setContentText(Html.fromHtml("<b>"+nameSurname+ "</b>" + getString(R.string.has_sent_you_req)))
+                .setContentText(Html.fromHtml("<b>"+nameSurname+ "</b> " + getString(R.string.has_sent_you_req)))
                 .setContentIntent(resultPendingIntent)
                 .setOnlyAlertOnce(true)
                 .addAction(R.color.colorNotification, getString(R.string.cancel), PendingIntent.getBroadcast(

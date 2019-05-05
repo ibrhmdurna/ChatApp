@@ -35,7 +35,7 @@ public class SecurityActivity extends AppCompatActivity implements ViewComponent
     private void checkInput(){
         String currentPass = currentPasswordInput.getEditText().getText().toString();
 
-        if(currentPass.trim().length() > 0 && confirmPasswordInput.getHelperText() != null && confirmPasswordInput.getHelperText().toString().equals("* Password are the same")){
+        if(currentPass.trim().length() > 0 && confirmPasswordInput.getHelperText() != null && confirmPasswordInput.getHelperText().toString().equals(getString(R.string.password_are_the_same))){
             changeView.setEnabled(true);
         }
         else {

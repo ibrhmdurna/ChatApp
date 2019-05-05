@@ -239,7 +239,7 @@ public class Update{
 
         AppController.getInstance().closeKeyboard(context);
 
-        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, "Sending...");
+        final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, context.getString(R.string.sending));
         loadingBar.show();
 
         emailInput.setError(null);
@@ -273,7 +273,7 @@ public class Update{
                             sendLayout.setAnimation(fadeOut);
                             sendLayout.setVisibility(View.GONE);
                         }
-                    }, 3000);
+                    }, 3500);
 
                 }
                 else{
@@ -413,6 +413,7 @@ public class Update{
 
         Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).child(messageId).child("unsend").setValue(true);
         Firebase.getInstance().getDatabaseReference().child("Messages").child(chatUid).child(uid).child(messageId).child("unsend").setValue(true);
+        Insert.getInstance().notification(chatUid, "deleted");
     }
 
     public void messageSeen(final String chatUid, boolean listener){

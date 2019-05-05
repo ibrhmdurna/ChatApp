@@ -141,7 +141,7 @@
     <string name="_photo">Fotoğraf</string>
     <string name="_settings">Ayarlar!</string>
     <string name="accepted_friendship_request">Arkaşlık isteği</string>
-    <string name="accepted_the_req_friendship">Arkadaşlık isteğini kabul etti</string>
+    <string name="accepted_the_req_friendship">arkadaşlık isteğini kabul etti</string>
     <string name="all_chats_cleared">Bütün sohbet temizlendi</string>
     <string name="all_chats_deleted">Bütün sohbet silindi</string>
     <string name="are_you_sure_clear_all_chat">Tüm sohbeti temizlemek istediğinden emin misin?</string>
@@ -161,7 +161,7 @@
     <string name="dismiss">Reddet</string>
     <string name="download">İndirilenler</string>
     <string name="email_incorrect">Hatalı email adresi. Lütfen geçerli bir email adresi girin.</string>
-    <string name="email_is_used">Bu email adresi kullanılmakta</string>
+    <string name="email_is_used">Bu email adresi kullanılmaktatır</string>
     <string name="email_updated_success">Email başarıyla güncellendi</string>
     <string name="enter_a_name">* Bir isim girin</string>
     <string name="enter_a_surname">* Bir soyisim girin</string>
@@ -176,7 +176,7 @@
     <string name="mark_as_read">Okundu olarak işaretle</string>
     <string name="messages">Mesajlar</string>
     <string name="mutual_f">Ortak A.</string>
-    <string name="nice_to_see_you_among_us">Sizi aramızda görmek güzel. Hoşgeldin\\n</string>
+    <string name="nice_to_see_you_among_us">Sizi aramızda görmek güzel. Hoşgeldin</string>
     <string name="no">Hayır</string>
     <string name="no_account_for_this_email">Bu email adresine ait hesap bulunamadı.</string>
     <string name="no_chat">Sohbet Yok</string>
@@ -202,4 +202,12 @@
     <string name="yes">Evet</string>
     <string name="find_your_friend">ChatApp dünyasında arkadaşını bul!</string>
     <string name="_friends">Arkadaş</string>
+    <string name="clear_chat_with">\"</string>
+    <string name="clear_chat_with_2">\" ile sohbeti temizle?</string>
+    <string name="delete_chat_with">\"</string>
+    <string name="delete_chat_with_2">\" ile sohbeti sil?</string>
+    <string name="out_of_friendship">arkadaşlıktan çıkarmak istediğine emin misin?</string>
+    <string name="are_you_sure_you_want">" "</string>
+    <string name="sending">Gönderiliyor…</string>
+    <string name="we_sent_mail_to">Mail adresine bir mail gönderdik :</string>
 </resources>

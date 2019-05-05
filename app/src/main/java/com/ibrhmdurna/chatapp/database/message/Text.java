@@ -23,13 +23,18 @@ public class Text extends MessageStrategy {
 
         final DatabaseReference messageReference = Firebase.getInstance().getDatabaseReference().child("Messages");
 
+        Map myChatMap = new HashMap();
+        myChatMap.put("time", ServerValue.TIMESTAMP);
+        myChatMap.put("seen", true);
+        myChatMap.put("typing", false);
+
         Map chatMap = new HashMap();
         chatMap.put("time", ServerValue.TIMESTAMP);
         chatMap.put("seen", false);
         chatMap.put("typing", false);
 
         final Map chatsMap = new HashMap();
-        chatsMap.put("Chats/" + message.getFrom() + "/" + chatUid, chatMap);
+        chatsMap.put("Chats/" + message.getFrom() + "/" + chatUid, myChatMap);
         chatsMap.put("Chats/" + chatUid + "/" + message.getFrom(), chatMap);
 
         final Map messageMap = new HashMap();

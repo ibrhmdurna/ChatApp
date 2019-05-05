@@ -1,5 +1,6 @@
 package com.ibrhmdurna.chatapp.image;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -94,7 +95,7 @@ public class PhotoActivity extends AppCompatActivity implements ViewComponentFac
 
         UniversalImageLoader.setImage(path, photoView, null, "file://");
 
-        timeText.setText(GetTimeAgo.getInstance().getMessageAgo(this, time));
+        timeText.setText(GetTimeAgo.getInstance().getPhotoTimeAgo(this, time));
     }
 
     private void toolbarProcess(){

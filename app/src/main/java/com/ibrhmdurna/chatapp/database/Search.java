@@ -91,7 +91,7 @@ public class Search {
             @Override
             public void onFailure(@NonNull Exception e) {
                 loading.dismiss();
-                Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
             }
         });
 

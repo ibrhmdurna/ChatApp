@@ -90,77 +90,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         uid = getIntent().getStringExtra("user_id");
         NOTIF_ID = uid;
 
-        permissionProcess();
-    }
-
-    private void permissionProcess(){
-        Dexter.withActivity(this)
-                .withPermissions(
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ).withListener(new MultiplePermissionsListener() {
-            @Override
-            public void onPermissionsChecked(MultiplePermissionsReport report) {
-                if(report.areAllPermissionsGranted()){
-                    toolsManagement();
-                }
-                else if(report.isAnyPermissionPermanentlyDenied()){
-                    permissionDialog();
-                }
-                else {
-                    ChatActivity.super.onBackPressed();
-                }
-            }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                token.continuePermissionRequest();
-            }
-        }).withErrorListener(new PermissionRequestErrorListener() {
-            @Override
-            public void onError(DexterError error) {
-                finish();
-                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
-            }
-        }).check();
-    }
-
-    private void permissionDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View view = getLayoutInflater().inflate(R.layout.dialog_layout, null);
-        App.Theme.getInstance().getTheme(view.getContext());
-        builder.setView(view);
-        final AlertDialog dialog = builder.create();
-
-        TextView content = view.findViewById(R.id.dialog_content_text);
-        content.setText("You need to provide the necessary permissions to reach this section, please go to the settings and give the necessary permissions.");
-
-        TextView negativeBtn = view.findViewById(R.id.dialog_negative_btn);
-        negativeBtn.setText("Cancel");
-        negativeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                ChatActivity.super.onBackPressed();
-            }
-        });
-
-        TextView positiveBtn = view.findViewById(R.id.dialog_positive_btn);
-        positiveBtn.setText("Settings!");
-        positiveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                Intent settingsIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                settingsIntent.setData(uri);
-                startActivity(settingsIntent);
-            }
-        });
-
-        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
+        toolsManagement();
     }
 
     private void loadMessage(){
