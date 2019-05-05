@@ -26,8 +26,6 @@ import com.ibrhmdurna.chatapp.models.Friend;
 import com.ibrhmdurna.chatapp.util.adapter.FriendAdapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class AccountFriendFindAll implements IFind {
