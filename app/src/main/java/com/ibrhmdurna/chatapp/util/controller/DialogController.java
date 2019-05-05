@@ -278,12 +278,16 @@ public class DialogController {
         final AlertDialog dialog = builder.create();
 
         final LinearLayout viewItem = view.findViewById(R.id.view_item);
+        final LinearLayout markItem = view.findViewById(R.id.mark_as_read_item);
+        final View line = view.findViewById(R.id.chat_dialog_line);
 
         Firebase.getInstance().getDatabaseReference().child("Accounts").child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     viewItem.setVisibility(View.VISIBLE);
+                    markItem.setVisibility(View.VISIBLE);
+                    line.setVisibility(View.VISIBLE);
                     viewItem.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -295,6 +299,8 @@ public class DialogController {
                     });
                 }
                 else{
+                    line.setVisibility(View.GONE);
+                    markItem.setVisibility(View.GONE);
                     viewItem.setVisibility(View.GONE);
                 }
             }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.ibrhmdurna.chatapp.application.App;
@@ -63,8 +64,10 @@ public class SettingsActivity extends AppCompatActivity implements ViewComponent
                 startActivity(securityIntent);
                 break;
             case R.id.blocked_accounts_item:
+                Toast.makeText(this, "Under Development", Toast.LENGTH_SHORT).show();
+                /*
                 Intent blockedIntent = new Intent(getApplicationContext(), BlockedAccountsActivity.class);
-                startActivity(blockedIntent);
+                startActivity(blockedIntent);*/
                 break;
             case R.id.chat_settings_item:
                 Intent chatSettingsIntent = new Intent(getApplicationContext(), ChatSettingsActivity.class);

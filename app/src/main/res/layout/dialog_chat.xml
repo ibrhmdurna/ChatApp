@@ -52,7 +52,34 @@
                         android:textSize="16sp"/>
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/mark_as_read_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="15dp"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_share_icon"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mark_as_read"
+                        android:textColor="?attr/primaryTextColor"
+                        android:textSize="16sp"/>
+                </LinearLayout>
+
                 <View
+                    android:id="@+id/chat_dialog_line"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="?attr/lineColor"

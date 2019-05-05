@@ -3,6 +3,7 @@ package com.ibrhmdurna.chatapp.util.adapter;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -23,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Firebase;
+import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.local.ChatActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Chat;
@@ -143,6 +145,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                     dialog.show();
 
                     final CheckBox deviceCheck = dialog.findViewById(R.id.delete_device_check);
+
+                    LinearLayout markItem = dialog.findViewById(R.id.mark_as_read_item);
+                    markItem.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            Update.getInstance().messageSeen(chatUid, true);
+                            Update.getInstance().chatSeen(chatUid, true);
+
+                            Handler h = new Handler();
+                            h.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Update.getInstance().messageSeen(chatUid, false);
+                                    Update.getInstance().chatSeen(chatUid, false);
+                                }
+                            },1500);
+                        }
+                    });
 
                     LinearLayout clearItem = dialog.findViewById(R.id.clear_item);
                     clearItem.setOnClickListener(new View.OnClickListener() {

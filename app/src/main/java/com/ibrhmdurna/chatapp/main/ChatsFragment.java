@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.ibrhmdurna.chatapp.application.App;
@@ -73,8 +74,8 @@ public class ChatsFragment extends Fragment implements ViewComponentFactory {
 
         isChat = true;
 
-        NotificationManager manager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.cancel(2);
+        NotificationManager manager = (NotificationManager) view.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.cancelAll();
     }
 
     @Override
