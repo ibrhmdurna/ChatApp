@@ -1,16 +1,11 @@
 package com.ibrhmdurna.chatapp.database.findAll;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,8 +47,7 @@ public class MessageFindAll implements IFind {
     private Query contentQuery;
     private Query moreQuery;
 
-    private boolean isRemoved = false;
-    private boolean isChanged = false;
+    public static boolean isRemoved = false;
 
     public MessageFindAll(Activity context, String chatUid){
         this.context = context;
@@ -139,22 +133,27 @@ public class MessageFindAll implements IFind {
 
             CURRENT_POSITION++;
 
-            if(isChanged){
-                messageList.add(message);
-                messageAdapter.notifyDataSetChanged();
-                isChanged = false;
-            }
-            else if(isRemoved){
-                messageList.add(0, message);
-                messageAdapter.notifyDataSetChanged();
-                isRemoved = false;
+            if(isRemoved){
+
+                String key = messageList.get(0).getMessage_id();
+
+                if(!MESSAGE_PREVIEW_KEY.equals(key)){
+                    messageList.add(0, message);
+                    messageAdapter.notifyDataSetChanged();
+                }
+                else{
+                    MESSAGE_PREVIEW_KEY = MESSAGE_LAST_KEY;
+                }
+
             }
             else{
                 messageList.add(message);
                 messageAdapter.notifyItemInserted(messageList.size() - 1);
+                messageView.smoothScrollToPosition(messageList.size() - 1);
             }
 
-            messageView.smoothScrollToPosition(messageList.size() - 1);
+            isRemoved = false;
+
         }
 
         @Override
@@ -164,7 +163,6 @@ public class MessageFindAll implements IFind {
             int position = findPosition(message.getTime());
             messageList.remove(position);
             messageList.add(position, message);
-            isChanged = true;
             messageAdapter.notifyDataSetChanged();
         }
 
@@ -174,7 +172,6 @@ public class MessageFindAll implements IFind {
             message.setMessage_id(dataSnapshot.getKey());
             int position = findPosition(message.getTime());
             messageList.remove(position);
-            isRemoved = true;
             messageAdapter.notifyItemRemoved(position);
         }
 
@@ -196,26 +193,21 @@ public class MessageFindAll implements IFind {
             message.setMessage_id(dataSnapshot.getKey());
 
             if(!MESSAGE_PREVIEW_KEY.equals(dataSnapshot.getKey())){
-                if(isChanged){
-                    messageList.add(message);
-                    messageAdapter.notifyDataSetChanged();
-                    isChanged = false;
-                }
-                else if(isRemoved){
+                if(isRemoved){
                     messageList.add(0, message);
                     messageAdapter.notifyDataSetChanged();
-                    isRemoved = false;
                 }
                 else{
                     messageList.add(CURRENT_MORE_POSITION++, message);
-                    messageAdapter.notifyItemInserted(CURRENT_MORE_POSITION);
+                    messageAdapter.notifyDataSetChanged();
+                    layoutManager.scrollToPositionWithOffset(CURRENT_MORE_POSITION - 1, 0);
                 }
-
-                layoutManager.scrollToPositionWithOffset(CURRENT_MORE_POSITION + 1, 0);
             }
             else{
                 MESSAGE_PREVIEW_KEY = MESSAGE_LAST_KEY;
             }
+
+            isRemoved = false;
 
             if(CURRENT_MORE_POSITION == 1){
                 MESSAGE_LAST_KEY = dataSnapshot.getKey();
@@ -240,7 +232,6 @@ public class MessageFindAll implements IFind {
             message.setMessage_id(dataSnapshot.getKey());
             int position = findPosition(message.getTime());
             messageList.remove(position);
-            isRemoved = true;
             messageAdapter.notifyItemRemoved(position);
         }
 

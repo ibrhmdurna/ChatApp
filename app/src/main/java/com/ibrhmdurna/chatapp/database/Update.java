@@ -39,6 +39,7 @@ import com.google.firebase.storage.UploadTask;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.models.Account;
+import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.util.controller.AppController;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
@@ -408,11 +409,11 @@ public class Update{
         });
     }
 
-    public void unSendMessage(String chatUid, String messageId){
+    public void unSendMessage(String chatUid, Message message){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).child(messageId).child("unsend").setValue(true);
-        Firebase.getInstance().getDatabaseReference().child("Messages").child(chatUid).child(uid).child(messageId).child("unsend").setValue(true);
+        Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).child(message.getMessage_id()).child("unsend").setValue(true);
+        Firebase.getInstance().getDatabaseReference().child("Messages").child(chatUid).child(uid).child(message.getMessage_id()).child("unsend").setValue(true);
         Insert.getInstance().notification(chatUid, "deleted");
     }
 

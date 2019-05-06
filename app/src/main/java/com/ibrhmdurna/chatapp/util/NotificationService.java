@@ -27,6 +27,7 @@ import android.support.v4.app.RemoteInput;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.IconCompat;
 import android.text.Html;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;

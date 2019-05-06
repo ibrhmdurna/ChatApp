@@ -26,17 +26,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.image.PhotoActivity;
-import com.ibrhmdurna.chatapp.local.ChatActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.util.GetTimeAgo;
@@ -51,14 +50,9 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.makeramen.roundedimageview.RoundedImageView;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 import com.vanniktech.emoji.EmojiTextView;
 
 import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -499,7 +493,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 else{
                     if(ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                        ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                            ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
                         File imgFile = new File(message.getPath());
 
                         if(imgFile.exists()){
@@ -857,20 +851,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             profileText.setVisibility(View.VISIBLE);
                         }
                         else {
-                            final Picasso picasso = Picasso.get();
-                            picasso.setIndicatorsEnabled(false);
-                            picasso.load(account.getThumb_image()).networkPolicy(NetworkPolicy.OFFLINE)
-                                    .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
-                                @Override
-                                public void onSuccess() {
-
-                                }
-
-                                @Override
-                                public void onError(Exception e) {
-                                    picasso.load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
-                                }
-                            });
+                            Glide.with(context).load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
                             profileText.setText(null);
                             profileText.setVisibility(View.GONE);
                             profileImage.setSaveEnabled(true);

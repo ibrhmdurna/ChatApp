@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Firebase;
+import com.ibrhmdurna.chatapp.database.findAll.MessageFindAll;
 import com.ibrhmdurna.chatapp.settings.EditAccountActivity;
 import com.ibrhmdurna.chatapp.start.RegisterFinishActivity;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
@@ -362,7 +363,6 @@ public class FileController {
 
         @Override
         protected synchronized void onPostExecute(String s) {
-
             Firebase.getInstance().getDatabaseReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(s);
 
             super.onPostExecute(s);
@@ -432,7 +432,6 @@ public class FileController {
             final String newPath = s;
 
             if(newPath != null){
-
                 Firebase.getInstance().getDatabaseReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(newPath).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

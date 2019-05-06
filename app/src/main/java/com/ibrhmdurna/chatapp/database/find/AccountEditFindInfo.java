@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -14,9 +15,6 @@ import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.databinding.ActivityEditAccountBinding;
 import com.ibrhmdurna.chatapp.models.Account;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -61,20 +59,7 @@ public class AccountEditFindInfo implements IFind {
                     profileText.setText(name);
                 }
                 else {
-                    final Picasso picasso = Picasso.get();
-                    picasso.setIndicatorsEnabled(false);
-                    picasso.load(account.getThumb_image()).networkPolicy(NetworkPolicy.OFFLINE)
-                            .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-                            picasso.load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
-                        }
-                    });
+                    Glide.with(binding.getRoot().getContext()).load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
                     profileText.setVisibility(View.GONE);
                 }
 

@@ -24,6 +24,7 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.database.Update;
+import com.ibrhmdurna.chatapp.database.findAll.MessageFindAll;
 import com.ibrhmdurna.chatapp.local.ProfileActivity;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.settings.DarkModeActivity;
@@ -139,6 +140,7 @@ public class DialogController {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                MessageFindAll.isRemoved = true;
                 if(myMessage){
                     Delete.getInstance().myImageMessage(message, chatUid);
                 }
@@ -164,7 +166,7 @@ public class DialogController {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
-                        Update.getInstance().unSendMessage(chatUid, message.getMessage_id());
+                        Update.getInstance().unSendMessage(chatUid, message);
 
                         if(removeDeviceCheck.isChecked()){
                             File file = new File(message.getPath());
@@ -222,6 +224,7 @@ public class DialogController {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                MessageFindAll.isRemoved = true;
                 if(myMessage){
                     Delete.getInstance().myMessage(message, chatUid);
                 }
@@ -239,7 +242,7 @@ public class DialogController {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
-                        Update.getInstance().unSendMessage(chatUid, message.getMessage_id());
+                        Update.getInstance().unSendMessage(chatUid, message);
                     }
                 });
             }

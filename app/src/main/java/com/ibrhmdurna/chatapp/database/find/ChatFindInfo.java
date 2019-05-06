@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,9 +21,6 @@ import com.ibrhmdurna.chatapp.local.ProfileActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.util.GetTimeAgo;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -286,20 +284,7 @@ public class ChatFindInfo implements IFind {
             profileText.setVisibility(View.VISIBLE);
         }
         else {
-            final Picasso picasso = Picasso.get();
-            picasso.setIndicatorsEnabled(false);
-            picasso.load(account.getThumb_image()).networkPolicy(NetworkPolicy.OFFLINE)
-                    .placeholder(R.drawable.default_avatar).into(profileImage, new Callback() {
-                @Override
-                public void onSuccess() {
-
-                }
-
-                @Override
-                public void onError(Exception e) {
-                    picasso.load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
-                }
-            });
+            Glide.with(context).load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
             profileText.setText(null);
             profileText.setVisibility(View.GONE);
         }

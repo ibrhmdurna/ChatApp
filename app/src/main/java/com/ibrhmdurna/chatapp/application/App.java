@@ -11,8 +11,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.squareup.picasso.OkHttp3Downloader;
-import com.squareup.picasso.Picasso;
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.google.GoogleEmojiProvider;
 
@@ -37,13 +35,6 @@ public class App extends Application {
 
         //ImageLoader.getInstance().clearMemoryCache();
         //ImageLoader.getInstance().clearDiskCache();
-
-        Picasso.Builder builder = new Picasso.Builder(this);
-        builder.downloader(new OkHttp3Downloader(this, Integer.MAX_VALUE));
-        Picasso built = builder.build();
-        built.setIndicatorsEnabled(true);
-        built.setLoggingEnabled(true);
-        Picasso.setSingletonInstance(built);
 
         SharedPreferences prefs = getSharedPreferences("THEME", MODE_PRIVATE);
         if(prefs.getBoolean("NIGHT_MODE", false)){

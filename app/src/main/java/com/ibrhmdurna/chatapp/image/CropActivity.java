@@ -12,7 +12,6 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.util.controller.ImageController;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.isseiaoki.simplecropview.CropImageView;
-import com.squareup.picasso.Picasso;
 
 public class CropActivity extends AppCompatActivity implements View.OnClickListener, ViewComponentFactory {
 
