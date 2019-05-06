@@ -91,7 +91,7 @@ public class ChatFindInfo implements IFind {
 
                 nameSurname.setText(account.getNameSurname());
 
-                typingListener(account);
+                typingListener();
 
                 toolbarView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -115,7 +115,7 @@ public class ChatFindInfo implements IFind {
         }
     };
 
-    private void typingListener(final Account account){
+    private void typingListener(){
         final String currentUid = FirebaseAuth.getInstance().getUid();
 
         Firebase.getInstance().getDatabaseReference().child("Chats").child(currentUid).child(uid).addValueEventListener(new ValueEventListener() {
