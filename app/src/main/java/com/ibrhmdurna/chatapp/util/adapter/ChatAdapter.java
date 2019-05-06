@@ -1,6 +1,5 @@
 package com.ibrhmdurna.chatapp.util.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Handler;
@@ -20,7 +19,6 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Delete;
@@ -35,6 +33,7 @@ import com.ibrhmdurna.chatapp.util.controller.DialogController;
 import com.vanniktech.emoji.EmojiTextView;
 
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -386,6 +385,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                         Message message = snapshot.getValue(Message.class);
 
+                        assert message != null;
                         if(message.getFrom().equals(chatUid) && !message.isSeen()){
                             count++;
                         }
@@ -423,7 +423,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                 if(dataSnapshot.exists()){
                     final boolean isTyping = (boolean) dataSnapshot.getValue();
 
-                    Firebase.getInstance().getDatabaseReference().child("Friends").child(FirebaseAuth.getInstance().getUid()).child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    Firebase.getInstance().getDatabaseReference().child("Friends").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if(dataSnapshot.exists()){

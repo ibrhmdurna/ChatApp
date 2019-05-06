@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.findAll.MessageFindAll;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.start.StartActivity;
@@ -180,7 +181,7 @@ public class Delete {
                             message.setMessage_id(snapshot1.getKey());
 
                             if(message.getType().equals("Text")){
-                                myMessage(message, snapshot.getKey());
+                                message(message, snapshot.getKey());
                             }
                             else if(message.getType().equals("Image")){
                                 if(device){
@@ -191,7 +192,7 @@ public class Delete {
                                     }
                                 }
 
-                                myImageMessage(message, snapshot.getKey());
+                                imageMessage(message, snapshot.getKey());
                             }
                         }
                     }
@@ -291,23 +292,18 @@ public class Delete {
         });
     }
 
-    public void myMessage(Message message, String chatUid){
-        String uid = FirebaseAuth.getInstance().getUid();
-
-        Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).child(message.getMessage_id()).removeValue();
-    }
-
-    public void myImageMessage(Message message, String chatUid){
-        if(!message.getUrl().equals(""))
-            FirebaseStorage.getInstance().getReferenceFromUrl(message.getUrl()).delete();
-
-        myMessage(message, chatUid);
-    }
-
     public void message(Message message, String chatUid){
         String uid = FirebaseAuth.getInstance().getUid();
 
-        Firebase.getInstance().getDatabaseReference().child("Messages").child(chatUid).child(uid).child(message.getMessage_id()).removeValue();
+        MessageFindAll.isRemoved = true;
+        Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).child(message.getMessage_id()).removeValue();
+    }
+
+    public void imageMessage(Message message, String chatUid){
+        if(!message.getUrl().equals(""))
+            FirebaseStorage.getInstance().getReferenceFromUrl(message.getUrl()).delete();
+
+        message(message, chatUid);
     }
 
     public void clearChat(String chatUid, boolean deleteDevice){

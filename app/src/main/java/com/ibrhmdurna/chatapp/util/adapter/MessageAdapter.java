@@ -58,6 +58,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -176,6 +177,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public TextMessageViewHolder(@NonNull View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
 
             profileLayout = itemView.findViewById(R.id.message_profile_layout);
             profileImage = itemView.findViewById(R.id.message_profile_image);
@@ -268,6 +270,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public TextMyMessageViewHolder(@NonNull View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
 
             messageContent = itemView.findViewById(R.id.message_content);
             timeText = itemView.findViewById(R.id.message_time_view);
@@ -300,9 +303,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             sendIcon.setVisibility(View.VISIBLE);
 
             if(message.isSend()){
+                sendIcon.setVisibility(View.GONE);
                 if(message.isReceive()){
-                    sendIcon.setVisibility(View.GONE);
-
                     if(position == messageList.size() - 1){
                         Firebase.getInstance().getDatabaseReference().child("Chats").child(chatUid).child(uid).child("seen").addValueEventListener(seenEventListener);
                     }
@@ -407,6 +409,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public ImageMyMessageViewHolder(@NonNull View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
 
             imageView = itemView.findViewById(R.id.message_image);
             messageContent = itemView.findViewById(R.id.message_content);
@@ -531,9 +534,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             sendIcon.setVisibility(View.VISIBLE);
 
             if(message.isSend()){
+                sendIcon.setVisibility(View.GONE);
                 if(message.isReceive()){
-                    sendIcon.setVisibility(View.GONE);
-
                     if(position == messageList.size() - 1){
                         Firebase.getInstance().getDatabaseReference().child("Chats").child(chatUid).child(uid).child("seen").addValueEventListener(seenEventListener);
                     }
@@ -639,6 +641,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public ImageMessageViewHolder(@NonNull View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
 
             imageView = itemView.findViewById(R.id.message_image);
             profileLayout = itemView.findViewById(R.id.message_profile_layout);

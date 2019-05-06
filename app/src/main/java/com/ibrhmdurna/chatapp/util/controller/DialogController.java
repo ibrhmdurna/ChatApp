@@ -140,12 +140,11 @@ public class DialogController {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                MessageFindAll.isRemoved = true;
                 if(myMessage){
-                    Delete.getInstance().myImageMessage(message, chatUid);
+                    Delete.getInstance().imageMessage(message, chatUid);
                 }
                 else{
-                    Delete.getInstance().myMessage(message, chatUid);
+                    Delete.getInstance().message(message, chatUid);
                 }
 
                 if(removeDeviceCheck.isChecked()){
@@ -224,12 +223,11 @@ public class DialogController {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                MessageFindAll.isRemoved = true;
                 if(myMessage){
-                    Delete.getInstance().myMessage(message, chatUid);
+                    Delete.getInstance().message(message, chatUid);
                 }
                 else{
-                    Delete.getInstance().myMessage(message, chatUid);
+                    Delete.getInstance().message(message, chatUid);
                 }
             }
         });
