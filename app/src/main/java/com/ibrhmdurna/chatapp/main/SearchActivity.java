@@ -199,7 +199,9 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
 
     @Override
     protected void onDestroy() {
-        find.onDestroy();
+        if(find != null){
+            find.onDestroy();
+        }
         super.onDestroy();
     }
 }

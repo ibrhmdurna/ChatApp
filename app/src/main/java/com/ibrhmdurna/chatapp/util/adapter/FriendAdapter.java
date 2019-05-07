@@ -192,11 +192,11 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             friendUid = friend.getAccount().getUid();
 
-            Firebase.getInstance().getDatabaseReference().child("Request").child(friend.getAccount().getUid()).removeEventListener(requestEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Request").child(friend.getAccount().getUid()).child(uid).removeEventListener(requestEventListener);
             Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).child(friendUid).removeEventListener(friendEventListener);
 
             if(!friendUid.equals(uid)){
-                Firebase.getInstance().getDatabaseReference().child("Request").child(friend.getAccount().getUid()).addListenerForSingleValueEvent(requestEventListener);
+                Firebase.getInstance().getDatabaseReference().child("Request").child(friend.getAccount().getUid()).child(uid).addListenerForSingleValueEvent(requestEventListener);
             }
             else{
                 addItem.setVisibility(View.GONE);

@@ -145,15 +145,11 @@ public class MessageFindAll implements IFind {
                 MESSAGE_PREVIEW_KEY = dataSnapshot.getKey();
 
                 isRemoved = false;
-
-                Log.e("Item Added R", message.getMessage_id());
             }
             else{
                 messageList.add(message);
                 messageAdapter.notifyItemInserted(messageList.size() - 1);
                 messageView.smoothScrollToPosition(messageList.size() - 1);
-
-                Log.e("Item Added", message.getMessage_id());
             }
         }
 
@@ -167,8 +163,6 @@ public class MessageFindAll implements IFind {
                 messageList.add(position, message);
                 messageAdapter.notifyDataSetChanged();
             }
-
-            Log.e("Item Changed", message.getMessage_id());
         }
 
         @Override
@@ -180,8 +174,6 @@ public class MessageFindAll implements IFind {
                 messageList.remove(position);
                 messageAdapter.notifyItemRemoved(position);
             }
-
-            Log.e("Item Removed", message.getMessage_id());
         }
 
         @Override
@@ -234,8 +226,6 @@ public class MessageFindAll implements IFind {
                 messageList.add(position, message);
                 messageAdapter.notifyDataSetChanged();
             }
-
-            Log.e("More Item Changed", message.getMessage_id() + " : " + message.getMessage());
         }
 
         @Override
@@ -251,8 +241,6 @@ public class MessageFindAll implements IFind {
 
             //MESSAGE_LAST_KEY = messageList.get(0).getMessage_id();
             //MESSAGE_PREVIEW_KEY = messageList.get(0).getMessage_id();
-
-            Log.e("More Item Removed", message.getMessage_id() + " : " + message.getMessage());
         }
 
         @Override

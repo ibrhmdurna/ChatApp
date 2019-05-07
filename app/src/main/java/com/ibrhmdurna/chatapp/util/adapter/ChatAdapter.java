@@ -105,21 +105,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
             chatUid = chat.getChatUid();
 
-            Firebase.getInstance().getDatabaseReference().child("Accounts").child(chatUid).removeEventListener(accountEventListener);
-            Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).limitToLast(1).removeEventListener(lastMessageEventListener);
-            Firebase.getInstance().getDatabaseReference().child("Messages").child(chatUid).child(uid).removeEventListener(messageEventListener);
             Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).child(chatUid).child("typing").removeEventListener(chatEventListener);
 
-            Firebase.getInstance().getDatabaseReference().child("Accounts").child(chatUid).addValueEventListener(accountEventListener);
-            Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).limitToLast(1).addValueEventListener(lastMessageEventListener);
-            Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).addValueEventListener(messageEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Accounts").child(chatUid).addListenerForSingleValueEvent(accountEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).limitToLast(1).addListenerForSingleValueEvent(lastMessageEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).addListenerForSingleValueEvent(messageEventListener);
             Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).child(chatUid).child("typing").addValueEventListener(chatEventListener);
 
             String chatTime = GetTimeAgo.getInstance().getChatTimeAgo(context.getContext(), chat.getTime());
             time.setText(chatTime);
             timeAccentText.setText(chatTime);
 
-            if(position == chatList.size() - 1){
+            if(position == 0){
                 line.setVisibility(View.GONE);
             }
             else{
@@ -174,6 +171,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                                 @Override
                                 public void onClick(View v) {
                                     confirmDialog.dismiss();
+                                    youText.setVisibility(View.GONE);
+                                    photoImage.setVisibility(View.GONE);
+                                    lastMessage.setVisibility(View.GONE);
+                                    timeAccentText.setVisibility(View.GONE);
+                                    time.setVisibility(View.VISIBLE);
+                                    messageCount.setVisibility(View.GONE);
                                     Delete.getInstance().clearChat(chatUid, deviceCheck.isChecked());
                                 }
                             });

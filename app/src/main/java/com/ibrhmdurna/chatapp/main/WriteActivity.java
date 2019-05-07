@@ -156,7 +156,9 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
 
     @Override
     protected void onDestroy() {
-        find.onDestroy();
+        if(find != null){
+            find.onDestroy();
+        }
         super.onDestroy();
     }
 }

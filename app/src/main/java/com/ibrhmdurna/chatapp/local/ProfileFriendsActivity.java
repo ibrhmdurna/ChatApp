@@ -191,7 +191,9 @@ public class ProfileFriendsActivity extends AppCompatActivity implements ViewCom
 
     @Override
     protected void onDestroy() {
-        find.onDestroy();
+        if(find != null){
+            find.onDestroy();
+        }
         super.onDestroy();
     }
 }

@@ -97,7 +97,7 @@ public class RecentFindAll implements IFind {
                                     recentLayout.setVisibility(View.GONE);
                                 }
 
-                                shortArrayList();
+                                sortArrayList();
                             }
                         }
 
@@ -120,7 +120,7 @@ public class RecentFindAll implements IFind {
         }
     };
 
-    private void shortArrayList(){
+    private void sortArrayList(){
         Collections.sort(recentList, new Comparator<Recent>() {
             @Override
             public int compare(Recent o1, Recent o2) {

@@ -1,6 +1,7 @@
 package com.ibrhmdurna.chatapp.database.findAll;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -20,8 +22,6 @@ import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.util.adapter.ChatAdapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -52,13 +52,15 @@ public class ChatFindAll implements IFind {
     public void getContent() {
         chatList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(context.getContext());
+        layoutManager.setReverseLayout(true);
         chatAdapter = new ChatAdapter(context, chatList);
+        chatView.setHasFixedSize(true);
         chatView.setLayoutManager(layoutManager);
         chatView.setAdapter(chatAdapter);
 
         uid = FirebaseAuth.getInstance().getUid();
 
-        Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).addValueEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).orderByChild("time").addValueEventListener(contentEventListener);
     }
 
     @Override
@@ -68,7 +70,7 @@ public class ChatFindAll implements IFind {
 
     @Override
     public void onDestroy() {
-        Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).removeEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).orderByChild("time").removeEventListener(contentEventListener);
     }
 
     private ValueEventListener contentEventListener = new ValueEventListener() {
@@ -88,7 +90,7 @@ public class ChatFindAll implements IFind {
                     chatList.add(chat);
                 }
 
-                shortArrayList();
+                chatAdapter.notifyDataSetChanged();
             }
             else {
                 if(bottomNavigationView.getSelectedItemId() == R.id.messages_item){
@@ -104,15 +106,4 @@ public class ChatFindAll implements IFind {
 
         }
     };
-
-    private void shortArrayList(){
-        Collections.sort(chatList, new Comparator<Chat>() {
-            @Override
-            public int compare(Chat o1, Chat o2) {
-                return Long.compare(o2.getTime(), o1.getTime());
-            }
-        });
-
-        chatAdapter.notifyDataSetChanged();
-    }
 }

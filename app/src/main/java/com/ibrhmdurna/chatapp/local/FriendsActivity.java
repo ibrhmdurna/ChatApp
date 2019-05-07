@@ -152,7 +152,9 @@ public class FriendsActivity extends AppCompatActivity implements ViewComponentF
 
     @Override
     protected void onDestroy() {
-        find.onDestroy();
+        if(find != null){
+            find.onDestroy();
+        }
         super.onDestroy();
     }
 }

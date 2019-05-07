@@ -62,7 +62,9 @@ public class RequestsFragment extends Fragment implements ViewComponentFactory {
 
     @Override
     public void onDestroy() {
-        find.onDestroy();
+        if(find != null){
+            find.onDestroy();
+        }
         super.onDestroy();
     }
 }

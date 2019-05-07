@@ -190,6 +190,8 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        find.onDestroy();
+        if(find != null){
+            find.onDestroy();
+        }
     }
 }

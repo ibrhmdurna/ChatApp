@@ -188,7 +188,7 @@ public class DialogController {
 
         LinearLayout copyItem = view.findViewById(R.id.copy_item);
 
-        if(!message.getMessage().equals("")){
+        if(!message.getMessage().equals("") && !message.isUnsend()){
             copyItem.setVisibility(View.VISIBLE);
             copyItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -254,15 +254,21 @@ public class DialogController {
 
 
         LinearLayout copyItem = view.findViewById(R.id.copy_item);
-        copyItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Copied Text", message.getMessage());
-                clipboard.setPrimaryClip(clip);
-            }
-        });
+        if(!message.isUnsend()){
+            copyItem.setVisibility(View.VISIBLE);
+            copyItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("Copied Text", message.getMessage());
+                    clipboard.setPrimaryClip(clip);
+                }
+            });
+        }
+        else{
+            copyItem.setVisibility(View.GONE);
+        }
 
         dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
