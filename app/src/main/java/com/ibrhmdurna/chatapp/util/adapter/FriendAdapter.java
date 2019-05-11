@@ -126,7 +126,7 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             email.setText(friend.getAccount().getEmail());
             setProfileImage(friend.getAccount().getThumb_image(), friend.getAccount().getName(), profileImage, profileText);
 
-            if(position == friendList.size() - 1){
+            if(position == 0){
                 line.setVisibility(View.GONE);
             }
             else{
@@ -180,11 +180,27 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         private void setData(final Friend friend, int position){
 
-            nameSurname.setText(friend.getAccount().getNameSurname());
-            email.setText(friend.getAccount().getEmail());
-            setProfileImage(friend.getAccount().getThumb_image(), friend.getAccount().getName(), profileImage, profileText);
+            Firebase.getInstance().getDatabaseReference().child("Accounts").child(friend.getAccount().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        Account account = dataSnapshot.getValue(Account.class);
+                        account.setUid(dataSnapshot.getKey());
+                        friend.setAccount(account);
 
-            if(position == friendList.size() - 1){
+                        nameSurname.setText(friend.getAccount().getNameSurname());
+                        email.setText(friend.getAccount().getEmail());
+                        setProfileImage(friend.getAccount().getThumb_image(), friend.getAccount().getName(), profileImage, profileText);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            if(position == 0){
                 line.setVisibility(View.GONE);
             }
             else{
@@ -334,7 +350,9 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             profileText.setVisibility(View.VISIBLE);
         }
         else {
-            Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+            if(context != null){
+                Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+            }
             profileText.setText(null);
             profileText.setVisibility(View.GONE);
         }

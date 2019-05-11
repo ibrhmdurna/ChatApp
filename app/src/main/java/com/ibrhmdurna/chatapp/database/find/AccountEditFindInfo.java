@@ -59,7 +59,9 @@ public class AccountEditFindInfo implements IFind {
                     profileText.setText(name);
                 }
                 else {
-                    Glide.with(binding.getRoot().getContext()).load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+                    if(binding.getRoot().getContext() != null){
+                        Glide.with(binding.getRoot().getContext()).load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+                    }
                     profileText.setVisibility(View.GONE);
                 }
 

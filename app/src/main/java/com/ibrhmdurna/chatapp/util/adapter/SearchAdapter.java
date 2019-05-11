@@ -130,7 +130,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 profileText.setVisibility(View.VISIBLE);
             }
             else {
-                Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                if(context != null){
+                    Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                }
                 profileText.setText(null);
                 profileText.setVisibility(View.GONE);
             }

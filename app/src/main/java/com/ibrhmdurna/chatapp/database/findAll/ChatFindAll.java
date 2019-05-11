@@ -56,6 +56,7 @@ public class ChatFindAll implements IFind {
         LinearLayoutManager layoutManager = new LinearLayoutManager(context.getContext());
         chatAdapter = new ChatAdapter(context, chatList);
         chatView.setLayoutManager(layoutManager);
+        chatView.setItemAnimator(null);
         chatView.setAdapter(chatAdapter);
 
         uid = FirebaseAuth.getInstance().getUid();
@@ -119,7 +120,7 @@ public class ChatFindAll implements IFind {
                 chatIds.remove(index);
                 chatList.remove(index);
 
-                chatAdapter.notifyDataSetChanged();
+                chatAdapter.notifyItemRemoved(index);
             }
         }
 

@@ -56,6 +56,7 @@ public class RequestFindAll implements IFind {
         LinearLayoutManager layoutManager = new LinearLayoutManager(context.getContext());
         requestAdapter = new RequestAdapter(context.getContext(), requestList);
         requestView.setLayoutManager(layoutManager);
+        requestView.setItemAnimator(null);
         requestView.setAdapter(requestAdapter);
 
         uid = FirebaseAuth.getInstance().getUid();
@@ -134,7 +135,7 @@ public class RequestFindAll implements IFind {
             if(index > -1){
                 requestIds.remove(index);
                 requestList.remove(index);
-                requestAdapter.notifyDataSetChanged();
+                requestAdapter.notifyItemRemoved(index);
             }
         }
 

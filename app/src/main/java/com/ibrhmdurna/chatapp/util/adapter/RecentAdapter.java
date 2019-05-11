@@ -119,7 +119,9 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentView
                 profileText.setVisibility(View.VISIBLE);
             }
             else {
-                Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                if(context != null){
+                    Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                }
                 profileText.setText(null);
                 profileText.setVisibility(View.GONE);
             }

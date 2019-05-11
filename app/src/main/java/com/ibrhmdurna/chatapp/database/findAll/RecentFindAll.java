@@ -56,6 +56,7 @@ public class RecentFindAll implements IFind {
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         recentAdapter = new RecentAdapter(context, recentList);
         recentView.setLayoutManager(layoutManager);
+        recentView.setItemAnimator(null);
         recentView.setAdapter(recentAdapter);
 
         uid = FirebaseAuth.getInstance().getUid();
@@ -135,7 +136,7 @@ public class RecentFindAll implements IFind {
             if(index > -1){
                 recentIds.remove(index);
                 recentList.remove(index);
-                recentAdapter.notifyDataSetChanged();
+                recentAdapter.notifyItemRemoved(index);
             }
         }
 

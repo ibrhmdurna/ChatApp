@@ -21,8 +21,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/friend_profile_image"
                 android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@drawable/default_avatar"/>
+                android:layout_height="45dp"/>
 
             <TextView
                 android:id="@+id/friend_profile_image_text"
@@ -50,7 +49,6 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textSize="18sp"
-                android:text="@string/chatapp_user"
                 android:textColor="?attr/primaryTextColor"
                 android:layout_marginEnd="5dp"/>
 
@@ -125,6 +123,5 @@
         android:layout_height="1dp"
         android:background="?attr/lineColor"
         android:layout_marginStart="80dp"
-        android:layout_marginEnd="20dp"
-        android:layout_alignParentBottom="true"/>
+        android:layout_marginEnd="20dp"/>
 </RelativeLayout>

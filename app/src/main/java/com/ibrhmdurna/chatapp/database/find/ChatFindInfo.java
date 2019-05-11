@@ -303,7 +303,9 @@ public class ChatFindInfo implements IFind {
             profileText.setVisibility(View.VISIBLE);
         }
         else {
-            Glide.with(context).load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+            if(context != null){
+                Glide.with(context).load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+            }
             profileText.setText(null);
             profileText.setVisibility(View.GONE);
         }

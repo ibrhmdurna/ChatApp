@@ -17,6 +17,7 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.database.Firebase;
+import com.ibrhmdurna.chatapp.database.Status;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.util.GetTimeAgo;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
@@ -125,5 +126,17 @@ public class PhotoActivity extends AppCompatActivity implements ViewComponentFac
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onBackPressed();
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Status.getInstance().onConnect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Status.getInstance().onDisconnect();
     }
 }

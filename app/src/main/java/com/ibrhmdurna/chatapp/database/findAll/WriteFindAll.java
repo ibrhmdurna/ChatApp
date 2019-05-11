@@ -67,6 +67,7 @@ public class WriteFindAll implements IFind {
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         writeAdapter = new WriteAdapter(context, friendList);
         friendView.setLayoutManager(layoutManager);
+        friendView.setItemAnimator(null);
         friendView.setAdapter(writeAdapter);
 
         uid = FirebaseAuth.getInstance().getUid();
@@ -147,26 +148,13 @@ public class WriteFindAll implements IFind {
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             if(dataSnapshot.exists()){
                 final Friend friend = dataSnapshot.getValue(Friend.class);
+                Account account = new Account();
+                account.setUid(dataSnapshot.getKey());
+                friend.setAccount(account);;
+                friendList.add(friend);
+                friendIds.add(dataSnapshot.getKey());
 
-                Firebase.getInstance().getDatabaseReference().child("Accounts").child(dataSnapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()){
-                            Account account = dataSnapshot.getValue(Account.class);
-                            account.setUid(dataSnapshot.getKey());
-                            friend.setAccount(account);
-                            friendList.add(friend);
-                            friendIds.add(dataSnapshot.getKey());
-
-                            writeAdapter.notifyItemInserted(friendList.size() - 1);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                writeAdapter.notifyItemInserted(friendList.size() - 1);
             }
         }
 
@@ -175,23 +163,11 @@ public class WriteFindAll implements IFind {
             final Friend friend = dataSnapshot.getValue(Friend.class);
             final int index = friendIds.indexOf(dataSnapshot.getKey());
             if(index > -1){
-                Firebase.getInstance().getDatabaseReference().child("Accounts").child(dataSnapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()){
-                            Account account = dataSnapshot.getValue(Account.class);
-                            account.setUid(dataSnapshot.getKey());
-                            friend.setAccount(account);
-                            friendList.set(index, friend);
-                            writeAdapter.notifyItemChanged(index);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                Account account = new Account();
+                account.setUid(dataSnapshot.getKey());
+                friend.setAccount(account);
+                friendList.set(index, friend);
+                writeAdapter.notifyItemChanged(index);
             }
         }
 
@@ -201,7 +177,7 @@ public class WriteFindAll implements IFind {
             if(index > -1){
                 friendIds.remove(index);
                 friendList.remove(index);
-                writeAdapter.notifyDataSetChanged();
+                writeAdapter.notifyItemRemoved(index);
             }
         }
 

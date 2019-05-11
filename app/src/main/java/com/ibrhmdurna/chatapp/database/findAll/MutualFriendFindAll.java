@@ -62,6 +62,7 @@ public class MutualFriendFindAll implements IFind {
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         friendAdapter = new FriendAdapter(context, friendList, 1);
         friendView.setLayoutManager(layoutManager);
+        friendView.setItemAnimator(null);
         friendView.setAdapter(friendAdapter);
 
         myUid = FirebaseAuth.getInstance().getUid();
@@ -73,6 +74,9 @@ public class MutualFriendFindAll implements IFind {
 
     @Override
     public void getMore() {
+
+        Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).addValueEventListener(moreEventListener);
+
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -112,7 +116,50 @@ public class MutualFriendFindAll implements IFind {
     @Override
     public void onDestroy() {
         Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).removeEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).removeEventListener(moreEventListener);
     }
+
+    private ValueEventListener moreEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                final int[] mutual = {0};
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Firebase.getInstance().getDatabaseReference().child("Friends").child(myUid).child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                mutual[0]++;
+                            }
+
+                            if(mutual[0] > 0){
+                                friendView.setVisibility(View.VISIBLE);
+                                notFoundView.setVisibility(View.GONE);
+                            }
+                            else{
+                                friendView.setVisibility(View.GONE);
+                                notFoundView.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+            else{
+                friendView.setVisibility(View.GONE);
+                notFoundView.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 
     private ChildEventListener contentEventListener = new ChildEventListener() {
         @Override
@@ -124,39 +171,13 @@ public class MutualFriendFindAll implements IFind {
                         if(dataSnapshot.exists()){
                             final Friend mutualFriend = dataSnapshot.getValue(Friend.class);
 
-                            Firebase.getInstance().getDatabaseReference().child("Accounts").child(dataSnapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if(dataSnapshot.exists()){
-                                        Account account = dataSnapshot.getValue(Account.class);
-                                        account.setUid(dataSnapshot.getKey());
-                                        mutualFriend.setAccount(account);
-                                        friendList.add(mutualFriend);
-                                        friendIds.add(dataSnapshot.getKey());
+                            Account account = new Account();
+                            account.setUid(dataSnapshot.getKey());
+                            mutualFriend.setAccount(account);
+                            friendList.add(mutualFriend);
+                            friendIds.add(dataSnapshot.getKey());
 
-                                        friendAdapter.notifyItemInserted(friendList.size() - 1);
-
-                                        if(friendView.getVisibility() == View.GONE){
-                                            friendView.setVisibility(View.VISIBLE);
-                                            notFoundView.setVisibility(View.GONE);
-                                        }
-                                    }
-
-                                    if(friendList.size() > 0){
-                                        friendView.setVisibility(View.VISIBLE);
-                                        notFoundView.setVisibility(View.GONE);
-                                    }
-                                    else{
-                                        friendView.setVisibility(View.GONE);
-                                        notFoundView.setVisibility(View.VISIBLE);
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
+                            friendAdapter.notifyItemInserted(friendList.size() - 1);
                         }
                     }
 
@@ -173,23 +194,11 @@ public class MutualFriendFindAll implements IFind {
             final Friend friend = dataSnapshot.getValue(Friend.class);
             final int index = friendIds.indexOf(dataSnapshot.getKey());
             if(index > -1){
-                Firebase.getInstance().getDatabaseReference().child("Accounts").child(dataSnapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()){
-                            Account account = dataSnapshot.getValue(Account.class);
-                            account.setUid(dataSnapshot.getKey());
-                            friend.setAccount(account);
-                            friendList.set(index, friend);
-                            friendAdapter.notifyItemChanged(index);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                Account account = new Account();
+                account.setUid(dataSnapshot.getKey());
+                friend.setAccount(account);
+                friendList.set(index, friend);
+                friendAdapter.notifyItemChanged(index);
             }
         }
 
