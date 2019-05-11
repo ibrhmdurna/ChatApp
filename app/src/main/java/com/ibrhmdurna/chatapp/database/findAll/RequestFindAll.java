@@ -1,6 +1,7 @@
 package com.ibrhmdurna.chatapp.database.findAll;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -28,6 +30,7 @@ public class RequestFindAll implements IFind {
     private View context;
 
     private List<Request> requestList;
+    private List<String> requestIds;
     private RequestAdapter requestAdapter;
     private RecyclerView requestView;
     private TextView notFoundView;
@@ -49,6 +52,7 @@ public class RequestFindAll implements IFind {
     @Override
     public void getContent() {
         requestList = new ArrayList<>();
+        requestIds = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(context.getContext());
         requestAdapter = new RequestAdapter(context.getContext(), requestList);
         requestView.setLayoutManager(layoutManager);
@@ -56,43 +60,32 @@ public class RequestFindAll implements IFind {
 
         uid = FirebaseAuth.getInstance().getUid();
 
-        Firebase.getInstance().getDatabaseReference().child("Request").child(uid).addValueEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Request").child(uid).orderByChild("time").addChildEventListener(contentEventListener);
+
+        getMore();
     }
 
     @Override
     public void getMore() {
-
+        Firebase.getInstance().getDatabaseReference().child("Request").child(uid).addValueEventListener(moreEventListener);
     }
 
     @Override
     public void onDestroy() {
-        Firebase.getInstance().getDatabaseReference().child("Request").child(uid).removeEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Request").child(uid).orderByChild("time").removeEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Request").child(uid).removeEventListener(moreEventListener);
     }
 
-    private ValueEventListener contentEventListener = new ValueEventListener() {
+    private ValueEventListener moreEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            requestList.clear();
             if(dataSnapshot.exists()){
                 if(bottomNavigationView.getSelectedItemId() == R.id.requests_item){
                     requestView.setVisibility(View.VISIBLE);
                     notFoundView.setVisibility(View.GONE);
                 }
-
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    final String request_id = snapshot.getKey();
-
-                    final Request request = snapshot.getValue(Request.class);
-                    Account account = new Account();
-                    account.setUid(request_id);
-                    request.setAccount(account);
-                    requestList.add(request);
-                }
-
-                sortArrayList();
-
             }
-            else {
+            else{
                 if(bottomNavigationView.getSelectedItemId() == R.id.requests_item){
                     requestView.setVisibility(View.GONE);
                     notFoundView.setVisibility(View.VISIBLE);
@@ -107,14 +100,52 @@ public class RequestFindAll implements IFind {
         }
     };
 
-    private void sortArrayList(){
-        Collections.sort(requestList, new Comparator<Request>() {
-            @Override
-            public int compare(Request o1, Request o2) {
-                return Long.compare(o2.getTime(), o1.getTime());
-            }
-        });
+    private ChildEventListener contentEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            if(dataSnapshot.exists()){
+                Request request = dataSnapshot.getValue(Request.class);
+                Account account = new Account();
+                account.setUid(dataSnapshot.getKey());
+                request.setAccount(account);
+                requestList.add(0, request);
+                requestIds.add(0, dataSnapshot.getKey());
 
-        requestAdapter.notifyDataSetChanged();
-    }
+                requestAdapter.notifyItemInserted(0);
+            }
+        }
+
+        @Override
+        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            Request request = dataSnapshot.getValue(Request.class);
+            int index = requestIds.indexOf(dataSnapshot.getKey());
+            if(index > -1){
+                Account account = new Account();
+                account.setUid(dataSnapshot.getKey());
+                request.setAccount(account);
+                requestList.set(index, request);
+                requestAdapter.notifyItemChanged(index);
+            }
+        }
+
+        @Override
+        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            int index = requestIds.indexOf(dataSnapshot.getKey());
+            if(index > -1){
+                requestIds.remove(index);
+                requestList.remove(index);
+                requestAdapter.notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 }

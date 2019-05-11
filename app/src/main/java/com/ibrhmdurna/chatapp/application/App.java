@@ -172,7 +172,7 @@ public class App extends Application {
                         context.setTheme(R.style.AppTheme_DarkTheme_Cyan);
                         break;
                     case R.color.colorLightGreen:
-                        context.setTheme(R.style.AppTheme_DarkTheme_Green);
+                        context.setTheme(R.style.AppTheme_DarkTheme_LightGreen);
                         break;
                     case R.color.colorOfficialGreen:
                         context.setTheme(R.style.AppTheme_DarkTheme_OfficialGreen);
@@ -227,7 +227,7 @@ public class App extends Application {
                         context.setTheme(R.style.AppTheme_LightTheme_Cyan);
                         break;
                     case R.color.colorLightGreen:
-                        context.setTheme(R.style.AppTheme_LightTheme_Green);
+                        context.setTheme(R.style.AppTheme_LightTheme_LightGreen);
                         break;
                     case R.color.colorOfficialGreen:
                         context.setTheme(R.style.AppTheme_LightTheme_OfficialGreen);
@@ -284,7 +284,7 @@ public class App extends Application {
                     context.setTheme(R.style.AppTheme_DarkTheme_Cyan_Transparent);
                     break;
                 case R.color.colorLightGreen:
-                    context.setTheme(R.style.AppTheme_DarkTheme_Green_Transparent);
+                    context.setTheme(R.style.AppTheme_DarkTheme_LightGreen_Transparent);
                     break;
                 case R.color.colorOfficialGreen:
                     context.setTheme(R.style.AppTheme_DarkTheme_OfficialGreen_Transparent);

@@ -26,6 +26,7 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.database.Insert;
+import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Friend;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
@@ -119,7 +120,7 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             onlineView = itemView.findViewById(R.id.friend_online_icon);
         }
 
-        private void setData(final Friend friend, int position){
+        private void setData(final Friend friend, final int position){
 
             nameSurname.setText(friend.getAccount().getNameSurname());
             email.setText(friend.getAccount().getEmail());

@@ -116,7 +116,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             time.setText(chatTime);
             timeAccentText.setText(chatTime);
 
-            if(position == 0){
+            if(position == chatList.size() - 1){
                 line.setVisibility(View.GONE);
             }
             else{

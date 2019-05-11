@@ -153,8 +153,7 @@
                             android:layout_height="wrap_content"
                             tools:itemCount="4"
                             tools:listitem="@layout/recent_layout"
-                            android:nestedScrollingEnabled="false"
-                            android:layoutAnimation="@anim/layout_animation_fall_down">
+                            android:nestedScrollingEnabled="false">
                         </android.support.v7.widget.RecyclerView>
 
                         <TextView

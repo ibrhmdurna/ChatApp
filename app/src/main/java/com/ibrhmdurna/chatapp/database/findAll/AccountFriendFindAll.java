@@ -3,6 +3,7 @@ package com.ibrhmdurna.chatapp.database.findAll;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -33,6 +35,7 @@ public class AccountFriendFindAll implements IFind {
     private Activity context;
 
     private List<Friend> friendList;
+    private List<String> friendIds;
     private FriendAdapter friendAdapter;
     private RecyclerView friendView;
     private NestedScrollView notFoundView;
@@ -59,18 +62,21 @@ public class AccountFriendFindAll implements IFind {
     @Override
     public void getContent() {
         friendList = new ArrayList<>();
+        friendIds = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         friendAdapter = new FriendAdapter(context, friendList, 1);
         friendView.setLayoutManager(layoutManager);
         friendView.setAdapter(friendAdapter);
 
-        Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).addListenerForSingleValueEvent(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).addChildEventListener(contentEventListener);
 
         getMore();
     }
 
     @Override
     public void getMore() {
+        Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).addValueEventListener(moreEventListener);
+
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -110,43 +116,17 @@ public class AccountFriendFindAll implements IFind {
     @Override
     public void onDestroy() {
         Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).removeEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).removeEventListener(moreEventListener);
     }
 
-    private ValueEventListener contentEventListener = new ValueEventListener() {
+    private ValueEventListener moreEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            friendList.clear();
             if(dataSnapshot.exists()){
                 friendView.setVisibility(View.VISIBLE);
                 notFoundView.setVisibility(View.GONE);
                 if(bottomLayout != null)
                     bottomLayout.setVisibility(View.VISIBLE);
-
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-
-                    final String friend_id = snapshot.getKey();
-
-                    final Friend friend = snapshot.getValue(Friend.class);
-
-                    Firebase.getInstance().getDatabaseReference().child("Accounts").child(friend_id).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()){
-                                final Account account = dataSnapshot.getValue(Account.class);
-                                account.setUid(dataSnapshot.getKey());
-                                friend.setAccount(account);
-                                friendList.add(friend);
-
-                                friendAdapter.notifyDataSetChanged();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-                }
             }
             else{
                 friendView.setVisibility(View.GONE);
@@ -154,6 +134,80 @@ public class AccountFriendFindAll implements IFind {
                 if(bottomLayout != null)
                     bottomLayout.setVisibility(View.GONE);
             }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    private ChildEventListener contentEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            if(dataSnapshot.exists()){
+                final Friend friend = dataSnapshot.getValue(Friend.class);
+
+                Firebase.getInstance().getDatabaseReference().child("Accounts").child(dataSnapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            Account account = dataSnapshot.getValue(Account.class);
+                            account.setUid(dataSnapshot.getKey());
+                            friend.setAccount(account);
+                            friendList.add(friend);
+                            friendIds.add(dataSnapshot.getKey());
+
+                            friendAdapter.notifyItemInserted(friendList.size() - 1);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            final Friend friend = dataSnapshot.getValue(Friend.class);
+            final int index = friendIds.indexOf(dataSnapshot.getKey());
+            if(index > -1){
+                Firebase.getInstance().getDatabaseReference().child("Accounts").child(dataSnapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            Account account = dataSnapshot.getValue(Account.class);
+                            account.setUid(dataSnapshot.getKey());
+                            friend.setAccount(account);
+                            friendList.set(index, friend);
+                            friendAdapter.notifyItemChanged(index);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            int index = friendIds.indexOf(dataSnapshot.getKey());
+            if(index > -1){
+                friendIds.remove(index);
+                friendList.remove(index);
+                friendAdapter.notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
         }
 
         @Override

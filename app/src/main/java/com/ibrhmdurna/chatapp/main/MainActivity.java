@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,9 +35,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Insert;
 import com.ibrhmdurna.chatapp.database.Status;
 import com.ibrhmdurna.chatapp.database.Firebase;
+import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.models.Request;
 import com.ibrhmdurna.chatapp.start.StartActivity;
@@ -247,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
                         App.Background.getInstance().addPage("AccountFragment");
                         mainAppBarLayout.setVisibility(View.GONE);
                         fullFrame.setVisibility(View.VISIBLE);
+                        mainFrame.setVisibility(View.GONE);
                         toolbar.getMenu().clear();
                         toolbar.inflateMenu(R.menu.main_menu);
                         return true;
@@ -254,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
 
                 mainAppBarLayout.setVisibility(View.VISIBLE);
                 fullFrame.setVisibility(View.GONE);
+                mainFrame.setVisibility(View.VISIBLE);
                 messageNotFoundView.setVisibility(View.GONE);
                 friendsNotFoundView.setVisibility(View.GONE);
                 requestNotFoundView.setVisibility(View.GONE);

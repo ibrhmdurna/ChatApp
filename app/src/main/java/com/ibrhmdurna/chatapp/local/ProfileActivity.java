@@ -31,6 +31,8 @@ import com.ibrhmdurna.chatapp.databinding.ActivityProfileBinding;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 import com.ibrhmdurna.chatapp.util.dialog.MoreBottomSheetDialog;
 
+import java.util.Locale;
+
 public class ProfileActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, MoreBottomSheetDialog.BottomSheetListener {
 
     private ActivityProfileBinding binding;
@@ -142,7 +144,7 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
             case "delete":
                 final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, null, getString(R.string.cancel), getString(R.string.delete));
 
-                String text = getString(R.string.are_you_sure_you_want) + " " + binding.getAccount().getNameSurname() + " " + getString(R.string.out_of_friendship);
+                String text = getString(R.string.are_you_sure_you_want) +  binding.getAccount().getNameSurname() + " " + getString(R.string.out_of_friendship);
                 TextView content = dialog.findViewById(R.id.dialog_content_text);
 
                 TypedValue typedValue = new TypedValue();
@@ -153,8 +155,15 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
                 SpannableString ss = new SpannableString(text);
                 ForegroundColorSpan fcsColor = new ForegroundColorSpan(color);
 
-                ss.setSpan(fcsColor, 30, 30 + binding.getAccount().getNameSurname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                content.setText(ss);
+                String language = Locale.getDefault().getLanguage();
+                if(language.equals("tr")){
+                    ss.setSpan(fcsColor, 1, 1 + binding.getAccount().getNameSurname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    content.setText(ss);
+                }
+                else{
+                    ss.setSpan(fcsColor, 30, 30 + binding.getAccount().getNameSurname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    content.setText(ss);
+                }
 
                 TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
                 positiveBtn.setOnClickListener(new View.OnClickListener() {

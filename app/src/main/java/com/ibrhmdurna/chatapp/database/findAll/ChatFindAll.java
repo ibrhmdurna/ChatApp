@@ -29,6 +29,7 @@ public class ChatFindAll implements IFind {
 
     private Fragment context;
 
+    private List<String> chatIds;
     private List<Chat> chatList;
     private ChatAdapter chatAdapter;
     private RecyclerView chatView;
@@ -51,48 +52,98 @@ public class ChatFindAll implements IFind {
     @Override
     public void getContent() {
         chatList = new ArrayList<>();
+        chatIds = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(context.getContext());
-        layoutManager.setReverseLayout(true);
         chatAdapter = new ChatAdapter(context, chatList);
-        chatView.setHasFixedSize(true);
         chatView.setLayoutManager(layoutManager);
         chatView.setAdapter(chatAdapter);
 
         uid = FirebaseAuth.getInstance().getUid();
 
-        Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).orderByChild("time").addValueEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).orderByChild("time").addChildEventListener(contentEventListener);
+
+        getMore();
     }
 
     @Override
     public void getMore() {
-
+        Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).addValueEventListener(moreEventListener);
     }
 
     @Override
     public void onDestroy() {
         Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).orderByChild("time").removeEventListener(contentEventListener);
+        Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).removeEventListener(moreEventListener);
     }
 
-    private ValueEventListener contentEventListener = new ValueEventListener() {
+    private ChildEventListener contentEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            if(dataSnapshot.exists()){
+                Chat chat = dataSnapshot.getValue(Chat.class);
+                chat.setChatUid(dataSnapshot.getKey());
+
+                chatIds.add(0, chat.getChatUid());
+                chatList.add(0, chat);
+
+                chatAdapter.notifyItemInserted(0);
+            }
+        }
+
+        @Override
+        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            Chat chat = dataSnapshot.getValue(Chat.class);
+            chat.setChatUid(dataSnapshot.getKey());
+
+            int index = chatIds.indexOf(chat.getChatUid());
+            if(index > -1){
+                if(chat.getTime().equals(chatList.get(index).getTime())){
+                    chatList.set(index, chat);
+                    chatAdapter.notifyItemChanged(index);
+                }
+                else{
+                    chatList.remove(index);
+                    chatIds.remove(index);
+                    chatAdapter.notifyItemRemoved(index);
+                    chatList.add(0, chat);
+                    chatIds.add(0, chat.getChatUid());
+                    chatAdapter.notifyItemInserted(0);
+                }
+            }
+        }
+
+        @Override
+        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            int index = chatIds.indexOf(dataSnapshot.getKey());
+            if(index > -1){
+                chatIds.remove(index);
+                chatList.remove(index);
+
+                chatAdapter.notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    private ValueEventListener moreEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            chatList.clear();
             if(dataSnapshot.exists()){
                 if(bottomNavigationView.getSelectedItemId() == R.id.messages_item){
                     chatView.setVisibility(View.VISIBLE);
                     notFoundView.setVisibility(View.GONE);
                 }
-
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Chat chat = snapshot.getValue(Chat.class);
-                    chat.setChatUid(snapshot.getKey());
-
-                    chatList.add(chat);
-                }
-
-                chatAdapter.notifyDataSetChanged();
             }
-            else {
+            else{
                 if(bottomNavigationView.getSelectedItemId() == R.id.messages_item){
                     chatView.setVisibility(View.GONE);
                     notFoundView.setVisibility(View.VISIBLE);

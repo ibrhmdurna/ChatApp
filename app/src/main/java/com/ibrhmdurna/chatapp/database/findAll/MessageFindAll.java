@@ -31,6 +31,7 @@ public class MessageFindAll implements IFind {
     private Activity context;
 
     private List<Message> messageList;
+    private List<String> messageIds;
     private MessageAdapter messageAdapter;
     private RecyclerView messageView;
     private LinearLayoutManager layoutManager;
@@ -68,6 +69,7 @@ public class MessageFindAll implements IFind {
     @Override
     public void getContent() {
         messageList = new ArrayList<>();
+        messageIds = new ArrayList<>();
         layoutManager = new LinearLayoutManager(context);
         layoutManager.setStackFromEnd(true);
         messageAdapter = new MessageAdapter(context, messageList, chatUid);
@@ -139,6 +141,7 @@ public class MessageFindAll implements IFind {
             if(isRemoved){
 
                 messageList.add(0, message);
+                messageIds.add(0, dataSnapshot.getKey());
                 messageAdapter.notifyDataSetChanged();
 
                 MESSAGE_LAST_KEY = dataSnapshot.getKey();
@@ -148,8 +151,13 @@ public class MessageFindAll implements IFind {
             }
             else{
                 messageList.add(message);
+                messageIds.add(dataSnapshot.getKey());
                 messageAdapter.notifyItemInserted(messageList.size() - 1);
                 messageView.smoothScrollToPosition(messageList.size() - 1);
+            }
+
+            if(dataSnapshot.getChildrenCount() > TOTAL_LOAD_MESSAGE_COUNT){
+                swipeRefreshLayout.setEnabled(true);
             }
         }
 
@@ -157,10 +165,12 @@ public class MessageFindAll implements IFind {
         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             Message message = dataSnapshot.getValue(Message.class);
             message.setMessage_id(dataSnapshot.getKey());
-            int position = findPosition(message.getTime());
-            if(position > -1){
-                messageList.remove(position);
-                messageList.add(position, message);
+            int index = messageIds.indexOf(dataSnapshot.getKey());
+            if(index > -1){
+                messageList.remove(index);
+                messageIds.remove(index);
+                messageList.add(index, message);
+                messageIds.add(index, dataSnapshot.getKey());
                 messageAdapter.notifyDataSetChanged();
             }
         }
@@ -169,10 +179,11 @@ public class MessageFindAll implements IFind {
         public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
             Message message = dataSnapshot.getValue(Message.class);
             message.setMessage_id(dataSnapshot.getKey());
-            int position = findPosition(message.getTime());
-            if(position > -1){
-                messageList.remove(position);
-                messageAdapter.notifyItemRemoved(position);
+            int index = messageIds.indexOf(dataSnapshot.getKey());
+            if(index > -1){
+                messageList.remove(index);
+                messageIds.remove(index);
+                messageAdapter.notifyItemRemoved(index);
             }
         }
 
@@ -196,6 +207,7 @@ public class MessageFindAll implements IFind {
             if(!MESSAGE_PREVIEW_KEY.equals(dataSnapshot.getKey())){
                 if(!isRemoved){
                     messageList.add(CURRENT_MORE_POSITION++, message);
+                    messageIds.add(CURRENT_MORE_POSITION - 1, dataSnapshot.getKey());
                     messageAdapter.notifyDataSetChanged();
                     layoutManager.scrollToPositionWithOffset(CURRENT_MORE_POSITION - 1, 0);
                 }
@@ -220,10 +232,12 @@ public class MessageFindAll implements IFind {
         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             Message message = dataSnapshot.getValue(Message.class);
             message.setMessage_id(dataSnapshot.getKey());
-            int position = findPosition(message.getTime());
-            if(position > -1){
-                messageList.remove(position);
-                messageList.add(position, message);
+            int index = messageIds.indexOf(dataSnapshot.getKey());
+            if(index > -1){
+                messageList.remove(index);
+                messageIds.remove(index);
+                messageList.add(index, message);
+                messageIds.add(index, dataSnapshot.getKey());
                 messageAdapter.notifyDataSetChanged();
             }
         }
@@ -232,10 +246,11 @@ public class MessageFindAll implements IFind {
         public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
             Message message = dataSnapshot.getValue(Message.class);
             message.setMessage_id(dataSnapshot.getKey());
-            int position = findPosition(message.getTime());
-            if(position > -1){
-                messageList.remove(position);
-                messageAdapter.notifyItemRemoved(position);
+            int index = messageIds.indexOf(dataSnapshot.getKey());
+            if(index > -1){
+                messageList.remove(index);
+                messageIds.remove(index);
+                messageAdapter.notifyItemRemoved(index);
                 CURRENT_MORE_POSITION = 0;
             }
 
@@ -253,14 +268,4 @@ public class MessageFindAll implements IFind {
 
         }
     };
-
-    private int findPosition(long time){
-        for(int i = 0; i < messageList.size(); i++){
-            if(messageList.get(i).getTime().equals(time)){
-                return i;
-            }
-        }
-
-        return messageList.size() - 1;
-    }
 }
