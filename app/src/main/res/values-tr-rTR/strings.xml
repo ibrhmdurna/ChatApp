@@ -181,7 +181,7 @@
     <string name="no_account_for_this_email">Bu email adresine ait hesap bulunamadı.</string>
     <string name="no_chat">Sohbet Yok</string>
     <string name="no_request">İstek Yok</string>
-    <string name="online">Çevrimiçi</string>
+    <string name="online">çevrimiçi</string>
     <string name="password_are_different">* Parola farklı</string>
     <string name="password_are_the_same">* Parola aynı</string>
     <string name="password_changed_success">Parola başarıyla değiştirildi</string>
@@ -206,8 +206,13 @@
     <string name="clear_chat_with_2">\" ile sohbeti temizle?</string>
     <string name="delete_chat_with">\"</string>
     <string name="delete_chat_with_2">\" ile sohbeti sil?</string>
-    <string name="out_of_friendship">arkadaşlıktan çıkarmak istediğine emin misin?</string>
-    <string name="are_you_sure_you_want">" "</string>
     <string name="sending">Gönderiliyor…</string>
     <string name="we_sent_mail_to">Mail adresine bir mail gönderdik :</string>
+    <string name="tap_and_hold">Sesli mesaj kaydetmek için dokunun ve basılı tutun.</string>
+    <string name="block">Engelle</string>
+    <string name="unblock">Engeli kaldır</string>
+    <string name="are_you_want_to_unblock">Engeli kaldırmak istediğinden emin misin?</string>
+    <string name="blocked_accounts">Engelli Hesaplar</string>
+    <string name="blocks">Engeller</string>
+    <string name="no_blocked_account">Engellenen Hesap Yok</string>
 </resources>

@@ -25,6 +25,7 @@ import com.ibrhmdurna.chatapp.start.StartActivity;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
 import java.io.File;
+import java.util.Objects;
 
 public class Delete {
 
@@ -44,31 +45,44 @@ public class Delete {
     public void friend(final String id){
         final String uid = FirebaseAuth.getInstance().getUid();
 
-        Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).child(id).removeValue();
-        Firebase.getInstance().getDatabaseReference().child("Friends").child(id).child(uid).removeValue();
+        if(uid != null){
+            Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).child(id).removeValue();
+            Firebase.getInstance().getDatabaseReference().child("Friends").child(id).child(uid).removeValue();
+        }
     }
 
     public void myRequest(final String id){
         String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         Firebase.getInstance().getDatabaseReference().child("Request").child(id).child(uid).removeValue();
     }
 
     public void request(final String id){
         final String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         Firebase.getInstance().getDatabaseReference().child("Request").child(uid).child(id).removeValue();
     }
 
     public void recent(String recent_id){
         String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         Firebase.getInstance().getDatabaseReference().child("Recent").child(uid).child(recent_id).removeValue();
+    }
+
+    public void recentBlock(String id){
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        assert uid != null;
+        Firebase.getInstance().getDatabaseReference().child("Recent").child(id).child(uid).removeValue();
     }
 
     public void allRecent(){
         String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         Firebase.getInstance().getDatabaseReference().child("Recent").child(uid).removeValue();
     }
 
@@ -78,96 +92,106 @@ public class Delete {
         loadingBar.show();
 
         final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), passwordInput.getEditText().getText().toString());
 
-        passwordInput.setError(null);
+        if(currentUser != null){
+            AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(currentUser.getEmail()), Objects.requireNonNull(passwordInput.getEditText()).getText().toString());
 
-        currentUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    final String uid = FirebaseAuth.getInstance().getUid();
+            passwordInput.setError(null);
 
-                    Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()){
+            currentUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        final String uid = FirebaseAuth.getInstance().getUid();
 
-                                Account account = dataSnapshot.getValue(Account.class);
+                        assert uid != null;
+                        Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
 
-                                String profile_image = account.getProfile_image();
+                                    Account account = dataSnapshot.getValue(Account.class);
 
-                                if(!profile_image.substring(0,8).equals("default_")){
-                                    // Profile Image Deleted
-                                    FirebaseStorage.getInstance().getReferenceFromUrl(account.getProfile_image()).delete();
-                                    FirebaseStorage.getInstance().getReferenceFromUrl(account.getThumb_image()).delete();
-                                }
+                                    if(account != null){
+                                        String profile_image = account.getProfile_image();
 
-                                // Request Deleted
-                                requestAllDelete(uid);
+                                        if(!profile_image.substring(0,8).equals("default_")){
+                                            // Profile Image Deleted
+                                            FirebaseStorage.getInstance().getReferenceFromUrl(account.getProfile_image()).delete();
+                                            FirebaseStorage.getInstance().getReferenceFromUrl(account.getThumb_image()).delete();
+                                        }
 
-                                // Friends Deleted
-                                friendAllDelete(uid);
+                                        // Request Deleted
+                                        requestAllDelete(uid);
 
-                                // Recent Deleted
-                                recentAllDelete(uid);
+                                        // Friends Deleted
+                                        friendAllDelete(uid);
 
-                                // Chat Deleted
-                                chatAllDelete(uid);
+                                        // Recent Deleted
+                                        recentAllDelete(uid);
 
-                                // Messages Deleted
-                                messageAllDelete(uid, true);
+                                        // Chat Deleted
+                                        chatAllDelete(uid);
 
-                                dataSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if(task.isSuccessful()){
+                                        // Messages Deleted
+                                        messageAllDelete(uid, true);
 
-                                            currentUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if(task.isSuccessful()){
-                                                        loadingBar.dismiss();
+                                        dataSnapshot.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()){
 
-                                                        Intent startIntent = new Intent(context, StartActivity.class);
-                                                        context.startActivity(startIntent);
-                                                        context.finish();
-                                                    }
-                                                    else{
-                                                        Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
-                                                        loadingBar.dismiss();
-                                                    }
+                                                    currentUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if(task.isSuccessful()){
+                                                                loadingBar.dismiss();
+
+                                                                Intent startIntent = new Intent(context, StartActivity.class);
+                                                                context.startActivity(startIntent);
+                                                                context.finish();
+                                                            }
+                                                            else{
+                                                                Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
+                                                                loadingBar.dismiss();
+                                                            }
+                                                        }
+                                                    });
                                                 }
-                                            });
-                                        }
-                                        else{
-                                            Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
-                                            loadingBar.dismiss();
-                                        }
+                                                else{
+                                                    Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
+                                                    loadingBar.dismiss();
+                                                }
+                                            }
+                                        });
                                     }
-                                });
+                                    else{
+                                        Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
+                                        loadingBar.dismiss();
+                                    }
+
+                                }
+                                else{
+                                    Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
+                                    loadingBar.dismiss();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                             }
-                            else{
-                                Toast.makeText(context, context.getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
-                                loadingBar.dismiss();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
+                        });
 
 
+                    }
+                    else{
+                        passwordInput.setError(context.getString(R.string.password_incorrect));
+                        loadingBar.dismiss();
+                    }
                 }
-                else{
-                    passwordInput.setError(context.getString(R.string.password_incorrect));
-                    loadingBar.dismiss();
-                }
-            }
-        });
+            });
+        }
     }
 
     public void messageAllDelete(final String uid, final boolean device){
@@ -178,21 +202,24 @@ public class Delete {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                         for(DataSnapshot snapshot1 : snapshot.getChildren()){
                             Message message = snapshot1.getValue(Message.class);
-                            message.setMessage_id(snapshot1.getKey());
 
-                            if(message.getType().equals("Text")){
-                                message(message, snapshot.getKey());
-                            }
-                            else if(message.getType().equals("Image")){
-                                if(device){
-                                    File file = new File(message.getPath());
+                            if(message != null){
+                                message.setMessage_id(snapshot1.getKey());
 
-                                    if(file.exists()){
-                                        file.delete();
-                                    }
+                                if(message.getType().equals("Text")){
+                                    message(message, snapshot.getKey());
                                 }
+                                else if(message.getType().equals("Image")){
+                                    if(device){
+                                        File file = new File(message.getPath());
 
-                                imageMessage(message, snapshot.getKey());
+                                        if(file.exists()){
+                                            file.delete();
+                                        }
+                                    }
+
+                                    imageMessage(message, snapshot.getKey());
+                                }
                             }
                         }
                     }
@@ -222,6 +249,7 @@ public class Delete {
                                 if(dataSnapshot.exists()){
                                     for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
                                         String recent_uid = snapshot1.getKey();
+                                        assert recent_uid != null;
                                         if(recent_uid.equals(uid)){
                                             snapshot1.getRef().removeValue();
                                             break;
@@ -255,6 +283,7 @@ public class Delete {
                 if(dataSnapshot.exists()){
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                         String friend_id = snapshot.getKey();
+                        assert friend_id != null;
                         Firebase.getInstance().getDatabaseReference().child("Friends").child(friend_id).child(uid).removeValue();
                     }
 
@@ -276,7 +305,7 @@ public class Delete {
                 if(dataSnapshot.exists()){
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                         for(DataSnapshot snapshot1 : snapshot.getChildren()){
-                            if(snapshot1.getKey().equals(uid)){
+                            if(Objects.equals(snapshot1.getKey(), uid)){
                                 snapshot1.getRef().removeValue();
                                 break;
                             }
@@ -292,9 +321,17 @@ public class Delete {
         });
     }
 
+    public void unblock(final String id){
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        assert uid != null;
+        Firebase.getInstance().getDatabaseReference().child("Blocks").child(uid).child(id).removeValue();
+    }
+
     public void message(Message message, String chatUid){
         String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         MessageFindAll.isRemoved = true;
         Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).child(message.getMessage_id()).removeValue();
     }
@@ -313,6 +350,7 @@ public class Delete {
     public void deleteChat(String chatUid, boolean deleteDevice){
         String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         clearChat(chatUid, deleteDevice);
         Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).child(chatUid).removeValue();
     }
@@ -320,6 +358,7 @@ public class Delete {
     private void allDeleteImage(final String chatUid, final boolean deleteDevice){
         final String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -327,7 +366,7 @@ public class Delete {
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                         Message message = snapshot.getValue(Message.class);
 
-                        if(message.getType().equals("Image")){
+                        if(message != null && message.getType().equals("Image")){
                             FirebaseStorage.getInstance().getReferenceFromUrl(message.getUrl()).delete();
 
                             if(deleteDevice && !message.getPath().equals("")){

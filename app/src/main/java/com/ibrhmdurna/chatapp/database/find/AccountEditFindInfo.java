@@ -38,7 +38,7 @@ public class AccountEditFindInfo implements IFind {
 
     @Override
     public void getContent() {
-        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        uid = FirebaseAuth.getInstance().getUid();
 
         Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).addListenerForSingleValueEvent(contentEventListener);
     }
@@ -49,23 +49,32 @@ public class AccountEditFindInfo implements IFind {
             if(dataSnapshot.exists()){
                 final Account account = dataSnapshot.getValue(Account.class);
 
-                String image = account.getProfile_image();
+                if(account != null){
+                    String image = account.getProfile_image();
 
-                if(image.substring(0, 8).equals("default_")){
-                    String value = image.substring(8,9);
-                    int index = Integer.parseInt(value);
-                    setProfileImage(index, profileImage);
-                    String name = account.getName().substring(0,1);
-                    profileText.setText(name);
-                }
-                else {
-                    if(binding.getRoot().getContext() != null){
-                        Glide.with(binding.getRoot().getContext()).load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+                    if(image.substring(0, 8).equals("default_")){
+                        String value = image.substring(8,9);
+                        int index = Integer.parseInt(value);
+                        setProfileImage(index, profileImage);
+                        String name = account.getName().substring(0,1);
+                        profileText.setText(name);
                     }
-                    profileText.setVisibility(View.GONE);
-                }
+                    else {
+                        if(binding.getRoot().getContext() != null){
+                            try {
+                                Glide.with(binding.getRoot().getContext()).load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                        profileText.setVisibility(View.GONE);
+                    }
 
-                binding.setAccount(account);
+                    binding.setAccount(account);
+                }
+                else{
+                    Toast.makeText(binding.getRoot().getContext(), binding.getRoot().getContext().getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
+                }
             }
             else {
                 Toast.makeText(binding.getRoot().getContext(), binding.getRoot().getContext().getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();

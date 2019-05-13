@@ -196,14 +196,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Blocked Accounts"
+                                android:text="@string/blocked_accounts"
                                 android:textColor="?attr/primaryTextColor"
                                 android:textSize="18sp"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Blocks"/>
+                                android:text="@string/blocks"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

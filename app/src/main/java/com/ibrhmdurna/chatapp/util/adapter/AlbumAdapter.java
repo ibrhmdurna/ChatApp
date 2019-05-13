@@ -1,5 +1,6 @@
 package com.ibrhmdurna.chatapp.util.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -45,7 +46,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final AlbumViewHolder albumViewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final AlbumViewHolder albumViewHolder, @SuppressLint("RecyclerView") final int i) {
         albumViewHolder.setImage(list.get(i));
 
         albumViewHolder.itemView.setOnClickListener(new View.OnClickListener() {

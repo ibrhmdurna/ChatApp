@@ -8,7 +8,6 @@ import com.google.firebase.storage.StorageReference;
 public class Firebase {
 
     private DatabaseReference databaseReference;
-    private StorageReference storageReference;
 
     private static Firebase instance;
 
@@ -27,12 +26,5 @@ public class Firebase {
             databaseReference.keepSynced(true);
         }
         return databaseReference;
-    }
-
-    public StorageReference getStorageReference() {
-        if(storageReference == null){
-            storageReference = FirebaseStorage.getInstance().getReference();
-        }
-        return storageReference;
     }
 }

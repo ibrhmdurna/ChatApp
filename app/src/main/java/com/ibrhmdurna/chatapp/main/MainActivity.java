@@ -18,7 +18,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,11 +34,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Insert;
 import com.ibrhmdurna.chatapp.database.Status;
 import com.ibrhmdurna.chatapp.database.Firebase;
-import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.models.Request;
 import com.ibrhmdurna.chatapp.start.StartActivity;
@@ -112,13 +109,14 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Request request = snapshot.getValue(Request.class);
 
+                    assert request != null;
                     if(!request.isSeen()){
                         count++;
                     }
                 }
 
                 if(count > 0){
-                    addBadgeView(count,2);
+                    addBadgeView(count);
                 }
                 else {
                     removeBadgeView();
@@ -144,13 +142,14 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
 
+                    assert chat != null;
                     if(!chat.isSeen()){
                         count++;
                     }
                 }
 
                 if(count > 0){
-                    addChatBadgeView(count, 0);
+                    addChatBadgeView(count);
                 }
                 else{
                     removeChatBadgeView();
@@ -169,9 +168,9 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     };
 
     @SuppressLint("SetTextI18n")
-    private void addChatBadgeView(int count, int position){
+    private void addChatBadgeView(int count){
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
-        BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(position);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(0);
 
         chatBadge = LayoutInflater.from(this).inflate(R.layout.view_notification_chat_badge, menuView, false);
         TextView text = chatBadge.findViewById(R.id.badge);
@@ -185,9 +184,9 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     }
 
     @SuppressLint("SetTextI18n")
-    private void addBadgeView(int count, int position){
+    private void addBadgeView(int count){
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
-        BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(position);
+        BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(2);
 
         notificationBadge = LayoutInflater.from(this).inflate(R.layout.view_notification_badge, menuView, false);
         TextView text = notificationBadge.findViewById(R.id.badge);

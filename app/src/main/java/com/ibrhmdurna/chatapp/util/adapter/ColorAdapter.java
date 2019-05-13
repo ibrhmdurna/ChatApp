@@ -136,7 +136,7 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ColorViewHol
 
         private ImageView solidView;
 
-        public ColorViewHolder(@NonNull View itemView) {
+        ColorViewHolder(@NonNull View itemView) {
             super(itemView);
 
             solidView = itemView.findViewById(R.id.solid_view);

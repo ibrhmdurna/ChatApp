@@ -33,6 +33,7 @@ import com.ibrhmdurna.chatapp.databinding.ActivityEditAccountBinding;
 import com.ibrhmdurna.chatapp.image.CameraActivity;
 import com.ibrhmdurna.chatapp.image.GalleryActivity;
 import com.ibrhmdurna.chatapp.util.Environment;
+import com.ibrhmdurna.chatapp.util.controller.AppController;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 import com.ibrhmdurna.chatapp.util.controller.ImageController;
 import com.ibrhmdurna.chatapp.util.dialog.ProfileBottomSheetDialog;
@@ -41,6 +42,7 @@ import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -204,9 +206,9 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
     }
 
     private void saveEdit(){
-        binding.getAccount().setName(nameInput.getEditText().getText().toString());
-        binding.getAccount().setSurname(surnameInput.getEditText().getText().toString());
-        binding.getAccount().setPhone(phoneInput.getEditText().getText().toString());
+        binding.getAccount().setName(Objects.requireNonNull(nameInput.getEditText()).getText().toString());
+        binding.getAccount().setSurname(Objects.requireNonNull(surnameInput.getEditText()).getText().toString());
+        binding.getAccount().setPhone(Objects.requireNonNull(phoneInput.getEditText()).getText().toString());
         binding.getAccount().setBirthday(birthdayText.getText().toString());
         binding.getAccount().setGender(genderSpinner.getSelectedItemPosition());
         binding.getAccount().setLocation(locationSpinner.getSelectedItemPosition());
@@ -277,7 +279,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
     }
 
     private void watcherProcess(){
-        nameInput.getEditText().addTextChangedListener(new TextWatcher() {
+        Objects.requireNonNull(nameInput.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -299,7 +301,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
             }
         });
 
-        surnameInput.getEditText().addTextChangedListener(new TextWatcher() {
+        Objects.requireNonNull(surnameInput.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -321,7 +323,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
             }
         });
 
-        phoneInput.getEditText().addTextChangedListener(new TextWatcher() {
+        Objects.requireNonNull(phoneInput.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -487,6 +489,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
         if(saveBtn.isEnabled()){
             final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, getString(R.string.unsaved_content), getString(R.string.no), getString(R.string.yes));
             TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
+            assert positiveBtn != null;
             positiveBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -552,6 +555,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
                 onBack();
                 break;
             case R.id.editSaveBtn:
+                AppController.getInstance().closeKeyboard(this);
                 saveEdit();
                 break;
         }

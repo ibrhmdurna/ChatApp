@@ -5,6 +5,8 @@ import android.support.v7.widget.Toolbar;
 
 import com.ibrhmdurna.chatapp.R;
 
+import java.util.Objects;
+
 public class Environment {
 
     private static Environment instance;
@@ -23,7 +25,7 @@ public class Environment {
     public void toolbarProcess(AppCompatActivity context, int id){
         Toolbar toolbar = context.findViewById(id);
         context.setSupportActionBar(toolbar);
-        context.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(context.getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         context.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_icon);
     }
 }

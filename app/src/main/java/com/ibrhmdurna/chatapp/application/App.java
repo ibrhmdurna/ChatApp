@@ -97,6 +97,7 @@ public class App extends Application {
             for(int i = 0; i < getPageStackList().size(); i++){
                 if(getPageStackList().get(i).equals(tag)){
                     getPageStackList().remove(i);
+                    break;
                 }
             }
         }

@@ -137,7 +137,7 @@
     <string name="last_seen">Last seen</string>
     <string name="this_message_was_deleted">This message was deleted</string>
     <string name="couldnt_refresh_feed">Couldn\'t refresh feed.</string>
-    <string name="online">Online</string>
+    <string name="online">online</string>
     <string name="mutual_f">Mutual F.</string>
     <string name="no_chat">No Chat</string>
     <string name="no_request">No Request</string>
@@ -165,8 +165,6 @@
     <string name="hello_i_am">Hello, I am</string>
     <string name="would_join_chatapp">would you like to join us? ChatApp Inc.</string>
     <string name="subject_here">Subject Here</string>
-    <string name="are_you_sure_you_want">"Are you sure you want to make "</string>
-    <string name="out_of_friendship">out of friendship?</string>
     <string name="_clear_search_history">Clear search history?</string>
     <string name="clear">Clear</string>
     <string name="version">version</string>
@@ -209,6 +207,13 @@
     <string name="clear_chat_with_2">\"?</string>
     <string name="delete_chat_with">Delete chat with \"</string>
     <string name="delete_chat_with_2">\"?</string>
-    <string name="sending">Sending...</string>
+    <string name="sending">Sending…</string>
+    <string name="tap_and_hold">Tap and hold to record a voice message.</string>
+    <string name="block">Block</string>
+    <string name="unblock">Unblock</string>
+    <string name="are_you_want_to_unblock">Are you sure you want to unblock?</string>
+    <string name="blocked_accounts">Blocked Accounts</string>
+    <string name="blocks">Blocks</string>
+    <string name="no_blocked_account">No Blocked Account</string>
 
 </resources>

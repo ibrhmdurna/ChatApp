@@ -23,6 +23,7 @@ import com.ibrhmdurna.chatapp.util.adapter.ChatAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class ChatFindAll implements IFind {
@@ -44,7 +45,7 @@ public class ChatFindAll implements IFind {
 
     @Override
     public void buildView() {
-        chatView = context.getView().findViewById(R.id.messagesContainer);
+        chatView = Objects.requireNonNull(context.getView()).findViewById(R.id.messagesContainer);
         notFoundView = context.getView().getRootView().findViewById(R.id.request_not_found_view);
         bottomNavigationView = context.getView().getRootView().findViewById(R.id.mainBottomNavigationView);
     }
@@ -82,33 +83,38 @@ public class ChatFindAll implements IFind {
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             if(dataSnapshot.exists()){
                 Chat chat = dataSnapshot.getValue(Chat.class);
-                chat.setChatUid(dataSnapshot.getKey());
+                if(chat != null){
+                    chat.setChatUid(dataSnapshot.getKey());
 
-                chatIds.add(0, chat.getChatUid());
-                chatList.add(0, chat);
+                    chatIds.add(0, chat.getChatUid());
+                    chatList.add(0, chat);
 
-                chatAdapter.notifyItemInserted(0);
+                    chatAdapter.notifyItemInserted(0);
+                }
             }
         }
 
         @Override
         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             Chat chat = dataSnapshot.getValue(Chat.class);
-            chat.setChatUid(dataSnapshot.getKey());
 
-            int index = chatIds.indexOf(chat.getChatUid());
-            if(index > -1){
-                if(chat.getTime().equals(chatList.get(index).getTime())){
-                    chatList.set(index, chat);
-                    chatAdapter.notifyItemChanged(index);
-                }
-                else{
-                    chatList.remove(index);
-                    chatIds.remove(index);
-                    chatAdapter.notifyItemRemoved(index);
-                    chatList.add(0, chat);
-                    chatIds.add(0, chat.getChatUid());
-                    chatAdapter.notifyItemInserted(0);
+            if(chat != null){
+                chat.setChatUid(dataSnapshot.getKey());
+
+                int index = chatIds.indexOf(chat.getChatUid());
+                if(index > -1){
+                    if(chat.getTime().equals(chatList.get(index).getTime())){
+                        chatList.set(index, chat);
+                        chatAdapter.notifyItemChanged(index);
+                    }
+                    else{
+                        chatList.remove(index);
+                        chatIds.remove(index);
+                        chatAdapter.notifyItemRemoved(index);
+                        chatList.add(0, chat);
+                        chatIds.add(0, chat.getChatUid());
+                        chatAdapter.notifyItemInserted(0);
+                    }
                 }
             }
         }

@@ -20,6 +20,8 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.settings.ForgotActivity;
 import com.ibrhmdurna.chatapp.util.Environment;
 
+import java.util.Objects;
+
 public class LoginActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
     private TextInputLayout emailInput, passwordInput;
@@ -36,8 +38,8 @@ public class LoginActivity extends AppCompatActivity implements ViewComponentFac
     }
 
     private void inputProcess(){
-        emailInput.getEditText().addTextChangedListener(inputWatcher);
-        passwordInput.getEditText().addTextChangedListener(inputWatcher);
+        Objects.requireNonNull(emailInput.getEditText()).addTextChangedListener(inputWatcher);
+        Objects.requireNonNull(passwordInput.getEditText()).addTextChangedListener(inputWatcher);
     }
 
     private TextWatcher inputWatcher = new TextWatcher() {
@@ -62,15 +64,15 @@ public class LoginActivity extends AppCompatActivity implements ViewComponentFac
         String password = App.Remember.getInstance().getPassword();
 
         if(email != null && password != null){
-            emailInput.getEditText().setText(email);
-            passwordInput.getEditText().setText(password);
+            Objects.requireNonNull(emailInput.getEditText()).setText(email);
+            Objects.requireNonNull(passwordInput.getEditText()).setText(password);
             rememberCheck.setChecked(true);
         }
     }
 
     private void checkInput(){
-        String email = emailInput.getEditText().getText().toString();
-        String password = passwordInput.getEditText().getText().toString();
+        String email = Objects.requireNonNull(emailInput.getEditText()).getText().toString();
+        String password = Objects.requireNonNull(passwordInput.getEditText()).getText().toString();
 
         if(email.trim().length() > 0 && password.trim().length() > 0){
             loginBtn.setEnabled(true);

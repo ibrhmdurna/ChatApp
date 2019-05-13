@@ -4,6 +4,7 @@ package com.ibrhmdurna.chatapp.main;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +44,7 @@ public class AccountFragment extends Fragment implements ViewComponentFactory, V
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         App.Theme.getInstance().getTheme(getContext());
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_account, container, false);
 

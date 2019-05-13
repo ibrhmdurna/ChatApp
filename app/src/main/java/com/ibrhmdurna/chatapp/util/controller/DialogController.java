@@ -30,6 +30,7 @@ import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.settings.DarkModeActivity;
 
 import java.io.File;
+import java.util.Objects;
 
 public class DialogController {
 
@@ -73,7 +74,7 @@ public class DialogController {
         TextView positiveBtn = view.findViewById(R.id.dialog_positive_btn);
         positiveBtn.setText(positive);
 
-        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
+        Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.dialogAnimation;
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
 
@@ -101,7 +102,7 @@ public class DialogController {
         TextView positiveBtn = view.findViewById(R.id.dialog_positive_btn);
         positiveBtn.setText(positive);
 
-        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
+        Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.dialogAnimation;
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
 

@@ -29,6 +29,7 @@ import com.ibrhmdurna.chatapp.util.adapter.FriendAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AccountFriendFindAll implements IFind {
 
@@ -100,7 +101,7 @@ public class AccountFriendFindAll implements IFind {
         friendAdapter.setOnItemClickListener(new FriendAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String uid) {
-                if(myUid.equals(uid)){
+                if(Objects.requireNonNull(myUid).equals(uid)){
                     Intent mainIntent = new Intent(context, MainActivity.class);
                     mainIntent.putExtra("page", "Account");
                     context.startActivity(mainIntent);
@@ -149,12 +150,14 @@ public class AccountFriendFindAll implements IFind {
             if(dataSnapshot.exists()){
                 final Friend friend = dataSnapshot.getValue(Friend.class);
                 Account account = dataSnapshot.getValue(Account.class);
-                account.setUid(dataSnapshot.getKey());
-                friend.setAccount(account);
-                friendList.add(friend);
-                friendIds.add(dataSnapshot.getKey());
+                if(account != null && friend != null){
+                    account.setUid(dataSnapshot.getKey());
+                    friend.setAccount(account);
+                    friendList.add(friend);
+                    friendIds.add(dataSnapshot.getKey());
 
-                friendAdapter.notifyItemInserted(friendList.size() - 1);
+                    friendAdapter.notifyItemInserted(friendList.size() - 1);
+                }
             }
         }
 
@@ -162,7 +165,7 @@ public class AccountFriendFindAll implements IFind {
         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             final Friend friend = dataSnapshot.getValue(Friend.class);
             final int index = friendIds.indexOf(dataSnapshot.getKey());
-            if(index > -1){
+            if(index > -1 && friend != null){
                 Account account = new Account();
                 account.setUid(dataSnapshot.getKey());
                 friend.setAccount(account);

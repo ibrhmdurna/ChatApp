@@ -115,12 +115,6 @@
                                 android:layout_centerInParent="true"
                                 android:textColor="@android:color/white"
                                 android:textSize="34sp"/>
-
-                            <ImageView
-                                android:layout_width="96dp"
-                                android:layout_height="96dp"
-                                android:src="@drawable/ic_brightness"
-                                android:translationZ="2dp"/>
                         </RelativeLayout>
 
                         <LinearLayout

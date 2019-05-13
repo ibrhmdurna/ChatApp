@@ -33,6 +33,7 @@ import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SearchActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
@@ -126,7 +127,7 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
     private void toolbarProcess(){
         Toolbar toolbar = findViewById(R.id.search_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(null);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_icon);
     }
@@ -174,6 +175,7 @@ public class SearchActivity extends AppCompatActivity implements ViewComponentFa
             case R.id.clear_recent_btn:
                 final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, getString(R.string._clear_search_history), getString(R.string.cancel), getString(R.string.clear));
                 TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
+                assert positiveBtn != null;
                 positiveBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

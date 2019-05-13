@@ -22,7 +22,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleGravity="top|center_horizontal"
-            app:title="Blocked Accounts"
+            app:title="@string/blocked_accounts"
             app:expandedTitleTextAppearance="@style/ExpandedTitleTextAppearance"
             app:collapsedTitleTextAppearance="@style/CollapsedTitleTextAppearance"
             app:expandedTitleMarginTop="-100dp">
@@ -60,46 +60,38 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <RelativeLayout
+                android:id="@+id/content_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <RelativeLayout
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/blocks_container"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
+                    android:background="@drawable/rounded_background"
+                    android:backgroundTint="?attr/backgroundCardColor"
+                    android:visibility="gone"
+                    android:nestedScrollingEnabled="false">
+                </android.support.v7.widget.RecyclerView>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="400dp">
+                <android.support.v4.widget.NestedScrollView
+                    android:id="@+id/no_blocked_account_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="450dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Under Development"
-                            android:textColor="?attr/primaryTextColor"
-                            android:textSize="20sp"
-                            android:layout_centerInParent="true"/>
-                    </RelativeLayout>
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/ic_left_circle_view"
-                        android:translationZ="2dp"
-                        android:layout_alignParentBottom="true"/>
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/ic_right_circle_view"
-                        android:translationZ="2dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"/>
-                </RelativeLayout>
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_blocked_account"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textColor="@color/colorDarkGray"
+                        android:layout_gravity="center" />
+                </android.support.v4.widget.NestedScrollView>
+            </RelativeLayout>
         </android.support.v4.widget.NestedScrollView>
-
     </RelativeLayout>
 
     <ImageView

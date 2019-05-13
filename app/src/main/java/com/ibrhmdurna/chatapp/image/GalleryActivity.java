@@ -36,6 +36,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class GalleryActivity extends AppCompatActivity implements ViewComponentFactory {
 
@@ -238,7 +239,7 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
             }
         });
 
-        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
+        Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.dialogAnimation;
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }

@@ -52,6 +52,7 @@ public class Text extends MessageStrategy {
         myUpdate.put("send", true);
         myUpdate.put("seen", true);
 
+        assert message_id != null;
         messageReference.child(message.getFrom()).child(chatUid).child(message_id).setValue(messageMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

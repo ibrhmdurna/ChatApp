@@ -148,13 +148,15 @@ public class WriteFindAll implements IFind {
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             if(dataSnapshot.exists()){
                 final Friend friend = dataSnapshot.getValue(Friend.class);
-                Account account = new Account();
-                account.setUid(dataSnapshot.getKey());
-                friend.setAccount(account);;
-                friendList.add(friend);
-                friendIds.add(dataSnapshot.getKey());
+                if(friend != null){
+                    Account account = new Account();
+                    account.setUid(dataSnapshot.getKey());
+                    friend.setAccount(account);
+                    friendList.add(friend);
+                    friendIds.add(dataSnapshot.getKey());
 
-                writeAdapter.notifyItemInserted(friendList.size() - 1);
+                    writeAdapter.notifyItemInserted(friendList.size() - 1);
+                }
             }
         }
 
@@ -162,7 +164,7 @@ public class WriteFindAll implements IFind {
         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             final Friend friend = dataSnapshot.getValue(Friend.class);
             final int index = friendIds.indexOf(dataSnapshot.getKey());
-            if(index > -1){
+            if(index > -1 && friend != null){
                 Account account = new Account();
                 account.setUid(dataSnapshot.getKey());
                 friend.setAccount(account);

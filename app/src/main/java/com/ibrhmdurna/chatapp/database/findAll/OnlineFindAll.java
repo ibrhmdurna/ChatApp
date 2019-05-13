@@ -22,6 +22,7 @@ import com.ibrhmdurna.chatapp.util.adapter.FriendAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class OnlineFindAll implements IFind {
 
@@ -40,7 +41,7 @@ public class OnlineFindAll implements IFind {
 
     @Override
     public void buildView() {
-        friendView = context.getView().findViewById(R.id.online_container);
+        friendView = Objects.requireNonNull(context.getView()).findViewById(R.id.online_container);
         onlineLayout = context.getView().findViewById(R.id.online_layout);
     }
 
@@ -85,44 +86,47 @@ public class OnlineFindAll implements IFind {
 
                     final Friend friend = snapshot.getValue(Friend.class);
 
-                    Firebase.getInstance().getDatabaseReference().child("Accounts").child(friend_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                    Firebase.getInstance().getDatabaseReference().child("Accounts").child(Objects.requireNonNull(friend_id)).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             friendList.clear();
                             if(dataSnapshot.exists()){
                                 final Account account = dataSnapshot.getValue(Account.class);
-                                account.setUid(friend_id);
-                                friend.setAccount(account);
 
-                                dataSnapshot.child("online").getRef().addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        if(dataSnapshot.exists()){
-                                            account.setOnline((boolean) dataSnapshot.getValue());
+                                if(account != null && friend != null){
+                                    account.setUid(friend_id);
+                                    friend.setAccount(account);
 
-                                            if(account.isOnline()){
-                                                friendList.add(friend);
-                                            }
-                                            else{
-                                                friendList.remove(friend);
-                                            }
+                                    dataSnapshot.child("online").getRef().addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if(dataSnapshot.exists()){
+                                                account.setOnline((boolean) dataSnapshot.getValue());
 
-                                            if(friendList.size() > 0){
-                                                onlineLayout.setVisibility(View.VISIBLE);
-                                            }
-                                            else {
-                                                onlineLayout.setVisibility(View.GONE);
-                                            }
+                                                if(account.isOnline()){
+                                                    friendList.add(friend);
+                                                }
+                                                else{
+                                                    friendList.remove(friend);
+                                                }
 
-                                            friendAdapter.notifyDataSetChanged();
+                                                if(friendList.size() > 0){
+                                                    onlineLayout.setVisibility(View.VISIBLE);
+                                                }
+                                                else {
+                                                    onlineLayout.setVisibility(View.GONE);
+                                                }
+
+                                                friendAdapter.notifyDataSetChanged();
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                    }
-                                });
+                                        }
+                                    });
+                                }
                             }
                         }
 

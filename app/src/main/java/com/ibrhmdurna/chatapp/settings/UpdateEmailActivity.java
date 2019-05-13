@@ -14,6 +14,9 @@ import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.util.Environment;
+import com.ibrhmdurna.chatapp.util.controller.AppController;
+
+import java.util.Objects;
 
 public class UpdateEmailActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
@@ -30,8 +33,8 @@ public class UpdateEmailActivity extends AppCompatActivity implements ViewCompon
     }
 
     private void inputProcess(){
-        newEmailInput.getEditText().addTextChangedListener(inputWatcher);
-        passwordInput.getEditText().addTextChangedListener(inputWatcher);
+        Objects.requireNonNull(newEmailInput.getEditText()).addTextChangedListener(inputWatcher);
+        Objects.requireNonNull(passwordInput.getEditText()).addTextChangedListener(inputWatcher);
     }
 
     private TextWatcher inputWatcher = new TextWatcher() {
@@ -52,7 +55,7 @@ public class UpdateEmailActivity extends AppCompatActivity implements ViewCompon
     };
 
     private void checkInput(){
-        if(newEmailInput.getEditText().getText().length() > 0 && passwordInput.getEditText().getText().length() > 0){
+        if(Objects.requireNonNull(newEmailInput.getEditText()).getText().length() > 0 && Objects.requireNonNull(passwordInput.getEditText()).getText().length() > 0){
             updateBtn.setEnabled(true);
         }
         else {
@@ -84,6 +87,7 @@ public class UpdateEmailActivity extends AppCompatActivity implements ViewCompon
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.update_btn:
+                AppController.getInstance().closeKeyboard(this);
                 Update.getInstance().updateEmail(this, newEmailInput, passwordInput);
                 break;
         }

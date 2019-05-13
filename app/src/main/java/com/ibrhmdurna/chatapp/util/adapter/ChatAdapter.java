@@ -68,7 +68,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         return chatList.size();
     }
 
-    public class ChatViewHolder extends RecyclerView.ViewHolder{
+    class ChatViewHolder extends RecyclerView.ViewHolder{
 
         private CircleImageView profileImage;
         private TextView profileText;
@@ -85,7 +85,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         private String chatUid;
         private String image;
 
-        public ChatViewHolder(@NonNull View itemView) {
+        ChatViewHolder(@NonNull View itemView) {
             super(itemView);
 
             profileImage = itemView.findViewById(R.id.chat_profile_image);
@@ -101,16 +101,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             timeAccentText = itemView.findViewById(R.id.chat_time_accent_text);
         }
 
-        public void setData(final Chat chat, int position){
+        private void setData(final Chat chat, int position){
 
             chatUid = chat.getChatUid();
 
             Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).child(chatUid).child("typing").removeEventListener(chatEventListener);
 
-            Firebase.getInstance().getDatabaseReference().child("Accounts").child(chatUid).addListenerForSingleValueEvent(accountEventListener);
+            Firebase.getInstance().getDatabaseReference().child("Blocks").child(chatUid).child(uid).addValueEventListener(blocksEventListener);
             Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).limitToLast(1).addListenerForSingleValueEvent(lastMessageEventListener);
             Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).addListenerForSingleValueEvent(messageEventListener);
-            Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).child(chatUid).child("typing").addValueEventListener(chatEventListener);
 
             String chatTime = GetTimeAgo.getInstance().getChatTimeAgo(context.getContext(), chat.getTime());
             time.setText(chatTime);
@@ -141,6 +140,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                     final CheckBox deviceCheck = dialog.findViewById(R.id.delete_device_check);
 
                     LinearLayout markItem = dialog.findViewById(R.id.mark_as_read_item);
+                    assert markItem != null;
                     markItem.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -160,6 +160,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                     });
 
                     LinearLayout clearItem = dialog.findViewById(R.id.clear_item);
+                    assert clearItem != null;
                     clearItem.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -167,6 +168,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                             final AlertDialog confirmDialog = DialogController.getInstance().dialogCustom(context.getActivity(), context.getString(R.string.clear_chat_with) + nameSurname.getText() + context.getString(R.string.clear_chat_with_2), context.getString(R.string.cancel), context.getString(R.string.clear));
                             confirmDialog.show();
                             TextView positiveView = confirmDialog.findViewById(R.id.dialog_positive_btn);
+                            assert positiveView != null;
                             positiveView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -177,6 +179,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                                     timeAccentText.setVisibility(View.GONE);
                                     time.setVisibility(View.VISIBLE);
                                     messageCount.setVisibility(View.GONE);
+                                    assert deviceCheck != null;
                                     Delete.getInstance().clearChat(chatUid, deviceCheck.isChecked());
                                 }
                             });
@@ -184,6 +187,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                     });
 
                     LinearLayout deleteItem = dialog.findViewById(R.id.delete_item);
+                    assert deleteItem != null;
                     deleteItem.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -191,10 +195,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                             final AlertDialog confirmDialog = DialogController.getInstance().dialogCustom(context.getActivity(), context.getString(R.string.delete_chat_with) + nameSurname.getText() + context.getString(R.string.delete_chat_with_2), context.getString(R.string.cancel), context.getString(R.string.delete));
                             confirmDialog.show();
                             TextView positiveView = confirmDialog.findViewById(R.id.dialog_positive_btn);
+                            assert positiveView != null;
                             positiveView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     confirmDialog.dismiss();
+                                    assert deviceCheck != null;
                                     Delete.getInstance().deleteChat(chatUid, deviceCheck.isChecked());
                                 }
                             });
@@ -220,7 +226,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                 }
                 else {
                     if(context != null){
-                        Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                        try {
+                            Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                     profileText.setText(null);
                     profileText.setVisibility(View.GONE);
@@ -239,7 +249,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                 }
                 else {
                     if(context != null){
-                        Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                        try {
+                            Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                     profileText.setText(null);
                     profileText.setVisibility(View.GONE);
@@ -282,18 +296,43 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             }
         }
 
+        private ValueEventListener blocksEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    try {
+                        nameSurname.setText(context.getString(R.string.chatapp_user));
+                        profileImage.setImageDrawable(Objects.requireNonNull(context.getContext()).getDrawable(R.drawable.default_avatar));
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+                else{
+                    Firebase.getInstance().getDatabaseReference().child("Accounts").child(chatUid).addListenerForSingleValueEvent(accountEventListener);
+                    Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).child(chatUid).child("typing").addValueEventListener(chatEventListener);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+
         private ValueEventListener accountEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     Account account = dataSnapshot.getValue(Account.class);
 
-                    setProfileImage(account.getThumb_image(), account.getName());
-                    nameSurname.setText(account.getNameSurname());
+                    if (account != null){
+                        setProfileImage(account.getThumb_image(), account.getName());
+                        nameSurname.setText(account.getNameSurname());
+                    }
                 }
                 else{
                     nameSurname.setText(context.getString(R.string.chatapp_user));
-                    profileImage.setImageDrawable(context.getContext().getDrawable(R.drawable.default_avatar));
+                    profileImage.setImageDrawable(Objects.requireNonNull(context.getContext()).getDrawable(R.drawable.default_avatar));
                 }
             }
 

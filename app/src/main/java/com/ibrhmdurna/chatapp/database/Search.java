@@ -38,6 +38,7 @@ import com.ibrhmdurna.chatapp.util.controller.AppController;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
 import java.util.List;
+import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -63,18 +64,18 @@ public class Search {
         final AlertDialog loading = DialogController.getInstance().dialogLoading(context, context.getString(R.string.please_wait));
         loading.show();
 
-        FirebaseAuth.getInstance().fetchSignInMethodsForEmail(emailInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+        FirebaseAuth.getInstance().fetchSignInMethodsForEmail(Objects.requireNonNull(emailInput.getEditText()).getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
             @Override
             public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
                 if(task.isSuccessful()){
                     loading.dismiss();
-                    if(task.getResult().getSignInMethods().size() > 0){
+                    if(Objects.requireNonNull(Objects.requireNonNull(task.getResult()).getSignInMethods()).size() > 0){
                         emailInput.setError(context.getString(R.string.email_is_used));
                     }
                     else {
                         Intent infoIntent = new Intent(context, RegisterInfoActivity.class);
                         infoIntent.putExtra("email", emailInput.getEditText().getText().toString());
-                        infoIntent.putExtra("password", passwordInput.getEditText().getText().toString());
+                        infoIntent.putExtra("password", Objects.requireNonNull(passwordInput.getEditText()).getText().toString());
                         context.startActivity(infoIntent);
                         emailInput.setError(null);
                     }
@@ -106,7 +107,7 @@ public class Search {
         emailInput.setError(null);
         passwordInput.setError(null);
 
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(emailInput.getEditText().getText().toString(), passwordInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(Objects.requireNonNull(emailInput.getEditText()).getText().toString(), Objects.requireNonNull(passwordInput.getEditText()).getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
@@ -141,7 +142,7 @@ public class Search {
                 }
                 else{
 
-                    String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                    String errorCode = ((FirebaseAuthException) Objects.requireNonNull(task.getException())).getErrorCode();
 
                     switch (errorCode){
                         case "ERROR_INVALID_EMAIL":
@@ -168,6 +169,8 @@ public class Search {
         loadingBar.setVisibility(View.VISIBLE);
         searchLayout.setVisibility(View.GONE);
 
+        final String uid = FirebaseAuth.getInstance().getUid();
+
         Query query = Firebase.getInstance().getDatabaseReference().child("Accounts")
                 .orderByChild("search_name")
                 .startAt(search.toLowerCase())
@@ -177,39 +180,79 @@ public class Search {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 accountList.clear();
-                int count = 0;
+                final int[] count = {0};
                 if(dataSnapshot.exists()){
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        count++;
-                        Account account = snapshot.getValue(Account.class);
-                        account.setUid(snapshot.getKey());
-                        accountList.add(account);
+                    for(final DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        assert uid != null;
+                        Firebase.getInstance().getDatabaseReference().child("Blocks").child(Objects.requireNonNull(snapshot.getKey())).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    count[0]++;
+                                    Account account = new Account();
+                                    account.setName(search);
+                                    account.setUid("False");
+                                    accountList.add(account);
+                                }
+                                else{
+                                    count[0]++;
+                                    Account account = snapshot.getValue(Account.class);
+                                    if(account != null){
+                                        account.setUid(snapshot.getKey());
+                                        accountList.add(account);
+                                    }
+                                }
+
+                                if(count[0] >= dataSnapshot.getChildrenCount()){
+                                    Handler h = new Handler();
+                                    h.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if(accountList.size() > 0){
+                                                searchLayout.setVisibility(View.VISIBLE);
+                                            }
+                                            else {
+                                                searchLayout.setVisibility(View.GONE);
+                                            }
+                                            loadingBar.setIndeterminate(false);
+                                            loadingBar.setVisibility(View.GONE);
+                                            searchAdapter.notifyDataSetChanged();
+                                        }
+                                    },1000);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 }
                 else {
-                    count++;
+                    count[0]++;
                     Account account = new Account();
                     account.setName(search);
                     account.setUid("False");
                     accountList.add(account);
-                }
 
-                if(count >= dataSnapshot.getChildrenCount()){
-                    Handler h = new Handler();
-                    h.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(accountList.size() > 0){
-                                searchLayout.setVisibility(View.VISIBLE);
+                    if(count[0] >= dataSnapshot.getChildrenCount()){
+                        Handler h = new Handler();
+                        h.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(accountList.size() > 0){
+                                    searchLayout.setVisibility(View.VISIBLE);
+                                }
+                                else {
+                                    searchLayout.setVisibility(View.GONE);
+                                }
+                                loadingBar.setIndeterminate(false);
+                                loadingBar.setVisibility(View.GONE);
+                                searchAdapter.notifyDataSetChanged();
                             }
-                            else {
-                                searchLayout.setVisibility(View.GONE);
-                            }
-                            loadingBar.setIndeterminate(false);
-                            loadingBar.setVisibility(View.GONE);
-                            searchAdapter.notifyDataSetChanged();
-                        }
-                    },1000);
+                        },1000);
+                    }
                 }
             }
 

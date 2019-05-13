@@ -185,12 +185,14 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(dataSnapshot.exists()){
                         Account account = dataSnapshot.getValue(Account.class);
-                        account.setUid(dataSnapshot.getKey());
-                        friend.setAccount(account);
+                        if (account != null){
+                            account.setUid(dataSnapshot.getKey());
+                            friend.setAccount(account);
 
-                        nameSurname.setText(friend.getAccount().getNameSurname());
-                        email.setText(friend.getAccount().getEmail());
-                        setProfileImage(friend.getAccount().getThumb_image(), friend.getAccount().getName(), profileImage, profileText);
+                            nameSurname.setText(friend.getAccount().getNameSurname());
+                            email.setText(friend.getAccount().getEmail());
+                            setProfileImage(friend.getAccount().getThumb_image(), friend.getAccount().getName(), profileImage, profileText);
+                        }
                     }
                 }
 
@@ -258,7 +260,15 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 public void onClick(View v) {
                     final AlertDialog dialog = DialogController.getInstance().dialogCustom((Activity) context, null, context.getString(R.string.cancel), context.getString(R.string.delete));
 
-                    String text = context.getString(R.string.are_you_sure_you_want) +  friend.getAccount().getNameSurname() + " " + context.getString(R.string.out_of_friendship);
+                    String language = Locale.getDefault().getLanguage();
+
+                    String text;
+                    if(language.equals("tr")){
+                        text = friend.getAccount().getNameSurname() + " arkadaşlıktan çıkarmak istediğine emin misin?";
+                    }
+                    else{
+                        text = "Are you sure you want to make " +  friend.getAccount().getNameSurname() + " out of friendship?";
+                    }
                     TextView content = dialog.findViewById(R.id.dialog_content_text);
 
                     TypedValue typedValue = new TypedValue();
@@ -269,9 +279,9 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     SpannableString ss = new SpannableString(text);
                     ForegroundColorSpan fcsColor = new ForegroundColorSpan(color);
 
-                    String language = Locale.getDefault().getLanguage();
+
                     if(language.equals("tr")){
-                        ss.setSpan(fcsColor, 1, 1 + friend.getAccount().getNameSurname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        ss.setSpan(fcsColor, 0, friend.getAccount().getNameSurname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         content.setText(ss);
                     }
                     else{
@@ -351,7 +361,11 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
         else {
             if(context != null){
-                Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                try {
+                    Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
             profileText.setText(null);
             profileText.setVisibility(View.GONE);

@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Objects;
 
 public class FileController {
 
@@ -363,7 +364,7 @@ public class FileController {
 
         @Override
         protected synchronized void onPostExecute(String s) {
-            Firebase.getInstance().getDatabaseReference().child("Messages").child(FirebaseAuth.getInstance().getUid()).child(chatUid).child(imageName).child("path").setValue(s);
+            Firebase.getInstance().getDatabaseReference().child("Messages").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child(chatUid).child(imageName).child("path").setValue(s);
 
             super.onPostExecute(s);
         }

@@ -51,6 +51,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     Account account = dataSnapshot.getValue(Account.class);
+                    assert account != null;
                     account.setUid(dataSnapshot.getKey());
                     request.setAccount(account);
 
@@ -143,7 +144,13 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
                 profileText.setVisibility(View.VISIBLE);
             }
             else {
-                Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                if(context != null){
+                    try {
+                        Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
                 profileText.setText(null);
                 profileText.setVisibility(View.GONE);
             }

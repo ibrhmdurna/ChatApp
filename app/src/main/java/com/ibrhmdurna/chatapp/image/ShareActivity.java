@@ -41,6 +41,7 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Objects;
 
 public class ShareActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, OnEmojiPopupShownListener, OnEmojiPopupDismissListener {
 
@@ -75,7 +76,7 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
 
     private void sendMessage(){
         SendMessage message = new SendMessage(new Image());
-        Message messageObject = new Message(FirebaseAuth.getInstance().getUid(), messageInput.getText().toString(), "Image", null, false, false, false, false);
+        Message messageObject = new Message(FirebaseAuth.getInstance().getUid(), Objects.requireNonNull(messageInput.getText()).toString(), "Image", null, false, false, false, false);
         messageObject.setDownload(false);
         messageObject.setBitmap(image);
         message.Send(messageObject, uid);
@@ -172,7 +173,7 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
     private void toolbarProcess(){
         Toolbar toolbar = findViewById(R.id.share_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_icon_2);
     }
 

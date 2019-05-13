@@ -26,6 +26,7 @@ import com.ibrhmdurna.chatapp.util.adapter.FriendAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FriendFindAll implements IFind {
 
@@ -46,8 +47,8 @@ public class FriendFindAll implements IFind {
 
     @Override
     public void buildView() {
-        friendView = context.getView().findViewById(R.id.friends_container);
-        notFoundView = context.getActivity().findViewById(R.id.friend_not_found_view);
+        friendView = Objects.requireNonNull(context.getView()).findViewById(R.id.friends_container);
+        notFoundView = Objects.requireNonNull(context.getActivity()).findViewById(R.id.friend_not_found_view);
         bottomNavigationView = context.getActivity().findViewById(R.id.mainBottomNavigationView);
         friendLayout = context.getView().findViewById(R.id.friend_layout);
     }

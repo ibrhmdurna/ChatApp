@@ -22,11 +22,12 @@ import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class RegisterInfoActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
     private TextInputLayout nameInput, surnameInput, phoneInput;
-    private TextView birthdayText, nextView;
+    private TextView birthdayText;
     private SmartMaterialSpinner genderSpinner, locationSpinner;
     private TextView birthdayError, genderError, locationError;
     private View birthdayLine, genderLine, locationLine;
@@ -117,9 +118,9 @@ public class RegisterInfoActivity extends AppCompatActivity implements ViewCompo
     private void registerProcess(){
         String email = getIntent().getStringExtra("email");
         String password = getIntent().getStringExtra("password");
-        String name = nameInput.getEditText().getText().toString();
-        String surname = surnameInput.getEditText().getText().toString();
-        String phone = phoneInput.getEditText().getText().toString();
+        String name = Objects.requireNonNull(nameInput.getEditText()).getText().toString();
+        String surname = Objects.requireNonNull(surnameInput.getEditText()).getText().toString();
+        String phone = Objects.requireNonNull(phoneInput.getEditText()).getText().toString();
         String birthday = birthdayText.getText().toString();
         int gender = genderSpinner.getSelectedItemPosition();
         int location = locationSpinner.getSelectedItemPosition();
@@ -203,7 +204,6 @@ public class RegisterInfoActivity extends AppCompatActivity implements ViewCompo
         surnameInput = findViewById(R.id.reg_surname_input);
         phoneInput = findViewById(R.id.reg_phone_input);
         birthdayText = findViewById(R.id.birthday_text);
-        nextView = findViewById(R.id.register_info_next_btn);
         genderSpinner = findViewById(R.id.genderSpinner);
         locationSpinner = findViewById(R.id.locationSpinner);
         birthdayError = findViewById(R.id.birthday_error_text);

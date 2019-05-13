@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class RecentFindAll implements IFind {
 
@@ -83,17 +84,19 @@ public class RecentFindAll implements IFind {
             if(dataSnapshot.exists()){
                 final Recent recent = dataSnapshot.getValue(Recent.class);
 
-                Firebase.getInstance().getDatabaseReference().child("Accounts").child(dataSnapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                Firebase.getInstance().getDatabaseReference().child("Accounts").child(Objects.requireNonNull(dataSnapshot.getKey())).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
                             Account account = dataSnapshot.getValue(Account.class);
-                            account.setUid(dataSnapshot.getKey());
-                            recent.setAccount(account);
-                            recentList.add(0, recent);
-                            recentIds.add(0, dataSnapshot.getKey());
+                            if(account != null && recent != null){
+                                account.setUid(dataSnapshot.getKey());
+                                recent.setAccount(account);
+                                recentList.add(0, recent);
+                                recentIds.add(0, dataSnapshot.getKey());
 
-                            recentAdapter.notifyItemInserted(0);
+                                recentAdapter.notifyItemInserted(0);
+                            }
                         }
                     }
 
@@ -110,15 +113,17 @@ public class RecentFindAll implements IFind {
             final Recent recent = dataSnapshot.getValue(Recent.class);
             final int index = recentIds.indexOf(dataSnapshot.getKey());
             if(index > -1){
-                Firebase.getInstance().getDatabaseReference().child("Accounts").child(dataSnapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                Firebase.getInstance().getDatabaseReference().child("Accounts").child(Objects.requireNonNull(dataSnapshot.getKey())).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
                             Account account = dataSnapshot.getValue(Account.class);
-                            account.setUid(dataSnapshot.getKey());
-                            recent.setAccount(account);
-                            recentList.set(index, recent);
-                            recentAdapter.notifyItemChanged(index);
+                            if(account != null && recent != null){
+                                account.setUid(dataSnapshot.getKey());
+                                recent.setAccount(account);
+                                recentList.set(index, recent);
+                                recentAdapter.notifyItemChanged(index);
+                            }
                         }
                     }
 

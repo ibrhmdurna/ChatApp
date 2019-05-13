@@ -16,7 +16,10 @@ import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.util.Environment;
+import com.ibrhmdurna.chatapp.util.controller.AppController;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
+
+import java.util.Objects;
 
 public class DeleteAccountActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
@@ -35,6 +38,7 @@ public class DeleteAccountActivity extends AppCompatActivity implements ViewComp
     private void deleteProcess(){
         final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, getString(R.string.delete_dialog_content), getString(R.string.cancel), getString(R.string._delete));
         TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
+        assert positiveBtn != null;
         positiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,7 +49,7 @@ public class DeleteAccountActivity extends AppCompatActivity implements ViewComp
     }
 
     private void inputProcess(){
-        passwordInput.getEditText().addTextChangedListener(inputWatcher);
+        Objects.requireNonNull(passwordInput.getEditText()).addTextChangedListener(inputWatcher);
     }
 
     private TextWatcher inputWatcher = new TextWatcher() {
@@ -61,7 +65,7 @@ public class DeleteAccountActivity extends AppCompatActivity implements ViewComp
 
         @Override
         public void afterTextChanged(Editable s) {
-            if(passwordInput.getEditText().getText().toString().trim().length() > 0){
+            if(Objects.requireNonNull(passwordInput.getEditText()).getText().toString().trim().length() > 0){
                 deleteBtn.setEnabled(true);
             }
             else{
@@ -93,6 +97,7 @@ public class DeleteAccountActivity extends AppCompatActivity implements ViewComp
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.delete_account_btn:
+                AppController.getInstance().closeKeyboard(this);
                 deleteProcess();
                 break;
         }

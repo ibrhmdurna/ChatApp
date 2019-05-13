@@ -17,6 +17,9 @@ import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.util.Environment;
+import com.ibrhmdurna.chatapp.util.controller.AppController;
+
+import java.util.Objects;
 
 public class ForgotActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
@@ -36,7 +39,7 @@ public class ForgotActivity extends AppCompatActivity implements ViewComponentFa
     }
 
     private void inputProcess(){
-        emailInput.getEditText().addTextChangedListener(inputWatcher);
+        Objects.requireNonNull(emailInput.getEditText()).addTextChangedListener(inputWatcher);
     }
 
     private TextWatcher inputWatcher = new TextWatcher() {
@@ -57,7 +60,7 @@ public class ForgotActivity extends AppCompatActivity implements ViewComponentFa
     };
 
     private void checkUpdate(){
-        if(emailInput.getEditText().getText().length() > 0)
+        if(Objects.requireNonNull(emailInput.getEditText()).getText().length() > 0)
             sendBtn.setEnabled(true);
         else
             sendBtn.setEnabled(false);
@@ -89,6 +92,7 @@ public class ForgotActivity extends AppCompatActivity implements ViewComponentFa
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.send_btn:
+                AppController.getInstance().closeKeyboard(this);
                 Update.getInstance().resetPassword(this, emailInput, sendLayout ,doneAnim, successText);
                 break;
         }

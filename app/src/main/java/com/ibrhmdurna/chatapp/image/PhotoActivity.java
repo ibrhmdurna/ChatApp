@@ -57,7 +57,9 @@ public class PhotoActivity extends AppCompatActivity implements ViewComponentFac
                     if(dataSnapshot.exists()){
                         Account account = dataSnapshot.getValue(Account.class);
 
-                        nameSurnameText.setText(account.getNameSurname());
+                        if (account != null){
+                            nameSurnameText.setText(account.getNameSurname());
+                        }
                     }
                     else{
                         nameSurnameText.setText(getString(R.string.chatapp_user));

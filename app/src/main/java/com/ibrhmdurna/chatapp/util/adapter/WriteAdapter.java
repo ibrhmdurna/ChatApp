@@ -86,6 +86,7 @@ public class WriteAdapter extends RecyclerView.Adapter<WriteAdapter.WriteViewHol
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(dataSnapshot.exists()){
                         Account account = dataSnapshot.getValue(Account.class);
+                        assert account != null;
                         account.setUid(dataSnapshot.getKey());
                         friend.setAccount(account);
 
@@ -134,7 +135,11 @@ public class WriteAdapter extends RecyclerView.Adapter<WriteAdapter.WriteViewHol
         }
         else {
             if(context != null){
-                Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                try {
+                    Glide.with(context).load(value).placeholder(R.drawable.default_avatar).into(profileImage);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
             profileText.setText(null);
             profileText.setVisibility(View.GONE);

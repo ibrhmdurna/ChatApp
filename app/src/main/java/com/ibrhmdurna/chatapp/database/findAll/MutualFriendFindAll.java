@@ -28,6 +28,7 @@ import com.ibrhmdurna.chatapp.util.adapter.FriendAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MutualFriendFindAll implements IFind {
 
@@ -125,7 +126,7 @@ public class MutualFriendFindAll implements IFind {
             if(dataSnapshot.exists()){
                 final int[] mutual = {0};
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Firebase.getInstance().getDatabaseReference().child("Friends").child(myUid).child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    Firebase.getInstance().getDatabaseReference().child("Friends").child(myUid).child(Objects.requireNonNull(snapshot.getKey())).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if(dataSnapshot.exists()){
@@ -165,19 +166,21 @@ public class MutualFriendFindAll implements IFind {
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             if(dataSnapshot.exists()){
-                Firebase.getInstance().getDatabaseReference().child("Friends").child(myUid).child(dataSnapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                Firebase.getInstance().getDatabaseReference().child("Friends").child(myUid).child(Objects.requireNonNull(dataSnapshot.getKey())).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
                             final Friend mutualFriend = dataSnapshot.getValue(Friend.class);
 
                             Account account = new Account();
-                            account.setUid(dataSnapshot.getKey());
-                            mutualFriend.setAccount(account);
-                            friendList.add(mutualFriend);
-                            friendIds.add(dataSnapshot.getKey());
+                            if(mutualFriend != null){
+                                account.setUid(dataSnapshot.getKey());
+                                mutualFriend.setAccount(account);
+                                friendList.add(mutualFriend);
+                                friendIds.add(dataSnapshot.getKey());
 
-                            friendAdapter.notifyItemInserted(friendList.size() - 1);
+                                friendAdapter.notifyItemInserted(friendList.size() - 1);
+                            }
                         }
                     }
 
@@ -193,7 +196,7 @@ public class MutualFriendFindAll implements IFind {
         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             final Friend friend = dataSnapshot.getValue(Friend.class);
             final int index = friendIds.indexOf(dataSnapshot.getKey());
-            if(index > -1){
+            if(index > -1 && friend != null){
                 Account account = new Account();
                 account.setUid(dataSnapshot.getKey());
                 friend.setAccount(account);

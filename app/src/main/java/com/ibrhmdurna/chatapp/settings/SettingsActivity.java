@@ -64,10 +64,8 @@ public class SettingsActivity extends AppCompatActivity implements ViewComponent
                 startActivity(securityIntent);
                 break;
             case R.id.blocked_accounts_item:
-                Toast.makeText(this, "Under Development", Toast.LENGTH_SHORT).show();
-                /*
                 Intent blockedIntent = new Intent(getApplicationContext(), BlockedAccountsActivity.class);
-                startActivity(blockedIntent);*/
+                startActivity(blockedIntent);
                 break;
             case R.id.chat_settings_item:
                 Intent chatSettingsIntent = new Intent(getApplicationContext(), ChatSettingsActivity.class);
@@ -88,6 +86,7 @@ public class SettingsActivity extends AppCompatActivity implements ViewComponent
             case R.id.logout_item:
                 final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, getString(R.string.log_out_of_chatapp), getString(R.string.cancel), getString(R.string.logout));
                 TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
+                assert positiveBtn != null;
                 positiveBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

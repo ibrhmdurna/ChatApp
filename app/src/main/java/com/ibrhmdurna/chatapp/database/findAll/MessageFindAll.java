@@ -129,56 +129,60 @@ public class MessageFindAll implements IFind {
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             Message message = dataSnapshot.getValue(Message.class);
-            message.setMessage_id(dataSnapshot.getKey());
 
-            if(CURRENT_POSITION == 0){
-                MESSAGE_LAST_KEY = dataSnapshot.getKey();
-                MESSAGE_PREVIEW_KEY = dataSnapshot.getKey();
-            }
+            if(message != null){
+                message.setMessage_id(dataSnapshot.getKey());
 
-            CURRENT_POSITION++;
+                if(CURRENT_POSITION == 0){
+                    MESSAGE_LAST_KEY = dataSnapshot.getKey();
+                    MESSAGE_PREVIEW_KEY = dataSnapshot.getKey();
+                }
 
-            if(isRemoved){
+                CURRENT_POSITION++;
 
-                messageList.add(0, message);
-                messageIds.add(0, dataSnapshot.getKey());
-                messageAdapter.notifyDataSetChanged();
+                if(isRemoved){
 
-                MESSAGE_LAST_KEY = dataSnapshot.getKey();
-                MESSAGE_PREVIEW_KEY = dataSnapshot.getKey();
+                    messageList.add(0, message);
+                    messageIds.add(0, dataSnapshot.getKey());
+                    messageAdapter.notifyDataSetChanged();
 
-                isRemoved = false;
-            }
-            else{
-                messageList.add(message);
-                messageIds.add(dataSnapshot.getKey());
-                messageAdapter.notifyItemInserted(messageList.size() - 1);
-                messageView.smoothScrollToPosition(messageList.size() - 1);
-            }
+                    MESSAGE_LAST_KEY = dataSnapshot.getKey();
+                    MESSAGE_PREVIEW_KEY = dataSnapshot.getKey();
 
-            if(dataSnapshot.getChildrenCount() > TOTAL_LOAD_MESSAGE_COUNT){
-                swipeRefreshLayout.setEnabled(true);
+                    isRemoved = false;
+                }
+                else{
+                    messageList.add(message);
+                    messageIds.add(dataSnapshot.getKey());
+                    messageAdapter.notifyItemInserted(messageList.size() - 1);
+                    messageView.smoothScrollToPosition(messageList.size() - 1);
+                }
+
+                if(dataSnapshot.getChildrenCount() > TOTAL_LOAD_MESSAGE_COUNT){
+                    swipeRefreshLayout.setEnabled(true);
+                }
             }
         }
 
         @Override
         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             Message message = dataSnapshot.getValue(Message.class);
-            message.setMessage_id(dataSnapshot.getKey());
-            int index = messageIds.indexOf(dataSnapshot.getKey());
-            if(index > -1){
-                messageList.remove(index);
-                messageIds.remove(index);
-                messageList.add(index, message);
-                messageIds.add(index, dataSnapshot.getKey());
-                messageAdapter.notifyDataSetChanged();
+
+            if(message != null){
+                message.setMessage_id(dataSnapshot.getKey());
+                int index = messageIds.indexOf(dataSnapshot.getKey());
+                if(index > -1){
+                    messageList.remove(index);
+                    messageIds.remove(index);
+                    messageList.add(index, message);
+                    messageIds.add(index, dataSnapshot.getKey());
+                    messageAdapter.notifyDataSetChanged();
+                }
             }
         }
 
         @Override
         public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            Message message = dataSnapshot.getValue(Message.class);
-            message.setMessage_id(dataSnapshot.getKey());
             int index = messageIds.indexOf(dataSnapshot.getKey());
             if(index > -1){
                 messageList.remove(index);
@@ -202,27 +206,30 @@ public class MessageFindAll implements IFind {
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             Message message = dataSnapshot.getValue(Message.class);
-            message.setMessage_id(dataSnapshot.getKey());
 
-            if(!MESSAGE_PREVIEW_KEY.equals(dataSnapshot.getKey())){
-                if(!isRemoved){
-                    messageList.add(CURRENT_MORE_POSITION++, message);
-                    messageIds.add(CURRENT_MORE_POSITION - 1, dataSnapshot.getKey());
-                    messageAdapter.notifyDataSetChanged();
-                    layoutManager.scrollToPositionWithOffset(CURRENT_MORE_POSITION - 1, 0);
+            if(message != null){
+                message.setMessage_id(dataSnapshot.getKey());
+
+                if(!MESSAGE_PREVIEW_KEY.equals(dataSnapshot.getKey())){
+                    if(!isRemoved){
+                        messageList.add(CURRENT_MORE_POSITION++, message);
+                        messageIds.add(CURRENT_MORE_POSITION - 1, dataSnapshot.getKey());
+                        messageAdapter.notifyDataSetChanged();
+                        layoutManager.scrollToPositionWithOffset(CURRENT_MORE_POSITION - 1, 0);
+                    }
+                    else{
+                        messageAdapter.notifyDataSetChanged();
+                    }
                 }
                 else{
-                    messageAdapter.notifyDataSetChanged();
+                    MESSAGE_PREVIEW_KEY = MESSAGE_LAST_KEY;
                 }
-            }
-            else{
-                MESSAGE_PREVIEW_KEY = MESSAGE_LAST_KEY;
-            }
 
-            isRemoved = false;
+                isRemoved = false;
 
-            if(CURRENT_MORE_POSITION == 1){
-                MESSAGE_LAST_KEY = dataSnapshot.getKey();
+                if(CURRENT_MORE_POSITION == 1){
+                    MESSAGE_LAST_KEY = dataSnapshot.getKey();
+                }
             }
 
             swipeRefreshLayout.setRefreshing(false);
@@ -231,21 +238,22 @@ public class MessageFindAll implements IFind {
         @Override
         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             Message message = dataSnapshot.getValue(Message.class);
-            message.setMessage_id(dataSnapshot.getKey());
-            int index = messageIds.indexOf(dataSnapshot.getKey());
-            if(index > -1){
-                messageList.remove(index);
-                messageIds.remove(index);
-                messageList.add(index, message);
-                messageIds.add(index, dataSnapshot.getKey());
-                messageAdapter.notifyDataSetChanged();
+
+            if(message != null){
+                message.setMessage_id(dataSnapshot.getKey());
+                int index = messageIds.indexOf(dataSnapshot.getKey());
+                if(index > -1){
+                    messageList.remove(index);
+                    messageIds.remove(index);
+                    messageList.add(index, message);
+                    messageIds.add(index, dataSnapshot.getKey());
+                    messageAdapter.notifyDataSetChanged();
+                }
             }
         }
 
         @Override
         public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            Message message = dataSnapshot.getValue(Message.class);
-            message.setMessage_id(dataSnapshot.getKey());
             int index = messageIds.indexOf(dataSnapshot.getKey());
             if(index > -1){
                 messageList.remove(index);

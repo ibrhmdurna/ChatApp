@@ -44,6 +44,7 @@ import com.ibrhmdurna.chatapp.util.controller.AppController;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Objects;
 
 public class Update{
 
@@ -67,12 +68,13 @@ public class Update{
         final AlertDialog loadingBar = DialogController.getInstance().dialogLoading(context, context.getString(R.string.this_may_take_some_time));
         loadingBar.show();
 
-        final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String uid = FirebaseAuth.getInstance().getUid();
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
                 .setDisplayName(account.getNameSurname()).build();
 
+        assert currentUser != null && uid != null;
         currentUser.updateProfile(profileChangeRequest);
 
         if(bitmap != null){
@@ -196,15 +198,16 @@ public class Update{
         loadingBar.show();
 
         final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), currentPasswordInput.getEditText().getText().toString());
+        assert currentUser != null;
+        AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(currentUser.getEmail()), Objects.requireNonNull(currentPasswordInput.getEditText()).getText().toString());
 
         currentUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    if(!currentPasswordInput.getEditText().getText().toString().equals(newPasswordInput.getEditText().getText().toString())){
+                    if(!currentPasswordInput.getEditText().getText().toString().equals(Objects.requireNonNull(newPasswordInput.getEditText()).getText().toString())){
 
-                        currentUser.updatePassword(confirmPasswordInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        currentUser.updatePassword(Objects.requireNonNull(confirmPasswordInput.getEditText()).getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
@@ -247,7 +250,7 @@ public class Update{
 
         FirebaseAuth.getInstance().useAppLanguage();
 
-        FirebaseAuth.getInstance().sendPasswordResetEmail(emailInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseAuth.getInstance().sendPasswordResetEmail(Objects.requireNonNull(emailInput.getEditText()).getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -296,18 +299,19 @@ public class Update{
         passwordInput.setError(null);
 
         final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), passwordInput.getEditText().getText().toString());
+        assert currentUser != null;
+        AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(currentUser.getEmail()), Objects.requireNonNull(passwordInput.getEditText()).getText().toString());
 
         currentUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
 
-                    FirebaseAuth.getInstance().fetchSignInMethodsForEmail(newEmailInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+                    FirebaseAuth.getInstance().fetchSignInMethodsForEmail(Objects.requireNonNull(newEmailInput.getEditText()).getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
                         @Override
                         public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
                             if(task.isSuccessful()){
-                                if(task.getResult().getSignInMethods().size() > 0){
+                                if(Objects.requireNonNull(Objects.requireNonNull(task.getResult()).getSignInMethods()).size() > 0){
                                     loadingBar.dismiss();
                                     newEmailInput.setError(context.getString(R.string.email_is_used));
                                 }
@@ -321,6 +325,7 @@ public class Update{
 
                                                 String uid = FirebaseAuth.getInstance().getUid();
 
+                                                assert uid != null;
                                                 Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).child("email").setValue(newEmailInput.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
@@ -371,6 +376,7 @@ public class Update{
     public void seenAllRequest(){
         String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         Firebase.getInstance().getDatabaseReference().child("Request").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -392,6 +398,7 @@ public class Update{
 
         String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         DatabaseReference databaseReference = Firebase.getInstance().getDatabaseReference().child("Chats").child(chatUid).child(uid);
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -412,6 +419,7 @@ public class Update{
     public void unSendMessage(String chatUid, Message message){
         String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).child(message.getMessage_id()).child("unsend").setValue(true);
         Firebase.getInstance().getDatabaseReference().child("Messages").child(chatUid).child(uid).child(message.getMessage_id()).child("unsend").setValue(true);
         Insert.getInstance().notification(chatUid, "deleted");
@@ -420,6 +428,7 @@ public class Update{
     public void messageSeen(final String chatUid, boolean listener){
         final String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         if(listener){
             Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).addValueEventListener(messageEventListener);
         }
@@ -431,6 +440,7 @@ public class Update{
     public void chatSeen(String chatUid, boolean listener){
         String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         if(listener){
             Firebase.getInstance().getDatabaseReference().child("Chats").child(uid).child(chatUid).addValueEventListener(chatEventListener);
         }

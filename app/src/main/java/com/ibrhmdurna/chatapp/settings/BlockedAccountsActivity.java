@@ -7,9 +7,14 @@ import android.view.MenuItem;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
+import com.ibrhmdurna.chatapp.database.bridge.Find;
+import com.ibrhmdurna.chatapp.database.findAll.BlockFindAll;
 import com.ibrhmdurna.chatapp.util.Environment;
 
 public class BlockedAccountsActivity extends AppCompatActivity implements ViewComponentFactory {
+
+    private AbstractFind find;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +23,11 @@ public class BlockedAccountsActivity extends AppCompatActivity implements ViewCo
         setContentView(R.layout.activity_blocked_accounts);
 
         toolsManagement();
+    }
+
+    private void getBlocks(){
+        find = new Find(new BlockFindAll(this));
+        find.getContent();
     }
 
     @Override
@@ -34,5 +44,14 @@ public class BlockedAccountsActivity extends AppCompatActivity implements ViewCo
     @Override
     public void toolsManagement(){
         Environment.getInstance().toolbarProcess(this, R.id.blocked_toolbar);
+        getBlocks();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(find != null){
+            find.onDestroy();
+        }
     }
 }

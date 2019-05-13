@@ -16,6 +16,8 @@ import com.ibrhmdurna.chatapp.database.Search;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.util.Environment;
 
+import java.util.Objects;
+
 public class RegisterActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
     private TextInputLayout emailInput, passwordInput, confirmInput;
@@ -32,9 +34,9 @@ public class RegisterActivity extends AppCompatActivity implements ViewComponent
     }
 
     private void checkInput(){
-        String email = emailInput.getEditText().getText().toString();
+        String email = Objects.requireNonNull(emailInput.getEditText()).getText().toString();
 
-        if(email.trim().length() > 0 && confirmInput.getHelperText().toString().equals(getString(R.string.password_are_the_same))){
+        if(email.trim().length() > 0 && Objects.requireNonNull(confirmInput.getHelperText()).toString().equals(getString(R.string.password_are_the_same))){
             nextView.setEnabled(true);
         }
         else {
@@ -43,9 +45,9 @@ public class RegisterActivity extends AppCompatActivity implements ViewComponent
     }
 
     private void passwordProcess(){
-        emailInput.getEditText().addTextChangedListener(inputWatcher);
-        passwordInput.getEditText().addTextChangedListener(inputWatcher);
-        confirmInput.getEditText().addTextChangedListener(inputWatcher);
+        Objects.requireNonNull(emailInput.getEditText()).addTextChangedListener(inputWatcher);
+        Objects.requireNonNull(passwordInput.getEditText()).addTextChangedListener(inputWatcher);
+        Objects.requireNonNull(confirmInput.getEditText()).addTextChangedListener(inputWatcher);
     }
 
     private TextWatcher inputWatcher = new TextWatcher() {
@@ -61,8 +63,8 @@ public class RegisterActivity extends AppCompatActivity implements ViewComponent
 
         @Override
         public void afterTextChanged(Editable s) {
-            if(passwordInput.getEditText().getText().length() > 5){
-                if(confirmInput.getEditText().getText().length() > 5){
+            if(Objects.requireNonNull(passwordInput.getEditText()).getText().length() > 5){
+                if(Objects.requireNonNull(confirmInput.getEditText()).getText().length() > 5){
                     if(confirmInput.getEditText().getText().toString().equals(passwordInput.getEditText().getText().toString())){
                         confirmImage.setImageDrawable(getDrawable(R.drawable.ic_password_done_icon));
                         passwordImage.setImageDrawable(getDrawable(R.drawable.ic_password_done_icon));

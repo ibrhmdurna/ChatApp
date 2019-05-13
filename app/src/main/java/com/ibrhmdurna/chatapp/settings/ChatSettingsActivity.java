@@ -179,10 +179,12 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
                 final CheckBox checkBox = dialog.findViewById(R.id.checked_device_delete);
 
                 TextView positive = dialog.findViewById(R.id.dialog_positive_btn);
+                assert positive != null;
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
+                        assert checkBox != null;
                         Delete.getInstance().messageAllDelete(FirebaseAuth.getInstance().getUid(), checkBox.isChecked());
                         Toast.makeText(getApplicationContext(), getString(R.string.all_chats_cleared), Toast.LENGTH_SHORT).show();
                     }
@@ -193,10 +195,12 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
                 final CheckBox checkBox1 = dialog1.findViewById(R.id.checked_device_delete);
 
                 TextView positive1 = dialog1.findViewById(R.id.dialog_positive_btn);
+                assert positive1 != null;
                 positive1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialog1.dismiss();
+                        assert checkBox1 != null;
                         Delete.getInstance().messageAllDelete(FirebaseAuth.getInstance().getUid(), checkBox1.isChecked());
                         Delete.getInstance().chatAllDelete(FirebaseAuth.getInstance().getUid());
                         Toast.makeText(getApplicationContext(), getString(R.string.all_chats_deleted), Toast.LENGTH_SHORT).show();

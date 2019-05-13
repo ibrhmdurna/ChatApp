@@ -67,9 +67,10 @@ public class Insert {
                     UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
                             .setDisplayName(account.getNameSurname()).build();
 
+                    assert currentUser != null;
                     currentUser.updateProfile(profileChangeRequest);
 
-                    final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    final String uid = FirebaseAuth.getInstance().getUid();
 
                     if(bitmap != null){
                         Bitmap thumb_bitmap = bitmap;
@@ -82,6 +83,7 @@ public class Insert {
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos2);
                         byte[] data = baos2.toByteArray();
 
+                        assert uid != null;
                         final StorageReference filepath = FirebaseStorage.getInstance().getReference().child("Accounts").child(uid).child("profile_image");
                         final StorageReference thumb_filepath = FirebaseStorage.getInstance().getReference().child("Accounts").child(uid).child("thumb_profile_image");
 
@@ -177,6 +179,7 @@ public class Insert {
                     loadingBar.dismiss();
                     final AlertDialog dialog = DialogController.getInstance().dialogCustom(context, context.getString(R.string.cannot_sign_in), null, context.getString(R.string.dismiss));
                     TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
+                    assert positiveBtn != null;
                     positiveBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -192,9 +195,9 @@ public class Insert {
 
         String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         Map recentMap = new HashMap();
         recentMap.put("time", ServerValue.TIMESTAMP);
-
         Firebase.getInstance().getDatabaseReference().child("Recent").child(uid).child(id).setValue(recentMap);
 
     }
@@ -203,6 +206,7 @@ public class Insert {
 
         String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         Map requestMap = new HashMap();
         requestMap.put("Request/" + id + "/" + uid + "/seen", false);
         requestMap.put("Request/" + id + "/" + uid + "/time", ServerValue.TIMESTAMP);
@@ -220,6 +224,7 @@ public class Insert {
     public void friend(final String id){
         String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         String currentDate = java.text.DateFormat.getDateInstance().format(new Date());
 
         Map friendMap = new HashMap();
@@ -241,6 +246,36 @@ public class Insert {
         });
     }
 
+    public void block(final String id){
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        assert uid != null;
+        Map blockMap = new HashMap();
+        blockMap.put("time", ServerValue.TIMESTAMP);
+
+        Firebase.getInstance().getDatabaseReference().child("Blocks").child(uid).child(id).setValue(blockMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+
+                    // Friend deleted
+                    Delete.getInstance().friend(id);
+
+                    // Chat deleted
+                    Delete.getInstance().deleteChat(id, true);
+
+                    // Request deleted
+                    Delete.getInstance().request(id);
+                    Delete.getInstance().myRequest(id);
+
+                    // Recent deleted
+                    Delete.getInstance().recentBlock(id);
+
+                }
+            }
+        });
+    }
+
     public void deviceToken(String id){
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
         Firebase.getInstance().getDatabaseReference().child("Accounts").child(id).child("device_token").setValue(deviceToken);
@@ -249,9 +284,11 @@ public class Insert {
     public void notification(String id, String type){
         String uid = FirebaseAuth.getInstance().getUid();
 
+        assert uid != null;
         DatabaseReference databaseReference = Firebase.getInstance().getDatabaseReference().child("Notifications").child(id);
         String notification_id = databaseReference.push().getKey();
 
+        assert notification_id != null;
         Map notificationMap = new HashMap();
         notificationMap.put("from", uid);
         notificationMap.put("type", type);
@@ -265,6 +302,7 @@ public class Insert {
         DatabaseReference databaseReference = Firebase.getInstance().getDatabaseReference().child("Notifications").child(id);
         String notification_id = databaseReference.push().getKey();
 
+        assert uid != null && notification_id != null;
         Map notificationMap = new HashMap();
         notificationMap.put("from", uid);
         notificationMap.put("type", type);
@@ -279,6 +317,7 @@ public class Insert {
         DatabaseReference databaseReference = Firebase.getInstance().getDatabaseReference().child("Notifications").child(id);
         String notification_id = databaseReference.push().getKey();
 
+        assert uid != null && notification_id != null;
         Map notificationMap = new HashMap();
         notificationMap.put("from", uid);
         notificationMap.put("type", type);

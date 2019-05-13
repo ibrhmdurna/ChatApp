@@ -28,6 +28,7 @@ import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
 import com.ibrhmdurna.chatapp.database.bridge.Find;
 import com.ibrhmdurna.chatapp.database.find.ProfileFindInfo;
 import com.ibrhmdurna.chatapp.databinding.ActivityProfileBinding;
+import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 import com.ibrhmdurna.chatapp.util.dialog.MoreBottomSheetDialog;
 
@@ -44,6 +45,8 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
     private AbstractFind find;
 
     private String uid;
+
+    private boolean isBlock = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,18 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
         manager.cancel(uid, 1);
     }
 
+    private void onBack(){
+        if(isBlock){
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            mainIntent.putExtra("page", "Main");
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(mainIntent);
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
+
     @Override
     public void toolsManagement() {
         buildView();
@@ -86,7 +101,7 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.profile_back_view:
-                super.onBackPressed();
+                onBack();
                 break;
             case R.id.profile_options_view:
                 MoreBottomSheetDialog moreBottomSheetDialog = new MoreBottomSheetDialog(uid);
@@ -123,11 +138,29 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
                 chatIntent.putExtra("user_id", uid);
                 startActivity(chatIntent);
                 break;
+            case R.id.unblock_btn:
+                final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, getString(R.string.are_you_want_to_unblock), getString(R.string.cancel), getString(R.string.unblock));
+                TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
+                assert positiveBtn != null;
+                positiveBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        Delete.getInstance().unblock(uid);
+                        if(find != null){
+                            find.onDestroy();
+                            find.getContent();
+                        }
+                    }
+                });
+                break;
         }
     }
 
     @Override
     public void onButtonClicked(String action) {
+        String language = Locale.getDefault().getLanguage();
+
         switch (action){
             case "share":
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
@@ -135,16 +168,64 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
                 String shareBody = getString(R.string.hello_i_am) + " " + binding.getAccount().getNameSurname() +" (" + binding.getAccount().getEmail() + ") "+ getString(R.string.would_join_chatapp);
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, R.string.subject_here);
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(sharingIntent, "Share"));
+                startActivity(Intent.createChooser(sharingIntent, getString(R.string.share)));
                 break;
             case "block":
+                final AlertDialog dialogBlock = DialogController.getInstance().dialogCustom(this, null, getString(R.string.cancel), getString(R.string.block));
+                String txt;
+
+                if(language.equals("tr")){
+                    txt = binding.getAccount().getNameSurname() + " adlı kullanıcıyı engellemek istediğinden emin misin?";
+                }
+                else{
+                    txt = "Are you sure yo want to block " + binding.getAccount().getNameSurname() + "?";
+                }
+
+                TextView contentBlock = dialogBlock.findViewById(R.id.dialog_content_text);
+
+                TypedValue typedValueB = new TypedValue();
+                Resources.Theme themeB = getTheme();
+                themeB.resolveAttribute(R.attr.colorAccent, typedValueB, true);
+                @ColorInt int colorB = typedValueB.data;
+
+                SpannableString ssB = new SpannableString(txt);
+                ForegroundColorSpan fcsColorB = new ForegroundColorSpan(colorB);
+
+                if(language.equals("tr")){
+                    ssB.setSpan(fcsColorB, 0, binding.getAccount().getNameSurname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    assert contentBlock != null;
+                    contentBlock.setText(ssB);
+                }
+                else{
+                    ssB.setSpan(fcsColorB, 30, 30 + binding.getAccount().getNameSurname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    assert contentBlock != null;
+                    contentBlock.setText(ssB);
+                }
+
+                TextView positiveBtnB = dialogBlock.findViewById(R.id.dialog_positive_btn);
+                assert positiveBtnB != null;
+                positiveBtnB.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogBlock.dismiss();
+                        Insert.getInstance().block(uid);
+                        isBlock = true;
+                    }
+                });
                 break;
             case "report":
                 break;
             case "delete":
                 final AlertDialog dialog = DialogController.getInstance().dialogCustom(this, null, getString(R.string.cancel), getString(R.string.delete));
 
-                String text = getString(R.string.are_you_sure_you_want) +  binding.getAccount().getNameSurname() + " " + getString(R.string.out_of_friendship);
+                String text;
+                if(language.equals("tr")){
+                    text = binding.getAccount().getNameSurname() + " arkadaşlıktan çıkarmak istediğine emin misin?";
+                }
+                else{
+                    text = "Are you sure you want to make " +  binding.getAccount().getNameSurname() + " out of friendship?";
+                }
+
                 TextView content = dialog.findViewById(R.id.dialog_content_text);
 
                 TypedValue typedValue = new TypedValue();
@@ -155,17 +236,19 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
                 SpannableString ss = new SpannableString(text);
                 ForegroundColorSpan fcsColor = new ForegroundColorSpan(color);
 
-                String language = Locale.getDefault().getLanguage();
                 if(language.equals("tr")){
-                    ss.setSpan(fcsColor, 1, 1 + binding.getAccount().getNameSurname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    ss.setSpan(fcsColor, 0, binding.getAccount().getNameSurname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    assert content != null;
                     content.setText(ss);
                 }
                 else{
                     ss.setSpan(fcsColor, 30, 30 + binding.getAccount().getNameSurname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    assert content != null;
                     content.setText(ss);
                 }
 
                 TextView positiveBtn = dialog.findViewById(R.id.dialog_positive_btn);
+                assert positiveBtn != null;
                 positiveBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -180,6 +263,11 @@ public class ProfileActivity extends AppCompatActivity implements ViewComponentF
                 });
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        onBack();
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -33,9 +34,11 @@ public class ProfileFindInfo implements IFind {
 
     private LinearLayout confirmLayout;
     private RelativeLayout addFriendLayout, sendMessageView;
-    private TextView cancelRequest, addFriendView, friendInfoText;
+    private TextView cancelRequest, addFriendView, unblockView, friendInfoText;
     private TextView friendsItem, mutualItem;
     private ImageView onlineView;
+    private ImageButton optionBtn;
+    private LinearLayout profileFriendsView;
 
     private RelativeLayout rootView;
     private SpinKitView loadingBar;
@@ -64,18 +67,17 @@ public class ProfileFindInfo implements IFind {
         friendsItem = binding.getRoot().findViewById(R.id.profileFriendsCount);
         mutualItem = binding.getRoot().findViewById(R.id.profileMutualCount);
         onlineView = binding.getRoot().findViewById(R.id.profileOnlineView);
+        unblockView = binding.getRoot().findViewById(R.id.unblock_btn);
+        optionBtn = binding.getRoot().findViewById(R.id.profile_options_view);
+        profileFriendsView = binding.getRoot().findViewById(R.id.profileFriendsView);
     }
 
     @Override
     public void getContent() {
         current_uid = FirebaseAuth.getInstance().getUid();
 
-        Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).removeEventListener(accountEventListener);
-        Firebase.getInstance().getDatabaseReference().child("Friends").child(current_uid).child(uid).removeEventListener(friendEventListener);
-        Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).removeEventListener(friendEventListener2);
-
+        Firebase.getInstance().getDatabaseReference().child("Blocks").child(current_uid).child(uid).addValueEventListener(blockEventListener);
         Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).addValueEventListener(accountEventListener);
-        Firebase.getInstance().getDatabaseReference().child("Friends").child(current_uid).child(uid).addValueEventListener(friendEventListener);
         Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).addValueEventListener(friendEventListener2);
     }
 
@@ -89,6 +91,7 @@ public class ProfileFindInfo implements IFind {
         Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).removeEventListener(accountEventListener);
         Firebase.getInstance().getDatabaseReference().child("Friends").child(current_uid).child(uid).removeEventListener(friendEventListener);
         Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).removeEventListener(friendEventListener2);
+        Firebase.getInstance().getDatabaseReference().child("Blocks").child(current_uid).child(uid).removeEventListener(blockEventListener);
     }
 
     private ValueEventListener accountEventListener = new ValueEventListener() {
@@ -97,73 +100,85 @@ public class ProfileFindInfo implements IFind {
             if(dataSnapshot.exists()){
                 final Account account = dataSnapshot.getValue(Account.class);
 
-                String image = account.getProfile_image();
+                if(account != null){
+                    String image = account.getProfile_image();
 
-                if(image.substring(0, 8).equals("default_")){
-                    String value = image.substring(8,9);
-                    int index = Integer.parseInt(value);
-                    setProfileImage(index, profileImage);
-                    String name = account.getName().substring(0,1);
-                    profileText.setText(name);
-                    profileText.setVisibility(View.VISIBLE);
-                }
-                else {
-                    if(binding.getRoot().getContext() != null){
-                        Glide.with(binding.getRoot().getContext()).load(account.getProfile_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+                    if(image.substring(0, 8).equals("default_")){
+                        String value = image.substring(8,9);
+                        int index = Integer.parseInt(value);
+                        setProfileImage(index, profileImage);
+                        String name = account.getName().substring(0,1);
+                        profileText.setText(name);
+                        profileText.setVisibility(View.VISIBLE);
                     }
-                    profileText.setText(null);
-                    profileText.setVisibility(View.GONE);
-                }
-
-                Handler h = new Handler();
-                h.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(friendInfoText.getVisibility() == View.VISIBLE){
-                            if(account.isOnline()){
-                                onlineView.setVisibility(View.VISIBLE);
-                            }
-                            else{
-                                Handler h = new Handler();
-                                h.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dataSnapshot.child("online").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                if(dataSnapshot.exists()){
-                                                    boolean isOnline = (boolean) dataSnapshot.getValue();
-
-                                                    if(isOnline){
-                                                        onlineView.setVisibility(View.VISIBLE);
-                                                    }
-                                                    else{
-                                                        onlineView.setVisibility(View.GONE);
-                                                    }
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                            }
-                                        });
-                                    }
-                                },1500);
+                    else {
+                        if(binding.getRoot().getContext() != null){
+                            try {
+                                Glide.with(binding.getRoot().getContext()).load(account.getProfile_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+                            }catch (Exception e){
+                                e.printStackTrace();
                             }
                         }
+                        profileText.setText(null);
+                        profileText.setVisibility(View.GONE);
                     }
-                }, 1000);
 
-                convertGender(account);
-                convertLocation(account);
+                    Handler h = new Handler();
+                    h.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(friendInfoText.getVisibility() == View.VISIBLE){
+                                if(account.isOnline()){
+                                    onlineView.setVisibility(View.VISIBLE);
+                                }
+                                else{
+                                    Handler h = new Handler();
+                                    h.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            dataSnapshot.child("online").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                    if(dataSnapshot.exists()){
+                                                        boolean isOnline = (boolean) dataSnapshot.getValue();
 
-                phoneLayout.setVisibility(account.getPhone().trim().length() > 0 ? View.VISIBLE : View.GONE);
+                                                        if(isOnline){
+                                                            onlineView.setVisibility(View.VISIBLE);
+                                                        }
+                                                        else{
+                                                            onlineView.setVisibility(View.GONE);
+                                                        }
+                                                    }
+                                                }
 
-                binding.setAccount(account);
-                rootView.setVisibility(View.VISIBLE);
-                loadingBar.setIndeterminate(false);
-                loadingBar.setVisibility(View.GONE);
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                }
+                                            });
+                                        }
+                                    },1500);
+                                }
+                            }
+                        }
+                    }, 1000);
+
+                    convertGender(account);
+                    convertLocation(account);
+
+                    phoneLayout.setVisibility(account.getPhone().trim().length() > 0 ? View.VISIBLE : View.GONE);
+
+                    binding.setAccount(account);
+                    rootView.setVisibility(View.VISIBLE);
+                    loadingBar.setIndeterminate(false);
+                    loadingBar.setVisibility(View.GONE);
+                }
+                else{
+                    Toast.makeText(binding.getRoot().getContext(), binding.getRoot().getContext().getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
+                    rootView.setVisibility(View.VISIBLE);
+                    loadingBar.setIndeterminate(false);
+                    loadingBar.setVisibility(View.GONE);
+                }
             }
             else {
                 Toast.makeText(binding.getRoot().getContext(), binding.getRoot().getContext().getString(R.string.couldnt_refresh_feed), Toast.LENGTH_SHORT).show();
@@ -246,25 +261,57 @@ public class ProfileFindInfo implements IFind {
                 final int[] count = {0};
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     if(!current_uid.equals(snapshot.getKey())){
-                        Firebase.getInstance().getDatabaseReference().child("Friends").child(current_uid).child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @SuppressLint("SetTextI18n")
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()){
-                                    count[0]++;
-                                    mutualItem.setText(count[0] + " " + binding.getRoot().getContext().getString(R.string.mutual_f));
+                        if(snapshot.getKey() != null){
+                            Firebase.getInstance().getDatabaseReference().child("Friends").child(current_uid).child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @SuppressLint("SetTextI18n")
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.exists()){
+                                        count[0]++;
+                                        mutualItem.setText(count[0] + " " + binding.getRoot().getContext().getString(R.string.mutual_f));
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            }
-                        });
+                                }
+                            });
+                        }
                     }
                 }
 
 
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    private ValueEventListener blockEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                Firebase.getInstance().getDatabaseReference().child("Friends").child(current_uid).child(uid).removeEventListener(friendEventListener);
+                sendMessageView.setVisibility(View.GONE);
+                friendInfoText.setVisibility(View.GONE);
+                addFriendLayout.setVisibility(View.VISIBLE);
+                addFriendView.setVisibility(View.GONE);
+                cancelRequest.setVisibility(View.GONE);
+                unblockView.setVisibility(View.VISIBLE);
+                onlineView.setVisibility(View.GONE);
+                optionBtn.setVisibility(View.GONE);
+                profileFriendsView.setEnabled(false);
+            }
+            else{
+                Firebase.getInstance().getDatabaseReference().child("Friends").child(current_uid).child(uid).addValueEventListener(friendEventListener);
+                addFriendView.setVisibility(View.GONE);
+                optionBtn.setVisibility(View.VISIBLE);
+                unblockView.setVisibility(View.GONE);
+                profileFriendsView.setEnabled(true);
             }
         }
 

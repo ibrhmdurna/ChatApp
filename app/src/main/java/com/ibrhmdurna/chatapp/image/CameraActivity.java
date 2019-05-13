@@ -39,6 +39,7 @@ import com.otaliastudios.cameraview.Gesture;
 import com.otaliastudios.cameraview.GestureAction;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CameraActivity extends AppCompatActivity implements View.OnClickListener, ViewComponentFactory {
 
@@ -232,7 +233,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
+        Objects.requireNonNull(dialog.getWindow()).getAttributes().windowAnimations = R.style.dialogAnimation;
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }

@@ -16,11 +16,15 @@ import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.util.Environment;
+import com.ibrhmdurna.chatapp.util.controller.AppController;
+
+import java.util.Objects;
 
 public class SecurityActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
 
     private TextInputLayout currentPasswordInput, newPasswordInput, confirmPasswordInput;
-    private ImageView currentImage, newPassImage, confirmImage;
+    private ImageView newPassImage;
+    private ImageView confirmImage;
     private TextView changeView;
 
     @Override
@@ -33,7 +37,7 @@ public class SecurityActivity extends AppCompatActivity implements ViewComponent
     }
 
     private void checkInput(){
-        String currentPass = currentPasswordInput.getEditText().getText().toString();
+        String currentPass = Objects.requireNonNull(currentPasswordInput.getEditText()).getText().toString();
 
         if(currentPass.trim().length() > 0 && confirmPasswordInput.getHelperText() != null && confirmPasswordInput.getHelperText().toString().equals(getString(R.string.password_are_the_same))){
             changeView.setEnabled(true);
@@ -44,7 +48,7 @@ public class SecurityActivity extends AppCompatActivity implements ViewComponent
     }
 
     private void passwordProcess(){
-        currentPasswordInput.getEditText().addTextChangedListener(new TextWatcher() {
+        Objects.requireNonNull(currentPasswordInput.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -60,8 +64,8 @@ public class SecurityActivity extends AppCompatActivity implements ViewComponent
                 currentPasswordInput.setError(null);
             }
         });
-        newPasswordInput.getEditText().addTextChangedListener(passwordWatcher);
-        confirmPasswordInput.getEditText().addTextChangedListener(passwordWatcher);
+        Objects.requireNonNull(newPasswordInput.getEditText()).addTextChangedListener(passwordWatcher);
+        Objects.requireNonNull(confirmPasswordInput.getEditText()).addTextChangedListener(passwordWatcher);
     }
 
     private TextWatcher passwordWatcher = new TextWatcher() {
@@ -77,8 +81,8 @@ public class SecurityActivity extends AppCompatActivity implements ViewComponent
 
         @Override
         public void afterTextChanged(Editable s) {
-            if(newPasswordInput.getEditText().getText().length() > 5){
-                if(confirmPasswordInput.getEditText().getText().length() > 5){
+            if(Objects.requireNonNull(newPasswordInput.getEditText()).getText().length() > 5){
+                if(Objects.requireNonNull(confirmPasswordInput.getEditText()).getText().length() > 5){
                     if(confirmPasswordInput.getEditText().getText().toString().equals(newPasswordInput.getEditText().getText().toString())){
                         confirmImage.setImageDrawable(getDrawable(R.drawable.ic_password_done_icon));
                         newPassImage.setImageDrawable(getDrawable(R.drawable.ic_password_done_icon));
@@ -125,7 +129,6 @@ public class SecurityActivity extends AppCompatActivity implements ViewComponent
         currentPasswordInput = findViewById(R.id.current_password_input);
         newPasswordInput = findViewById(R.id.new_password_input);
         confirmPasswordInput = findViewById(R.id.confirm_password_input);
-        currentImage = findViewById(R.id.current_password_image);
         newPassImage = findViewById(R.id.new_password_image);
         confirmImage = findViewById(R.id.confirm_password_image);
         changeView = findViewById(R.id.security_change_btn);
@@ -155,6 +158,7 @@ public class SecurityActivity extends AppCompatActivity implements ViewComponent
                 super.onBackPressed();
                 break;
             case R.id.security_change_btn:
+                AppController.getInstance().closeKeyboard(this);
                 Update.getInstance().updatePassword(this, currentPasswordInput, newPasswordInput, confirmPasswordInput);
                 break;
         }

@@ -54,6 +54,8 @@ public class Image extends MessageStrategy {
         message.getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, stream);
         final byte[] data = stream.toByteArray();
 
+        assert uid != null;
+        assert message_id != null;
         final StorageReference myFilepath = FirebaseStorage.getInstance().getReference().child("Chats").child(uid).child(chatUid).child(message_id);
         final StorageReference filepath = FirebaseStorage.getInstance().getReference().child("Chats").child(chatUid).child(uid).child(message_id);
 

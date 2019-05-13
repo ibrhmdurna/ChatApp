@@ -53,6 +53,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import com.vanniktech.emoji.EmojiTextView;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -448,7 +449,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     @Override
                     public void onClick(View v) {
                         downloadLayout.setVisibility(View.GONE);
-                        myPermissionProcess(message, loadingBar, imageView, downloadLayout, imageSizeText);
+                        myPermissionProcess(message, loadingBar, imageView, downloadLayout);
                     }
                 });
 
@@ -714,7 +715,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         downloadLayout.setVisibility(View.GONE);
                         loadingBar.setIndeterminate(true);
                         loadingBar.setVisibility(View.VISIBLE);
-                        permissionProcess(message, loadingBar, imageView, downloadLayout, imageSizeText);
+                        permissionProcess(message, loadingBar, imageView, downloadLayout);
                     }
                     else{
                         downloadLayout.setVisibility(View.VISIBLE);
@@ -752,7 +753,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 @Override
                 public void onClick(View v) {
                     downloadLayout.setVisibility(View.GONE);
-                    permissionProcess(message, loadingBar, imageView, downloadLayout, imageSizeText);
+                    permissionProcess(message, loadingBar, imageView, downloadLayout);
 
                 }
             });
@@ -845,6 +846,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     final Account account = dataSnapshot.getValue(Account.class);
 
                     if(!profileImage.isSaveEnabled()){
+                        assert account != null;
                         if(account.getThumb_image().substring(0,8).equals("default_")){
                             String text = account.getThumb_image().substring(8,9);
                             int index = Integer.parseInt(text);
@@ -855,7 +857,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
                         else {
                             if(context != null){
-                                Glide.with(context).load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+                                try {
+                                    Glide.with(context).load(account.getThumb_image()).placeholder(R.drawable.default_avatar).into(profileImage);
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
                             }
                             profileText.setText(null);
                             profileText.setVisibility(View.GONE);
@@ -907,7 +913,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    private void myPermissionProcess(final Message message, final SpinKitView loadingBar, final RoundedImageView imageView, final LinearLayout downloadLayout, final TextView imageSizeText){
+    private void myPermissionProcess(final Message message, final SpinKitView loadingBar, final RoundedImageView imageView, final LinearLayout downloadLayout){
         Dexter.withActivity(context)
                 .withPermissions(
                         android.Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -952,7 +958,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }).check();
     }
 
-    private void permissionProcess(final Message message, final SpinKitView loadingBar, final RoundedImageView imageView, final LinearLayout downloadLayout, final TextView imageSizeText){
+    private void permissionProcess(final Message message, final SpinKitView loadingBar, final RoundedImageView imageView, final LinearLayout downloadLayout){
         Dexter.withActivity(context)
                 .withPermissions(
                         android.Manifest.permission.READ_EXTERNAL_STORAGE,

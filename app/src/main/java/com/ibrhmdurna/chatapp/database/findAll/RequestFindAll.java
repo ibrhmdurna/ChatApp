@@ -106,13 +106,15 @@ public class RequestFindAll implements IFind {
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             if(dataSnapshot.exists()){
                 Request request = dataSnapshot.getValue(Request.class);
-                Account account = new Account();
-                account.setUid(dataSnapshot.getKey());
-                request.setAccount(account);
-                requestList.add(0, request);
-                requestIds.add(0, dataSnapshot.getKey());
+                if(request != null){
+                    Account account = new Account();
+                    account.setUid(dataSnapshot.getKey());
+                    request.setAccount(account);
+                    requestList.add(0, request);
+                    requestIds.add(0, dataSnapshot.getKey());
 
-                requestAdapter.notifyItemInserted(0);
+                    requestAdapter.notifyItemInserted(0);
+                }
             }
         }
 
@@ -122,10 +124,12 @@ public class RequestFindAll implements IFind {
             int index = requestIds.indexOf(dataSnapshot.getKey());
             if(index > -1){
                 Account account = new Account();
-                account.setUid(dataSnapshot.getKey());
-                request.setAccount(account);
-                requestList.set(index, request);
-                requestAdapter.notifyItemChanged(index);
+                if(request != null){
+                    account.setUid(dataSnapshot.getKey());
+                    request.setAccount(account);
+                    requestList.set(index, request);
+                    requestAdapter.notifyItemChanged(index);
+                }
             }
         }
 
