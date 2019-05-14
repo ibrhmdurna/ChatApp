@@ -233,7 +233,24 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             if(message.isProfileVisibility()){
                 profileLayout.setVisibility(View.VISIBLE);
-                profileImageProcess(profileImage, profileText);
+
+                Firebase.getInstance().getDatabaseReference().child("Blocks").child(chatUid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            profileText.setText(null);
+                            profileImage.setImageDrawable(context.getDrawable(R.drawable.default_avatar));
+                        }
+                        else{
+                            profileImageProcess(profileImage, profileText);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
                 messageTimeText.setVisibility(View.VISIBLE);
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("HH:mm");
@@ -792,7 +809,23 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             if(message.isProfileVisibility()){
                 profileLayout.setVisibility(View.VISIBLE);
-                profileImageProcess(profileImage, profileText);
+                Firebase.getInstance().getDatabaseReference().child("Blocks").child(chatUid).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            profileText.setText(null);
+                            profileImage.setImageDrawable(context.getDrawable(R.drawable.default_avatar));
+                        }
+                        else{
+                            profileImageProcess(profileImage, profileText);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
                 messageTimeText.setVisibility(View.VISIBLE);
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("HH:mm");

@@ -76,7 +76,7 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int i) {
         final Friend friend = friendList.get(i);
 
         switch (viewHolder.getItemViewType()){
@@ -85,8 +85,25 @@ public class FriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 friendViewHolder.setData(friend, i);
                 break;
             case 1:
-                ProfileFriendViewHolder profileFriendViewHolder = (ProfileFriendViewHolder)viewHolder;
-                profileFriendViewHolder.setData(friend, i);
+                final ProfileFriendViewHolder profileFriendViewHolder = (ProfileFriendViewHolder)viewHolder;
+
+                Firebase.getInstance().getDatabaseReference().child("Blocks").child(friend.getAccount().getUid()).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            friendList.remove(i);
+                            notifyItemRemoved(i);
+                        }
+                        else{
+                            profileFriendViewHolder.setData(friend, i);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
         }
     }
 

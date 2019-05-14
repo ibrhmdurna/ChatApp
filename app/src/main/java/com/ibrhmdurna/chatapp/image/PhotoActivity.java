@@ -1,6 +1,5 @@
 package com.ibrhmdurna.chatapp.image;
 
-import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.github.chrisbanes.photoview.PhotoView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -23,6 +23,8 @@ import com.ibrhmdurna.chatapp.util.GetTimeAgo;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.vanniktech.emoji.EmojiTextView;
 
+import java.util.Objects;
+
 public class PhotoActivity extends AppCompatActivity implements ViewComponentFactory {
 
     private TextView nameSurnameText;
@@ -34,6 +36,8 @@ public class PhotoActivity extends AppCompatActivity implements ViewComponentFac
     private long time;
     private String path;
     private String content;
+
+    private String currentUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,26 +55,46 @@ public class PhotoActivity extends AppCompatActivity implements ViewComponentFac
 
     private void getContent(){
         if(uid != null){
-            Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()){
-                        Account account = dataSnapshot.getValue(Account.class);
 
-                        if (account != null){
-                            nameSurnameText.setText(account.getNameSurname());
+            currentUid = FirebaseAuth.getInstance().getUid();
+
+            if(currentUid != null){
+                Firebase.getInstance().getDatabaseReference().child("Blocks").child(uid).child(currentUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            nameSurnameText.setText(getString(R.string.chatapp_user));
+                        }
+                        else{
+                            Firebase.getInstance().getDatabaseReference().child("Accounts").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.exists()){
+                                        Account account = dataSnapshot.getValue(Account.class);
+
+                                        if (account != null){
+                                            nameSurnameText.setText(account.getNameSurname());
+                                        }
+                                    }
+                                    else{
+                                        nameSurnameText.setText(getString(R.string.chatapp_user));
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
                         }
                     }
-                    else{
-                        nameSurnameText.setText(getString(R.string.chatapp_user));
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
                     }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
+                });
+            }
         }
 
         /*
@@ -104,7 +128,7 @@ public class PhotoActivity extends AppCompatActivity implements ViewComponentFac
     private void toolbarProcess(){
         Toolbar toolbar = findViewById(R.id.photo_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_icon_2);
     }
 
