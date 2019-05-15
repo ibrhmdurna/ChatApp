@@ -166,7 +166,6 @@
                 android:onClick="onClick"
                 android:visibility="visible"/>
 
-            <!--
             <LinearLayout
                 android:id="@+id/record_layout"
                 android:layout_width="match_parent"
@@ -216,13 +215,12 @@
                     android:onClick="onClick"
                     android:visibility="gone"/>
 
-                <ProgressBar
+                <SeekBar
                     android:id="@+id/record_line_view"
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="10dp"
-                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                     android:visibility="gone"/>
 
                 <com.airbnb.lottie.LottieAnimationView
@@ -262,7 +260,6 @@
                 android:layout_weight="0"
                 android:onClick="onClick"
                 android:visibility="gone"/>
-                -->
 
             <ImageButton
                 android:id="@+id/send_btn"
@@ -277,7 +274,7 @@
                 android:layout_marginBottom="4dp"
                 android:layout_weight="0"
                 android:onClick="onClick"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
         </LinearLayout>
 
         <TextView

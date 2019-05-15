@@ -212,7 +212,8 @@
     <string name="block">Engelle</string>
     <string name="unblock">Engeli kaldır</string>
     <string name="are_you_want_to_unblock">Engeli kaldırmak istediğinden emin misin?</string>
-    <string name="blocked_accounts">Engelli Hesaplar</string>
+    <string name="blocked_accounts">Engellenen Hesaplar</string>
     <string name="blocks">Engeller</string>
     <string name="no_blocked_account">Engellenen Hesap Yok</string>
+    <string name="short_time">Sesli mesaj kaydedilmedi. Kayıt süresi kısa.</string>
 </resources>

@@ -215,5 +215,6 @@
     <string name="blocked_accounts">Blocked Accounts</string>
     <string name="blocks">Blocks</string>
     <string name="no_blocked_account">No Blocked Account</string>
+    <string name="short_time">Can\'t save voice message. Recording time to short.</string>
 
 </resources>

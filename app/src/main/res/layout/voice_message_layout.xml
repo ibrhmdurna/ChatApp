@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/message_time_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:background="@drawable/gray_rounded_background"
+            android:backgroundTint="?attr/backgroundBrushColor"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="15sp"
+            tools:ignore="RtlSymmetry"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp">
+
+            <RelativeLayout
+                android:id="@+id/message_profile_layout"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="8dp"
+                android:layout_gravity="bottom"
+                android:visibility="visible">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/message_profile_image"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    app:civ_border_color="?attr/searchColor"
+                    app:civ_border_width="1dp"
+                    android:src="@drawable/default_avatar"
+                    android:layout_centerInParent="true"
+                    android:saveEnabled="false"/>
+
+                <TextView
+                    android:id="@+id/message_profile_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/white"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
+            <com.vanniktech.emoji.EmojiTextView
+                android:id="@+id/message_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="240dp"
+                android:textSize="15sp"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center"
+                android:background="@drawable/ripple_message_background"
+                android:paddingStart="12dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingEnd="12dp"/>
+
+            <TextView
+                android:id="@+id/message_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="1dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

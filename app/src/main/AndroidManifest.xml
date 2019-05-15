@@ -89,7 +89,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".local.ChatActivity"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:parentActivityName=".main.MainActivity"
             android:excludeFromRecents="true">

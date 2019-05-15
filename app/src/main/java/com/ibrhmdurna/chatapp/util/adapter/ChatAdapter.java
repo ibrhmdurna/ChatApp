@@ -355,51 +355,52 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                         typingLayout.setVisibility(View.GONE);
                         lastMessage.setVisibility(View.VISIBLE);
 
-                        if(message.getType().equals("Text")){
-                            photoImage.setVisibility(View.GONE);
-
-                            if(message.isUnsend()){
-                                lastMessage.setText(context.getString(R.string.this_message_was_deleted));
-                                lastMessage.setTypeface(null, Typeface.ITALIC);
-                            }
-                            else{
-                                lastMessage.setText(message.getMessage());
-                                lastMessage.setTypeface(Typeface.DEFAULT);
-                            }
-
-                            if(message.getFrom().equals(uid)){
-                                youText.setVisibility(View.VISIBLE);
-                            }
-                            else{
-                                youText.setVisibility(View.GONE);
-                            }
+                        if(message.isUnsend()){
+                            lastMessage.setText(context.getString(R.string.this_message_was_deleted));
+                            lastMessage.setTypeface(null, Typeface.ITALIC);
                         }
-                        else if (message.getType().equals("Image")){
+                        else{
+                            lastMessage.setTypeface(Typeface.DEFAULT);
 
-                            if(message.isUnsend()){
-                                lastMessage.setText(context.getString(R.string.this_message_was_deleted));
-                                lastMessage.setTypeface(null, Typeface.ITALIC);
-                            }
-                            else{
-                                photoImage.setVisibility(View.VISIBLE);
-
-                                lastMessage.setTypeface(Typeface.DEFAULT);
-                                if(message.getMessage().equals("")){
-                                    lastMessage.setText(context.getString(R.string._photo));
-                                }
-                                else{
+                            switch (message.getType()) {
+                                case "Text":
+                                    photoImage.setVisibility(View.GONE);
                                     lastMessage.setText(message.getMessage());
-                                }
-                            }
 
-                            if(message.getFrom().equals(uid)){
-                                youText.setVisibility(View.VISIBLE);
-                            }
-                            else{
-                                youText.setVisibility(View.GONE);
-                            }
+                                    if (message.getFrom().equals(uid)) {
+                                        youText.setVisibility(View.VISIBLE);
+                                    } else {
+                                        youText.setVisibility(View.GONE);
+                                    }
+                                    break;
+                                case "Image":
 
+                                    photoImage.setVisibility(View.VISIBLE);
 
+                                    if (message.getMessage().equals("")) {
+                                        lastMessage.setText(context.getString(R.string._photo));
+                                    } else {
+                                        lastMessage.setText(message.getMessage());
+                                    }
+
+                                    if (message.getFrom().equals(uid)) {
+                                        youText.setVisibility(View.VISIBLE);
+                                    } else {
+                                        youText.setVisibility(View.GONE);
+                                    }
+                                    break;
+                                case "Voice":
+
+                                    lastMessage.setText("Voice message");
+
+                                    if (message.getFrom().equals(uid)) {
+                                        youText.setVisibility(View.VISIBLE);
+                                    } else {
+                                        youText.setVisibility(View.GONE);
+                                    }
+
+                                    break;
+                            }
                         }
                     }
                     else {
