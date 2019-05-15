@@ -1,6 +1,9 @@
 package com.ibrhmdurna.chatapp.database.find;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -18,6 +21,7 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
 import com.ibrhmdurna.chatapp.databinding.FragmentAccountBinding;
+import com.ibrhmdurna.chatapp.image.ImageActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -82,6 +86,7 @@ public class AccountFindInfo implements IFind {
                         String name = account.getName().substring(0,1);
                         profileText.setText(name);
                         profileText.setVisibility(View.VISIBLE);
+                        profileImage.setEnabled(false);
                     }
                     else {
                         if(binding.getRoot().getContext() != null){
@@ -93,6 +98,18 @@ public class AccountFindInfo implements IFind {
                         }
                         profileText.setText(null);
                         profileText.setVisibility(View.GONE);
+                        profileImage.setEnabled(true);
+
+                        profileImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) binding.getRoot().getContext(), profileImage, "profileImage");
+                                Intent imageIntent = new Intent(binding.getRoot().getContext(), ImageActivity.class);
+                                imageIntent.putExtra("nameSurname", binding.getRoot().getContext().getString(R.string.you));
+                                imageIntent.putExtra("image", binding.getAccount().getProfile_image());
+                                binding.getRoot().getContext().startActivity(imageIntent, options.toBundle());
+                            }
+                        });
                     }
 
                     convertGender(account);
@@ -109,6 +126,7 @@ public class AccountFindInfo implements IFind {
                     rootView.setVisibility(View.VISIBLE);
                     loadingBar.setIndeterminate(false);
                     loadingBar.setVisibility(View.GONE);
+                    profileImage.setEnabled(false);
                 }
             }
             else {
@@ -116,6 +134,7 @@ public class AccountFindInfo implements IFind {
                 rootView.setVisibility(View.VISIBLE);
                 loadingBar.setIndeterminate(false);
                 loadingBar.setVisibility(View.GONE);
+                profileImage.setEnabled(false);
             }
         }
 
@@ -125,6 +144,7 @@ public class AccountFindInfo implements IFind {
             rootView.setVisibility(View.VISIBLE);
             loadingBar.setIndeterminate(false);
             loadingBar.setVisibility(View.GONE);
+            profileImage.setEnabled(false);
         }
     };
 

@@ -37,8 +37,6 @@ public class PhotoActivity extends AppCompatActivity implements ViewComponentFac
     private String path;
     private String content;
 
-    private String currentUid;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTransparentTheme(this);
@@ -56,7 +54,7 @@ public class PhotoActivity extends AppCompatActivity implements ViewComponentFac
     private void getContent(){
         if(uid != null){
 
-            currentUid = FirebaseAuth.getInstance().getUid();
+            String currentUid = FirebaseAuth.getInstance().getUid();
 
             if(currentUid != null){
                 Firebase.getInstance().getDatabaseReference().child("Blocks").child(uid).child(currentUid).addListenerForSingleValueEvent(new ValueEventListener() {

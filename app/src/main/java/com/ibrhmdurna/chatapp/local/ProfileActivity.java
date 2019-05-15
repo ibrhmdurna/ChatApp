@@ -1,5 +1,6 @@
 package com.ibrhmdurna.chatapp.local;
 
+import android.app.ActivityOptions;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -28,11 +29,14 @@ import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
 import com.ibrhmdurna.chatapp.database.bridge.Find;
 import com.ibrhmdurna.chatapp.database.find.ProfileFindInfo;
 import com.ibrhmdurna.chatapp.databinding.ActivityProfileBinding;
+import com.ibrhmdurna.chatapp.image.ImageActivity;
 import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 import com.ibrhmdurna.chatapp.util.dialog.MoreBottomSheetDialog;
 
 import java.util.Locale;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, MoreBottomSheetDialog.BottomSheetListener {
 
