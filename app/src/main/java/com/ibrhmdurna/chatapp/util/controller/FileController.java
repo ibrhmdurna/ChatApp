@@ -13,17 +13,17 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Firebase;
-import com.ibrhmdurna.chatapp.database.findAll.MessageFindAll;
 import com.ibrhmdurna.chatapp.settings.EditAccountActivity;
 import com.ibrhmdurna.chatapp.start.RegisterFinishActivity;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
@@ -35,12 +35,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class FileController {
@@ -261,8 +264,12 @@ public class FileController {
         new DownloadMyImageCompressAsyncTask(chatUid, imageName, loadingBar, imageView).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, url);
     }
 
-    public void compressToDownloadAndSaveImage(String url, String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, MessageAdapter adapter){
-        new DownloadImageCompressAsyncTask(chatUid, imageName, loadingBar, imageView, adapter).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, url);
+    public void compressToDownloadAndSaveImage(String url, String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, MessageAdapter adapter, int position){
+        new DownloadImageCompressAsyncTask(chatUid, imageName, loadingBar, imageView, adapter, position).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, url);
+    }
+
+    public void compressToDownloadAndSaveVoice(String url, String chatUid, String message_id, SpinKitView loadingBar, ImageButton downloadBtn){
+        new DownloadMyVoiceCompressAsyncTask(loadingBar, downloadBtn, chatUid, message_id).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, url);
     }
 
     private static class PhotoCompressAsyncTask extends AsyncTask<Bitmap, byte[], byte[]>{
@@ -381,13 +388,15 @@ public class FileController {
         private ImageView imageView;
 
         private MessageAdapter adapter;
+        private int position;
 
-        public ImageMessageSaveCompressAsyncTask(String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, MessageAdapter adapter){
+        public ImageMessageSaveCompressAsyncTask(String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, MessageAdapter adapter, int position){
             this.imageName = imageName;
             this.chatUid = chatUid;
             this.loadingBar = loadingBar;
             this.imageView = imageView;
             this.adapter = adapter;
+            this.position = position;
         }
 
         @Override
@@ -447,7 +456,7 @@ public class FileController {
                                             UniversalImageLoader.setImage(newPath, imageView, null, "file://");
                                             loadingBar.setVisibility(View.GONE);
                                             loadingBar.setIndeterminate(false);
-                                            adapter.notifyDataSetChanged();
+                                            adapter.notifyItemChanged(position);
                                         }
                                     }
                                 }
@@ -553,13 +562,15 @@ public class FileController {
         @SuppressLint("StaticFieldLeak")
         private ImageView imageView;
         private MessageAdapter adapter;
+        private int position;
 
-        public DownloadImageCompressAsyncTask(String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, MessageAdapter adapter){
+        public DownloadImageCompressAsyncTask(String chatUid, String imageName, SpinKitView loadingBar, ImageView imageView, MessageAdapter adapter, int position){
             this.imageName = imageName;
             this.chatUid = chatUid;
             this.loadingBar = loadingBar;
             this.imageView = imageView;
             this.adapter = adapter;
+            this.position = position;
         }
 
         @Override
@@ -616,9 +627,130 @@ public class FileController {
         @Override
         protected synchronized void onPostExecute(Bitmap bitmap) {
 
-            new ImageMessageSaveCompressAsyncTask(chatUid, imageName, loadingBar, imageView, adapter).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, bitmap);
+            new ImageMessageSaveCompressAsyncTask(chatUid, imageName, loadingBar, imageView, adapter, position).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, bitmap);
 
             super.onPostExecute(bitmap);
+        }
+    }
+
+    private static class DownloadMyVoiceCompressAsyncTask extends AsyncTask<String, Integer, String>{
+
+        @SuppressLint("StaticFieldLeak")
+        private SpinKitView loadingBar;
+        @SuppressLint("StaticFieldLeak")
+        private ImageButton downloadBtn;
+
+        private String chatUid;
+        private String message_id;
+
+        private DownloadMyVoiceCompressAsyncTask(SpinKitView loadingBar, ImageButton downloadBtn, String chatUid, String message_id) {
+            this.loadingBar = loadingBar;
+            this.downloadBtn = downloadBtn;
+            this.chatUid = chatUid;
+            this.message_id = message_id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loadingBar.setVisibility(View.VISIBLE);
+            downloadBtn.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            InputStream is = null;
+            BufferedInputStream bis = null;
+            OutputStream os = null;
+
+            int count;
+
+            String path = null;
+
+            try {
+                URL url = new URL(strings[0]);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+
+                is = connection.getInputStream();
+                bis = new BufferedInputStream(is, 8192);
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.US);
+                String fileName = "AUD_"
+                        + dateFormat.format(new Date())
+                        + ".3gp";
+                path = android.os.Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + "/ChatApp/Sent/"+ fileName;
+
+                String ExternalStorageDirectory = Environment.getExternalStorageDirectory().getPath()+"/ChatApp/Sent";
+                File fileInfo = new File(ExternalStorageDirectory);
+                File file = new File(ExternalStorageDirectory + File.separator, fileName);
+
+                if(fileInfo.isDirectory() || fileInfo.mkdirs()){
+                    file.createNewFile();
+                    os = new FileOutputStream(path);
+
+                    byte[] data = new byte[1024];
+                    while ((count = is.read(data)) != -1) {
+                        os.write(data, 0, count);
+                    }
+                }
+            }
+            catch (IOException e) {
+                Log.e("Error", "Catch");
+                e.printStackTrace();
+            }
+            finally {
+                if (bis != null)
+                {
+                    try
+                    {
+                        bis.close();
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                if (is != null)
+                {
+                    try
+                    {
+                        is.close();
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                if(os != null){
+                    try {
+                        os.flush();
+                        os.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            return path;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            String uid = FirebaseAuth.getInstance().getUid();
+
+            downloadBtn.setVisibility(View.VISIBLE);
+            loadingBar.setVisibility(View.GONE);
+            loadingBar.setIndeterminate(false);
+
+            if(s != null){
+                assert uid != null;
+                Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).child(message_id).child("path").setValue(s);
+            }
         }
     }
 }

@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -99,12 +100,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case 3:
                 View view3 = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.image_message_layout, viewGroup, false);
                 return new ImageMessageViewHolder(view3);
+                /*
             case 4:
                 View view4 = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.my_voice_message_layout, viewGroup, false);
                 return new VoiceMyMessageViewHolder(view4);
             case 5:
                 View view5 = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.voice_message_layout, viewGroup, false);
                 return new VoiceMessageViewHolder(view5);
+                */
         }
 
         return null;
@@ -147,10 +150,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ImageMessageViewHolder viewHolder4 = (ImageMessageViewHolder)viewHolder;
                 viewHolder4.setData(messageList.get(i), i);
                 break;
+                /*
             case 4:
                 VoiceMyMessageViewHolder viewHolder5 = (VoiceMyMessageViewHolder)viewHolder;
                 viewHolder5.setDate(messageList.get(i), i);
                 break;
+                */
         }
     }
 
@@ -172,6 +177,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 return 3;
             }
         }
+        /*
         else if (message != null && message.getType().equals("Voice")){
             if(message.getFrom().equals(uid)){
                 return 4;
@@ -179,7 +185,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             else{
                 return 5;
             }
-        }
+        }*/
 
         return -1;
     }
@@ -189,6 +195,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return messageList.size();
     }
 
+    /*
     private class VoiceMessageViewHolder extends RecyclerView.ViewHolder{
 
         public VoiceMessageViewHolder(@NonNull View itemView) {
@@ -285,6 +292,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 e.printStackTrace();
                             }
 
+                            pauseItem.setVisibility(View.GONE);
+                            voiceLine.setProgress(0);
                             int duration = mediaPlayer.getDuration();
                             int secs = (duration / 1000);
                             int mins = secs / 60;
@@ -341,7 +350,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             downloadBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    downloadBtn.setVisibility(View.GONE);
+                    myPermissionVoiceProcess(message, loadingBar, voiceDownloadLayout, mediaLayout, playItem, mediaPlayer, durationText, downloadBtn);
                 }
             });
 
@@ -490,7 +500,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     pauseItem.setVisibility(View.GONE);
                     playItem.setVisibility(View.VISIBLE);
                     voiceLine.setProgress(0);
-                    mediaPlayer.stop();
+                    if(mediaPlayer != null){
+                        mediaPlayer.stop();
+                    }
                     mediaPlayer = null;
                     customHandler.removeCallbacks(updateTimerDurationThread);
                 }
@@ -565,6 +577,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         };
     }
+    */
 
     private class TextMessageViewHolder extends RecyclerView.ViewHolder{
 
@@ -1075,7 +1088,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             imageLayout = itemView.findViewById(R.id.image_layout);
         }
 
-        public void setData(final Message message, int position){
+        public void setData(final Message message, final int position){
 
             if(message.isUnsend()){
                 messageContent.setVisibility(View.VISIBLE);
@@ -1132,7 +1145,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         downloadLayout.setVisibility(View.GONE);
                         loadingBar.setIndeterminate(true);
                         loadingBar.setVisibility(View.VISIBLE);
-                        permissionProcess(message, loadingBar, imageView, downloadLayout);
+                        permissionProcess(message, loadingBar, imageView, downloadLayout, position);
                     }
                     else{
                         downloadLayout.setVisibility(View.VISIBLE);
@@ -1170,7 +1183,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 @Override
                 public void onClick(View v) {
                     downloadLayout.setVisibility(View.GONE);
-                    permissionProcess(message, loadingBar, imageView, downloadLayout);
+                    permissionProcess(message, loadingBar, imageView, downloadLayout, position);
 
                 }
             });
@@ -1346,28 +1359,52 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    private void myPermissionVoiceProcess(final Message message, final SpinKitView loadingBar, final LinearLayout downloadLayout, LinearLayout mediaLayout, ImageButton playItem){
+    /*
+    private void myPermissionVoiceProcess(final Message message, final SpinKitView loadingBar, final LinearLayout downloadLayout, final RelativeLayout mediaLayout, final ImageButton playItem, final MediaPlayer mediaPlayer, final TextView durationText, final ImageButton downloadBtn){
         Dexter.withActivity(context)
                 .withPermissions(
                         android.Manifest.permission.READ_EXTERNAL_STORAGE,
                         android.Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ).withListener(new MultiplePermissionsListener() {
+            @SuppressLint({"SetTextI18n", "DefaultLocale"})
             @Override
             public void onPermissionsChecked(MultiplePermissionsReport report) {
                 if(report.areAllPermissionsGranted()){
                     if(message.getPath().equals("")){
-                        //FileController.getInstance().compressToDownloadImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView);
+                        downloadLayout.setVisibility(View.VISIBLE);
+                        mediaLayout.setVisibility(View.GONE);
+                        playItem.setVisibility(View.GONE);
+                        FileController.getInstance().compressToDownloadAndSaveVoice(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, downloadBtn);
                     }
                     else{
-                        File imgFile = new File(message.getPath());
+                        File file = new File(message.getPath());
 
-                        if(imgFile.exists()){
-                            //UniversalImageLoader.setImage(message.getPath(), imageView, null, "file://");
+                        if(file.exists()){
                             downloadLayout.setVisibility(View.GONE);
-                            //imageView.setEnabled(true);
+                            mediaLayout.setVisibility(View.VISIBLE);
+                            playItem.setVisibility(View.VISIBLE);
+
+                            if(mediaPlayer != null){
+                                try {
+                                    mediaPlayer.setDataSource(message.getPath());
+                                    mediaPlayer.prepare();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                int duration = mediaPlayer.getDuration();
+                                int secs = (duration / 1000);
+                                int mins = secs / 60;
+                                secs = secs % 60;
+                                durationText.setText("" + String.format("%02d", mins) + ":"
+                                        + String.format("%02d", secs));
+                            }
                         }
                         else{
-                            //FileController.getInstance().compressToDownloadImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView);
+                            downloadLayout.setVisibility(View.VISIBLE);
+                            mediaLayout.setVisibility(View.GONE);
+                            playItem.setVisibility(View.GONE);
+                            FileController.getInstance().compressToDownloadAndSaveVoice(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, downloadBtn);
                         }
                     }
                 }
@@ -1376,6 +1413,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 else{
                     downloadLayout.setVisibility(View.VISIBLE);
+                    mediaLayout.setVisibility(View.GONE);
+                    playItem.setVisibility(View.GONE);
                 }
             }
 
@@ -1390,6 +1429,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         }).check();
     }
+    */
 
     private void myPermissionProcess(final Message message, final SpinKitView loadingBar, final RoundedImageView imageView, final LinearLayout downloadLayout){
         Dexter.withActivity(context)
@@ -1436,7 +1476,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }).check();
     }
 
-    private void permissionProcess(final Message message, final SpinKitView loadingBar, final RoundedImageView imageView, final LinearLayout downloadLayout){
+    private void permissionProcess(final Message message, final SpinKitView loadingBar, final RoundedImageView imageView, final LinearLayout downloadLayout, final int position){
         Dexter.withActivity(context)
                 .withPermissions(
                         android.Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -1447,7 +1487,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if(report.areAllPermissionsGranted()){
                     if(!isDownloaded && message.getPath().equals("")){
                         Log.e("Info ", "Image Downloaded");
-                        FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, MessageAdapter.this);
+                        FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, MessageAdapter.this, position);
                         isDownloaded = true;
                     }
                     else{
@@ -1463,7 +1503,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 isDownloaded = false;
                             }
                             else{
-                                FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, MessageAdapter.this);
+                                FileController.getInstance().compressToDownloadAndSaveImage(message.getUrl(), chatUid, message.getMessage_id(), loadingBar, imageView, MessageAdapter.this, position);
                             }
                         }
                     }

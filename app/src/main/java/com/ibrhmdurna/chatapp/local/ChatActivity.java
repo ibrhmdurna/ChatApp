@@ -64,6 +64,7 @@ import com.ibrhmdurna.chatapp.image.GalleryActivity;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.util.Environment;
+import com.ibrhmdurna.chatapp.util.controller.MediaController;
 import com.ibrhmdurna.chatapp.util.dialog.GalleryBottomSheetDialog;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -102,20 +103,17 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     private ImageView backgroundView;
     private ImageButton addBtn;
     private ImageButton sendBtn;
-    private ImageButton voiceBtn;
+    /*private ImageButton voiceBtn;
     private ImageButton voiceSendBtn;
     private LinearLayout recordLayout;
     private ImageView recordClearView;
-    private ImageView playItem;
-    private ImageView pauseItem;
+    private ImageButton playItem;
+    private ImageButton pauseItem;
     private SeekBar recordLineView;
     private TextView recordTimestamp;
-    private LottieAnimationView recordAnim;
+    private LottieAnimationView recordAnim;*/
 
-    private MediaRecorder mediaRecorder;
-    private MediaPlayer mediaPlayer;
-
-    private String voicePath;
+    //private String voicePath;
     private String uid;
 
     private AbstractFind findMessage;
@@ -123,16 +121,12 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
 
     public static String NOTIF_ID;
 
-    private long startHTime = 0L;
-    private Handler customHandler = new Handler();
-    private long timeInMilliseconds = 0L;
-    private long timeSwapBuff = 0L;
-    private long updatedTime = 0L;
-
+    /*
     private boolean isSend = false;
     private boolean isShortTime = false;
 
     private boolean isLongClicked = false;
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,15 +140,18 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         toolsManagement();
     }
 
+    /*
     private void sendVoiceMessage(){
         SendMessage message = new SendMessage(new Voice());
         Message messageObject = new Message(FirebaseAuth.getInstance().getUid(), "", "Voice", null, false, false, false, false);
         messageObject.setDownload(false);
         messageObject.setPath(voicePath);
         message.Send(messageObject, uid);
+        isSend = true;
 
         clearRecord(false);
     }
+    */
 
     private void loadMessage(){
         findMessage = new Find(new MessageFindAll(this, uid));
@@ -173,8 +170,11 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         find.getContent();
     }
 
+    /*
     @SuppressLint("ClickableViewAccessibility")
     private void voiceProcess(){
+
+        MediaController.Player.getInstance().setComponent(recordTimestamp, recordLineView, playItem, pauseItem, voicePath);
 
         final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.SimpleOnGestureListener(){
             public void onLongPress(MotionEvent event){
@@ -219,85 +219,20 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
     }
 
     private void pauseVoice(){
-        playItem.setVisibility(View.VISIBLE);
-        pauseItem.setVisibility(View.GONE);
-
-        if(mediaPlayer != null){
-            mediaPlayer.pause();
-            customHandler.removeCallbacks(updateTimerDurationThread);
-        }
+        MediaController.Player.getInstance().pauseVoice();
     }
 
     private void resumeVoice(){
-        playItem.setVisibility(View.GONE);
-        pauseItem.setVisibility(View.VISIBLE);
-
-        mediaPlayer.start();
-        customHandler.postDelayed(updateTimerDurationThread, 100);
-
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                pauseItem.setVisibility(View.GONE);
-                playItem.setVisibility(View.VISIBLE);
-                mediaPlayer.stop();
-                mediaPlayer = null;
-                customHandler.removeCallbacks(updateTimerDurationThread);
-            }
-        });
+        MediaController.Player.getInstance().resumeVoice();
     }
 
-    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     private void playVoice(){
-        playItem.setVisibility(View.GONE);
-        pauseItem.setVisibility(View.VISIBLE);
-
-        mediaPlayer = new MediaPlayer();
         try {
-            mediaPlayer.setDataSource(voicePath);
-            mediaPlayer.prepare();
-        }catch (IOException e){
+            MediaController.Player.getInstance().playVoice();
+        } catch (Exception e) {
             Log.e("Error", e.getMessage());
             e.printStackTrace();
         }
-
-        recordTimestamp.setText("00:00");
-        mediaPlayer.start();
-        startHTime = mediaPlayer.getCurrentPosition();
-        recordLineView.setMax(mediaPlayer.getDuration());
-        recordLineView.setProgress((int) startHTime);
-
-        customHandler.postDelayed(updateTimerDurationThread, 100);
-
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                pauseItem.setVisibility(View.GONE);
-                playItem.setVisibility(View.VISIBLE);
-                mediaPlayer.stop();
-                mediaPlayer = null;
-                customHandler.removeCallbacks(updateTimerDurationThread);
-            }
-        });
-
-        recordLineView.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(fromUser && mediaPlayer != null){
-                    mediaPlayer.seekTo(progress);
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
     }
 
     private void stopRecord(){
@@ -309,21 +244,9 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         playItem.setVisibility(View.VISIBLE);
         recordLineView.setVisibility(View.VISIBLE);
 
-        try {
-            mediaRecorder.stop();
-            mediaRecorder.release();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        mediaRecorder = null;
-        timeInMilliseconds = 0L;
-        timeSwapBuff = 0L;
-        updatedTime = 0L;
-        recordLineView.setProgress(0);
-        customHandler.removeCallbacks(updateTimerThread);
+        MediaController.Recorder.getInstance().stopRecord();
     }
 
-    @SuppressLint("SetTextI18n")
     private void startRecord(){
         if(checkPermissionFromDevice()){
             recordLayout.setVisibility(View.VISIBLE);
@@ -337,93 +260,17 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
             recordAnim.setVisibility(View.VISIBLE);
             recordAnim.playAnimation();
 
-            setupMediaRecorder();
-
             try {
-                mediaRecorder.prepare();
-                mediaRecorder.start();
-                recordTimestamp.setText("00:00");
-                startHTime = SystemClock.uptimeMillis();
-                customHandler.postDelayed(updateTimerThread, 0);
-            }catch (IOException e){
+                File outputFile = getOutputFile();
+                outputFile.getParentFile().mkdirs();
+                MediaController.Recorder.getInstance().startRecord(recordTimestamp, voicePath);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         else{
             permissionProcess();
         }
-    }
-
-    private Runnable updateTimerThread = new Runnable() {
-
-        @SuppressLint({"SetTextI18n", "DefaultLocale"})
-        public void run() {
-            updateRun(this);
-        }
-
-    };
-
-    @SuppressLint({"DefaultLocale", "SetTextI18n"})
-    private void updateRun(Runnable runnable){
-        timeInMilliseconds = SystemClock.uptimeMillis() - startHTime;
-
-        updatedTime = timeSwapBuff + timeInMilliseconds;
-
-        int secs = (int) (updatedTime / 1000);
-        int mins = secs / 60;
-        secs = secs % 60;
-        if (recordTimestamp != null)
-            recordTimestamp.setText("" + String.format("%02d", mins) + ":"
-                    + String.format("%02d", secs));
-
-        customHandler.postDelayed(runnable, 100);
-    }
-
-    private Runnable updateTimerDurationThread = new Runnable() {
-        @SuppressLint({"DefaultLocale", "SetTextI18n"})
-        @Override
-        public void run() {
-            updateTimerRun(this);
-        }
-    };
-
-    @SuppressLint({"DefaultLocale", "SetTextI18n"})
-    private void updateTimerRun(Runnable runnable){
-        timeInMilliseconds = mediaPlayer.getCurrentPosition() - startHTime;
-
-        updatedTime = timeSwapBuff + timeInMilliseconds;
-
-        recordLineView.setProgress((int) timeInMilliseconds);
-
-        int secs = (int) (updatedTime / 1000);
-        int mins = secs / 60;
-        secs = secs % 60;
-        if (recordTimestamp != null)
-            recordTimestamp.setText("" + String.format("%02d", mins) + ":"
-                    + String.format("%02d", secs));
-
-        customHandler.postDelayed(runnable, 0);
-    }
-
-    private void setupMediaRecorder() {
-        mediaRecorder = new MediaRecorder();
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        mediaRecorder.setAudioEncodingBitRate(64000);
-        mediaRecorder.setAudioSamplingRate(16000);
-        File outputFile = getOutputFile();
-        outputFile.getParentFile().mkdirs();
-        mediaRecorder.setOutputFile(outputFile.getAbsolutePath());
-    }
-
-    private File getOutputFile(){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.US);
-        voicePath = android.os.Environment.getExternalStorageDirectory().getAbsolutePath()
-                + "/ChatApp/AUD_"
-                + dateFormat.format(new Date())
-                + ".3gp";
-        return new File(voicePath);
     }
 
     private void clearRecord(boolean clear){
@@ -434,21 +281,16 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         voiceBtn.setVisibility(View.VISIBLE);
         voiceSendBtn.setVisibility(View.GONE);
 
-        pauseVoice();
+        MediaController.Recorder.getInstance().clearRecord(clear, voicePath);
+    }
 
-        if(mediaRecorder != null){
-            mediaRecorder.release();
-            mediaRecorder = null;
-        }
-        if(mediaPlayer != null){
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
-
-        if(clear && voicePath != null){
-            File f = new File(voicePath);
-            f.delete();
-        }
+    private File getOutputFile(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.US);
+        voicePath = android.os.Environment.getExternalStorageDirectory().getAbsolutePath()
+                + "/ChatApp/Sent/AUD_"
+                + dateFormat.format(new Date())
+                + ".3gp";
+        return new File(voicePath);
     }
 
     private void permissionProcess(){
@@ -522,6 +364,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
+    */
 
     private void backgroundProcess(){
         SharedPreferences prefs = getSharedPreferences("CHAT", MODE_PRIVATE);
@@ -558,14 +401,14 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
             public void afterTextChanged(Editable s) {
                 if(Objects.requireNonNull(messageInput.getText()).toString().trim().length() > 0) {
                     sendBtn.setEnabled(true);
-                    sendBtn.setVisibility(View.VISIBLE);
-                    voiceBtn.setVisibility(View.GONE);
+                    //sendBtn.setVisibility(View.VISIBLE);
+                    //voiceBtn.setVisibility(View.GONE);
                     Update.getInstance().typing(uid, true);
                 }
                 else{
                     sendBtn.setEnabled(false);
-                    sendBtn.setVisibility(View.GONE);
-                    voiceBtn.setVisibility(View.VISIBLE);
+                    //sendBtn.setVisibility(View.GONE);
+                    //voiceBtn.setVisibility(View.VISIBLE);
                     Update.getInstance().typing(uid, false);
                 }
 
@@ -606,16 +449,17 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         messageInput = findViewById(R.id.message_input);
         backgroundView = findViewById(R.id.chat_background_view);
         sendBtn = findViewById(R.id.send_btn);
-        voiceBtn = findViewById(R.id.voice_btn);
-        recordLayout = findViewById(R.id.record_layout);
+        //voiceBtn = findViewById(R.id.voice_btn);
+        //recordLayout = findViewById(R.id.record_layout);
         addBtn = findViewById(R.id.chat_gallery_icon);
-        recordClearView = findViewById(R.id.record_clear_view);
+        /*recordClearView = findViewById(R.id.record_clear_view);
         recordAnim = findViewById(R.id.record_anim_layout);
         voiceSendBtn = findViewById(R.id.voice_send_btn);
         playItem = findViewById(R.id.record_play_item);
         pauseItem = findViewById(R.id.record_pause_item);
         recordLineView = findViewById(R.id.record_line_view);
         recordTimestamp = findViewById(R.id.record_timestamp);
+        */
     }
 
     @Override
@@ -626,7 +470,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
         backgroundProcess();
         inputProcess();
         loadMessage();
-        voiceProcess();
+        //voiceProcess();
     }
 
     @Override
@@ -653,6 +497,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
             case R.id.send_btn:
                 sendMessage();
                 break;
+                /*
             case R.id.voice_btn:
                 if(recordLayout.getVisibility() != View.VISIBLE && !isShortTime){
                     Toast.makeText(getApplicationContext(), getString(R.string.tap_and_hold), Toast.LENGTH_SHORT).show();
@@ -662,7 +507,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
                 clearRecord(true);
                 break;
             case R.id.record_play_item:
-                if(mediaPlayer == null){
+                if(MediaController.Player.getInstance().getMediaPlayer() == null){
                     playVoice();
                 }else{
                     resumeVoice();
@@ -674,6 +519,7 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
             case R.id.voice_send_btn:
                 sendVoiceMessage();
                 break;
+                */
         }
     }
 
@@ -737,9 +583,11 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
             findMessage.onDestroy();
             find.onDestroy();
         }
-        if(mediaPlayer != null && voicePath != null){
+        /*
+        if(MediaController.Player.getInstance().getMediaPlayer() != null && voicePath != null){
             clearRecord(!isSend);
         }
+        */
         NOTIF_ID = null;
 
         super.onDestroy();

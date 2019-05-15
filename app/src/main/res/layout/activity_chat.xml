@@ -166,6 +166,7 @@
                 android:onClick="onClick"
                 android:visibility="visible"/>
 
+            <!--
             <LinearLayout
                 android:id="@+id/record_layout"
                 android:layout_width="match_parent"
@@ -195,24 +196,30 @@
                     android:textSize="18sp"
                     android:layout_marginStart="10dp"/>
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/record_play_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_play_icon"
                     android:layout_gravity="center"
                     android:layout_marginStart="5dp"
+                    android:padding="5dp"
                     android:onClick="onClick"
+                    style="@style/CustomTransparentViewStyle"
+                    android:backgroundTint="?attr/searchColor"
                     android:visibility="gone"/>
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/record_pause_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_pause_icon"
                     android:layout_gravity="center"
                     android:layout_marginStart="5dp"
+                    android:padding="5dp"
                     android:onClick="onClick"
+                    style="@style/CustomTransparentViewStyle"
+                    android:backgroundTint="?attr/searchColor"
                     android:visibility="gone"/>
 
                 <SeekBar
@@ -220,7 +227,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="10dp"
                     android:visibility="gone"/>
 
                 <com.airbnb.lottie.LottieAnimationView
@@ -259,7 +265,7 @@
                 android:layout_marginBottom="4dp"
                 android:layout_weight="0"
                 android:onClick="onClick"
-                android:visibility="gone"/>
+                android:visibility="gone"/>-->
 
             <ImageButton
                 android:id="@+id/send_btn"
@@ -274,7 +280,7 @@
                 android:layout_marginBottom="4dp"
                 android:layout_weight="0"
                 android:onClick="onClick"
-                android:visibility="gone"/>
+                android:visibility="visible"/>
         </LinearLayout>
 
         <TextView
