@@ -64,12 +64,6 @@ public class UpdateEmailActivity extends AppCompatActivity implements ViewCompon
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onBackPressed();
-        return true;
-    }
-
-    @Override
     public void buildView() {
         newEmailInput = findViewById(R.id.update_email_new_mail_input);
         passwordInput = findViewById(R.id.update_email_password_input);
@@ -78,7 +72,7 @@ public class UpdateEmailActivity extends AppCompatActivity implements ViewCompon
 
     @Override
     public void toolsManagement(){
-        Environment.getInstance().toolbarProcess(this, R.id.update_email_toolbar);
+        Environment.getInstance().toolbarProcess(this);
         buildView();
         inputProcess();
     }

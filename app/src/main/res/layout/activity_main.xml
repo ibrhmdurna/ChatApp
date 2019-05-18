@@ -28,25 +28,72 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleGravity="top|center_horizontal"
-            app:title="@string/chats"
-            app:expandedTitleTextAppearance="@style/ExpandedTitleTextAppearance"
-            app:collapsedTitleTextAppearance="@style/CollapsedTitleTextAppearance"
-            app:expandedTitleMarginTop="-100dp">
+            app:titleEnabled="false">
+
+            <TextView
+                android:id="@+id/app_bar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/chats"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="38sp"
+                android:textAlignment="center"
+                android:fontFamily="sans-serif-light"
+                android:layout_gravity="center"
+                app:layout_collapseMode="parallax"
+                android:layout_marginStart="65dp"
+                android:layout_marginEnd="65dp"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/mainToolbar"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="65dp"
                 android:layout_width="match_parent"
                 app:layout_collapseMode="pin"
-                android:layout_gravity="bottom"/>
+                android:layout_gravity="bottom"
+                android:background="?attr/backgroundBrushColor">
 
-            <View
-                android:id="@+id/tooltip_view"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="end|bottom"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="18dp"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp">
+
+                    <TextView
+                        android:id="@+id/toolbar_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chats"
+                        android:textSize="20sp"
+                        android:layout_centerVertical="true"
+                        android:textColor="?attr/primaryTextColor"
+                        android:visibility="gone"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="10dp">
+
+                        <ImageButton
+                            android:id="@+id/toolbar_write_btn"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_write_icon"
+                            android:layout_marginStart="10dp"
+                            style="@style/CustomTransparentViewStyle"/>
+
+                        <ImageButton
+                            android:id="@+id/toolbar_search_btn"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_search_icon"
+                            android:layout_marginStart="10dp"
+                            style="@style/CustomTransparentViewStyle"/>
+                    </LinearLayout>
+                </RelativeLayout>
+
+            </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 

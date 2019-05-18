@@ -23,6 +23,7 @@ public class CameraGalleryActivity extends AppCompatActivity implements ViewComp
 
     private RecyclerView galleryContainer;
     private TextView subTitle;
+    private TextView toolbarSubtitle;
 
     private String isContext = "Share";
     private boolean isRegister;
@@ -63,9 +64,11 @@ public class CameraGalleryActivity extends AppCompatActivity implements ViewComp
 
         if(FileController.getInstance().getAllGalleryPhoto(this).size() > 1){
             subTitle.setText(FileController.getInstance().getAllGalleryPhoto(this).size() + " " + getString(R.string.photos));
+            toolbarSubtitle.setText(FileController.getInstance().getAllGalleryPhoto(this).size() + " " + getString(R.string.photos));
         }
         else {
             subTitle.setText(FileController.getInstance().getAllGalleryPhoto(this).size() + " " + getString(R.string.photo));
+            toolbarSubtitle.setText(FileController.getInstance().getAllGalleryPhoto(this).size() + " " + getString(R.string.photo));
         }
     }
 
@@ -73,19 +76,14 @@ public class CameraGalleryActivity extends AppCompatActivity implements ViewComp
     public void buildView(){
         galleryContainer = findViewById(R.id.c_gallery_container);
         subTitle = findViewById(R.id.c_gallery_subtitle);
+        toolbarSubtitle = findViewById(R.id.toolbar_subtitle);
     }
 
     @Override
     public void toolsManagement() {
-        Environment.getInstance().toolbarProcess(this, R.id.c_gallery_toolbar);
+        Environment.getInstance().toolbarProcessSubtitle(this);
         buildView();
         galleyProcess();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onBackPressed();
-        return true;
     }
 
     @Override

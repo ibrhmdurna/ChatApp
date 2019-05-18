@@ -21,9 +21,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Voice extends MessageStrategy {
+public class Voice implements MessageStrategy {
     @Override
-    public void Send(final Message message, final String chatUid) {
+    public void send(final Message message, final String chatUid) {
         String uid = FirebaseAuth.getInstance().getUid();
 
         final String message_id = Firebase.getInstance().getDatabaseReference().child("Messages").child(message.getFrom()).child(chatUid).push().getKey();

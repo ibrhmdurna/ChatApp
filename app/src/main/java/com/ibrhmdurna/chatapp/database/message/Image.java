@@ -25,10 +25,10 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Image extends MessageStrategy {
+public class Image implements MessageStrategy {
 
     @Override
-    public void Send(final Message message, final String chatUid) {
+    public void send(final Message message, final String chatUid) {
 
         String uid = FirebaseAuth.getInstance().getUid();
 

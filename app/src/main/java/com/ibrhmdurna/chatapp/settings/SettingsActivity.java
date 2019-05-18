@@ -3,11 +3,19 @@ package com.ibrhmdurna.chatapp.settings;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +29,7 @@ import com.ibrhmdurna.chatapp.util.Environment;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 
 public class SettingsActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTheme(this);
@@ -43,14 +52,15 @@ public class SettingsActivity extends AppCompatActivity implements ViewComponent
 
     @Override
     public void toolsManagement(){
-        Environment.getInstance().toolbarProcess(this, R.id.settingsToolbar);
+        Environment.getInstance().toolbarProcess(this);
     }
 
+    /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onBackPressed();
         return true;
-    }
+    }*/
 
     @Override
     public void onClick(View v) {

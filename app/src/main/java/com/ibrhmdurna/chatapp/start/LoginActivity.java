@@ -92,16 +92,10 @@ public class LoginActivity extends AppCompatActivity implements ViewComponentFac
 
     @Override
     public void toolsManagement(){
-        Environment.getInstance().toolbarProcess(this, R.id.login_toolbar);
+        Environment.getInstance().toolbarProcess(this);
         buildView();
         inputProcess();
         checkRemember();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onBackPressed();
-        return true;
     }
 
     @Override

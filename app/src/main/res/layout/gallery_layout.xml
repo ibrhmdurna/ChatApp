@@ -1,89 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/album_root_view">
 
-    <RelativeLayout
+    <com.ibrhmdurna.chatapp.util.GridImageViewRounded
+        android:id="@+id/album_last_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:background="@drawable/ic_left_circle_view_top"
-            android:translationZ="2dp"/>
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:background="@drawable/ic_right_circle_view_top"
-            android:translationZ="2dp"
-            android:layout_alignParentEnd="true"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorGray"
-            android:padding="0.5dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/ic_left_circle_view_top"
-                android:translationZ="2dp"
-                android:backgroundTint="@color/colorGray"/>
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/ic_right_circle_view_top"
-                android:translationZ="2dp"
-                android:layout_alignParentEnd="true"
-                android:backgroundTint="@color/colorGray"/>
-
-            <com.ibrhmdurna.chatapp.util.GridImageView
-                android:id="@+id/album_last_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:background="?attr/buttonControlColor"/>
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/ic_left_circle_view"
-                android:translationZ="2dp"
-                android:layout_alignParentBottom="true"
-                android:backgroundTint="@color/colorGray"/>
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/ic_right_circle_view"
-                android:translationZ="2dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:backgroundTint="@color/colorGray"/>
-        </RelativeLayout>
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:background="@drawable/ic_left_circle_view"
-            android:translationZ="2dp"
-            android:layout_alignParentBottom="true"/>
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:background="@drawable/ic_right_circle_view"
-            android:translationZ="2dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"/>
-    </RelativeLayout>
+        android:layout_weight="1"
+        android:src="?attr/buttonControlColor"
+        android:scaleType="centerCrop"
+        app:riv_corner_radius="24dp"/>
 
     <TextView
         android:id="@+id/title_text"

@@ -216,15 +216,9 @@ public class RegisterInfoActivity extends AppCompatActivity implements ViewCompo
 
     @Override
     public void toolsManagement(){
-        Environment.getInstance().toolbarProcess(this, R.id.register_info_toolbar);
+        Environment.getInstance().toolbarProcess(this);
         buildView();
         spinnerProcess();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onBackPressed();
-        return true;
     }
 
     @Override

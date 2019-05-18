@@ -118,23 +118,15 @@ public class RegisterActivity extends AppCompatActivity implements ViewComponent
 
     @Override
     public void toolsManagement(){
-        Environment.getInstance().toolbarProcess(this, R.id.register_toolbar);
+        Environment.getInstance().toolbarProcess(this);
         buildView();
         passwordProcess();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onBackPressed();
-        return true;
-    }
-
-    @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.register_next_btn:
-                Search.getInstance().checkEmail(this, emailInput, passwordInput);
-                break;
+        if (v.getId() == R.id.register_next_btn) {
+            Search.getInstance().checkEmail(this, emailInput, passwordInput);
         }
     }
 }

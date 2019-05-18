@@ -39,13 +39,7 @@ public class SolidColorActivity extends AppCompatActivity implements ViewCompone
 
     @Override
     public void toolsManagement() {
-        Environment.getInstance().toolbarProcess(this, R.id.solid_color_toolbar);
+        Environment.getInstance().toolbarProcess(this);
         colorProcess();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onBackPressed();
-        return true;
     }
 }

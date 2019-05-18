@@ -59,14 +59,8 @@ public class DarkModeActivity extends AppCompatActivity implements ViewComponent
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onBackPressed();
-        return true;
-    }
-
-    @Override
     public void toolsManagement() {
-        Environment.getInstance().toolbarProcess(this, R.id.dark_mode_toolbar);
+        Environment.getInstance().toolbarProcess(this);
         buildView();
         checkTheme();
     }

@@ -14,10 +14,10 @@ import com.ibrhmdurna.chatapp.models.Message;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Text extends MessageStrategy {
+public class Text implements MessageStrategy {
 
     @Override
-    public void Send(final Message message, final String chatUid) {
+    public void send(final Message message, final String chatUid) {
 
         final String message_id = Firebase.getInstance().getDatabaseReference().child("Messages").child(message.getFrom()).child(chatUid).push().getKey();
 

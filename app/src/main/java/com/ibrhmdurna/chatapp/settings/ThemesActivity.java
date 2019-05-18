@@ -36,12 +36,6 @@ public class ThemesActivity extends AppCompatActivity implements ViewComponentFa
         toolsManagement();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onBackPressed();
-        return true;
-    }
-
     private void checkThemeColor(){
         selectedListAllVisibilityGone();
         switch (App.Theme.getInstance().getThemeColor()){
@@ -181,7 +175,7 @@ public class ThemesActivity extends AppCompatActivity implements ViewComponentFa
 
     @Override
     public void toolsManagement(){
-        Environment.getInstance().toolbarProcess(this, R.id.themes_toolbar);
+        Environment.getInstance().toolbarProcess(this);
         buildView();
         selectedListView();
         checkTheme();

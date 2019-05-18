@@ -10,7 +10,7 @@ public class SendMessage {
         this.strategy = strategy;
     }
 
-    public void Send(Message message, String chatUid){
-        strategy.Send(message, chatUid);
+    public void send(Message message, String chatUid){
+        strategy.send(message, chatUid);
     }
 }

@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -75,12 +74,6 @@ public class DeleteAccountActivity extends AppCompatActivity implements ViewComp
     };
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onBackPressed();
-        return true;
-    }
-
-    @Override
     public void buildView() {
         passwordInput = findViewById(R.id.password_input);
         deleteBtn = findViewById(R.id.delete_account_btn);
@@ -88,7 +81,7 @@ public class DeleteAccountActivity extends AppCompatActivity implements ViewComp
 
     @Override
     public void toolsManagement(){
-        Environment.getInstance().toolbarProcess(this, R.id.delete_account_toolbar);
+        Environment.getInstance().toolbarProcess(this);
         buildView();
         inputProcess();
     }

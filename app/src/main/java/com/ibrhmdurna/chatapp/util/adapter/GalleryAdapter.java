@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.ibrhmdurna.chatapp.models.File;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.util.GridImageView;
+import com.ibrhmdurna.chatapp.util.GridImageViewRounded;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 
 import java.util.List;
@@ -63,7 +64,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     public class GalleryViewHolder extends RecyclerView.ViewHolder{
 
         private TextView title, count;
-        private GridImageView image;
+        private GridImageViewRounded image;
         private LinearLayout rootView;
 
         public GalleryViewHolder(@NonNull View itemView) {

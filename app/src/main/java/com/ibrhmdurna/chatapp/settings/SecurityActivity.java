@@ -136,15 +136,9 @@ public class SecurityActivity extends AppCompatActivity implements ViewComponent
 
     @Override
     public void toolsManagement(){
-        Environment.getInstance().toolbarProcess(this, R.id.security_toolbar);
+        Environment.getInstance().toolbarProcess(this);
         buildView();
         passwordProcess();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onBackPressed();
-        return true;
     }
 
     @Override

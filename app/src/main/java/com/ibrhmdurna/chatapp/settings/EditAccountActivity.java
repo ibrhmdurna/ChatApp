@@ -531,7 +531,7 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
 
     @Override
     public void toolsManagement(){
-        Environment.getInstance().toolbarProcess(this, R.id.editAccountToolbar);
+        Environment.getInstance().toolbarProcess(this);
         buildView();
         spinnerProcess();
         watcherProcess();
@@ -566,12 +566,6 @@ public class EditAccountActivity extends AppCompatActivity implements ViewCompon
         find.onDestroy();
         super.onDestroy();
         ImageController.getInstance().setProfileImageBytes(null);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onBackPressed();
-        return true;
     }
 
     @Override

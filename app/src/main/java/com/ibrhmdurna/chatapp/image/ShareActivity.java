@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,7 +15,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,9 +27,7 @@ import com.ibrhmdurna.chatapp.database.message.Image;
 import com.ibrhmdurna.chatapp.database.strategy.SendMessage;
 import com.ibrhmdurna.chatapp.local.ChatActivity;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.models.File;
 import com.ibrhmdurna.chatapp.models.Message;
-import com.ibrhmdurna.chatapp.util.controller.FileController;
 import com.ibrhmdurna.chatapp.util.controller.ImageController;
 import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.vanniktech.emoji.EmojiEditText;
@@ -40,7 +36,6 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
 public class ShareActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener, OnEmojiPopupShownListener, OnEmojiPopupDismissListener {
@@ -79,7 +74,7 @@ public class ShareActivity extends AppCompatActivity implements ViewComponentFac
         Message messageObject = new Message(FirebaseAuth.getInstance().getUid(), Objects.requireNonNull(messageInput.getText()).toString(), "Image", null, false, false, false, false);
         messageObject.setDownload(false);
         messageObject.setBitmap(image);
-        message.Send(messageObject, uid);
+        message.send(messageObject, uid);
 
         Intent chatIntent = new Intent(this, ChatActivity.class);
         chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

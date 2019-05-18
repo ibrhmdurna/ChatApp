@@ -14,6 +14,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,8 +43,11 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
 
     private List<File> files;
     private RecyclerView galleryContainer;
-    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private TextView appBarTitle;
     private TextView subTitle, noPhotosView;
+    private TextView toolbarTitle;
+    private TextView toolbarSubTitle;
+    private ImageButton backBtn;
 
     private boolean isBack = true;
 
@@ -156,7 +160,9 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
     private void getGallery(){
         isBack = true;
         subTitle.setText(null);
-        collapsingToolbarLayout.setTitle(getString(R.string.gallery));
+        appBarTitle.setText(getString(R.string.gallery));
+        toolbarTitle.setText(getString(R.string.gallery));
+        toolbarSubTitle.setVisibility(View.GONE);
         GalleryAdapter galleryAdapter = new GalleryAdapter(this, files);
         galleryContainer = findViewById(R.id.gallery_container);
 
@@ -180,12 +186,16 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
                 else {
                     getAlbumPhoto(FileController.getInstance().getFolderFile(files.get(position).getPath()));
                 }
-                collapsingToolbarLayout.setTitle(files.get(position).getTitle());
+                appBarTitle.setText(files.get(position).getTitle());
+                toolbarTitle.setText(files.get(position).getTitle());
+                toolbarSubTitle.setVisibility(View.VISIBLE);
                 if(files.get(position).getCount() > 1){
                     subTitle.setText(files.get(position).getCount() + " " + getString(R.string.photos));
+                    toolbarSubTitle.setText(files.get(position).getCount() + " " + getString(R.string.photos));
                 }
                 else {
                     subTitle.setText(files.get(position).getCount() + " " + getString(R.string.photo));
+                    toolbarSubTitle.setText(files.get(position).getCount() + " " + getString(R.string.photo));
                 }
                 isBack = false;
             }
@@ -251,24 +261,31 @@ public class GalleryActivity extends AppCompatActivity implements ViewComponentF
             getGallery();
     }
 
+    private void toolbarBackProcess(){
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBack();
+            }
+        });
+    }
+
     @Override
     public void buildView(){
-        collapsingToolbarLayout = findViewById(R.id.gallery_collapsing_bar);
-        subTitle = findViewById(R.id.gallery_subtitle);
+        appBarTitle = findViewById(R.id.app_bar_title);
+        subTitle = findViewById(R.id.app_bar_subtitle);
         noPhotosView = findViewById(R.id.no_photos_view);
+        backBtn = findViewById(R.id.toolbar_back_btn);
+        toolbarSubTitle = findViewById(R.id.toolbar_subtitle);
+        toolbarTitle = findViewById(R.id.toolbar_title);
     }
 
     @Override
     public void toolsManagement(){
-        Environment.getInstance().toolbarProcess(this, R.id.gallery_toolbar);
+        Environment.getInstance().toolbarProcessSubtitle(this);
         buildView();
         buildGalleryPath();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        onBack();
-        return true;
+        toolbarBackProcess();
     }
 
     @Override

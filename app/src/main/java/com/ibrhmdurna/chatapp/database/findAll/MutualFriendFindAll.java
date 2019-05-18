@@ -53,7 +53,7 @@ public class MutualFriendFindAll implements IFind {
     public void buildView() {
         friendView = context.findViewById(R.id.friends_container);
         notFoundView = context.findViewById(R.id.no_friends_view);
-        searchInput = context.findViewById(R.id.friends_search_input);
+        searchInput = context.findViewById(R.id.search_input);
     }
 
     @Override

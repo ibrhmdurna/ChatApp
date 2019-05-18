@@ -148,7 +148,7 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
 
     @Override
     public void toolsManagement(){
-        Environment.getInstance().toolbarProcess(this, R.id.chat_settings_toolbar);
+        Environment.getInstance().toolbarProcess(this);
         buildView();
     }
 
@@ -156,12 +156,6 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
     protected void onStart() {
         super.onStart();
         backgroundProcess();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onBackPressed();
-        return true;
     }
 
     @Override

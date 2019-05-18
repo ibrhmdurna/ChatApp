@@ -145,13 +145,13 @@ public class ChatFindAll implements IFind {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             if(dataSnapshot.exists()){
-                if(bottomNavigationView.getSelectedItemId() == R.id.messages_item){
+                if(bottomNavigationView.getSelectedItemId() == R.id.chats_item){
                     chatView.setVisibility(View.VISIBLE);
                     notFoundView.setVisibility(View.GONE);
                 }
             }
             else{
-                if(bottomNavigationView.getSelectedItemId() == R.id.messages_item){
+                if(bottomNavigationView.getSelectedItemId() == R.id.chats_item){
                     chatView.setVisibility(View.GONE);
                     notFoundView.setVisibility(View.VISIBLE);
                     notFoundView.setText(context.getString(R.string.no_chat));

@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,21 +38,25 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Insert;
 import com.ibrhmdurna.chatapp.database.Status;
 import com.ibrhmdurna.chatapp.database.Firebase;
+import com.ibrhmdurna.chatapp.database.message.Image;
 import com.ibrhmdurna.chatapp.models.Chat;
 import com.ibrhmdurna.chatapp.models.Request;
 import com.ibrhmdurna.chatapp.start.StartActivity;
+import com.ibrhmdurna.chatapp.util.Environment;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;
 import com.tooltip.OnDismissListener;
 import com.tooltip.Tooltip;
 
 public class MainActivity extends AppCompatActivity implements ViewComponentFactory {
 
-    private Toolbar toolbar;
     private FrameLayout mainFrame, fullFrame;
     private AppBarLayout mainAppBarLayout;
-    private CollapsingToolbarLayout collapsingToolbarLayout;
     private BottomNavigationView bottomNavigationView;
     private TextView messageNotFoundView, friendsNotFoundView, requestNotFoundView;
+    private ImageButton searchBtn;
+    private ImageButton writeBtn;
+    private TextView appBarTitle;
+    private TextView toolbarTitle;
 
     private String page;
 
@@ -59,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
     private View chatBadge;
 
     private String uid;
-
-    private View tooltipView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,29 +221,29 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
-                    case R.id.messages_item:
+                    case R.id.chats_item:
                         showFragment(new ChatsFragment(), "ChatsFragment");
                         App.Background.getInstance().clearThisPage("ChatsFragment");
                         App.Background.getInstance().addPage("ChatsFragment");
-                        collapsingToolbarLayout.setTitle(getString(R.string.chats));
-                        toolbar.getMenu().clear();
-                        toolbar.inflateMenu(R.menu.messages_main_menu);
+                        toolbarTitle.setText(getString(R.string.chats));
+                        appBarTitle.setText(getString(R.string.chats));
+                        writeBtn.setVisibility(View.VISIBLE);
                         break;
                     case R.id.friends_item:
                         showFragment(new FriendsFragment(), "FriendsFragment");
                         App.Background.getInstance().clearThisPage("FriendsFragment");
                         App.Background.getInstance().addPage("FriendsFragment");
-                        collapsingToolbarLayout.setTitle(getString(R.string.friends));
-                        toolbar.getMenu().clear();
-                        toolbar.inflateMenu(R.menu.main_menu);
+                        toolbarTitle.setText(getString(R.string.friends));
+                        appBarTitle.setText(getString(R.string.friends));
+                        writeBtn.setVisibility(View.GONE);
                         break;
                     case R.id.requests_item:
                         showFragment(new RequestsFragment(), "RequestsFragment");
                         App.Background.getInstance().clearThisPage("RequestsFragment");
                         App.Background.getInstance().addPage("RequestsFragment");
-                        collapsingToolbarLayout.setTitle(getString(R.string.requests));
-                        toolbar.getMenu().clear();
-                        toolbar.inflateMenu(R.menu.main_menu);
+                        toolbarTitle.setText(getString(R.string.requests));
+                        appBarTitle.setText(getString(R.string.requests));
+                        writeBtn.setVisibility(View.GONE);
                         removeBadgeView();
                         break;
                     case R.id.account_item:
@@ -250,8 +253,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
                         mainAppBarLayout.setVisibility(View.GONE);
                         fullFrame.setVisibility(View.VISIBLE);
                         mainFrame.setVisibility(View.GONE);
-                        toolbar.getMenu().clear();
-                        toolbar.inflateMenu(R.menu.main_menu);
+                        writeBtn.setVisibility(View.GONE);
                         return true;
                 }
 
@@ -270,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
             @Override
             public void onNavigationItemReselected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
-                    case R.id.messages_item:
+                    case R.id.chats_item:
                         NestedScrollView nestedMessages = findViewById(R.id.nestedMessagesContainer);
                         nestedMessages.smoothScrollTo(0,0);
                         break;
@@ -300,44 +302,24 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
 
     @Override
     public void buildView(){
-        toolbar = findViewById(R.id.mainToolbar);
+        appBarTitle = findViewById(R.id.app_bar_title);
         mainFrame = findViewById(R.id.mainFrame);
         fullFrame = findViewById(R.id.fullMainFrame);
-        collapsingToolbarLayout = findViewById(R.id.collapsingToolbar);
+        toolbarTitle = findViewById(R.id.toolbar_title);
         bottomNavigationView = findViewById(R.id.mainBottomNavigationView);
         mainAppBarLayout = findViewById(R.id.appbar);
         messageNotFoundView = findViewById(R.id.messages_not_found_view);
         friendsNotFoundView = findViewById(R.id.friend_not_found_view);
         requestNotFoundView = findViewById(R.id.request_not_found_view);
-        tooltipView = findViewById(R.id.tooltip_view);
+        searchBtn = findViewById(R.id.toolbar_search_btn);
+        writeBtn = findViewById(R.id.toolbar_write_btn);
     }
 
     @Override
     public void toolsManagement(){
+        Environment.getInstance().toolbarProcessMain(this);
         buildView();
         bottomViewItemSelected();
-        setSupportActionBar(toolbar);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.search_item:
-                Intent searchIntent = new Intent(getApplicationContext(), SearchActivity.class);
-                startActivity(searchIntent);
-                break;
-            case R.id.write_item:
-                Intent writeIntent = new Intent(getApplicationContext(), WriteActivity.class);
-                startActivity(writeIntent);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.messages_main_menu, menu);
-        return true;
     }
 
     @Override
@@ -347,37 +329,32 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
                 switch (App.Background.getInstance().getPageStackList().get(App.Background.getInstance().pageStackChildCount() - 2)){
                     case "ChatsFragment":
                         App.Background.getInstance().removePage();
-                        bottomNavigationView.setSelectedItemId(R.id.messages_item);
-                        toolbar.getMenu().clear();
-                        toolbar.inflateMenu(R.menu.messages_main_menu);
+                        bottomNavigationView.setSelectedItemId(R.id.chats_item);
+                        writeBtn.setVisibility(View.VISIBLE);
                         break;
                     case "FriendsFragment":
                         App.Background.getInstance().removePage();
                         bottomNavigationView.setSelectedItemId(R.id.friends_item);
-                        toolbar.getMenu().clear();
-                        toolbar.inflateMenu(R.menu.main_menu);
+                        writeBtn.setVisibility(View.GONE);
                         break;
                     case "RequestsFragment":
                         App.Background.getInstance().removePage();
                         bottomNavigationView.setSelectedItemId(R.id.requests_item);
-                        toolbar.getMenu().clear();
-                        toolbar.inflateMenu(R.menu.main_menu);
+                        writeBtn.setVisibility(View.GONE);
                         break;
                     case "AccountFragment":
                         App.Background.getInstance().removePage();
                         bottomNavigationView.setSelectedItemId(R.id.account_item);
-                        toolbar.getMenu().clear();
-                        toolbar.inflateMenu(R.menu.main_menu);
+                        writeBtn.setVisibility(View.GONE);
                         break;
                     default:
                         finish();
                 }
             }
             else if(App.Background.getInstance().pageStackChildCount() == 1){
-                bottomNavigationView.setSelectedItemId(R.id.messages_item);
+                bottomNavigationView.setSelectedItemId(R.id.chats_item);
                 App.Background.getInstance().clearAllPage();
-                toolbar.getMenu().clear();
-                toolbar.inflateMenu(R.menu.messages_main_menu);
+                writeBtn.setVisibility(View.VISIBLE);
             }
             else {
                 finish();
@@ -414,7 +391,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                Tooltip tooltip = new Tooltip.Builder(tooltipView, R.style.CustomToolTip)
+                Tooltip tooltip = new Tooltip.Builder(searchBtn, R.style.CustomToolTip)
                         .setText(R.string.find_your_friend)
                         .setGravity(Gravity.BOTTOM)
                         .show();
@@ -435,7 +412,7 @@ public class MainActivity extends AppCompatActivity implements ViewComponentFact
             editor.apply();
         }
         else if(isSearch){
-            Tooltip tooltip = new Tooltip.Builder(tooltipView, R.style.CustomToolTip)
+            Tooltip tooltip = new Tooltip.Builder(searchBtn, R.style.CustomToolTip)
                     .setText("Find your friend in the world of ChatApp!")
                     .setGravity(Gravity.BOTTOM)
                     .show();

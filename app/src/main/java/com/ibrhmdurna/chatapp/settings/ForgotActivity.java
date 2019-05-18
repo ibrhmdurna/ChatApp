@@ -67,12 +67,6 @@ public class ForgotActivity extends AppCompatActivity implements ViewComponentFa
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onBackPressed();
-        return true;
-    }
-
-    @Override
     public void buildView() {
         emailInput = findViewById(R.id.forgot_email_input);
         sendBtn = findViewById(R.id.send_btn);
@@ -83,7 +77,7 @@ public class ForgotActivity extends AppCompatActivity implements ViewComponentFa
 
     @Override
     public void toolsManagement(){
-        Environment.getInstance().toolbarProcess(this, R.id.forgot_toolbar);
+        Environment.getInstance().toolbarProcess(this);
         buildView();
         inputProcess();
     }

@@ -31,19 +31,13 @@ public class BlockedAccountsActivity extends AppCompatActivity implements ViewCo
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onBackPressed();
-        return true;
-    }
-
-    @Override
     public void buildView() {
         // ---- COMPONENT ----
     }
 
     @Override
     public void toolsManagement(){
-        Environment.getInstance().toolbarProcess(this, R.id.blocked_toolbar);
+        Environment.getInstance().toolbarProcess(this);
         getBlocks();
     }
 
