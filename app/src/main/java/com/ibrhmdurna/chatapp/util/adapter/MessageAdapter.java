@@ -837,6 +837,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private TextView messageTimeText;
         private SpinKitView loadingBar;
         private RelativeLayout imageLayout;
+        private LinearLayout messageLayout;
 
         public ImageMyMessageViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -853,6 +854,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             loadingBar = itemView.findViewById(R.id.downloading_progress);
             messageTimeText = itemView.findViewById(R.id.message_time_text);
             imageLayout = itemView.findViewById(R.id.image_layout);
+            messageLayout = itemView.findViewById(R.id.message_layout);
         }
 
         public void setData(final Message message, int position){
@@ -953,7 +955,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             }
 
-            messageContent.setOnLongClickListener(new View.OnLongClickListener() {
+            messageLayout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     AlertDialog dialog = DialogController.getInstance().dialogImageMessage(context, message, chatUid, true);
@@ -1069,6 +1071,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private SpinKitView loadingBar;
         private TextView messageTimeText;
         private RelativeLayout imageLayout;
+        private LinearLayout messageLayout;
 
         public ImageMessageViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -1086,6 +1089,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             loadingBar = itemView.findViewById(R.id.downloading_progress);
             messageTimeText = itemView.findViewById(R.id.message_time_text);
             imageLayout = itemView.findViewById(R.id.image_layout);
+            messageLayout = itemView.findViewById(R.id.message_layout);
         }
 
         public void setData(final Message message, final int position){
@@ -1188,7 +1192,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
 
-            messageContent.setOnLongClickListener(new View.OnLongClickListener() {
+            messageLayout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     AlertDialog dialog = DialogController.getInstance().dialogImageMessage(context, message, chatUid, false);

@@ -415,19 +415,12 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
 
     @Override
     public void toolsManagement(){
-        Environment.getInstance().toolbarProcess(this, R.id.chat_toolbar);
         buildView();
         emojiProcess();
         backgroundProcess();
         inputProcess();
         loadMessage();
         //voiceProcess();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onBackPressed();
-        return true;
     }
 
     @Override
@@ -447,6 +440,9 @@ public class ChatActivity extends AppCompatActivity implements ViewComponentFact
                 break;
             case R.id.send_btn:
                 sendMessage();
+                break;
+            case R.id.toolbar_back_btn:
+                super.onBackPressed();
                 break;
                 /*
             case R.id.voice_btn:

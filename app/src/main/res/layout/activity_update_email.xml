@@ -101,125 +101,99 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/rounded_background"
+                    android:paddingStart="25dp"
+                    android:paddingEnd="25dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="20dp"
+                    android:backgroundTint="?attr/backgroundCardColor">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <LinearLayout
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_email_icon"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="5dp"/>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/update_email_new_mail_input"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:background="@drawable/rounded_background"
-                            android:paddingStart="25dp"
-                            android:paddingEnd="25dp"
-                            android:paddingTop="15dp"
-                            android:paddingBottom="20dp"
-                            android:backgroundTint="?attr/backgroundCardColor">
+                            android:layout_marginStart="20dp"
+                            app:hintEnabled="false"
+                            app:errorEnabled="true">
 
-                            <LinearLayout
+                            <android.support.design.widget.TextInputEditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <ImageView
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:src="@drawable/ic_email_icon"
-                                    android:layout_gravity="center"
-                                    android:layout_marginBottom="5dp"/>
-
-                                <android.support.design.widget.TextInputLayout
-                                    android:id="@+id/update_email_new_mail_input"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="20dp"
-                                    app:hintEnabled="false"
-                                    app:errorEnabled="true">
-
-                                    <android.support.design.widget.TextInputEditText
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:hint="@string/new_email"
-                                        android:inputType="textEmailAddress"
-                                        android:backgroundTint="@color/colorLightGray"/>
-                                </android.support.design.widget.TextInputLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <ImageView
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:src="@drawable/ic_password_icon"
-                                    android:layout_gravity="center"
-                                    android:layout_marginBottom="5dp"/>
-
-                                <android.support.design.widget.TextInputLayout
-                                    android:id="@+id/update_email_password_input"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="20dp"
-                                    app:hintEnabled="false"
-                                    app:errorEnabled="true"
-                                    app:passwordToggleEnabled="true">
-
-                                    <android.support.design.widget.TextInputEditText
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:hint="@string/password"
-                                        android:inputType="textPassword"
-                                        android:backgroundTint="@color/colorLightGray"/>
-                                </android.support.design.widget.TextInputLayout>
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:text="@string/we_need_a_password_to_update_your_email_address"/>
-                        </LinearLayout>
-
-                        <Button
-                            android:id="@+id/update_btn"
-                            android:layout_width="140dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="25dp"
-                            android:layout_marginBottom="10dp"
-                            android:text="@string/update"
-                            style="@style/CustomButtonStyle"
-                            android:textColor="@color/selector_button_text_color"
-                            android:enabled="false"
-                            android:onClick="onClick"/>
-
+                                android:hint="@string/new_email"
+                                android:inputType="textEmailAddress"
+                                android:backgroundTint="@color/colorLightGray"/>
+                        </android.support.design.widget.TextInputLayout>
                     </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/ic_left_circle_view"
-                        android:translationZ="2dp"
-                        android:layout_alignParentBottom="true"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/ic_right_circle_view"
-                        android:translationZ="2dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"/>
-                </RelativeLayout>
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_password_icon"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="5dp"/>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/update_email_password_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            app:hintEnabled="false"
+                            app:errorEnabled="true"
+                            app:passwordToggleEnabled="true">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/password"
+                                android:inputType="textPassword"
+                                android:backgroundTint="@color/colorLightGray"/>
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/we_need_a_password_to_update_your_email_address"/>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/update_btn"
+                    android:layout_width="140dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/update"
+                    style="@style/CustomButtonStyle"
+                    android:textColor="@color/selector_button_text_color"
+                    android:enabled="false"
+                    android:onClick="onClick"/>
+
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 

@@ -178,7 +178,6 @@
                         android:text="@string/no_friends"
                         android:textSize="18sp"
                         android:gravity="center"
-                        android:textColor="@color/colorDarkGray"
                         android:layout_gravity="center" />
                 </android.support.v4.widget.NestedScrollView>
 

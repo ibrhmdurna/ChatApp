@@ -225,6 +225,7 @@
                         android:id="@+id/write_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
                         android:visibility="visible">
                     </android.support.v7.widget.RecyclerView>
                 </LinearLayout>

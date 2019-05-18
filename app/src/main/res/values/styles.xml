@@ -384,21 +384,6 @@
         <item name="colorAccentHighLight">@color/colorGreenHighLight</item>
     </style>
 
-    <!--
-    <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
-        <item name="android:activityOpenEnterAnimation">@anim/slide_in_down</item>
-        <item name="android:activityOpenExitAnimation">@anim/slide_out_up</item>
-        <item name="android:activityCloseEnterAnimation">@anim/slide_in_up</item>
-        <item name="android:activityCloseExitAnimation">@anim/slide_out_down</item>
-    </style>-->
-
-    <style name="ExpandedTitleTextAppearance" parent="@android:style/TextAppearance.Medium">
-        <item name="android:textSize">38sp</item>
-        <item name="android:textColor">?attr/primaryTextColor</item>
-        <item name="android:fontFamily">sans-serif-light</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
     <style name="CollapsedTitleTextAppearance" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">?attr/primaryTextColor</item>

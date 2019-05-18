@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="65dp"
         app:contentInsetStartWithNavigation="0dp"
+        app:contentInsetStart="0dp"
         android:background="?attr/backgroundBrushColor">
 
         <RelativeLayout
@@ -21,12 +22,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ImageButton
+                android:id="@+id/toolbar_back_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_back_icon"
+                android:layout_marginStart="5dp"
+                style="@style/CustomTransparentViewStyle"
+                android:onClick="onClick"/>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_gravity="center"
-                android:layout_centerVertical="true">
+                android:layout_centerVertical="true"
+                android:layout_marginStart="55dp">
 
                 <TextView
                     android:id="@+id/chat_name_surname"
@@ -79,6 +90,7 @@
                     android:layout_height="36dp"
                     app:civ_border_color="?attr/searchColor"
                     app:civ_border_width="1dp"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/default_avatar"/>
             </RelativeLayout>
         </RelativeLayout>

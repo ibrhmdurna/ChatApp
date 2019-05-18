@@ -126,7 +126,6 @@
                         android:text="@string/no_blocked_account"
                         android:textSize="18sp"
                         android:gravity="center"
-                        android:textColor="@color/colorDarkGray"
                         android:layout_gravity="center" />
                 </android.support.v4.widget.NestedScrollView>
             </RelativeLayout>
