@@ -21,6 +21,7 @@
         <item name="colorControlNormal">@color/colorDarkGray</item>
         <item name="photoBackgroundColor">#C8C8C8</item>
         <item name="colorAccentHighLight">@color/colorAccentHighLight</item>
+        <item name="upAttackBackgroundColor">#E6E6E6</item>
     </style>
 
     <style name="AppTheme.DarkTheme" parent="Theme.AppCompat.NoActionBar">
@@ -44,6 +45,7 @@
         <item name="colorControlNormal">@color/colorGray</item>
         <item name="photoBackgroundColor">#2D2D2D</item>
         <item name="colorAccentHighLight">@color/colorAccentHighLight</item>
+        <item name="upAttackBackgroundColor">#2D2D2D</item>
     </style>
 
     <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">

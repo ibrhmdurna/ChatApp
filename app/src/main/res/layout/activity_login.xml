@@ -39,7 +39,7 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/login_toolbar"
-                android:layout_height="65dp"
+                android:layout_height="70dp"
                 android:layout_width="match_parent"
                 app:layout_collapseMode="pin"
                 app:contentInsetStartWithNavigation="0dp"

@@ -55,7 +55,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
+                android:layout_height="70dp"
                 android:layout_gravity="bottom"
                 app:contentInsetStartWithNavigation="0dp"
                 app:contentInsetStart="0dp"
@@ -141,6 +141,17 @@
             android:visibility="gone"/>
 
     </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/up_attack_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/custom_up_attack_button"
+        android:padding="12dp"
+        android:src="@drawable/ic_scroll_up_icon"
+        android:visibility="gone"/>
 
     <ImageView
         android:layout_width="24dp"

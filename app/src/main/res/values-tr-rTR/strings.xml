@@ -69,7 +69,7 @@
     <string name="email">Email</string>
     <string name="enable">Etkinleştir</string>
     <string name="enter_a_birthday">* Bir doğum tarihi girin</string>
-    <string name="enter_message">Bir mesaj yaz…</string>
+    <string name="enter_message">Bir mesaj yaz</string>
     <string name="finish">Bitir</string>
     <string name="forgot_my_password">Şifremi Unuttum</string>
     <string name="friends">Arkadaşlar</string>
@@ -216,4 +216,6 @@
     <string name="blocks">Engeller</string>
     <string name="no_blocked_account">Engellenen hesap yok</string>
     <string name="short_time">Sesli mesaj kaydedilmedi. Kayıt süresi kısa.</string>
+    <string name="this_is_the_message_received">Bu alınan mesaj</string>
+    <string name="this_is_your_message">Bu senin mesajın</string>
 </resources>

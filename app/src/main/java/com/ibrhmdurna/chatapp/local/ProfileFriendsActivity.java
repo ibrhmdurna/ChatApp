@@ -1,13 +1,17 @@
 package com.ibrhmdurna.chatapp.local;
 
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.application.App;
@@ -24,6 +28,8 @@ public class ProfileFriendsActivity extends AppCompatActivity implements ViewCom
     private EditText searchInput;
     private ImageButton searchClearView;
     private TabLayout tabLayout;
+    private NestedScrollView nestedContainer;
+    private ImageButton upAttackBtn;
 
     private String uid;
 
@@ -102,10 +108,38 @@ public class ProfileFriendsActivity extends AppCompatActivity implements ViewCom
         }
     };
 
+    private void scrollListener(){
+        nestedContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == 0) {
+                    Animation fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_down);
+                    upAttackBtn.setAnimation(fadeOut);
+                    upAttackBtn.setVisibility(View.GONE);
+                }
+                else if (scrollY > 1){
+                    if(upAttackBtn.getVisibility() == View.GONE){
+                        Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_down);
+                        upAttackBtn.setAnimation(fadeIn);
+                        upAttackBtn.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+
+        upAttackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nestedContainer.smoothScrollTo(0,0);
+            }
+        });
+    }
+
     @Override
     public void toolsManagement() {
         Environment.getInstance().toolbarProcessSearchBar(this);
         buildView();
+        scrollListener();
         inputProcess();
         tabProcess();
         getFriends();
@@ -116,6 +150,8 @@ public class ProfileFriendsActivity extends AppCompatActivity implements ViewCom
         searchInput = findViewById(R.id.search_input);
         searchClearView = findViewById(R.id.clear_search_btn);
         tabLayout = findViewById(R.id.bottom_tab_selected);
+        nestedContainer = findViewById(R.id.nestedContainer);
+        upAttackBtn = findViewById(R.id.up_attack_btn);
     }
 
     @Override

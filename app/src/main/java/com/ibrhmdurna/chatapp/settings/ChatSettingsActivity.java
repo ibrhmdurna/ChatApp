@@ -2,12 +2,15 @@ package com.ibrhmdurna.chatapp.settings;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.ColorInt;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -66,7 +69,7 @@ public class ChatSettingsActivity extends AppCompatActivity implements ViewCompo
             editor.putString("BACKGROUND_IMAGE", null);
             editor.apply();
 
-            backgroundView.setImageDrawable(getDrawable(R.drawable.splash_background));
+            backgroundView.setImageDrawable(null);
             Toast.makeText(getApplicationContext(), getString(R.string.deleted_background), Toast.LENGTH_SHORT).show();
         }
     }

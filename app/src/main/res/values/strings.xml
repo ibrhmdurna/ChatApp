@@ -9,7 +9,7 @@
     <string name="chatapp_user">ChatApp User</string>
     <string name="A5S0">Touch for account information</string>
     <string name="typing">typing…</string>
-    <string name="enter_message">Type a message…</string>
+    <string name="enter_message">Type a message</string>
     <string name="A5S1">This account is no longer available. That\'s why you can\'t send messages anymore.</string>
     <string name="chat_settings">Chat Settings</string>
     <string name="background">Background</string>
@@ -216,5 +216,7 @@
     <string name="blocks">Blocks</string>
     <string name="no_blocked_account">No blocked account</string>
     <string name="short_time">Can\'t save voice message. Recording time to short.</string>
+    <string name="this_is_your_message">This is your message</string>
+    <string name="this_is_the_message_received">This is the message received</string>
 
 </resources>

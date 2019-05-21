@@ -39,7 +39,7 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/update_email_toolbar"
-                android:layout_height="65dp"
+                android:layout_height="70dp"
                 android:layout_width="match_parent"
                 app:layout_collapseMode="pin"
                 app:contentInsetStartWithNavigation="0dp"
@@ -79,8 +79,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
-        android:layout_marginBottom="55dp">
+        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
         <ImageView
             android:layout_width="24dp"

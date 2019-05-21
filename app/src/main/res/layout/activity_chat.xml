@@ -12,7 +12,7 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/chat_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="60dp"
         app:contentInsetStartWithNavigation="0dp"
         app:contentInsetStart="0dp"
         android:background="?attr/backgroundBrushColor">

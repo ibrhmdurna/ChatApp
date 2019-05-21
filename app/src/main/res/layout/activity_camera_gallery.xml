@@ -49,7 +49,7 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/c_gallery_toolbar"
-                android:layout_height="65dp"
+                android:layout_height="70dp"
                 android:layout_width="match_parent"
                 app:layout_collapseMode="pin"
                 app:contentInsetStartWithNavigation="0dp"
@@ -125,6 +125,17 @@
         </android.support.v7.widget.RecyclerView>
 
     </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/up_attack_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/custom_up_attack_button"
+        android:padding="12dp"
+        android:src="@drawable/ic_scroll_up_icon"
+        android:visibility="gone"/>
 
     <ImageView
         android:layout_width="24dp"

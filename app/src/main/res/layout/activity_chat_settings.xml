@@ -39,7 +39,7 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/chat_settings_toolbar"
-                android:layout_height="65dp"
+                android:layout_height="70dp"
                 android:layout_width="match_parent"
                 app:layout_collapseMode="pin"
                 app:contentInsetStartWithNavigation="0dp"
@@ -107,177 +107,400 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/background"
+                            android:fontFamily="sans-serif-light"
+                            android:textStyle="bold"
+                            android:textSize="15sp"
+                            android:paddingStart="20dp"
+                            android:paddingTop="6dp"
+                            android:paddingBottom="6dp"
+                            android:paddingEnd="20dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:background="@drawable/rounded_background"
+                            android:paddingTop="20dp"
+                            android:paddingBottom="10dp"
+                            android:backgroundTint="?attr/backgroundCardColor">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/background"
-                                android:fontFamily="sans-serif-light"
-                                android:textStyle="bold"
-                                android:textSize="15sp"
-                                android:paddingStart="20dp"
-                                android:paddingTop="6dp"
-                                android:paddingBottom="6dp"
-                                android:paddingEnd="20dp"/>
+                            <RelativeLayout
+                                android:layout_width="150dp"
+                                android:layout_height="250dp"
+                                android:layout_gravity="center"
+                                android:background="?attr/backgroundBrushColor">
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:background="@drawable/rounded_background"
-                                android:paddingTop="20dp"
-                                android:paddingBottom="10dp"
-                                android:backgroundTint="?attr/backgroundCardColor">
+                                <ImageView
+                                    android:id="@+id/chat_background_view"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scaleType="centerCrop"
+                                    android:background="?attr/backgroundBrushColor"/>
 
-                                <RelativeLayout
-                                    android:layout_width="150dp"
-                                    android:layout_height="250dp"
-                                    android:layout_gravity="center">
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:background="@drawable/ic_left_circle_view_top"
+                                    android:translationZ="2dp"
+                                    android:backgroundTint="?attr/pvtRadiusColor"/>
 
-                                    <ImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:background="@drawable/ic_left_circle_view_top"
-                                        android:translationZ="2dp"
-                                        android:backgroundTint="?attr/pvtRadiusColor"/>
-
-                                    <ImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:background="@drawable/ic_right_circle_view_top"
-                                        android:translationZ="2dp"
-                                        android:layout_alignParentEnd="true"
-                                        android:backgroundTint="?attr/pvtRadiusColor"/>
-
-                                    <ImageView
-                                        android:id="@+id/chat_background_view"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:src="@drawable/splash_background"
-                                        android:scaleType="centerCrop"/>
-
-                                    <ImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:background="@drawable/ic_left_circle_view"
-                                        android:translationZ="2dp"
-                                        android:backgroundTint="?attr/pvtRadiusColor"
-                                        android:layout_alignParentBottom="true"/>
-
-                                    <ImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:background="@drawable/ic_right_circle_view"
-                                        android:translationZ="2dp"
-                                        android:backgroundTint="?attr/pvtRadiusColor"
-                                        android:layout_alignParentEnd="true"
-                                        android:layout_alignParentBottom="true"/>
-                                </RelativeLayout>
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:background="@drawable/ic_right_circle_view_top"
+                                    android:translationZ="2dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:backgroundTint="?attr/pvtRadiusColor"/>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="55dp"
+                                    android:layout_height="30dp"
                                     android:orientation="horizontal"
-                                    android:layout_marginTop="10dp">
+                                    android:translationZ="1dp"
+                                    android:background="?attr/backgroundBrushColor"
+                                    android:gravity="center_vertical">
+
+                                    <ImageView
+                                        android:layout_width="10dp"
+                                        android:layout_height="10dp"
+                                        android:src="@drawable/ic_back_icon"
+                                        android:layout_marginStart="10dp"/>
 
                                     <TextView
-                                        android:id="@+id/background_change_view"
-                                        android:layout_width="100dp"
-                                        android:layout_height="40dp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
                                         android:layout_weight="1"
+                                        android:textSize="8sp"
+                                        android:text="@string/chatapp_user"
                                         android:layout_gravity="center"
-                                        android:gravity="center"
-                                        android:text="@string/change"
-                                        android:layout_margin="10dp"
-                                        android:textColor="?attr/colorAccent"
-                                        style="@style/CustomTransparentViewStyle"
-                                        android:backgroundTint="?attr/pvtRadiusColor"
-                                        android:onClick="onClick"/>
+                                        android:layout_marginStart="5dp"/>
 
-                                    <View
-                                        android:layout_width="1dp"
-                                        android:layout_height="match_parent"
-                                        android:background="?attr/lineColor"
-                                        android:layout_marginTop="10dp"
-                                        android:layout_marginBottom="10dp"/>
-
-                                    <TextView
-                                        android:id="@+id/chat_background_save_view"
-                                        android:layout_width="100dp"
-                                        android:layout_height="40dp"
-                                        android:layout_weight="1"
-                                        android:layout_gravity="center"
-                                        android:gravity="center"
-                                        android:text="@string/save"
-                                        android:layout_margin="10dp"
-                                        android:textColor="@color/selector_transparent_view_text_color"
-                                        style="@style/CustomTransparentViewStyle"
-                                        android:backgroundTint="?attr/pvtRadiusColor"
-                                        android:enabled="false"
-                                        android:onClick="onClick"/>
+                                    <de.hdodenhof.circleimageview.CircleImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_weight="0"
+                                        android:src="@drawable/default_avatar"
+                                        android:layout_marginEnd="10dp"
+                                        app:civ_border_color="?attr/searchColor"
+                                        app:civ_border_width="1dp"/>
                                 </LinearLayout>
-                            </LinearLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/chat_history"
-                                android:fontFamily="sans-serif-light"
-                                android:textStyle="bold"
-                                android:textSize="15sp"
-                                android:paddingStart="20dp"
-                                android:paddingTop="6dp"
-                                android:paddingBottom="6dp"
-                                android:paddingEnd="20dp"/>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:layout_alignParentBottom="true">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:layout_gravity="center">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/today"
+                                            android:textSize="6sp"
+                                            android:gravity="center"
+                                            android:paddingStart="5dp"
+                                            android:paddingEnd="5dp"
+                                            android:paddingTop="3dp"
+                                            android:paddingBottom="3dp"
+                                            android:layout_margin="5dp"
+                                            android:layout_gravity="center"
+                                            android:background="@drawable/gray_rounded_background"
+                                            android:backgroundTint="?attr/backgroundBrushColor"/>
+
+                                        <LinearLayout
+                                            android:layout_width="140dp"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal"
+                                            android:paddingStart="5sp"
+                                            tools:ignore="RtlSymmetry"
+                                            android:paddingTop="2dp"
+                                            android:paddingBottom="2dp">
+
+                                            <com.vanniktech.emoji.EmojiTextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textSize="8sp"
+                                                android:textColor="@android:color/white"
+                                                android:layout_gravity="center"
+                                                android:text="@string/this_is_the_message_received"
+                                                android:background="@drawable/ripple_message_background"
+                                                android:paddingStart="6dp"
+                                                android:paddingTop="3dp"
+                                                android:paddingBottom="3dp"
+                                                android:paddingEnd="6dp"/>
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textSize="6sp"
+                                                android:text="12:00"
+                                                android:layout_gravity="bottom"
+                                                android:layout_marginStart="3dp"/>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="end"
+                                            android:orientation="horizontal"
+                                            tools:ignore="RtlSymmetry"
+                                            android:layout_marginEnd="5dp"
+                                            android:layout_marginTop="3dp"
+                                            android:layout_marginBottom="1dp">
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="bottom"
+                                                android:textSize="6sp"
+                                                android:layout_marginEnd="3dp"
+                                                android:text="12:00"/>
+
+                                            <com.vanniktech.emoji.EmojiTextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:maxWidth="240dp"
+                                                android:textSize="8sp"
+                                                android:text="@string/this_is_your_message"
+                                                android:layout_gravity="end"
+                                                android:textColor="?attr/primaryTextColor"
+                                                android:background="@drawable/my_ripple_message_background"
+                                                android:paddingStart="6dp"
+                                                android:paddingTop="3dp"
+                                                android:paddingBottom="3dp"
+                                                android:paddingEnd="6dp"/>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal"
+                                            android:layout_gravity="end"
+                                            android:layout_marginEnd="15dp"
+                                            android:paddingStart="10dp"
+                                            android:paddingEnd="10dp"
+                                            android:paddingTop="5dp"
+                                            android:paddingBottom="5dp"
+                                            android:background="@drawable/gray_rounded_background"
+                                            android:backgroundTint="?attr/backgroundBrushColor"
+                                            android:visibility="gone"
+                                            android:layout_marginTop="5dp">
+
+                                            <ImageView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:src="@drawable/ic_seen_icon"
+                                                android:layout_gravity="center"
+                                                android:layout_marginEnd="6dp"/>
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textSize="13sp"
+                                                android:text="@string/seen"/>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal"
+                                            android:layout_gravity="end"
+                                            android:layout_marginEnd="5dp"
+                                            android:paddingStart="3dp"
+                                            android:paddingEnd="3dp"
+                                            android:background="@drawable/gray_rounded_background"
+                                            android:backgroundTint="?attr/backgroundBrushColor"
+                                            android:layout_marginTop="3dp"
+                                            android:layout_marginBottom="2dp">
+
+                                            <ImageView
+                                                android:layout_width="6dp"
+                                                android:layout_height="6dp"
+                                                android:src="@drawable/ic_seen_icon"
+                                                android:layout_gravity="center"
+                                                android:layout_marginEnd="3dp"/>
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:textSize="6sp"
+                                                android:text="@string/seen"/>
+                                        </LinearLayout>
+                                    </LinearLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="32dp"
+                                        android:background="?attr/backgroundBrushColor"
+                                        android:padding="7dp"
+                                        android:translationZ="1dp">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:orientation="horizontal"
+                                            android:background="@drawable/gray_rounded_background"
+                                            android:layout_alignParentBottom="true"
+                                            android:gravity="center_vertical"
+                                            android:layout_marginStart="2dp"
+                                            android:layout_marginEnd="2dp">
+
+                                            <ImageView
+                                                android:layout_width="10dp"
+                                                android:layout_height="10dp"
+                                                android:src="@drawable/ic_add_icon"
+                                                android:layout_marginStart="5dp"/>
+
+                                            <TextView
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:text="@string/enter_message"
+                                                android:textSize="8sp"
+                                                android:layout_gravity="center_vertical"
+                                                android:layout_marginStart="5dp"/>
+
+                                            <ImageView
+                                                android:layout_width="14dp"
+                                                android:layout_height="14sp"
+                                                android:layout_gravity="center_vertical"
+                                                android:src="@drawable/ic_send_icon"
+                                                android:background="@drawable/custom_button"
+                                                android:padding="3dp"
+                                                android:backgroundTint="@color/selector_send_button_color"
+                                                android:layout_weight="0"
+                                                android:layout_marginEnd="2dp"/>
+                                        </LinearLayout>
+                                    </RelativeLayout>
+                                </LinearLayout>
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:background="@drawable/ic_left_circle_view"
+                                    android:translationZ="2dp"
+                                    android:backgroundTint="?attr/pvtRadiusColor"
+                                    android:layout_alignParentBottom="true"/>
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:background="@drawable/ic_right_circle_view"
+                                    android:translationZ="2dp"
+                                    android:backgroundTint="?attr/pvtRadiusColor"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentBottom="true"/>
+                            </RelativeLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/rounded_background"
-                                android:backgroundTint="?attr/backgroundCardColor"
-                                android:orientation="vertical">
+                                android:layout_height="55dp"
+                                android:orientation="horizontal"
+                                android:layout_marginTop="10dp">
 
                                 <TextView
-                                    android:id="@+id/clear_chat_view"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:padding="20dp"
-                                    android:text="@string/clear_all_chats"
-                                    android:textColor="?attr/primaryTextColor"
-                                    android:textSize="18sp"
-                                    android:background="@drawable/top_item_view"
-                                    android:backgroundTint="?attr/backgroundCardColor"
+                                    android:id="@+id/background_change_view"
+                                    android:layout_width="100dp"
+                                    android:layout_height="40dp"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="@string/change"
+                                    android:layout_margin="10dp"
+                                    android:textColor="?attr/colorAccent"
+                                    style="@style/CustomTransparentViewStyle"
+                                    android:backgroundTint="?attr/pvtRadiusColor"
                                     android:onClick="onClick"/>
 
                                 <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:layout_marginStart="20dp"
-                                    android:layout_marginEnd="20dp"
-                                    android:background="?attr/lineColor" />
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:background="?attr/lineColor"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginBottom="10dp"/>
 
                                 <TextView
-                                    android:id="@+id/delete_chat_view"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:padding="20dp"
-                                    android:text="@string/delete_all_chats"
-                                    android:background="@drawable/bottom_item_view"
-                                    android:backgroundTint="?attr/backgroundCardColor"
-                                    android:textColor="?attr/primaryTextColor"
-                                    android:textSize="18sp"
+                                    android:id="@+id/chat_background_save_view"
+                                    android:layout_width="100dp"
+                                    android:layout_height="40dp"
+                                    android:layout_weight="1"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="@string/save"
+                                    android:layout_margin="10dp"
+                                    android:textColor="@color/selector_transparent_view_text_color"
+                                    style="@style/CustomTransparentViewStyle"
+                                    android:backgroundTint="?attr/pvtRadiusColor"
+                                    android:enabled="false"
                                     android:onClick="onClick"/>
                             </LinearLayout>
                         </LinearLayout>
-                    </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chat_history"
+                            android:fontFamily="sans-serif-light"
+                            android:textStyle="bold"
+                            android:textSize="15sp"
+                            android:paddingStart="20dp"
+                            android:paddingTop="6dp"
+                            android:paddingBottom="6dp"
+                            android:paddingEnd="20dp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rounded_background"
+                            android:backgroundTint="?attr/backgroundCardColor"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/clear_chat_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="20dp"
+                                android:text="@string/clear_all_chats"
+                                android:textColor="?attr/primaryTextColor"
+                                android:textSize="18sp"
+                                android:background="@drawable/top_item_view"
+                                android:backgroundTint="?attr/backgroundCardColor"
+                                android:onClick="onClick"/>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:background="?attr/lineColor" />
+
+                            <TextView
+                                android:id="@+id/delete_chat_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="20dp"
+                                android:text="@string/delete_all_chats"
+                                android:background="@drawable/bottom_item_view"
+                                android:backgroundTint="?attr/backgroundCardColor"
+                                android:textColor="?attr/primaryTextColor"
+                                android:textSize="18sp"
+                                android:onClick="onClick"/>
+                        </LinearLayout>
+                    </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

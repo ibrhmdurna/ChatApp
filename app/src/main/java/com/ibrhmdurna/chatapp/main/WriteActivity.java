@@ -1,11 +1,14 @@
 package com.ibrhmdurna.chatapp.main;
 
 import android.content.Intent;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -22,6 +25,8 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
 
     private EditText searchInput;
     private ImageButton searchClearView;
+    private NestedScrollView nestedContainer;
+    private ImageButton upAttackBtn;
 
     private AbstractFind find;
 
@@ -65,16 +70,46 @@ public class WriteActivity extends AppCompatActivity implements ViewComponentFac
         }
     };
 
+    private void scrollListener(){
+        nestedContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == 0) {
+                    Animation fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_down);
+                    upAttackBtn.setAnimation(fadeOut);
+                    upAttackBtn.setVisibility(View.GONE);
+                }
+                else if (scrollY > 1){
+                    if(upAttackBtn.getVisibility() == View.GONE){
+                        Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_down);
+                        upAttackBtn.setAnimation(fadeIn);
+                        upAttackBtn.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+
+        upAttackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nestedContainer.smoothScrollTo(0,0);
+            }
+        });
+    }
+
     @Override
     public void buildView(){
         searchInput = findViewById(R.id.search_input);
         searchClearView = findViewById(R.id.clear_search_btn);
+        nestedContainer = findViewById(R.id.nestedContainer);
+        upAttackBtn = findViewById(R.id.up_attack_btn);
     }
 
     @Override
     public void toolsManagement() {
         Environment.getInstance().toolbarProcessSearchBar(this);
         buildView();
+        scrollListener();
         inputProcess();
     }
 

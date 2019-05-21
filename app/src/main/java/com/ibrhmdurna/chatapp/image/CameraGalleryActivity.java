@@ -1,12 +1,16 @@
 package com.ibrhmdurna.chatapp.image;
 
 import android.annotation.SuppressLint;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
@@ -24,6 +28,7 @@ public class CameraGalleryActivity extends AppCompatActivity implements ViewComp
     private RecyclerView galleryContainer;
     private TextView subTitle;
     private TextView toolbarSubtitle;
+    private ImageButton upAttackBtn;
 
     private String isContext = "Share";
     private boolean isRegister;
@@ -72,17 +77,46 @@ public class CameraGalleryActivity extends AppCompatActivity implements ViewComp
         }
     }
 
+    private void scrollListener(){
+        galleryContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == 0) {
+                    Animation fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_out_down);
+                    upAttackBtn.setAnimation(fadeOut);
+                    upAttackBtn.setVisibility(View.GONE);
+                }
+                else if (scrollY > 1){
+                    if(upAttackBtn.getVisibility() == View.GONE){
+                        Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_down);
+                        upAttackBtn.setAnimation(fadeIn);
+                        upAttackBtn.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+
+        upAttackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                galleryContainer.smoothScrollToPosition(0);
+            }
+        });
+    }
+
     @Override
     public void buildView(){
         galleryContainer = findViewById(R.id.c_gallery_container);
         subTitle = findViewById(R.id.c_gallery_subtitle);
         toolbarSubtitle = findViewById(R.id.toolbar_subtitle);
+        upAttackBtn = findViewById(R.id.up_attack_btn);
     }
 
     @Override
     public void toolsManagement() {
         Environment.getInstance().toolbarProcessSubtitle(this);
         buildView();
+        scrollListener();
         galleyProcess();
     }
 
