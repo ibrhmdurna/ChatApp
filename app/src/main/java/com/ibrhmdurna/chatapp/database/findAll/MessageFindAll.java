@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,7 +18,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Firebase;
+import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
+import com.ibrhmdurna.chatapp.database.bridge.Find;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
+import com.ibrhmdurna.chatapp.database.find.BeginChatFindInfo;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.util.adapter.MessageAdapter;
 
@@ -53,6 +57,9 @@ public class MessageFindAll implements IFind {
 
     public static boolean isRemoved = false;
 
+    private LinearLayout beginLayout;
+    private AbstractFind find;
+
     public MessageFindAll(Activity context, String chatUid){
         this.context = context;
         this.chatUid = chatUid;
@@ -64,6 +71,7 @@ public class MessageFindAll implements IFind {
     public void buildView() {
         messageView = context.findViewById(R.id.chat_container);
         swipeRefreshLayout = context.findViewById(R.id.chat_swipe_container);
+        beginLayout = context.findViewById(R.id.chat_begin_layout);
     }
 
     @Override
@@ -106,6 +114,8 @@ public class MessageFindAll implements IFind {
                 });
             }
         });
+
+        Firebase.getInstance().getDatabaseReference().child("Messages").child(uid).child(chatUid).addValueEventListener(beginEventListener);
     }
 
     @Override
@@ -119,9 +129,14 @@ public class MessageFindAll implements IFind {
 
     @Override
     public void onDestroy() {
-        contentQuery.removeEventListener(contentEventListener);
+        if(contentQuery != null){
+            contentQuery.removeEventListener(contentEventListener);
+        }
         if(moreQuery != null){
             moreQuery.removeEventListener(moreEventListener);
+        }
+        if(find != null){
+            find.onDestroy();
         }
     }
 
@@ -269,6 +284,32 @@ public class MessageFindAll implements IFind {
         @Override
         public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    private ValueEventListener beginEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                beginLayout.setVisibility(View.GONE);
+                beginLayout.setEnabled(false);
+                swipeRefreshLayout.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setEnabled(true);
+            }
+            else{
+                beginLayout.setVisibility(View.VISIBLE);
+                beginLayout.setEnabled(true);
+                swipeRefreshLayout.setVisibility(View.GONE);
+                swipeRefreshLayout.setEnabled(false);
+
+                find = new Find(new BeginChatFindInfo(context, chatUid));
+                find.getContent();
+            }
         }
 
         @Override

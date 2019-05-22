@@ -119,6 +119,183 @@
         android:scaleType="centerCrop"
         android:translationZ="-2dp"/>
 
+    <LinearLayout
+        android:id="@+id/chat_begin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@id/chat_toolbar"
+        android:layout_above="@id/chat_bottom_view"
+        android:gravity="center_horizontal|bottom"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="60dp"
+            android:layout_height="60dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <TextView
+                android:id="@+id/profile_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="26sp"
+                android:gravity="center"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/account_name_surname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textSize="18sp"
+            android:textColor="?attr/primaryTextColor"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/you_re_friends_on_chatapp"
+            android:textSize="14sp"
+            android:textColor="?attr/primaryTextColor"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:id="@+id/account_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:id="@+id/friend_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
+
+            <RelativeLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image_first"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:civ_border_color="?attr/searchColor"
+                    app:civ_border_width="1dp"/>
+
+                <TextView
+                    android:id="@+id/profile_text_first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="25dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image_last"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:civ_border_color="?attr/searchColor"
+                    app:civ_border_width="1dp"/>
+
+                <TextView
+                    android:id="@+id/profile_text_last"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/hello_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"/>
+
+        <LinearLayout
+            android:id="@+id/wave_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/hello_wave_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorDarkGray"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"/>
+
+                <ImageButton
+                    android:id="@+id/wave_close_btn"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    style="@style/CustomButtonStyle"
+                    android:backgroundTint="?attr/searchColor"
+                    android:src="@drawable/ic_cancel_icon"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="15dp"/>
+            </RelativeLayout>
+
+            <com.vanniktech.emoji.EmojiTextView
+                android:id="@+id/emoji_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="50sp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_gravity="center"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/wave_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/wave"
+                android:textColor="?attr/primaryTextColor"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:paddingStart="13dp"
+                android:paddingEnd="13dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:backgroundTint="?attr/searchColor"
+                android:layout_marginBottom="20dp"
+                style="@style/CustomButtonStyle"/>
+        </LinearLayout>
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/chat_bottom_view"
         android:layout_width="match_parent"

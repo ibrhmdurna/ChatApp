@@ -218,5 +218,7 @@
     <string name="short_time">Can\'t save voice message. Recording time to short.</string>
     <string name="this_is_your_message">This is your message</string>
     <string name="this_is_the_message_received">This is the message received</string>
+    <string name="you_re_friends_on_chatapp">You\'re friends on ChatApp</string>
+    <string name="wave">WAVE</string>
 
 </resources>

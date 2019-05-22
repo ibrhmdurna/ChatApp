@@ -71,6 +71,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void getAlbumPhoto(final List<String> list){
+        galleryContainer = findViewById(R.id.camera_gallery_container);
         galleryContainer.removeAllViews();
         final CameraAlbumAdapter albumAdapter = new CameraAlbumAdapter(this, list, isContext, isRegister, uid);
         galleryContainer.setAdapter(albumAdapter);

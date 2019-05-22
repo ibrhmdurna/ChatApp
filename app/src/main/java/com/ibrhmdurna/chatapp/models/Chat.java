@@ -5,16 +5,18 @@ public class Chat {
     private Long time;
     private boolean seen;
     private boolean typing;
+    private boolean wave;
 
     private String chatUid;
 
     public Chat() {
     }
 
-    public Chat(Long time, boolean seen, boolean typing) {
+    public Chat(Long time, boolean seen, boolean typing, boolean wave) {
         this.time = time;
         this.seen = seen;
         this.typing = typing;
+        this.wave = wave;
     }
 
     public Long getTime() {
@@ -39,6 +41,14 @@ public class Chat {
 
     public void setTyping(boolean typing) {
         this.typing = typing;
+    }
+
+    public boolean isWave() {
+        return wave;
+    }
+
+    public void setWave(boolean wave) {
+        this.wave = wave;
     }
 
     public String getChatUid() {

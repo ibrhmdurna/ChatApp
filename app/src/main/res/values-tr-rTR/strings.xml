@@ -218,4 +218,6 @@
     <string name="short_time">Sesli mesaj kaydedilmedi. Kayıt süresi kısa.</string>
     <string name="this_is_the_message_received">Bu alınan mesaj</string>
     <string name="this_is_your_message">Bu senin mesajın</string>
+    <string name="wave">EL SALLA</string>
+    <string name="you_re_friends_on_chatapp">ChatApp\'de arkadaşsınız</string>
 </resources>

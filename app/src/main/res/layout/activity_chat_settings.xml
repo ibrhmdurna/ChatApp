@@ -165,7 +165,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="30dp"
                                     android:orientation="horizontal"
-                                    android:translationZ="1dp"
                                     android:background="?attr/backgroundBrushColor"
                                     android:gravity="center_vertical">
 
@@ -346,8 +345,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="32dp"
                                         android:background="?attr/backgroundBrushColor"
-                                        android:padding="7dp"
-                                        android:translationZ="1dp">
+                                        android:padding="7dp">
 
                                         <LinearLayout
                                             android:layout_width="match_parent"

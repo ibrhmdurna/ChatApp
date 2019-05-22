@@ -40,11 +40,13 @@ public class Image implements MessageStrategy {
         myChatMap.put("time", ServerValue.TIMESTAMP);
         myChatMap.put("seen", true);
         myChatMap.put("typing", false);
+        myChatMap.put("wave", true);
 
         Map chatMap = new HashMap();
         chatMap.put("time", ServerValue.TIMESTAMP);
         chatMap.put("seen", false);
         chatMap.put("typing", false);
+        chatMap.put("wave", true);
 
         final Map chatsMap = new HashMap();
         chatsMap.put("Chats/" + message.getFrom() + "/" + chatUid, myChatMap);

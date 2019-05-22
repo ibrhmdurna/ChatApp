@@ -1,13 +1,21 @@
 package com.ibrhmdurna.chatapp.image;
 
+import android.graphics.Color;
+import android.graphics.RectF;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.github.chrisbanes.photoview.OnMatrixChangedListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +35,7 @@ import java.util.Objects;
 
 public class PhotoActivity extends AppCompatActivity implements ViewComponentFactory {
 
+    private Toolbar toolbar;
     private TextView nameSurnameText;
     private TextView timeText;
     private PhotoView photoView;
@@ -37,9 +46,12 @@ public class PhotoActivity extends AppCompatActivity implements ViewComponentFac
     private String path;
     private String content;
 
+    private boolean hasFocus = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.Theme.getInstance().getTransparentTheme(this);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
@@ -95,20 +107,51 @@ public class PhotoActivity extends AppCompatActivity implements ViewComponentFac
             }
         }
 
-        /*
         photoView.setOnMatrixChangeListener(new OnMatrixChangedListener() {
             @Override
             public void onMatrixChanged(RectF rect) {
                 if(photoView.getScale() > 1){
-                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                            WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    hideSystemUI();
+                    hasFocus = false;
+                    toolbar.setVisibility(View.GONE);
+                    contentText.setVisibility(View.GONE);
                 }
                 else{
-
+                    showSystemUI();
+                    hasFocus = true;
+                    toolbar.setVisibility(View.VISIBLE);
+                    if(!content.equals("")){
+                        contentText.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });
-        */
+
+        photoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(hasFocus){
+                    hideSystemUI();
+                    hasFocus = false;
+                    Animation fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
+                    toolbar.setAnimation(fadeOut);
+                    contentText.setAnimation(fadeOut);
+                    toolbar.setVisibility(View.GONE);
+                    contentText.setVisibility(View.GONE);
+                }
+                else{
+                    showSystemUI();
+                    hasFocus = true;
+                    Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+                    toolbar.setAnimation(fadeIn);
+                    toolbar.setVisibility(View.VISIBLE);
+                    if(!content.equals("")){
+                        contentText.setAnimation(fadeIn);
+                        contentText.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
 
         if(content.equals("")){
             contentText.setVisibility(View.GONE);
@@ -123,8 +166,27 @@ public class PhotoActivity extends AppCompatActivity implements ViewComponentFac
         timeText.setText(GetTimeAgo.getInstance().getPhotoTimeAgo(this, time));
     }
 
+    private void hideSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+    }
+
+    private void showSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
+
     private void toolbarProcess(){
-        Toolbar toolbar = findViewById(R.id.photo_toolbar);
+        toolbar = findViewById(R.id.photo_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_icon_2);

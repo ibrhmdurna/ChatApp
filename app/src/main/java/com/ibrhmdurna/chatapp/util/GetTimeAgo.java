@@ -66,7 +66,7 @@ public class GetTimeAgo {
             dateTimeFormatString = "dd/MM/yy, HH:mm";
         }else{
             timeFormatString = "h:mm aa";
-            dateTimeFormatString = "MM/dd/YY, HH:mm aa";
+            dateTimeFormatString = "MM/dd/yy, HH:mm aa";
         }
 
         if(now.get(Calendar.DATE) == mTime.get(Calendar.DATE)

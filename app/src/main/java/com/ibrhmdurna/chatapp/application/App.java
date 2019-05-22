@@ -13,6 +13,7 @@ import com.ibrhmdurna.chatapp.util.UniversalImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.google.GoogleEmojiProvider;
+import com.vanniktech.emoji.ios.IosEmojiProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class App extends Application {
         EmojiCompat.Config config = new BundledEmojiCompatConfig(this);
         EmojiCompat.init(config);
 
-        EmojiManager.install(new GoogleEmojiProvider());
+        EmojiManager.install(new IosEmojiProvider());
 
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(this);
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
