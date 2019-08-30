@@ -14,7 +14,7 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
 import com.ibrhmdurna.chatapp.database.bridge.Find;
-import com.ibrhmdurna.chatapp.database.findAll.RequestFindAll;
+import com.ibrhmdurna.chatapp.database.find.RequestFindAll;
 
 
 /**

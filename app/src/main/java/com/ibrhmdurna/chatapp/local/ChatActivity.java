@@ -26,7 +26,7 @@ import com.ibrhmdurna.chatapp.database.Update;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
 import com.ibrhmdurna.chatapp.database.bridge.Find;
 import com.ibrhmdurna.chatapp.database.find.ChatFindInfo;
-import com.ibrhmdurna.chatapp.database.findAll.MessageFindAll;
+import com.ibrhmdurna.chatapp.database.find.MessageFindAll;
 import com.ibrhmdurna.chatapp.database.message.Text;
 import com.ibrhmdurna.chatapp.database.strategy.SendMessage;
 import com.ibrhmdurna.chatapp.image.CameraActivity;

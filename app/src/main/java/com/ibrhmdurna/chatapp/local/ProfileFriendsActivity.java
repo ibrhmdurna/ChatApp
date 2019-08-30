@@ -11,7 +11,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.application.App;
@@ -19,8 +18,8 @@ import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.database.Status;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
 import com.ibrhmdurna.chatapp.database.bridge.Find;
-import com.ibrhmdurna.chatapp.database.findAll.AccountFriendFindAll;
-import com.ibrhmdurna.chatapp.database.findAll.MutualFriendFindAll;
+import com.ibrhmdurna.chatapp.database.find.AccountFriendFindAll;
+import com.ibrhmdurna.chatapp.database.find.MutualFriendFindAll;
 import com.ibrhmdurna.chatapp.util.Environment;
 
 public class ProfileFriendsActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {

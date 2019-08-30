@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.ibrhmdurna.chatapp.application.App;
@@ -17,7 +16,7 @@ import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
 import com.ibrhmdurna.chatapp.database.bridge.Find;
-import com.ibrhmdurna.chatapp.database.findAll.ChatFindAll;
+import com.ibrhmdurna.chatapp.database.find.ChatFindAll;
 
 
 /**

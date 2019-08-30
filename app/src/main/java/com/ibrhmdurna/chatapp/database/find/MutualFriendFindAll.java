@@ -1,4 +1,4 @@
-package com.ibrhmdurna.chatapp.database.findAll;
+package com.ibrhmdurna.chatapp.database.find;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +11,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -21,43 +20,40 @@ import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.database.bridge.IFind;
-import com.ibrhmdurna.chatapp.local.ChatActivity;
+import com.ibrhmdurna.chatapp.local.ProfileActivity;
+import com.ibrhmdurna.chatapp.main.MainActivity;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Friend;
 import com.ibrhmdurna.chatapp.util.adapter.FriendAdapter;
-import com.ibrhmdurna.chatapp.util.adapter.WriteAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class WriteFindAll implements IFind {
+public class MutualFriendFindAll implements IFind {
 
     private Activity context;
 
     private List<Friend> friendList;
     private List<String> friendIds;
-    private WriteAdapter writeAdapter;
+    private FriendAdapter friendAdapter;
     private RecyclerView friendView;
-    private LinearLayout writeLayout;
     private NestedScrollView notFoundView;
     private EditText searchInput;
-    private LinearLayout newGroupLayout;
-    private LinearLayout addFriendLayout;
 
     private String uid;
+    private String myUid;
 
-    public WriteFindAll(Activity context){
+    public MutualFriendFindAll(Activity context, String uid){
         this.context = context;
+        this.uid = uid;
     }
 
     @Override
     public void buildView() {
-        friendView = context.findViewById(R.id.write_container);
-        writeLayout = context.findViewById(R.id.write_layout);
-        notFoundView = context.findViewById(R.id.no_write_view);
+        friendView = context.findViewById(R.id.friends_container);
+        notFoundView = context.findViewById(R.id.no_friends_view);
         searchInput = context.findViewById(R.id.search_input);
-        newGroupLayout = context.findViewById(R.id.write_new_group_layout);
-        addFriendLayout = context.findViewById(R.id.write_add_friend_layout);
     }
 
     @Override
@@ -65,12 +61,12 @@ public class WriteFindAll implements IFind {
         friendList = new ArrayList<>();
         friendIds = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        writeAdapter = new WriteAdapter(context, friendList);
+        friendAdapter = new FriendAdapter(context, friendList, 1);
         friendView.setLayoutManager(layoutManager);
         friendView.setItemAnimator(null);
-        friendView.setAdapter(writeAdapter);
+        friendView.setAdapter(friendAdapter);
 
-        uid = FirebaseAuth.getInstance().getUid();
+        myUid = FirebaseAuth.getInstance().getUid();
 
         Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).addChildEventListener(contentEventListener);
 
@@ -79,6 +75,7 @@ public class WriteFindAll implements IFind {
 
     @Override
     public void getMore() {
+
         Firebase.getInstance().getDatabaseReference().child("Friends").child(uid).addValueEventListener(moreEventListener);
 
         searchInput.addTextChangedListener(new TextWatcher() {
@@ -95,25 +92,24 @@ public class WriteFindAll implements IFind {
             @Override
             public void afterTextChanged(Editable s) {
                 filter(s.toString());
-
-                if(searchInput.getText().toString().length() > 0){
-                    newGroupLayout.setVisibility(View.GONE);
-                    addFriendLayout.setVisibility(View.GONE);
-                }
-                else{
-                    newGroupLayout.setVisibility(View.VISIBLE);
-                    addFriendLayout.setVisibility(View.VISIBLE);
-                }
             }
         });
 
-        writeAdapter.setOnItemClickListener(new WriteAdapter.OnItemClickListener() {
+        myUid = FirebaseAuth.getInstance().getUid();
+
+        friendAdapter.setOnItemClickListener(new FriendAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String uid) {
-                Intent chatIntent = new Intent(context, ChatActivity.class);
-                chatIntent.putExtra("user_id", uid);
-                context.startActivity(chatIntent);
-                context.finish();
+                if(myUid.equals(uid)){
+                    Intent mainIntent = new Intent(context, MainActivity.class);
+                    mainIntent.putExtra("page", "Account");
+                    context.startActivity(mainIntent);
+                }
+                else{
+                    Intent profileIntent = new Intent(context, ProfileActivity.class);
+                    profileIntent.putExtra("user_id", uid);
+                    context.startActivity(profileIntent);
+                }
             }
         });
     }
@@ -128,11 +124,34 @@ public class WriteFindAll implements IFind {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             if(dataSnapshot.exists()){
-                writeLayout.setVisibility(View.VISIBLE);
-                notFoundView.setVisibility(View.GONE);
+                final int[] mutual = {0};
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Firebase.getInstance().getDatabaseReference().child("Friends").child(myUid).child(Objects.requireNonNull(snapshot.getKey())).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                mutual[0]++;
+                            }
+
+                            if(mutual[0] > 0){
+                                friendView.setVisibility(View.VISIBLE);
+                                notFoundView.setVisibility(View.GONE);
+                            }
+                            else{
+                                friendView.setVisibility(View.GONE);
+                                notFoundView.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
             }
             else{
-                writeLayout.setVisibility(View.GONE);
+                friendView.setVisibility(View.GONE);
                 notFoundView.setVisibility(View.VISIBLE);
             }
         }
@@ -147,16 +166,29 @@ public class WriteFindAll implements IFind {
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             if(dataSnapshot.exists()){
-                final Friend friend = dataSnapshot.getValue(Friend.class);
-                if(friend != null){
-                    Account account = new Account();
-                    account.setUid(dataSnapshot.getKey());
-                    friend.setAccount(account);
-                    friendList.add(friend);
-                    friendIds.add(dataSnapshot.getKey());
+                Firebase.getInstance().getDatabaseReference().child("Friends").child(myUid).child(Objects.requireNonNull(dataSnapshot.getKey())).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            final Friend mutualFriend = dataSnapshot.getValue(Friend.class);
 
-                    writeAdapter.notifyItemInserted(friendList.size() - 1);
-                }
+                            Account account = new Account();
+                            if(mutualFriend != null){
+                                account.setUid(dataSnapshot.getKey());
+                                mutualFriend.setAccount(account);
+                                friendList.add(mutualFriend);
+                                friendIds.add(dataSnapshot.getKey());
+
+                                friendAdapter.notifyItemInserted(friendList.size() - 1);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         }
 
@@ -169,7 +201,7 @@ public class WriteFindAll implements IFind {
                 account.setUid(dataSnapshot.getKey());
                 friend.setAccount(account);
                 friendList.set(index, friend);
-                writeAdapter.notifyItemChanged(index);
+                friendAdapter.notifyItemChanged(index);
             }
         }
 
@@ -179,7 +211,7 @@ public class WriteFindAll implements IFind {
             if(index > -1){
                 friendIds.remove(index);
                 friendList.remove(index);
-                writeAdapter.notifyItemRemoved(index);
+                friendAdapter.notifyItemRemoved(index);
             }
         }
 
@@ -212,6 +244,6 @@ public class WriteFindAll implements IFind {
             notFoundView.setVisibility(View.VISIBLE);
         }
 
-        writeAdapter.filterList(filterList);
+        friendAdapter.filterList(filterList);
     }
 }

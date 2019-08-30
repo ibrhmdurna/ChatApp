@@ -26,7 +26,7 @@ import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Search;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
 import com.ibrhmdurna.chatapp.database.bridge.Find;
-import com.ibrhmdurna.chatapp.database.findAll.RecentFindAll;
+import com.ibrhmdurna.chatapp.database.find.RecentFindAll;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.util.adapter.SearchAdapter;
 import com.ibrhmdurna.chatapp.util.controller.DialogController;

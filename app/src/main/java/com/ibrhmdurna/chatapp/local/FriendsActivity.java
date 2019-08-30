@@ -18,7 +18,7 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Status;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
 import com.ibrhmdurna.chatapp.database.bridge.Find;
-import com.ibrhmdurna.chatapp.database.findAll.AccountFriendFindAll;
+import com.ibrhmdurna.chatapp.database.find.AccountFriendFindAll;
 import com.ibrhmdurna.chatapp.util.Environment;
 
 public class FriendsActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {

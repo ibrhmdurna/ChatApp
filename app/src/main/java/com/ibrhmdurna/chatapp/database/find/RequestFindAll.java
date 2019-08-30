@@ -1,4 +1,4 @@
-package com.ibrhmdurna.chatapp.database.findAll;
+package com.ibrhmdurna.chatapp.database.find;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

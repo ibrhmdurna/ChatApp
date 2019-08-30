@@ -18,7 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.ibrhmdurna.chatapp.R;
-import com.ibrhmdurna.chatapp.database.findAll.MessageFindAll;
+import com.ibrhmdurna.chatapp.database.find.MessageFindAll;
 import com.ibrhmdurna.chatapp.models.Account;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.start.StartActivity;

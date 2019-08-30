@@ -18,7 +18,7 @@ import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Status;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
 import com.ibrhmdurna.chatapp.database.bridge.Find;
-import com.ibrhmdurna.chatapp.database.findAll.WriteFindAll;
+import com.ibrhmdurna.chatapp.database.find.WriteFindAll;
 import com.ibrhmdurna.chatapp.util.Environment;
 
 public class WriteActivity extends AppCompatActivity implements ViewComponentFactory, View.OnClickListener {

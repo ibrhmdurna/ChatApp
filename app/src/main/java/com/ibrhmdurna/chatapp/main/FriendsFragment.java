@@ -13,8 +13,8 @@ import com.ibrhmdurna.chatapp.application.ViewComponentFactory;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.bridge.AbstractFind;
 import com.ibrhmdurna.chatapp.database.bridge.Find;
-import com.ibrhmdurna.chatapp.database.findAll.FriendFindAll;
-import com.ibrhmdurna.chatapp.database.findAll.OnlineFindAll;
+import com.ibrhmdurna.chatapp.database.find.FriendFindAll;
+import com.ibrhmdurna.chatapp.database.find.OnlineFindAll;
 
 
 /**

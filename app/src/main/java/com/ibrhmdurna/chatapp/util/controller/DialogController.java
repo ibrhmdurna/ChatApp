@@ -17,14 +17,12 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.ibrhmdurna.chatapp.application.App;
 import com.ibrhmdurna.chatapp.R;
 import com.ibrhmdurna.chatapp.database.Delete;
 import com.ibrhmdurna.chatapp.database.Firebase;
 import com.ibrhmdurna.chatapp.database.Update;
-import com.ibrhmdurna.chatapp.database.findAll.MessageFindAll;
 import com.ibrhmdurna.chatapp.local.ProfileActivity;
 import com.ibrhmdurna.chatapp.models.Message;
 import com.ibrhmdurna.chatapp.settings.DarkModeActivity;

@@ -88,11 +88,9 @@ public class DeleteAccountActivity extends AppCompatActivity implements ViewComp
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.delete_account_btn:
-                AppController.getInstance().closeKeyboard(this);
-                deleteProcess();
-                break;
+        if (v.getId() == R.id.delete_account_btn) {
+            AppController.getInstance().closeKeyboard(this);
+            deleteProcess();
         }
     }
 }
